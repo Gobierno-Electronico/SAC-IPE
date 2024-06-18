@@ -1,0 +1,73 @@
+@extends('layouts.app')
+@section('titulo', 'Presupuesto Inicial')
+
+@section('content')
+    <script src="{{ asset('js/Presupuesto/importarPresupuestoInicial.js') }}"></script>
+    <x-download />
+
+     
+    <button id="downloadButton" hidden></button>
+    <div class="container mt-5">
+
+        <div class="card shadow border-0 p-5">
+
+            <div class="row align-items-center">
+
+                <div class="">
+                    <div class="d-flex flex-row">
+                        <h2 class="">
+                            Ingresos
+                        </h2>
+                        <div class="col text-end">
+                            <div class="col">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="1.8em" data-toggle="tooltip"
+                                    data-bs-placement="left"
+                                    title="Seleccione el archivo Excel para iniciar la carga del presupuesto inicial."
+                                    viewBox="0 0 512 512">
+                                    <style>
+                                        svg {
+                                            fill: #198754
+                                        }
+                                    </style>
+                                    <path
+                                        d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm169.8-90.7c7.9-22.3 29.1-37.3 52.8-37.3h58.3c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L280 264.4c-.2 13-10.9 23.6-24 23.6c-13.3 0-24-10.7-24-24V250.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1c0-8.4-6.8-15.1-15.1-15.1H222.6c-3.4 0-6.4 2.1-7.5 5.3l-.4 1.2c-4.4 12.5-18.2 19-30.6 14.6s-19-18.2-14.6-30.6l.4-1.2zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 class="mt-4">
+                        Carga de presupuesto inicial
+                    </h4>
+
+                </div>
+            </div>
+
+            <form id="formImportarPresupuesto" action="/presupuesto/cargar-presupuesto-inicial-ingresos" method="post"
+                enctype="multipart/form-data">
+                @csrf
+                <div class="mt-5">
+                    <input class="form-control" type="file" accept=".xlsx" name="input-archivo" id="input-archivo"
+                        onchange="cambioArchivo()">
+                    {{-- <button type="button" onclick="document.getElementById('input-archivo').click()"
+                        class="btn btn-success ms-2 shadow border-0">
+                        <i class="fa-solid fa-file-arrow-up text-xl"></i>
+                        <span class="px-3">Agregar archivo</span>
+                    </button>
+                    <span class="ms-2" id="fieldName"></span> --}}
+                </div>
+                <div class="mt-5 d-flex justify-content-between">
+                    <button type="button" onclick="descargarPlantilla(this,'ingresos')" class="btn btn-success shadow border-0"
+                        id="botonPlantilla">
+                        Descargar plantilla
+                    </button>
+
+                    <button type="submit" onclick="importarPresupuestoInicial(this)"
+                        class="btn btn-success shadow border-0" id="importarBoton" disabled>
+                        Cargar presupuesto
+                    </button>
+                </div>
+            </form>
+        </div>
+    @endsection
+    <script></script>

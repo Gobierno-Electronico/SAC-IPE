@@ -1,0 +1,1232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.5.final using JasperReports Library version 6.20.5-3efcf2e67f959db3888d79f73dde2dbd7acb4f8e  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BalanzaArmonizada" pageWidth="1747" pageHeight="595" orientation="Landscape" columnWidth="1707" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="283f1541-42d6-4d73-8f29-0a6c9605635e">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SQL Server Nueva"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="Anio" class="java.lang.String"/>
+	<parameter name="Grupo" class="java.lang.String"/>
+	<parameter name="Tipo" class="java.lang.String"/>
+	<parameter name="Fecha" class="java.lang.String"/>
+	<parameter name="Hora" class="java.lang.String"/>
+	<parameter name="Numero" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[EXEC BalanzaArmonizada @Anio =   $P{Anio} , @Grupo =  $P{Grupo} ]]>
+	</queryString>
+	<field name="Codigo_cuenta" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Codigo_cuenta"/>
+		<property name="com.jaspersoft.studio.field.label" value="Codigo_cuenta"/>
+	</field>
+	<field name="Cuenta_padre_ID" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Cuenta_padre_ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="Cuenta_padre_ID"/>
+	</field>
+	<field name="tipo_interaccion" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="tipo_interaccion"/>
+		<property name="com.jaspersoft.studio.field.label" value="tipo_interaccion"/>
+	</field>
+	<field name="Descripcion_cuenta" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Descripcion_cuenta"/>
+		<property name="com.jaspersoft.studio.field.label" value="Descripcion_cuenta"/>
+	</field>
+	<field name="TotalCargoSuma" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="TotalCargoSuma"/>
+		<property name="com.jaspersoft.studio.field.label" value="TotalCargoSuma"/>
+	</field>
+	<field name="EneroCargoAcumulado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="EneroCargoAcumulado"/>
+		<property name="com.jaspersoft.studio.field.label" value="EneroCargoAcumulado"/>
+	</field>
+	<field name="FebreroCargoAcumulado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="FebreroCargoAcumulado"/>
+		<property name="com.jaspersoft.studio.field.label" value="FebreroCargoAcumulado"/>
+	</field>
+	<field name="MarzoCargoAcumulado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="MarzoCargoAcumulado"/>
+		<property name="com.jaspersoft.studio.field.label" value="MarzoCargoAcumulado"/>
+	</field>
+	<field name="AbrilCargoAcumulado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="AbrilCargoAcumulado"/>
+		<property name="com.jaspersoft.studio.field.label" value="AbrilCargoAcumulado"/>
+	</field>
+	<field name="MayoCargoAcumulado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="MayoCargoAcumulado"/>
+		<property name="com.jaspersoft.studio.field.label" value="MayoCargoAcumulado"/>
+	</field>
+	<field name="JunioCargoAcumulado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="JunioCargoAcumulado"/>
+		<property name="com.jaspersoft.studio.field.label" value="JunioCargoAcumulado"/>
+	</field>
+	<field name="JulioCargoAcumulado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="JulioCargoAcumulado"/>
+		<property name="com.jaspersoft.studio.field.label" value="JulioCargoAcumulado"/>
+	</field>
+	<field name="AgostoCargoAcumulado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="AgostoCargoAcumulado"/>
+		<property name="com.jaspersoft.studio.field.label" value="AgostoCargoAcumulado"/>
+	</field>
+	<field name="SeptiembreCargoAcumulado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="SeptiembreCargoAcumulado"/>
+		<property name="com.jaspersoft.studio.field.label" value="SeptiembreCargoAcumulado"/>
+	</field>
+	<field name="OctubreCargoAcumulado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="OctubreCargoAcumulado"/>
+		<property name="com.jaspersoft.studio.field.label" value="OctubreCargoAcumulado"/>
+	</field>
+	<field name="NoviembreCargoAcumulado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="NoviembreCargoAcumulado"/>
+		<property name="com.jaspersoft.studio.field.label" value="NoviembreCargoAcumulado"/>
+	</field>
+	<field name="DiciembreCargoAcumulado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="DiciembreCargoAcumulado"/>
+		<property name="com.jaspersoft.studio.field.label" value="DiciembreCargoAcumulado"/>
+	</field>
+	<field name="TotalAbonoSuma" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="TotalAbonoSuma"/>
+		<property name="com.jaspersoft.studio.field.label" value="TotalAbonoSuma"/>
+	</field>
+	<field name="EneroAbonoAcumulado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="EneroAbonoAcumulado"/>
+		<property name="com.jaspersoft.studio.field.label" value="EneroAbonoAcumulado"/>
+	</field>
+	<field name="FebreroAbonoAcumulado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="FebreroAbonoAcumulado"/>
+		<property name="com.jaspersoft.studio.field.label" value="FebreroAbonoAcumulado"/>
+	</field>
+	<field name="MarzoAbonoAcumulado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="MarzoAbonoAcumulado"/>
+		<property name="com.jaspersoft.studio.field.label" value="MarzoAbonoAcumulado"/>
+	</field>
+	<field name="AbrilAbonoAcumulado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="AbrilAbonoAcumulado"/>
+		<property name="com.jaspersoft.studio.field.label" value="AbrilAbonoAcumulado"/>
+	</field>
+	<field name="MayoAbonoAcumulado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="MayoAbonoAcumulado"/>
+		<property name="com.jaspersoft.studio.field.label" value="MayoAbonoAcumulado"/>
+	</field>
+	<field name="JunioAbonoAcumulado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="JunioAbonoAcumulado"/>
+		<property name="com.jaspersoft.studio.field.label" value="JunioAbonoAcumulado"/>
+	</field>
+	<field name="JulioAbonoAcumulado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="JulioAbonoAcumulado"/>
+		<property name="com.jaspersoft.studio.field.label" value="JulioAbonoAcumulado"/>
+	</field>
+	<field name="AgostoAbonoAcumulado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="AgostoAbonoAcumulado"/>
+		<property name="com.jaspersoft.studio.field.label" value="AgostoAbonoAcumulado"/>
+	</field>
+	<field name="SeptiembreAbonoAcumulado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="SeptiembreAbonoAcumulado"/>
+		<property name="com.jaspersoft.studio.field.label" value="SeptiembreAbonoAcumulado"/>
+	</field>
+	<field name="OctubreAbonoAcumulado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="OctubreAbonoAcumulado"/>
+		<property name="com.jaspersoft.studio.field.label" value="OctubreAbonoAcumulado"/>
+	</field>
+	<field name="NoviembreAbonoAcumulado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="NoviembreAbonoAcumulado"/>
+		<property name="com.jaspersoft.studio.field.label" value="NoviembreAbonoAcumulado"/>
+	</field>
+	<field name="DiciembreAbonoAcumulado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="DiciembreAbonoAcumulado"/>
+		<property name="com.jaspersoft.studio.field.label" value="DiciembreAbonoAcumulado"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="80">
+			<image>
+				<reportElement x="20" y="0" width="137" height="50" uuid="1eafcdf0-8dce-437b-bdf5-9c9f26749229"/>
+				<imageExpression><![CDATA["C:/xampp/htdocs/SAC-IPE/public/imagenes/ipe_reportes.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="320" y="0" width="340" height="20" uuid="c367064d-885e-41c1-820f-4c83d5df8dff"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INSTITUTO DE PENSIONES DEL ESTADO DE VERACRUZ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="320" y="30" width="340" height="20" uuid="1d8917da-a700-461f-bede-5a6416a1bee7"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BALANZA ARMONIZADA]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="860" y="0" width="50" height="20" uuid="de6c4ebb-93fc-453c-90ca-243787fef10f">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TIPO."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="860" y="20" width="50" height="20" uuid="7f54ccef-4b67-497d-8cb6-c3a8101ad210">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["NO."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="860" y="40" width="50" height="20" uuid="9b9a77e5-9d6a-4efa-94d9-1824dfc01b7c">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FECHA"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="860" y="60" width="50" height="20" uuid="76451eea-0bd9-43c7-a28b-929c88bb46b2">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["HORA"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="910" y="40" width="64" height="20" uuid="3a8e4524-868d-4eca-801e-74d1819bac6f">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="910" y="0" width="64" height="20" uuid="0cbffb4c-cda0-491c-aaa3-568e1a1e178c">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Tipo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="910" y="20" width="64" height="20" uuid="c2ff3ee5-8bf1-4761-a14c-06d3fd720e2b">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Numero}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="910" y="60" width="64" height="20" uuid="d82660e9-5ad4-4d2b-ae0c-176816d8b0bb">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Hora}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="22" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="65" height="22" isPrintInFirstWholeBand="true" uuid="6141fc25-ecc6-4139-90bd-8df8dfe401b1">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Cuenta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="65" y="0" width="188" height="22" isPrintInFirstWholeBand="true" uuid="118927e3-5453-484b-a094-ee9de6358ea2">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Descripción de la cuenta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="387" y="0" width="55" height="22" isPrintInFirstWholeBand="true" uuid="f42d5192-f617-4684-b13c-f0a32d8a8381">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Enero Cargo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="442" y="0" width="55" height="22" isPrintInFirstWholeBand="true" uuid="625021d3-0bc2-412d-943a-e505b03fe4ca">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Enero Abono]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="497" y="0" width="55" height="22" isPrintInFirstWholeBand="true" uuid="82f74296-b1be-4716-b56a-ae8b34f4bfec">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Febrero Cargo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="552" y="0" width="55" height="22" isPrintInFirstWholeBand="true" uuid="b596b27c-3c50-4930-958a-e8b535db092f">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Febrero Abono]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="607" y="0" width="55" height="22" isPrintInFirstWholeBand="true" uuid="1cb9b06a-956a-4cd7-9fd4-60503321f6f7">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Marzo Cargo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="662" y="0" width="55" height="22" isPrintInFirstWholeBand="true" uuid="276dd4fd-eb33-4c4e-8e47-ca58e73712bc">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Marzo Abono]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="717" y="0" width="55" height="22" isPrintInFirstWholeBand="true" uuid="4a349169-db32-4254-9b2a-e5859cab6a76">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Abril Cargo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="772" y="0" width="55" height="22" isPrintInFirstWholeBand="true" uuid="da57df54-c1fb-43f4-bc1f-8abe018e00d8">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Abril Abono]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="827" y="0" width="55" height="22" isPrintInFirstWholeBand="true" uuid="d197507b-2868-4ffe-b84a-4b1bd224298b">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Mayo Cargo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="882" y="0" width="55" height="22" isPrintInFirstWholeBand="true" uuid="1ad0fc8c-2a0a-41a1-80f9-ba94b639f1dc">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Mayo Abono]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="937" y="0" width="55" height="22" isPrintInFirstWholeBand="true" uuid="36a05c85-18a7-41f0-b907-6e3f58261ec6">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Junio Cargo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="992" y="0" width="55" height="22" isPrintInFirstWholeBand="true" uuid="566c37e6-cb3d-4161-8b6a-50533d9c82bb">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Junio Abono]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="253" y="0" width="67" height="22" isPrintInFirstWholeBand="true" uuid="152305fb-695d-49de-ac68-edbc238ea46b">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Total Cargo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1487" y="0" width="55" height="22" isPrintInFirstWholeBand="true" uuid="07a1d481-c64f-41b3-bcad-648c6b2840c3">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Noviembre Cargo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1377" y="0" width="55" height="22" isPrintInFirstWholeBand="true" uuid="c52b9ef4-a63b-4562-95a2-85888af487ee">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Octubre Cargo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1542" y="0" width="55" height="22" isPrintInFirstWholeBand="true" uuid="ed60e6ba-ae19-4fab-bf2f-8033859193c0">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Noviembre Abono]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1157" y="0" width="55" height="22" isPrintInFirstWholeBand="true" uuid="46d889d0-0625-455b-91e0-778a1591f57d">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Agosto Cargo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1597" y="0" width="55" height="22" isPrintInFirstWholeBand="true" uuid="3ec503a7-4c5d-430c-a8aa-96f5537751ce">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Diciembre Cargo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1322" y="0" width="55" height="22" isPrintInFirstWholeBand="true" uuid="d8a6fc94-0859-472d-8b47-f8621da65c87">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Septiembre Abono]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1102" y="0" width="55" height="22" isPrintInFirstWholeBand="true" uuid="760d21e9-411e-4b1f-bd71-dddf8b0f5726">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Julio Abono]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1267" y="0" width="55" height="22" isPrintInFirstWholeBand="true" uuid="815b8e16-26ef-48ec-86be-45a97d52df35">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Septiembre Cargo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1432" y="0" width="55" height="22" isPrintInFirstWholeBand="true" uuid="fb5aea66-437c-445a-b1a7-cc21570b32c6">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Octubre Abono]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1212" y="0" width="55" height="22" isPrintInFirstWholeBand="true" uuid="7f6c353b-05f3-4283-b557-215dabed111d">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Agosto Abono]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1047" y="0" width="55" height="22" isPrintInFirstWholeBand="true" uuid="f0d8a1e4-3af9-4498-beff-90937f2ca142">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Julio Cargo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1652" y="0" width="55" height="22" isPrintInFirstWholeBand="true" uuid="f649042d-4f57-4cec-9dc2-34863bf1df92">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Diciembre Abono]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="320" y="0" width="67" height="22" isPrintInFirstWholeBand="true" uuid="95c93046-7fe1-45ba-a499-bc1e59419478">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="7"/>
+				</textElement>
+				<text><![CDATA[Total Abono]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="65" height="20" uuid="f6631059-bf6d-4412-aea4-b4abf5ff7046">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Codigo_cuenta}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="65" y="0" width="188" height="20" uuid="58e614d4-e348-47e7-b454-252fba0aa59e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Descripcion_cuenta}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="387" y="0" width="55" height="20" uuid="1938477c-9f56-4bcf-ac7a-f2390c3e3926">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{EneroCargoAcumulado})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="442" y="0" width="55" height="20" uuid="10fa1d2a-6ce3-47a8-af74-7161fedbf4cc">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{EneroAbonoAcumulado})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="497" y="0" width="55" height="20" uuid="d2ab421e-d87c-429d-9d81-e68746ca8831">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{FebreroCargoAcumulado})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="552" y="0" width="55" height="20" uuid="0a31782f-b89c-4da9-a6e0-d76a82426bc3">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{FebreroAbonoAcumulado})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="607" y="0" width="55" height="20" uuid="9ba0052e-3834-40bb-b270-0504045d3b11">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{MarzoCargoAcumulado})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="662" y="0" width="55" height="20" uuid="97ddffac-db52-4f84-8ed9-b181ba6535e9">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{MarzoAbonoAcumulado})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="717" y="0" width="55" height="20" uuid="778788e2-1acd-48c8-81ba-507a514a1ba6">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{AbrilCargoAcumulado})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="772" y="0" width="55" height="20" uuid="eb1a6f07-5120-41f7-8bb3-fc24339ecc8a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{AbrilAbonoAcumulado})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="827" y="0" width="55" height="20" uuid="4025dc79-967e-43e1-8196-83df58a4ddbf">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{MayoCargoAcumulado})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="882" y="0" width="55" height="20" uuid="51e30234-9219-4cb1-ac47-002e701a7a42">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{MayoAbonoAcumulado})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="937" y="0" width="55" height="20" uuid="d9fbe40b-4aab-447d-9a1f-1b2b88f3b8fe">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{JunioCargoAcumulado})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="992" y="0" width="55" height="20" uuid="44a0eae9-8131-442c-9019-1004f6d1e0ab">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{JunioAbonoAcumulado})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="253" y="0" width="67" height="20" uuid="f08c0de1-3014-48c8-a9f9-b0b2af4fc223">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{TotalCargoSuma})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="320" y="0" width="67" height="20" uuid="98eaabe0-5a38-4051-9817-d313809da999">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{TotalAbonoSuma})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1157" y="0" width="55" height="20" uuid="f55a8aba-9da9-46e6-ba3f-35bf47296d2d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{AgostoCargoAcumulado})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1047" y="0" width="55" height="20" uuid="b4f532f8-7caa-4c64-ac82-fe6c0931afb6">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{JulioCargoAcumulado})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1267" y="0" width="55" height="20" uuid="f922aa84-45bd-4f68-95ae-e005b3ee5f5e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{SeptiembreCargoAcumulado})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1432" y="0" width="55" height="20" uuid="91804e4e-6b68-4638-aaa8-2a4f2f861c28">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{OctubreAbonoAcumulado})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1102" y="0" width="55" height="20" uuid="c76ca459-ff95-4d16-a894-99c193e94936">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{JulioAbonoAcumulado})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1322" y="0" width="55" height="20" uuid="ddd2ff43-b129-49d3-a3b8-9e790ecad01e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{SeptiembreAbonoAcumulado})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1542" y="0" width="55" height="20" uuid="af7b898e-e8fc-46c5-8d1d-d2393edbfc4c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{NoviembreAbonoAcumulado})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1212" y="0" width="55" height="20" uuid="f342f885-3497-4bb4-b922-64121b0a0b35">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{AgostoAbonoAcumulado})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1487" y="0" width="55" height="20" uuid="6c40d441-64d9-4e07-8e2d-61d3aeb48ebc">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{NoviembreCargoAcumulado})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1377" y="0" width="55" height="20" uuid="6de7597f-94fc-4e71-8c7a-396cd91de439">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{OctubreCargoAcumulado})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1652" y="0" width="55" height="20" uuid="2e583528-ffd2-4119-86a6-281909967668">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{DiciembreAbonoAcumulado})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1597" y="0" width="55" height="20" uuid="00927cff-8707-496d-bc24-a19d6e206a93">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{DiciembreCargoAcumulado})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

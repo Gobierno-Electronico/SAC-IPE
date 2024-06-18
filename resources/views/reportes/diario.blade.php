@@ -1,0 +1,14 @@
+@extends('layouts.app')
+@section('title', 'Libro diario')
+
+@section('content')
+    <script src="{{ asset('js/Presupuesto/balanzaArmonizada.js') }}"></script>
+     
+
+    <div class="container mt-5">
+        <div class="shadow rounded p-5">
+            <h2 class="mb-4">Libro diario</h2>
+            <livewire:libro-diario />
+        </div>
+    </div>
+@endsection

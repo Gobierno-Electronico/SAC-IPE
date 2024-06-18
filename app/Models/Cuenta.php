@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Cuenta extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'Codigo_cuenta',
+        'Descripcion_cuenta',
+        'Cuenta_registro',
+        'Nivel',
+        'Cuenta_padre_ID',
+        'Estado',
+        'Naturaleza'
+        // 'Clasificador_fuente_financiamiento'
+    ];
+}

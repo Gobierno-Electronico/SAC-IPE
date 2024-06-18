@@ -1,0 +1,36 @@
+.logo_encabezado {
+   height: 25px;
+   margin-right: 15px;
+}
+
+.flecha_orden {
+   height: 20px;
+   width: 20px;
+}
+
+.columna_tabla {
+   cursor: pointer;
+}
+
+.input_busqueda {
+   height: 35px;
+   outline: none;
+   padding: 10px;
+}
+
+.select_presupuesto {
+   height: 35px;
+   outline: none;
+   padding: 5px;
+}
+
+.columnas_informacion {
+   padding-top: 5px;
+   padding-bottom: 5px;
+}
+
+.texto_estados {
+   padding-top: 0.5px;
+   padding-bottom: 0.5px;
+
+}

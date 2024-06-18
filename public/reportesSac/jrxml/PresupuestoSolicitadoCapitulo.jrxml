@@ -1,0 +1,802 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.5.final using JasperReports Library version 6.20.5-3efcf2e67f959db3888d79f73dde2dbd7acb4f8e  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PresupuestoSolicitadoCapitulo" pageWidth="1230" pageHeight="950" orientation="Landscape" columnWidth="1190" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="07435f69-7c61-4785-b7f6-165369384ce4">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SQL Server Nueva"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="Anio" class="java.lang.String"/>
+	<parameter name="rango" class="java.lang.String"/>
+	<parameter name="capitulo1" class="java.lang.String"/>
+	<parameter name="capitulo2" class="java.lang.String"/>
+	<parameter name="Tipo" class="java.lang.String"/>
+	<parameter name="Fecha" class="java.lang.String"/>
+	<parameter name="Hora" class="java.lang.String"/>
+	<parameter name="Numero" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[EXEC TipoPresupuestoCapitulo @anio =  $P{Anio} , @rango =  $P{rango} , @capitulo1 =  $P{capitulo1} , @capitulo2 =  $P{capitulo2}]]>
+	</queryString>
+	<field name="capitulo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="capitulo"/>
+		<property name="com.jaspersoft.studio.field.label" value="capitulo"/>
+	</field>
+	<field name="denomincacion" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="denomincacion"/>
+		<property name="com.jaspersoft.studio.field.label" value="denomincacion"/>
+	</field>
+	<field name="Enero" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="Enero"/>
+		<property name="com.jaspersoft.studio.field.label" value="Enero"/>
+	</field>
+	<field name="Febrero" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="Febrero"/>
+		<property name="com.jaspersoft.studio.field.label" value="Febrero"/>
+	</field>
+	<field name="Marzo" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="Marzo"/>
+		<property name="com.jaspersoft.studio.field.label" value="Marzo"/>
+	</field>
+	<field name="Abril" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="Abril"/>
+		<property name="com.jaspersoft.studio.field.label" value="Abril"/>
+	</field>
+	<field name="Mayo" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="Mayo"/>
+		<property name="com.jaspersoft.studio.field.label" value="Mayo"/>
+	</field>
+	<field name="Junio" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="Junio"/>
+		<property name="com.jaspersoft.studio.field.label" value="Junio"/>
+	</field>
+	<field name="Julio" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="Julio"/>
+		<property name="com.jaspersoft.studio.field.label" value="Julio"/>
+	</field>
+	<field name="Agosto" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="Agosto"/>
+		<property name="com.jaspersoft.studio.field.label" value="Agosto"/>
+	</field>
+	<field name="Septiembre" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="Septiembre"/>
+		<property name="com.jaspersoft.studio.field.label" value="Septiembre"/>
+	</field>
+	<field name="Octubre" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="Octubre"/>
+		<property name="com.jaspersoft.studio.field.label" value="Octubre"/>
+	</field>
+	<field name="Noviembre" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="Noviembre"/>
+		<property name="com.jaspersoft.studio.field.label" value="Noviembre"/>
+	</field>
+	<field name="Diciembre" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="Diciembre"/>
+		<property name="com.jaspersoft.studio.field.label" value="Diciembre"/>
+	</field>
+	<field name="Total" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="Total"/>
+		<property name="com.jaspersoft.studio.field.label" value="Total"/>
+	</field>
+	<field name="Anio" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="Anio"/>
+		<property name="com.jaspersoft.studio.field.label" value="Anio"/>
+	</field>
+	<variable name="TotalSumaTodo" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{Total}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="TotalSumaTodoEnero" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{Enero}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="TotalSumaTodoFebrero" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{Febrero}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="TotalSumaTodoMarzo" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{Marzo}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="TotalSumaTodoAbril" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{Abril}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="TotalSumaTodoMayo" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{Mayo}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="TotalSumaTodoJunio" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{Junio}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="TotalSumaTodoJulio" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{Julio}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="TotalSumaTodoAgosto" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{Agosto}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="TotalSumaTodoSeptiembre" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{Septiembre}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="TotalSumaTodoOctubre" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{Octubre}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="TotalSumaTodoNoviembre" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{Noviembre}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="TotalSumaTodoDiciembre" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{Diciembre}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="80">
+			<image>
+				<reportElement x="5" y="1" width="137" height="50" uuid="5a3c263c-361f-4dec-bc4f-f891d4af8ae0"/>
+				<imageExpression><![CDATA["C:/xampp/htdocs/SAC-IPE/public/imagenes/ipe_reportes.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="425" y="0" width="340" height="20" uuid="f3fad13b-203a-4977-b959-a4a26bf699dd"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INSTITUTO DE PENSIONES DEL ESTADO DE VERACRUZ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="425" y="60" width="340" height="20" uuid="4728200e-9cd7-4c92-84e0-3a91517814a3"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Presupuesto Aprobado por Capítulo]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="1076" y="0" width="50" height="20" uuid="3cb7a41e-89fd-46fc-bdad-11b93a71068d">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TIPO."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1076" y="20" width="50" height="20" uuid="a321e7bf-722b-494b-9b2f-32e0805cbf3b">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["NO."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1076" y="40" width="50" height="20" uuid="cb707021-4e02-4343-82a4-272c38f0220f">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FECHA"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1076" y="60" width="50" height="20" uuid="3e8ae71c-6640-4d3d-8c53-d9f9175b3839">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["HORA"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1126" y="40" width="64" height="20" uuid="40e8cb18-0a83-4c72-8b7d-9bf6b511f08c">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1126" y="0" width="64" height="20" uuid="36fb302f-4311-4bf9-bc79-5e3d18787034">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Tipo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1126" y="20" width="64" height="20" uuid="f3b1d5f5-aee3-4ea8-ad2f-119fc06d8693">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Numero}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1126" y="60" width="64" height="20" uuid="3e45019c-9d66-4058-a3e9-490e026dda70">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Hora}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="425" y="20" width="340" height="20" uuid="d294b9a2-5774-48c4-a79b-c9f7388c6049"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Subdirección de Finanzas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="425" y="40" width="340" height="20" uuid="524bbdb3-6822-42e9-afa9-34e3e660fbbd"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Departamento de Contabilidad y Presupuesto]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20">
+			<staticText>
+				<reportElement x="0" y="0" width="80" height="20" uuid="248956a5-9435-4dc1-80bf-4053de679fe5">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="be1fec77-b826-4d4c-9ccd-0ebd805455e1"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Capítulo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="260" y="0" width="90" height="20" uuid="03d96797-a3e6-4286-a7a9-bc2fa3ca62cb">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2e7fe8e1-6fae-4dda-9d47-0ee84cd23f42"/>
+				</reportElement>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="350" y="0" width="70" height="20" uuid="da0f8ebf-de5a-41a5-8761-60951de87d45">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2e7fe8e1-6fae-4dda-9d47-0ee84cd23f42"/>
+				</reportElement>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Enero]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="0" width="70" height="20" uuid="bb11b7af-0c1b-4a27-90b7-1803885b91a9">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2e7fe8e1-6fae-4dda-9d47-0ee84cd23f42"/>
+				</reportElement>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Febrero]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="490" y="0" width="70" height="20" uuid="880ff2d0-e83f-4bb9-a2be-bbc7f7749718">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2e7fe8e1-6fae-4dda-9d47-0ee84cd23f42"/>
+				</reportElement>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Marzo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="560" y="0" width="70" height="20" uuid="11b1a594-0973-47a1-ad59-7b45e056bcd0">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2e7fe8e1-6fae-4dda-9d47-0ee84cd23f42"/>
+				</reportElement>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Abril]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="630" y="0" width="70" height="20" uuid="7507fae4-a418-4844-a991-d60566914702">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2e7fe8e1-6fae-4dda-9d47-0ee84cd23f42"/>
+				</reportElement>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Mayo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="700" y="0" width="70" height="20" uuid="8b71bd74-694e-4bf2-a843-a05a4dac47c4">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2e7fe8e1-6fae-4dda-9d47-0ee84cd23f42"/>
+				</reportElement>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Junio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="770" y="0" width="70" height="20" uuid="110dd2c9-04b4-4273-ae2c-05c6b4e30a53">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2e7fe8e1-6fae-4dda-9d47-0ee84cd23f42"/>
+				</reportElement>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Julio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="840" y="0" width="70" height="20" uuid="eabb6fbe-59a5-4954-b211-a59cf4dd0a67">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2e7fe8e1-6fae-4dda-9d47-0ee84cd23f42"/>
+				</reportElement>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Agosto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="910" y="0" width="70" height="20" uuid="6c8ef912-199e-4638-b999-0cd3b61047c0">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2e7fe8e1-6fae-4dda-9d47-0ee84cd23f42"/>
+				</reportElement>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Septiembre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="980" y="0" width="70" height="20" uuid="b367f891-4a1d-4f52-8f48-590f8f21b41f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2e7fe8e1-6fae-4dda-9d47-0ee84cd23f42"/>
+				</reportElement>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Octubre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1050" y="0" width="70" height="20" uuid="58662643-b8da-43a4-9866-d53bd96c86f3">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2e7fe8e1-6fae-4dda-9d47-0ee84cd23f42"/>
+				</reportElement>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Noviembre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1120" y="0" width="70" height="20" uuid="b523e8bc-375f-4aa9-ae79-6dcc0712ff9d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2e7fe8e1-6fae-4dda-9d47-0ee84cd23f42"/>
+				</reportElement>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Diciembre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="0" width="180" height="20" uuid="c2bea0f7-3ab7-4d83-95cd-ba8e555e1170">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="be1fec77-b826-4d4c-9ccd-0ebd805455e1"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Concepto]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField textAdjust="StretchHeight">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="0" y="0" width="80" height="20" uuid="7def24c2-3336-40ab-b860-e4dbc2e48d39">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="be1fec77-b826-4d4c-9ccd-0ebd805455e1"/>
+				</reportElement>
+				<box topPadding="2" bottomPadding="2">
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{capitulo}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="260" y="0" width="90" height="20" uuid="de3af93d-0826-4d17-9bdc-b78fd6f470f8"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{Total})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="350" y="0" width="70" height="20" uuid="db3b0389-0d03-4ffb-9728-a8b2b36dacc5"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{Enero})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="420" y="0" width="70" height="20" uuid="56c12ecd-5349-4481-a559-9c16a61f4cbf"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{Febrero})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="490" y="0" width="70" height="20" uuid="c4f60728-2a9c-498e-8f39-f565d6474ba6"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{Marzo})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="560" y="0" width="70" height="20" uuid="f2738534-5cbe-479d-8840-fa1e02efbe0f"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{Abril})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="630" y="0" width="70" height="20" uuid="04e52dd9-836d-4a1f-a3fb-d3afdae04d34"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{Mayo})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="770" y="0" width="70" height="20" uuid="b823dcf9-9825-4ce8-82b2-3ac79be61fc5"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{Julio})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="1050" y="0" width="70" height="20" uuid="1f38e5e3-1e23-4804-9aad-86f5bc89bbf4"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{Noviembre})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="980" y="0" width="70" height="20" uuid="eca56cac-c998-4f15-ace8-b297b26d01ac"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{Octubre})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="840" y="0" width="70" height="20" uuid="4410d44a-d8dd-41a2-8e7b-8976f509b658"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{Agosto})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="910" y="0" width="70" height="20" uuid="691ac4a7-b69e-4dce-b23b-668a9f30b113"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{Septiembre})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="700" y="0" width="70" height="20" uuid="6b6549dd-afb9-4f5f-8d50-b4a0157b31e8"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{Junio})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="1120" y="0" width="70" height="20" uuid="a9f86a06-499b-47f3-aea9-e513f82859b4"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{Diciembre})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="80" y="0" width="180" height="20" uuid="15a4c4f4-6c36-44e8-aad2-396621f2eec7">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="be1fec77-b826-4d4c-9ccd-0ebd805455e1"/>
+				</reportElement>
+				<box topPadding="2" bottomPadding="2">
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{denomincacion}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="20">
+			<textField textAdjust="StretchHeight" evaluationTime="Report">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="980" y="0" width="70" height="20" uuid="34d57259-fbaf-4309-93cd-fa69c9df974b"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($V{TotalSumaTodoOctubre})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" evaluationTime="Report">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="770" y="0" width="70" height="20" uuid="aca572aa-3c76-4fa9-ae79-77920342a71a"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($V{TotalSumaTodoJulio})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" evaluationTime="Report">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="630" y="0" width="70" height="20" uuid="7d399d4d-ef83-4850-830e-2015ed75a60b"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($V{TotalSumaTodoMayo})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" evaluationTime="Report">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="1120" y="0" width="70" height="20" uuid="8a2d5f78-b264-4552-90b4-fd5942ea9979"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($V{TotalSumaTodoDiciembre})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" evaluationTime="Report">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="840" y="0" width="70" height="20" uuid="7269dcb7-c5bc-44ee-94b7-851f4fa62a8e"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($V{TotalSumaTodoAgosto})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" evaluationTime="Report">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="100" y="0" width="160" height="20" uuid="b4748390-f78a-44e3-9da2-3cf7881311f7">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="92b403b4-3c73-447e-9ec8-a4cd0acf4bfa"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" evaluationTime="Report">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="0" y="0" width="100" height="20" uuid="a3ab4c18-9110-4a8f-a98b-81b8a3e4bb38">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="92b403b4-3c73-447e-9ec8-a4cd0acf4bfa"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Totales:"]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" evaluationTime="Report">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="560" y="0" width="70" height="20" uuid="e4f650da-88cc-4513-a0cc-bf50b67acf4b"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($V{TotalSumaTodoAbril})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" evaluationTime="Report">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="350" y="0" width="70" height="20" uuid="df4e4249-1a60-4e62-8d11-570bb940f193"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($V{TotalSumaTodoEnero})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" evaluationTime="Report">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="1050" y="0" width="70" height="20" uuid="01265aab-a8e7-4061-9260-2c44f946d1c9"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($V{TotalSumaTodoNoviembre})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" evaluationTime="Report">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="260" y="0" width="90" height="20" uuid="25d8a7e7-31c7-4ee2-b318-04b2fd139395"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($V{TotalSumaTodo})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" evaluationTime="Report">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="700" y="0" width="70" height="20" uuid="d5067be2-d53a-4b67-8f71-6ec68b850230"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($V{TotalSumaTodoJunio})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" evaluationTime="Report">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="910" y="0" width="70" height="20" uuid="1e4c0f3e-ed5b-45cb-ad72-cc5b272adaff"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($V{TotalSumaTodoSeptiembre})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" evaluationTime="Report">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="420" y="0" width="70" height="20" uuid="6e5c91eb-d805-4802-96ea-31ff5db7776c"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($V{TotalSumaTodoFebrero})]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" evaluationTime="Report">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="490" y="0" width="70" height="20" uuid="636ccacb-9670-4289-b04d-426955e33319"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($V{TotalSumaTodoMarzo})]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+</jasperReport>
