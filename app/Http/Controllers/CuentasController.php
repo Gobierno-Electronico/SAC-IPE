@@ -9,9 +9,9 @@ use App\Models\Cuenta;
 use App\Models\CuentaClasificadorEgreso;
 use DB;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Shuchkin\SimpleXLSX;
+use Log;
 
 class CuentasController extends Controller
 {
@@ -352,8 +352,106 @@ class CuentasController extends Controller
         } else {
             return response()->json(['error' => 'Error al analizar el archivo Excel: ' . SimpleXLSX::parseError()]);
         }
-
     }
+
+    public function limpiarCuentas(Request $request)
+    {
+        try {
+            $path = public_path('PlanCuentas/Plan-Cuentas-Identificador.xlsx');
+
+            // Intentar parsear el archivo Excel
+            $xlsx = SimpleXLSX::parse($path);
+            if (!$xlsx) {
+                session()->flash('message', 'No se pudo analizar el documento como archivo Excel válido.');
+                session()->flash('message_type', 'error');
+                return redirect('/home');
+            }else{
+
+                // Validar encabezados del archivo Excel
+                $expectedHeaders = ['Cuenta', 'Descripcion', 'Cta. de registro', 'Naturaleza', 'Identificador'];
+                $actualHeaders = $xlsx->rows()[0];
+                $actualHeaders = array_map('trim', $actualHeaders);
+                if (count($expectedHeaders) !== count($actualHeaders) || array_diff($expectedHeaders, $actualHeaders)) {
+                    $diferencias = implode(', ', array_diff($expectedHeaders, $actualHeaders));
+                    session()->flash('message', 'Los campos del archivo no coinciden con los campos esperados: ' . $diferencias);
+                    session()->flash('message_type', 'error');
+                    return redirect('/home');
+                }
+    
+                // Guardar registro en bitácora
+                $bitacoraController = new BitacoraController();
+                $bitacoraController->bitacora('limpiarCuentas', 'depuró o intentó depurar el plan de cuentas ', $request);
+    
+                // Iniciar transacción
+                DB::beginTransaction();
+    
+                // Leer los datos del archivo
+                $rows = $xlsx->rows();
+    
+                // Eliminar la fila del encabezado
+                array_shift($rows);
+    
+                // Obtener los registros de la base de datos
+                $cuentas = Cuenta::all(); // Asumiendo que tienes un modelo Cuenta
+    
+                // Procesar cada cuenta de la base de datos
+                foreach ($cuentas as $cuenta) {
+                    $found = false;
+                    foreach ($rows as $row) {
+                        // Ajustar las columnas del Excel y convertir las respuestas
+                        $cuentaExcel = $row[0];
+                        $descripcionExcel = $row[1];
+                        $ctaRegistroExcel = (strtoupper($row[2]) == 'SI') ? 1 : 0;
+                        $naturalezaExcel = empty($row[3]) ? null : $row[3]; // Convertir vacío a null
+                        $identificadorExcel = $row[4]; // Columna Identificador
+    
+                        // Comparar con la base de datos
+                        if (
+                            $cuenta->Codigo_cuenta == $cuentaExcel &&
+                            $cuenta->Descripcion_cuenta == $descripcionExcel &&
+                            $cuenta->Cuenta_registro == $ctaRegistroExcel &&
+                            $cuenta->Naturaleza == $naturalezaExcel
+                        ) {
+                            // Si coincide, actualizar el identificador
+                            $cuenta->identificador = $identificadorExcel;
+                            $found = true;
+                            break;
+                        }
+                    }
+                    if (!$found) {
+                        // Si no coincide, asignar 0
+                        $cuenta->identificador = 0;
+                    }
+                    // Guardar los cambios en la base de datos
+                    $cuenta->save();
+                }
+    
+                // Commit de la transacción
+                DB::commit();
+    
+                // Mensaje de éxito
+                session()->flash('message', 'Plan de cuentas depurado correctamente');
+                session()->flash('message_type', 'success');
+                return redirect('/home');
+
+            }
+
+        } catch (\Exception $e) {
+            // Rollback de la transacción en caso de error
+            DB::rollback();
+
+            // Registrar el error en el log
+            Log::error('Error al depurar el plan de cuentas: ' . $e->getMessage());
+
+            // Mensaje de error
+            session()->flash('message', 'Ocurrió un error al depurar el plan de cuentas');
+            session()->flash('message_type', 'error');
+            return redirect('/home');
+        }
+        
+    }
+
+
     public function plantillaExcel($archivo, Request $request)
     {
         // guardar registro en bitácora
@@ -408,5 +506,4 @@ class CuentasController extends Controller
         }
         return $cuentasNoEncontradas;
     }
-
 }
