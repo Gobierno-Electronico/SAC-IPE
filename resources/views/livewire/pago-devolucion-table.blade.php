@@ -28,7 +28,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($this->data() as $row)
+                        @foreach ($this->data() as $row)    
                             <tr class=" hover:bg-light">
                                 @foreach ($this->columns() as $column)
                                     <td class=" px-4 align-middle cursor-pointer">
