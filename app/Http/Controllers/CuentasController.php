@@ -174,20 +174,20 @@ class CuentasController extends Controller
     //     }
     // }
     // //Busca un código de cuenta en base a uno que se ingrese en la vista para verificar si ya existe dicho código
-    // public function buscarCodigoDeCuenta($codigoCuenta)
-    // {
-    //     try {
-    //         $codigoExistente = DB::table('dbo.cuentas')
-    //             ->where("Codigo_cuenta", "=", $codigoCuenta)
-    //             ->get();
-    //         return $codigoExistente;
-    //     } catch (\Throwable $th) {
-    //         Log::debug($th->getMessage());
-    //         session()->flash('message', 'Ocurrió un error al obtener la información necesaria, intente más tarde');
-    //         session()->flash('message_type', 'error');
-    //         return redirect('/cuentas/mostrarRegistrarCuenta');
-    //     }
-    // }
+    public function buscarCodigoDeCuenta($codigoCuenta)
+    {
+        try {
+            $codigoExistente = DB::table('dbo.cuentas')
+                ->where("Codigo_cuenta", "=", $codigoCuenta)
+                ->get();
+            return $codigoExistente;
+        } catch (\Throwable $th) {
+            Log::debug($th->getMessage());
+            session()->flash('message', 'Ocurrió un error al obtener la información necesaria, intente más tarde');
+            session()->flash('message_type', 'error');
+            return redirect('/cuentas/mostrarRegistrarCuenta');
+        }
+    }
 
     public function agregarCuenta(Request $requestAgregarCuenta)
     {
@@ -474,10 +474,15 @@ class CuentasController extends Controller
                     if (in_array($row['Identificador'], $identificadoresExistentes)) {
                         $identificadorExistente = Cuenta::where('identificador', '=', $row['Identificador'])->first();
                         if ($identificadorExistente->Codigo_cuenta != $row['Cuenta']) {
-                            $identificadorExistente->Codigo_cuenta = $row['Cuenta'];
-                            $identificadorExistente->save();
-                            $cuentasRepetidas[] = "El codigo de la cuenta con identificador {$row['Identificador']} fue actualizada!";
-                            // return [$identificadorExistente, $row];
+                            $codigoCuentaExistente = $this->buscarCodigoDeCuenta($row['Cuenta']);
+                            if (count($codigoCuentaExistente)) {
+                                return response()->json(['error' => 'Código de cuenta ya existente']);
+                            }else{
+                                $identificadorExistente->Codigo_cuenta = $row['Cuenta'];
+                                $identificadorExistente->save();
+                                $cuentasRepetidas[] = "El codigo de la cuenta con identificador {$row['Identificador']} fue actualizada!";
+                                // return [$identificadorExistente, $row];
+                            }
                         }
                         if ($identificadorExistente->Descripcion_cuenta != $row['Descripcion']) {
                             $identificadorExistente->Descripcion_cuenta = $row['Descripcion'];
@@ -559,18 +564,27 @@ class CuentasController extends Controller
                     $nivel = count($codigoDividido);
                     //Se le suma para que el Nivel de la Cuenta empiece en "1"
                     $nivel = $nivel + 1;
-
-                    Cuenta::create([
+                    
+                    
+                    $codigoCuentaExistente = $this->buscarCodigoDeCuenta($row['Cuenta']);
+                    if (count($codigoCuentaExistente)) {
+                        return response()->json(['error' => 'Código de cuenta ya existente']);
+                    }else{
+                        
+                    $cuenta = Cuenta::create([
                         'Codigo_cuenta' => $row['Cuenta'],
                         'Descripcion_cuenta' => $row['Descripcion'],
                         'Nivel' => $row['Nivel'] = $nivel,
                         'Estado' => $row['Estado'] = 'True',
-                        'identificador' => $row['Identidicador'],
+                        'identificador' => $row['Identificador'],
                         'Cuenta_registro' => Str::upper($row['Cta. de registro']) == 'SÍ' || Str::upper($row['Cta. de registro']) == 'Sí' || Str::upper($row['Cta. de registro']) == 'Si' || Str::upper($row['Cta. de registro']) == 'SI',
                         // 'Clasificador_rubro_ingreso' => empty($row['CRI']) ? null : $row['CRI'],
                         // 'Clasificador_objeto_gasto' => empty($row['COG']) ? null : $row['COG'],
                         'Cuenta_padre_ID' => empty($cuentaPadre) ? null : $cuentaPadre,
                     ]);
+                    Log::info($cuenta);
+                    }
+                    
                 }
 
                 // codigo interno unicamente para borrar al inicio de la carga cualquier actualizacion en el plan de cuentas
