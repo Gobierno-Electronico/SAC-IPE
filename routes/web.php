@@ -41,7 +41,7 @@ Route::post('/cuentas/agregarCuenta', [CuentasController::class, 'agregarCuenta'
 Route::get('/cuentas/cargaExcel', [CuentasController::class, 'cargaExcel'])->name('cargaExcel')->middleware('role:Administrador');
 Route::post('/importarExcel', [CuentasController::class, 'importarExcel'])->name('importarExcel')->middleware('role:Administrador');
 Route::get('/plantillaExcel/{archivo}', [CuentasController::class, 'plantillaExcel'])->name('plantillaExcel')->middleware('role:Administrador');
-Route::post('/limpiar-plan-cuentas', [CuentasController::class, 'limpiarCuentas'])->name('limpiarCuentas')->middleware('role:Administrador');
+Route::get('/limpiar-plan-cuentas', [CuentasController::class, 'limpiarCuentas'])->name('limpiarCuentas')->middleware('role:Administrador');
 
 //Usuarios
 Route::get('/usuarios', [UsuariosController::class, 'listaDeUsuarios'])->name('listaDeUsuarios')->middleware('role:Administrador');

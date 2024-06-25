@@ -16,7 +16,8 @@ class Cuenta extends Model
         'Nivel',
         'Cuenta_padre_ID',
         'Estado',
-        'Naturaleza'
+        'Naturaleza',
+        'identificador'
         // 'Clasificador_fuente_financiamiento'
     ];
 }

@@ -354,7 +354,7 @@ class CuentasController extends Controller
         }
     }
 
-    public function limpiarCuentas(Request $request)
+    public function limpiarCuentas()
     {
         try {
             $path = public_path('PlanCuentas/Plan-Cuentas-Identificador.xlsx');
@@ -380,7 +380,7 @@ class CuentasController extends Controller
     
                 // Guardar registro en bitácora
                 $bitacoraController = new BitacoraController();
-                $bitacoraController->bitacora('limpiarCuentas', 'depuró o intentó depurar el plan de cuentas ', $request);
+                $bitacoraController->bitacora('limpiarCuentas', 'depuró o intentó depurar el plan de cuentas ', Request());
     
                 // Iniciar transacción
                 DB::beginTransaction();
@@ -401,16 +401,16 @@ class CuentasController extends Controller
                         // Ajustar las columnas del Excel y convertir las respuestas
                         $cuentaExcel = $row[0];
                         $descripcionExcel = $row[1];
-                        $ctaRegistroExcel = (strtoupper($row[2]) == 'SI') ? 1 : 0;
-                        $naturalezaExcel = empty($row[3]) ? null : $row[3]; // Convertir vacío a null
+                        // $ctaRegistroExcel = (strtoupper($row[2]) == 'SI') ? 1 : 0;
+                        // $naturalezaExcel = empty($row[3]) ? null : $row[3]; // Convertir vacío a null
                         $identificadorExcel = $row[4]; // Columna Identificador
     
                         // Comparar con la base de datos
                         if (
                             $cuenta->Codigo_cuenta == $cuentaExcel &&
-                            $cuenta->Descripcion_cuenta == $descripcionExcel &&
-                            $cuenta->Cuenta_registro == $ctaRegistroExcel &&
-                            $cuenta->Naturaleza == $naturalezaExcel
+                            $cuenta->Descripcion_cuenta == $descripcionExcel
+                            // $cuenta->Cuenta_registro == $ctaRegistroExcel
+                            // $cuenta->Naturaleza == $naturalezaExcel
                         ) {
                             // Si coincide, actualizar el identificador
                             $cuenta->identificador = $identificadorExcel;
