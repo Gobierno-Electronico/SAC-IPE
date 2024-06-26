@@ -30,7 +30,7 @@ class GuiaContabilizadoraController extends Controller
     public function crearGuiaContabilizadora(Request $request)
     {
         // return response()->json('Método desactivado');
-        $path = public_path('Guia/9.xlsx');
+        $path = public_path('Guia/DepBancos-CuentasConceptos-2506.xlsx');
 
         // Validar que el archivo pueda ser analizado correctamente.
         if ($xlsx = SimpleXLSX::parse($path)) {
@@ -74,7 +74,7 @@ class GuiaContabilizadoraController extends Controller
                         if (!$cuenta && !in_array($row["cuenta"], $cuentasFaltantes)) {
                             $cuentasFaltantes[] = $row["cuenta"];
                         }
-                        dd($cuenta, $concepto, $row['concepto'] ,$clasificador);
+                       // dd($cuenta, $concepto, $row['concepto'] ,$clasificador);
                         continue;
                     }
                     $interaccion = InteraccionCuentaConcepto::where(['cuenta_id' => $cuenta->id, 'concepto_id' => $concepto->id, 'clasificador_de_concepto_id' => $clasificador->id, 'tipo_interaccion' => $row['tipo']])->first();
@@ -130,7 +130,7 @@ class GuiaContabilizadoraController extends Controller
     public function relacionarCuentasCuentas(Request $request)
     {
         // return response()->json('Método desactivado');
-        $path = public_path('CuentasCuentas/14.xlsx');
+        $path = public_path('CuentasCuentas/IngresosPorClas-CuentasConcepto-2506.xlsx');
 
         // Validar que el archivo pueda ser analizado correctamente.
         if ($xlsx = SimpleXLSX::parse($path)) {
@@ -243,7 +243,7 @@ class GuiaContabilizadoraController extends Controller
     public function relacionarCuentasCuentasSeguidas(Request $request)
     {
         // return response()->json('Método desactivado');
-        $path = public_path('CuentasCuentas/17.xlsx');
+        $path = public_path('CuentasCuentas/DepBancos-CuentasCuentasSeguidas-2606.xlsx');
 
         // Validar que el archivo pueda ser analizado correctamente.
         if ($xlsx = SimpleXLSX::parse($path)) {
@@ -294,7 +294,7 @@ class GuiaContabilizadoraController extends Controller
                     $interaccionIzquierda = InteraccionCuentaConcepto::where(['cuenta_id' => $cuentaIzquierda->id, 'concepto_id' => $conceptoIzquierda->id, 'clasificador_de_concepto_id' => $clasificadorIzquierda->id, 'tipo_interaccion' => $rows[$k]['tipo']])->first();
                     $interaccionDerecha = InteraccionCuentaConcepto::where(['cuenta_id' => $cuentaDerecha->id, 'concepto_id' => $conceptoDerecha->id, 'clasificador_de_concepto_id' => $clasificadorDerecha->id, 'tipo_interaccion' => $rows[$k + 1]['tipo']])->first();
                     if(!$interaccionIzquierda || !$interaccionDerecha) {
-                        dd($cuentaIzquierda, $conceptoIzquierda, $clasificadorIzquierda);
+                       // dd($cuentaIzquierda, $conceptoIzquierda, $clasificadorIzquierda);
                     }
                     $interaccionExistente = InteraccionCuentaCuenta::where(['id_interaccion_concepto_cuenta_1' => $interaccionIzquierda->id, 'id_interaccion_concepto_cuenta_2' => $interaccionDerecha->id])->first();
                     // dd($interaccionIzquierda, $interaccionDerecha);
