@@ -30,7 +30,7 @@ class GuiaContabilizadoraController extends Controller
     public function crearGuiaContabilizadora(Request $request)
     {
         // return response()->json('Método desactivado');
-        $path = public_path('Guia/DepBancos-CuentasConceptos-2506.xlsx');
+        $path = public_path('Guia/DevPrevRec-CuentasConceptos-2606.xlsx');
 
         // Validar que el archivo pueda ser analizado correctamente.
         if ($xlsx = SimpleXLSX::parse($path)) {
@@ -243,7 +243,7 @@ class GuiaContabilizadoraController extends Controller
     public function relacionarCuentasCuentasSeguidas(Request $request)
     {
         // return response()->json('Método desactivado');
-        $path = public_path('CuentasCuentas/DepBancos-CuentasCuentasSeguidas-2606.xlsx');
+        $path = public_path('CuentasCuentas/DevPrevRe-CuentasCuentasSeguidas-2606.xlsx');
 
         // Validar que el archivo pueda ser analizado correctamente.
         if ($xlsx = SimpleXLSX::parse($path)) {
@@ -290,6 +290,7 @@ class GuiaContabilizadoraController extends Controller
                     $clasificadorDerecha = ClasificadorDeConcepto::where("codigo_clasificador", $rows[$k + 1]["clasificador"])->first();
                     if (!$cuentaIzquierda || !$conceptoIzquierda || !$clasificadorIzquierda || !$cuentaDerecha || !$conceptoDerecha || !$clasificadorDerecha) {
                         continue;
+                        continue;
                     }
                     $interaccionIzquierda = InteraccionCuentaConcepto::where(['cuenta_id' => $cuentaIzquierda->id, 'concepto_id' => $conceptoIzquierda->id, 'clasificador_de_concepto_id' => $clasificadorIzquierda->id, 'tipo_interaccion' => $rows[$k]['tipo']])->first();
                     $interaccionDerecha = InteraccionCuentaConcepto::where(['cuenta_id' => $cuentaDerecha->id, 'concepto_id' => $conceptoDerecha->id, 'clasificador_de_concepto_id' => $clasificadorDerecha->id, 'tipo_interaccion' => $rows[$k + 1]['tipo']])->first();
@@ -300,6 +301,7 @@ class GuiaContabilizadoraController extends Controller
                     // dd($interaccionIzquierda, $interaccionDerecha);
                     // dd($interaccionExistente);
                     if ($interaccionExistente) {
+                        continue;
                         continue;
                     }
 
