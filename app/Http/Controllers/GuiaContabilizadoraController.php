@@ -30,7 +30,7 @@ class GuiaContabilizadoraController extends Controller
     public function crearGuiaContabilizadora(Request $request)
     {
         // return response()->json('Método desactivado');
-        $path = public_path('Guia/DevPrevRec-CuentasConceptos-2606.xlsx');
+        $path = public_path('Guia/Devengado-CuentasConceptos-2706.xlsx');
 
         // Validar que el archivo pueda ser analizado correctamente.
         if ($xlsx = SimpleXLSX::parse($path)) {
@@ -243,7 +243,7 @@ class GuiaContabilizadoraController extends Controller
     public function relacionarCuentasCuentasSeguidas(Request $request)
     {
         // return response()->json('Método desactivado');
-        $path = public_path('CuentasCuentas/DevPrevRe-CuentasCuentasSeguidas-2606.xlsx');
+        $path = public_path('CuentasCuentas/Rec-CuentasCuentasSeguidas-2706.xlsx');
 
         // Validar que el archivo pueda ser analizado correctamente.
         if ($xlsx = SimpleXLSX::parse($path)) {
@@ -279,8 +279,14 @@ class GuiaContabilizadoraController extends Controller
                 $total = 0;
                 $j = 0;
                 $creadas = [];
+                $banderaSaltoFila = false;
                 // Se procesan los datos de cada fila del archivo Excel y se crea un nuevo registro en la base de datos utilizando el modelo Cuenta.
                 for ($k = 0; $k < count($rows); $k++) {
+                    if($banderaSaltoFila){
+                        //Permite dar un nuevo salto para comparar el siguiente par de cuentas
+                        $banderaSaltoFila = false; //Regresa a falso porque ya salto dos líneas
+                        continue;
+                    }
                     
                     $cuentaIzquierda = Cuenta::where("Codigo_cuenta", $rows[$k]["cuenta"])->first();
                     $conceptoIzquierda = Concepto::where("descripcion", $rows[$k]["concepto"])->first();
@@ -289,7 +295,7 @@ class GuiaContabilizadoraController extends Controller
                     $conceptoDerecha = Concepto::where("descripcion", $rows[$k + 1]["concepto"])->first();
                     $clasificadorDerecha = ClasificadorDeConcepto::where("codigo_clasificador", $rows[$k + 1]["clasificador"])->first();
                     if (!$cuentaIzquierda || !$conceptoIzquierda || !$clasificadorIzquierda || !$cuentaDerecha || !$conceptoDerecha || !$clasificadorDerecha) {
-                        continue;
+                        $banderaSaltoFila = true;
                         continue;
                     }
                     $interaccionIzquierda = InteraccionCuentaConcepto::where(['cuenta_id' => $cuentaIzquierda->id, 'concepto_id' => $conceptoIzquierda->id, 'clasificador_de_concepto_id' => $clasificadorIzquierda->id, 'tipo_interaccion' => $rows[$k]['tipo']])->first();
@@ -301,7 +307,7 @@ class GuiaContabilizadoraController extends Controller
                     // dd($interaccionIzquierda, $interaccionDerecha);
                     // dd($interaccionExistente);
                     if ($interaccionExistente) {
-                        continue;
+                        $banderaSaltoFila = true;
                         continue;
                     }
 
