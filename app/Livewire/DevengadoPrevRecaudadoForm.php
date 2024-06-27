@@ -49,8 +49,13 @@ class DevengadoPrevRecaudadoForm extends Component
         $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
             ->where('interaccion_cuenta_conceptos.concepto_id', '=', 14)->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Abono')
             ->where('cuentas.Descripcion_cuenta', 'LIKE', '%(Devengado)%')->orderBy('cuentas.Codigo_cuenta')->get();
-        $eventos =  Poliza::select('evento')->whereYear('fecha', '=', Carbon::now()->year)->where('tipo_poliza', '=', 'I')
-            ->where('categoria','=','INGRESOS POR CLASIFICAR')->distinct()->pluck('evento');
+            $eventos = Poliza::select('evento', 'descripcion')
+            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->where('tipo_poliza', '=', 'I')
+            ->where('categoria', '=', 'INGRESOS POR CLASIFICAR')
+            ->distinct()
+            ->pluck('descripcion', 'evento');
+
         return view('livewire.devengado-prev-recaudado-form', ['eventos' => $eventos, 'cuentas' => $cuentas]);
     }
 

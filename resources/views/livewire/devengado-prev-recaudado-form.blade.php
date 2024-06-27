@@ -55,9 +55,9 @@
                         <option value="" disabled>
                             Seleccionar un evento
                         </option>
-                        @foreach ($eventos as $evento)
+                        @foreach ($eventos as $evento => $descripcion)
                             <option value="{{ $evento }}">
-                                {{ $evento }}
+                                {{ $evento }} - {{$descripcion}}
                             </option>
                         @endforeach
                     </select>
