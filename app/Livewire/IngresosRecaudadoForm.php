@@ -42,7 +42,7 @@ class IngresosRecaudadoForm extends Component
     public function render()
     {
         $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [19,20,21,35])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Abono')
+            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [19,20,21,35,39])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Abono')
             ->orderBy('cuentas.Codigo_cuenta')->get();
         $eventos =  Poliza::select('evento')->whereYear('fecha', '=', Carbon::now()->year)->where('tipo_poliza', '=', 'I')
             ->where('categoria','=','INGRESOS DEVENGADO')->distinct()->pluck('evento');

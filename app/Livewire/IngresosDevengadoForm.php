@@ -50,7 +50,7 @@ class IngresosDevengadoForm extends Component
     public function render()
     {
         $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [15,16,17,18])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Abono')
+            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [15,16,17,18,38])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Abono')
             ->orderBy('cuentas.Codigo_cuenta')->get();
         return view('livewire.ingresos-devengado-form', ['cuentas' => $cuentas]);
     }
