@@ -576,6 +576,7 @@ class CuentasController extends Controller
                         'Descripcion_cuenta' => $row['Descripcion'],
                         'Nivel' => $row['Nivel'] = $nivel,
                         'Estado' => $row['Estado'] = 'True',
+                        'Naturaleza' => $row['Naturaleza'],
                         'identificador' => $row['Identificador'],
                         'Cuenta_registro' => Str::upper($row['Cta. de registro']) == 'SÍ' || Str::upper($row['Cta. de registro']) == 'Sí' || Str::upper($row['Cta. de registro']) == 'Si' || Str::upper($row['Cta. de registro']) == 'SI',
                         // 'Clasificador_rubro_ingreso' => empty($row['CRI']) ? null : $row['CRI'],
