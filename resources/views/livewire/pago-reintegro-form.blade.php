@@ -48,7 +48,7 @@
             <select name="selectCuentaContable" id="selectCuentaContable" class="form-select">
                 <option value="0">
                     Seleccionar cuenta</option>
-                @foreach (\App\Models\Cuenta::join('clasificador_rubro_ingreso', 'clasificador_rubro_ingreso.Cuenta_contable', '=', 'cuentas.Codigo_cuenta')->select('cuentas.*', 'clasificador_rubro_ingreso.*')->where('cuentas.Descripcion_cuenta', 'LIKE', '%(Recaudado)%')->orderBy('cuentas.Codigo_cuenta')->get() as $cuenta)
+                @foreach ($cuentas as $cuenta)
                     <option value="{{ $cuenta->Codigo_cuenta }}">
                         {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
                 @endforeach
