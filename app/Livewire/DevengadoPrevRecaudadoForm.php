@@ -38,6 +38,9 @@ class DevengadoPrevRecaudadoForm extends Component
     #[Validate('required', message: 'Importe requerido')]
     public $importe = "";
 
+    #[Validate('required', message:'Fecha requerida')]
+    public $fechaRegistro = "";
+
 
     public $consultarRegistro = false;
     public $numeroPoliza;
@@ -86,6 +89,7 @@ class DevengadoPrevRecaudadoForm extends Component
                 'codigoCuenta' => $cuenta->Codigo_cuenta,
                 'descripcionCuenta' =>$cuenta->Descripcion_cuenta,
                 'mes' => $this->mes,
+                'fechaRegistro' => $this->fechaRegistro,
                 'importe' => $this->importe,
                 'montoEvento' => $this->montoDelEvento
             ];
