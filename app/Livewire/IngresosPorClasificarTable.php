@@ -171,7 +171,7 @@ class IngresosPorClasificarTable extends Tabla
                 'area' => $responsable->Codigo_completo,
                 'tipo_poliza' => 'I',
                 'numero_poliza' =>  $this->numeroPoliza,
-                'fecha' => $fecha,
+                'fecha' => $movimiento['fechaRegistro'],
                 'cuenta' => $movimiento['codigoCuenta'],
                 'concepto' => $movimiento['descripcionCuenta'],
                 'total' => abs($movimiento['importe']),
@@ -188,7 +188,7 @@ class IngresosPorClasificarTable extends Tabla
                 'area' => $responsable->Codigo_completo,
                 'tipo_poliza' => 'I',
                 'numero_poliza' =>  $this->numeroPoliza,
-                'fecha' => $fecha,
+                'fecha' => $movimiento['fechaRegistro'],
                 'cuenta' => $cuentaDerecha->Codigo_cuenta,
                 'concepto' => $cuentaDerecha->Descripcion_cuenta,
                 'total' => abs($movimiento['importe']),
@@ -201,6 +201,7 @@ class IngresosPorClasificarTable extends Tabla
                 'created_at' => $fecha,
                 'updated_at' => $fecha
             ]);
+
             $poliza->save();
             $polizaDerecha->save();
         }

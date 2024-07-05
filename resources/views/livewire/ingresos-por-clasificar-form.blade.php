@@ -13,19 +13,18 @@
                                 class="form-control w-100" name="inputObservaciones" disabled>
                         </div>
                         <div>
-                            <label for="inputObservaciones"
-                                class="col-md-12 col-form-label">{{ __('Total') }}</label>
+                            <label for="inputObservaciones" class="col-md-12 col-form-label">{{ __('Total') }}</label>
                             <input value="{{ $total }}" type="text" class="form-control" name="inputAumentado"
                                 disabled>
                         </div>
                     </div>
-                   
 
                 </div>
 
             </div>
         </div>
-        <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total tipoMovimiento="PolizaIngresosPorClasificar" urlFinalizar="/ingresos-por-clasificar" tipoPoliza="I" />
+        <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+            tipoMovimiento="PolizaIngresosPorClasificar" urlFinalizar="/ingresos-por-clasificar" tipoPoliza="I" />
     @else
         <div>
             <label for="selectArea" class="form-label">Área solicitante</label>
@@ -44,6 +43,11 @@
             <label for="inputObservacion" class="form-label mt-3">Observación</label>
             <input type="text" name="inputObservacion" id="inputObservacion" class="form-control"
                 wire:model.live="observaciones">
+
+            <label for="inputFechaRegistro" class="form-label mt-3">Fecha de registro</label>
+            <input type="date" name="inputFechaRegistro" id="inputFechaRegistro" class="form-control mb-3"
+                wire:model.live="fechaRegistro">
+
         </div>
 
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
