@@ -86,7 +86,7 @@ class CuentasController extends Controller
         return true;
     }
 
-    private function validarCodigo($data, $key) {
+    private function validarIdentificador($data, $key) {
         // Patrón regex para validar la cadena
         $patron = '/^[A-Z]{2}-\d+$/';
         
