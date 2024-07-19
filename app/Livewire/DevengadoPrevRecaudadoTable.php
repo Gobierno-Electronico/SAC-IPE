@@ -206,8 +206,11 @@ class DevengadoPrevRecaudadoTable extends Tabla
                     'updated_at' => $fecha
                 ]
             ];
-
             foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
+                $importe = $movimiento['importe'];
+                if(str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')){
+                    $importe *= 0.16;
+                }
                 array_push($polizas, [
                     'area' => $movimiento['codigoAreaResponsable'],
                     'tipo_poliza' => 'I',
@@ -215,7 +218,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
                     'fecha' => $movimiento['fechaRegistro'],
                     'cuenta' => $dataCuenta['Codigo_cuenta'],
                     'concepto' => $dataCuenta['Descripcion_cuenta'],
-                    'total' => abs($movimiento['importe']),
+                    'total' => $importe,
                     'mes' => $movimiento['mes'],
                     'descripcion' => $movimiento['observaciones'],
                     'evento' => $this->numeroEvento,
