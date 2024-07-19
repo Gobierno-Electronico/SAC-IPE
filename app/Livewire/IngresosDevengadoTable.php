@@ -62,7 +62,7 @@ class IngresosDevengadoTable extends Tabla
                     'ejecutar' => $registro['pttoEjecutar'],
                     'iva' => $registro['iva']
                 ];
-
+ 
                 unset($this->dataCompleta[$key]);
                 $this->dispatch('llenar-formulario', $datosRegistro);
                 break;

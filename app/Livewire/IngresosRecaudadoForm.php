@@ -36,6 +36,12 @@ class IngresosRecaudadoForm extends Component
     #[Validate('required', message: 'Importe requerido')]
     public $importe = "";
 
+    #[Validate('required', message: 'Fecha requerida')]
+    public $fechaRegistro = "";
+
+    #[Validate('required', message: 'Cuenta de pago requerida')]
+    public $cuentaPago = "";
+
 
     public $numeroPoliza;
 
@@ -44,15 +50,19 @@ class IngresosRecaudadoForm extends Component
         $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
             ->whereIn('interaccion_cuenta_conceptos.concepto_id', [19,20,21,35,39])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Abono')
             ->orderBy('cuentas.Codigo_cuenta')->get();
-        $eventos =  Poliza::select('evento')->whereYear('fecha', '=', Carbon::now()->year)->where('tipo_poliza', '=', 'I')
-            ->where('categoria','=','INGRESOS DEVENGADO')->distinct()->pluck('evento');
+        $eventos =  Poliza::select('evento', 'descripcion')->whereYear('fecha', '=', Carbon::now()->year)->where('tipo_poliza', '=', 'I')
+            ->where('categoria','=','INGRESOS DEVENGADO')->distinct()->pluck('descripcion', 'evento');
         return view('livewire.ingresos-recaudado-form', ['eventos' => $eventos, 'cuentas' => $cuentas]);
     }
 
     public function cambioEvento() {
-        // $this->montoDelEvento = DB::select('EXEC ImporteTotalRecaudado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
-        // $this->dispatch('formato_importe', id: 'inputMontoEvento', amount: ($this->montoDelEvento > 0) ? $this->montoDelEvento : '');
-        // $this->dispatch('mostrarMensaje', mensaje: 'Monto del evento cargado', tipo : 'success', tiempo: 1500);
+        $this->montoDelEvento = DB::select('EXEC ImporteTotalRecaudado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
+        $this->dispatch('formato_importe', id: 'inputMontoEvento', amount: ($this->montoDelEvento > 0) ? $this->montoDelEvento : '');
+        $this->dispatch('mostrarMensaje', mensaje: 'Monto del evento cargado', tipo : 'success', tiempo: 1500);
+    }
+
+    public function llenarCuentaPago(){
+
     }
 
 }
