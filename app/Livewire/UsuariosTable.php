@@ -26,8 +26,8 @@ class UsuariosTable extends Tabla
     {
         return [
             Column::make('nombre', 'Nombre'),
-            Column::make('apellido_materno', 'Apellido materno'),
             Column::make('apellido_paterno', 'Apellido paterno'),
+            Column::make('apellido_materno', 'Apellido materno'),
             Column::make('rol', 'Rol'),
             Column::make('usuario', 'Usuario'),
             Column::make('numero_de_personal', 'Número de personal'),

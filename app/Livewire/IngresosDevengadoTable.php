@@ -10,6 +10,7 @@ use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
 use App\Http\Controllers\BitacoraController;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Log;
 
 class IngresosDevengadoTable extends Tabla
 {
@@ -167,7 +168,8 @@ class IngresosDevengadoTable extends Tabla
         $fecha->year($anioActual);
 
         foreach ($this->dataCompleta as $movimiento) {
-            $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaId'])->whereIn('concepto_id', [15,16,17,18])
+            $movimiento['importe'] = doubleval($movimiento['importe']);
+            $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaId'])->whereIn('concepto_id', [15,16,17,18,38])
                 ->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
             $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
                 ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
@@ -178,7 +180,7 @@ class IngresosDevengadoTable extends Tabla
                     'area' => $movimiento['codigoAreaResponsable'],
                     'tipo_poliza' => 'I',
                     'numero_poliza' =>  $this->numeroPoliza,
-                    'fecha' => $fecha,
+                    'fecha' => $movimiento['fechaRegistro'],
                     'cuenta' => $movimiento['codigoCuenta'],
                     'concepto' => $movimiento['descripcionCuenta'],
                     'total' => abs($movimiento['importe']),
@@ -195,13 +197,13 @@ class IngresosDevengadoTable extends Tabla
             foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
                 $importe = $movimiento['importe'];
                 if(str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')){
-                    $importe *= 0.16;
+                    $importe = $movimiento['iva'];
                 }
                 array_push($polizas, [
                     'area' => $movimiento['codigoAreaResponsable'],
                     'tipo_poliza' => 'I',
                     'numero_poliza' =>  $this->numeroPoliza,
-                    'fecha' => $fecha,
+                    'fecha' => $movimiento['fechaRegistro'],
                     'cuenta' => $dataCuenta['Codigo_cuenta'],
                     'concepto' => $dataCuenta['Descripcion_cuenta'],
                     'total' => $importe,
