@@ -168,6 +168,7 @@ class AutorizacionDevolucionTable extends Tabla
         $fecha->year($anioActual);
 
         foreach ($this->dataCompleta as $movimiento) {
+            $movimiento['importe'] = doubleval($movimiento['importe']);
             $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaId'])->whereIn('concepto_id', [22,23,24,25])
                 ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
             $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
@@ -179,7 +180,7 @@ class AutorizacionDevolucionTable extends Tabla
                     'area' => $movimiento['codigoAreaResponsable'],
                     'tipo_poliza' => 'I',
                     'numero_poliza' =>  $this->numeroPoliza,
-                    'fecha' => $fecha,
+                    'fecha' => $movimiento['fechaRegistro'],
                     'cuenta' => $movimiento['codigoCuenta'],
                     'concepto' => $movimiento['descripcionCuenta'],
                     'total' => abs($movimiento['importe']),
@@ -196,13 +197,13 @@ class AutorizacionDevolucionTable extends Tabla
             foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
                 $importe = $movimiento['importe'];
                 if(str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')){
-                    $importe *= 0.16;
+                    $importe = $movimiento['iva'];
                 }
                 array_push($polizas, [
                     'area' => $movimiento['codigoAreaResponsable'],
                     'tipo_poliza' => 'I',
                     'numero_poliza' =>  $this->numeroPoliza,
-                    'fecha' => $fecha,
+                    'fecha' => $movimiento['fechaRegistro'],
                     'cuenta' => $dataCuenta['Codigo_cuenta'],
                     'concepto' => $dataCuenta['Descripcion_cuenta'],
                     'total' => $importe,

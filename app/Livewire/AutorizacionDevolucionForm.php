@@ -21,6 +21,9 @@ class AutorizacionDevolucionForm extends Component
     #[Validate('required', message: 'Observaciones requeridas')]
     public $observaciones = "";
 
+    #[Validate('required', message:'Fecha requerida')]
+    public $fechaRegistro = "";
+
     #[Validate('required', message: 'Área responsable requerida')]
     public $selectCodigoAreaResponsable = "";
 
@@ -54,6 +57,7 @@ class AutorizacionDevolucionForm extends Component
 
     public function cambioPresupuesto() {
         if(!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
+        $this->limpiarImporteIva();
         $anioActual = Carbon::now()->year;
         $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
         $cuenta = Cuenta::find($this->cuenta);
@@ -66,6 +70,7 @@ class AutorizacionDevolucionForm extends Component
     public function agregarRegistro(){
         try {
             $this->importe = floatval(str_replace(['$',','],"",$this->importe));
+            $this->causaIva = floatval(str_replace(['$',','],"",$this->causaIva));
             $this->importe = ($this->importe > 0)  ? $this->importe : "";
             $this->validate();
             if($this->importe > $this->presupuestoDevengado){
@@ -78,6 +83,7 @@ class AutorizacionDevolucionForm extends Component
                 'id' => 0,
                 'codigoArea' => $this->selectCodigoArea,
                 'observaciones' => $this->observaciones,
+                'fechaRegistro' => $this->fechaRegistro,
                 'areaResponsableId' => $this->selectCodigoAreaResponsable,
                 'codigoAreaResponsable' =>$departamento->Codigo_completo,
                 'descripcionAreaResponsable' =>$departamento->Nombre,
@@ -105,6 +111,27 @@ class AutorizacionDevolucionForm extends Component
             }
         }
     }
+
+    public function verificarCausaIVA() {
+        if(!$this->cuenta) return;
+        $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [22,23,24,25])->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
+        $interaccionCuentasCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
+        ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+        ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
+
+        foreach ($interaccionCuentasCuentas as $key => $dataCuenta) {
+            if(str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')){
+                if($this->importe == ""){
+                    $this->dispatch('limpiarIVA');
+                }else{
+                    $importeFormateado = str_replace(['$',','], '', $this->importe);          
+                    $this->causaIva = $importeFormateado* 0.16;
+                    $this->dispatch('formato_importe', id: 'inputIva', amount: "{$this->causaIva}");
+                }
+            }
+        }
+    }
+
     #[On('reiniciar')]
     public function reiniciar() {
         $this->limpiar();
@@ -130,6 +157,12 @@ class AutorizacionDevolucionForm extends Component
         $this->presupuestoDevengado = 0;
         $this->importe = "";
         $this->dispatch('limpiar');
+    }
+
+    public function limpiarImporteIva(){
+        $this->causaIva = "";
+        $this->importe = "";
+        $this->dispatch('limpiarImporteIva');
     }
 
     #[On('llenar-formulario')]

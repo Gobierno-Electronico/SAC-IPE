@@ -120,8 +120,6 @@
 </div>
 
 <script>
-    let cuentaSeleccionada;
-
     window.addEventListener('formato_importe', event => {
         let params = event.__livewire.params
         formatearImporte({
