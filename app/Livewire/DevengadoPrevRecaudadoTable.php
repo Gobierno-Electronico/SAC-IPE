@@ -130,6 +130,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
         if ($solvencia[0]->Solvencia - $registro['importe'] < 0) {
             $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar insuficiente', tipo: 'error', tiempo: 3000);
             return;
+            
         }
 
         $nuevoRegistro = [
@@ -181,6 +182,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
 
 
         foreach ($this->dataCompleta as $movimiento) {
+            $movimiento['importe'] = doubleval($movimiento['importe']);
             $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaId'])->where('concepto_id', '=', 14)
                 ->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
             $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
@@ -209,7 +211,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
             foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
                 $importe = $movimiento['importe'];
                 if(str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')){
-                    $importe *= 0.16;
+                    $importe = $movimiento['iva'];
                 }
                 array_push($polizas, [
                     'area' => $movimiento['codigoAreaResponsable'],

@@ -29,7 +29,7 @@
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
-            wire:model.live="selectCodigoArea">
+            wire:model="selectCodigoArea">
             <option value="" @if ($this->selectCodigoArea == '') selected @endif disabled>
                 Seleccionar un área
             </option>
@@ -44,7 +44,7 @@
 
         <label for="inputObservacion" class="form-label mt-3">Observación</label>
         <input type="text" name="inputObservacion" id="inputObservacion" class="form-control"
-            wire:model.live="observaciones">
+            wire:model="observaciones">
 
         <label for="inputFechaRegistro" class="form-label mt-3">Fecha de registro</label>
         <input type="date" name="inputFechaRegistro" id="inputFechaRegistro" class="form-control">
@@ -55,7 +55,7 @@
                 <div class="col-auto">
                     <label for="inputSeguimientoEvento" class="form-label">Número de seguimiento de evento</label>
                     <select name="selectSeguimientoEvento" id="selectSeguimientoEvento" class="form-select"
-                        wire:model.live="numeroEvento" wire:change="cambioEvento">
+                        wire:model="numeroEvento" wire:change="cambioEvento">
                         <option value="" disabled>
                             Seleccionar un evento
                         </option>
@@ -68,9 +68,9 @@
                 </div>
                 <label for="selectAreaResponsable" class="form-label mt-3">Área responsable</label>
                 <select name="selectAreaResponsable" id="selectAreaResponsable" class="form-select"
-                    wire:model.live="selectCodigoAreaResponsable">
+                    wire:model="selectCodigoAreaResponsable">
                     <option value="" @if ($this->selectCodigoArea == '') selected @endif>
-                         
+                        Seleccionar un área
                     </option>
                     @foreach (\App\Models\CodigoDepartamento::all() as $departamento)
                         @if (strlen($departamento->Codigo_completo) >= 5)
@@ -83,7 +83,7 @@
 
                 <label for="selectCuentaContable" class="form-label mt-3">Cuenta contable</label>
                 <select name="selectCuentaContable" id="selectCuentaContable" class="form-select"
-                    wire:model.live="cuenta" wire:change="llenarCuentaPago">
+                    wire:model="cuenta" wire:change="llenarCuentasPago">
                     <option value="" disabled>
                         Seleccionar cuenta</option>
                     @foreach ($cuentas as $cuenta)
@@ -93,12 +93,19 @@
                 </select>
 
                 <label for="selectCuentaPago" class="form-label mt-3">Cuenta de pago</label>
-                <select name="selectCuentaPago" id="selectCuentaPago" class="form-select" wire:model.live="cuentaPago">
-
+                <select name="selectCuentaPago" id="selectCuentaPago" class="form-select" wire:model="cuentaPago">
+                    <option value="" selected disabled>Seleccionar cuenta de pago</option>
+                    @if($subcuentas)
+                        @foreach ($subcuentas as $cuentaPago)
+                            <option value="{{ $cuentaPago->cuenta_id }}">
+                                {{ $cuentaPago->Codigo_cuenta . '  ' . $cuentaPago->Descripcion_cuenta }}
+                            </option>
+                        @endforeach
+                    @endif
                 </select>
 
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
-                <select name="selectMes" id="selectMes" class="form-select" wire:model.live="mes">
+                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes">
                     <option value="" selected disabled>Seleccionar mes...</option>
                     @foreach (range(1, 12) as $mes)
                         @php
@@ -114,7 +121,7 @@
 
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control"
-                    onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model.live="importe">
+                    onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model="importe">
 
             </div>
             <div class="col">

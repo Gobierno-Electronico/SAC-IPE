@@ -5,9 +5,12 @@ use Livewire\Component;
 use Livewire\Attributes\Validate;
 use Livewire\Attributes\On;
 use App\Models\Cuenta;
+use App\Models\InteraccionCuentaCuenta;
+use App\Models\InteraccionCuentaConcepto;
 use App\Models\CodigoDepartamento;
 use App\Models\Poliza;
 use Carbon\Carbon;
+use Log;
 use DB;
 
 class IngresosRecaudadoForm extends Component
@@ -42,8 +45,11 @@ class IngresosRecaudadoForm extends Component
     #[Validate('required', message: 'Cuenta de pago requerida')]
     public $cuentaPago = "";
 
+    public $subcuentas = [];
 
     public $numeroPoliza;
+
+    public $cambiarCuentaPagoSeleccionada = true;
 
     public function render()
     {
@@ -59,10 +65,29 @@ class IngresosRecaudadoForm extends Component
         $this->montoDelEvento = DB::select('EXEC ImporteTotalRecaudado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
         $this->dispatch('formato_importe', id: 'inputMontoEvento', amount: ($this->montoDelEvento > 0) ? $this->montoDelEvento : '');
         $this->dispatch('mostrarMensaje', mensaje: 'Monto del evento cargado', tipo : 'success', tiempo: 1500);
+        $this->cambiarCuentaPagoSeleccionada = false;
+        $this->llenarCuentasPago();
+
     }
 
-    public function llenarCuentaPago(){
+    public function llenarCuentasPago(){
+        if(!$this->cuenta){
+            return;
+        } 
 
+        if($this->cambiarCuentaPagoSeleccionada){
+            $this->cuentaPago = "";
+        }
+
+        $this->cambiarCuentaPagoSeleccionada = true;
+        $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [19,20,21,35,39])
+                                                                ->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
+        $this->subcuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
+        ->join('interaccion_cuenta_conceptos', function($join){
+            $join->on('interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+                    ->where('tipo_interaccion', '=', 'Contable - Cargo');
+        })                                                              
+        ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get();
     }
 
 }

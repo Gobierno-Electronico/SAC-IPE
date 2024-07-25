@@ -10,6 +10,9 @@ use App\Models\Poliza;
 use Carbon\Carbon;
 use Log;
 use DB;
+use App\Models\InteraccionCuentaCuenta;
+use App\Models\InteraccionCuentaConcepto;
+
 
 
 class DevengadoPrevRecaudadoForm extends Component
@@ -41,7 +44,7 @@ class DevengadoPrevRecaudadoForm extends Component
     #[Validate('required', message:'Fecha requerida')]
     public $fechaRegistro = "";
 
-
+    public $causaIva = "";
     public $consultarRegistro = false;
     public $numeroPoliza;
     public $numeroPolizaRemanente;
@@ -73,6 +76,7 @@ class DevengadoPrevRecaudadoForm extends Component
     public function agregarRegistro(){
         try {
             $this->importe = floatval(str_replace(['$',','],"",$this->importe));
+            $this->causaIva = floatval(str_replace(['$',','],"",$this->causaIva));
             $this->importe = ($this->importe > 0)  ? $this->importe : "";
             $this->validate();
             $cuenta = Cuenta::find($this->cuenta);
@@ -91,7 +95,8 @@ class DevengadoPrevRecaudadoForm extends Component
                 'mes' => $this->mes,
                 'fechaRegistro' => $this->fechaRegistro,
                 'importe' => $this->importe,
-                'montoEvento' => $this->montoDelEvento
+                'montoEvento' => $this->montoDelEvento,
+                'iva' => $this->causaIva
             ];
             Log::info($registro);
             $this->dispatch('agregar-registro', registro: $registro);
@@ -110,6 +115,26 @@ class DevengadoPrevRecaudadoForm extends Component
         }
     }
 
+    public function verificarCausaIVA() {
+        if(!$this->cuenta) return;
+        $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [14])->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
+        $interaccionCuentasCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
+        ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+        ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
+
+        foreach ($interaccionCuentasCuentas as $key => $dataCuenta) {
+            if(str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')){
+                if($this->importe == ""){
+                    $this->dispatch('limpiarIVA');
+                }else{
+                    $importeFormateado = str_replace(['$',','], '', $this->importe);          
+                    $this->causaIva = $importeFormateado* 0.16;
+                    $this->dispatch('formato_importe', id: 'inputIva', amount: "{$this->causaIva}");
+                }
+            }
+        }
+    }
+
     #[On('reiniciar')]
     public function reiniciar() {
         $this->limpiar();
@@ -124,7 +149,9 @@ class DevengadoPrevRecaudadoForm extends Component
         $this->mes = "";
         $this->importe = "";
         $this->dispatch('limpiar');
+        $this->dispatch('limpiarIVA');
     }
+
 
     public function finalizarRegistros(){
         $this->dispatch('finalizar-registros');
@@ -136,6 +163,7 @@ class DevengadoPrevRecaudadoForm extends Component
         $this->mes = $datosRegistro['mes'];
         $this->importe = $datosRegistro['importe'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
+        $this->causaIva = $datosRegistro['iva'];
         $this->dispatch('llenarFormulario', cuenta: $datosRegistro['cuenta'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe'], area: $datosRegistro['area']);
     }
 

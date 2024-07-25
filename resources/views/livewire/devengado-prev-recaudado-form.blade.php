@@ -110,7 +110,11 @@
 
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control"
-                    onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model.live="importe">
+                    onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model.live="importe"
+                    wire:model.live="importe" wire:change="verificarCausaIVA">
+
+                <label for="inputIva" class="form-label mt-3">Causa IVA</label>
+                <input type="text" name="inputIva" id="inputIva" class="form-control" disabled>
 
             </div>
             <div class="col">
