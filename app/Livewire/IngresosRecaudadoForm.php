@@ -99,6 +99,7 @@ class IngresosRecaudadoForm extends Component
             $this->importe = ($this->importe > 0)  ? $this->importe : "";
             $this->validate();
             $cuenta = Cuenta::find($this->cuenta);
+            $cuentaPagoSeleccionada = Cuenta::find($this->cuentaPago);
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $registro = [
                 'id' => 0,
@@ -112,11 +113,14 @@ class IngresosRecaudadoForm extends Component
                 'cuentaId' => $this->cuenta,
                 'codigoCuenta' => $cuenta->Codigo_cuenta,
                 'descripcionCuenta' =>$cuenta->Descripcion_cuenta,
+                //VERIFICAR 
+                'cuentaPagoId' => $this->cuentaPago,
+                'codigoCuentaPago' => $cuentaPagoSeleccionada->Codigo_cuenta,
+                'descripcionCuentaPago' =>$cuentaPagoSeleccionada->Descripcion_cuenta,
                 'mes' => $this->mes,
                 'importe' => $this->importe,
                 'montoEvento' => $this->montoDelEvento
             ];
-            Log::info($registro);
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
         }catch(\Illuminate\Validation\ValidationException $exception){
@@ -139,6 +143,16 @@ class IngresosRecaudadoForm extends Component
         $this->mes = "";
         $this->importe = "";
         $this->dispatch('limpiar');
+    }
+
+    #[On('llenar-formulario')]
+    public function llenarFormulario ($datosRegistro) {
+        $this->cuenta = $datosRegistro['cuenta'];
+        $this->cuentaPago = $datosRegistro['cuentaPago'];
+        $this->mes = $datosRegistro['mes'];
+        $this->importe = $datosRegistro['importe'];
+        $this->selectCodigoAreaResponsable = $datosRegistro['area'];
+        $this->dispatch('llenarFormulario', cuenta: $datosRegistro['cuenta'], cuentaPago: $datosRegistro['cuentaPago'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe'], area: $datosRegistro['area']);
     }
 
 }

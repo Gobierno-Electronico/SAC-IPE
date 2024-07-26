@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Clases\Column;
 use App\Http\Controllers\BitacoraController;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Carbon\Carbon;
+use Log;
 
 class IngresosRecaudadoTable extends Tabla
 {
@@ -36,15 +38,15 @@ class IngresosRecaudadoTable extends Tabla
     public function columns(): array
     {
         return [
-            Column::make('', 'Area'),
-            Column::make('', 'Partida'),
-            Column::make('', 'Mes'),
-            Column::make('', 'Movimiento'),
-            Column::make('', 'PPTO por ejecutar'),
-            Column::make('', 'Importe')->component('columns.importe'),
-            Column::make('', 'Disponibilidad'),
-            Column::make('', 'Remanente'),
-            Column::make('', 'Acciones')->component('columns.accionesIngresos')
+            Column::make('area', 'Area'),
+            Column::make('partida', 'Partida'),
+            Column::make('mes', 'Mes'),
+            Column::make('movimiento', 'Movimiento'),
+            Column::make('ppto', 'PPTO por ejecutar'),
+            Column::make('importe', 'Importe')->component('columns.importe'),
+            Column::make('disponibilidad', 'Disponibilidad'),
+           // Column::make('remanente', 'Remanente'),
+            Column::make('id', 'Acciones')->component('columns.accionesIngresos')
         ];
     }
 
@@ -55,10 +57,10 @@ class IngresosRecaudadoTable extends Tabla
                 $datosRegistro = [
                     'area' => $registro['areaResponsableId'],
                     'cuenta' => $registro['cuentaId'],
+                    'cuentaPago' => $registro['cuentaPagoId'],
                     'mes' => $registro['mes'],
                     'importe' => $registro['importe']
                 ];
-
                 unset($this->dataCompleta[$key]);
                 $this->dispatch('llenar-formulario', $datosRegistro);
                 break;
@@ -108,5 +110,28 @@ class IngresosRecaudadoTable extends Tabla
             return;
         }
         $anioActual = Carbon::now()->year;
+        //LOGICA PARA SOLVENCIA...
+
+        //revisar
+        $nuevoRegistro = [
+            'id' => 0,
+            'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
+            'partida' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
+            'mes' => $registro['mes'],
+            'movimiento' => 'RECAUDADO',
+            'ppto' => 'Prueba ppto',//$solvencia[0]->Solvencia,
+            'importe' => $registro['importe'],
+            'disponibilidad' => 'Prueba disponibilidad',//$solvencia[0]->Solvencia - $registro['importe'],
+        ];
+
+        array_push($this->cacheData, $nuevoRegistro);
+        array_push($this->dataCompleta, $registro);
+        $this->total = 0;
+        foreach ($this->cacheData as $key => $registro) {
+            $this->cacheData[$key]['id'] = $key + 1; // El ID comienza en 1
+            $this->dataCompleta[$key]['id'] = $key + 1;
+            $this->total += $registro['importe'];
+        }
+        $this->dispatch('cambioTotal', total: $this->total);
     }
 }

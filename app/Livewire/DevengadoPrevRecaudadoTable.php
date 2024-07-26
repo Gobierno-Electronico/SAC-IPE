@@ -64,7 +64,8 @@ class DevengadoPrevRecaudadoTable extends Tabla
                     'area' => $registro['areaResponsableId'],
                     'cuenta' => $registro['cuentaId'],
                     'mes' => $registro['mes'],
-                    'importe' => $registro['importe']
+                    'importe' => $registro['importe'],
+                    'iva' => $registro['iva']
                 ];
 
                 unset($this->dataCompleta[$key]);
@@ -141,7 +142,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
             'movimiento' => 'DEVENGADO',
             'ejecutar' => $solvencia[0]->Solvencia,
             'importe' => $registro['importe'],
-            'disponibilidad' => $solvencia[0]->Solvencia - $registro['importe'],
+            'disponibilidad' => $solvencia[0]->Solvencia - $registro['importe']
         ];
         array_push($this->cacheData, $nuevoRegistro);
         array_push($this->dataCompleta, $registro);
