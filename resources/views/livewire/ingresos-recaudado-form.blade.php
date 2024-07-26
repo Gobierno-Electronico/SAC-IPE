@@ -47,7 +47,7 @@
             wire:model="observaciones">
 
         <label for="inputFechaRegistro" class="form-label mt-3">Fecha de registro</label>
-        <input type="date" name="inputFechaRegistro" id="inputFechaRegistro" class="form-control">
+        <input type="date" name="inputFechaRegistro" id="inputFechaRegistro" class="form-control" wire:model="fechaRegistro">
 
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
         <div class="row">

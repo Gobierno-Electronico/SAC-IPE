@@ -14,6 +14,7 @@ use Log;
 use DB;
 
 class IngresosRecaudadoForm extends Component
+
 {
     #[Validate('required', message: 'Área solicitante requerida')]
     public $selectCodigoArea = "";
@@ -58,6 +59,8 @@ class IngresosRecaudadoForm extends Component
             ->orderBy('cuentas.Codigo_cuenta')->get();
         $eventos =  Poliza::select('evento', 'descripcion')->whereYear('fecha', '=', Carbon::now()->year)->where('tipo_poliza', '=', 'I')
             ->where('categoria','=','INGRESOS DEVENGADO')->distinct()->pluck('descripcion', 'evento');
+            $this->cambiarCuentaPagoSeleccionada = false;
+            $this->llenarCuentasPago();
         return view('livewire.ingresos-recaudado-form', ['eventos' => $eventos, 'cuentas' => $cuentas]);
     }
 
@@ -88,6 +91,54 @@ class IngresosRecaudadoForm extends Component
                     ->where('tipo_interaccion', '=', 'Contable - Cargo');
         })                                                              
         ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get();
+    }
+
+    public function agregarRegistro(){
+        try{
+            $this->importe = floatval(str_replace(['$',','],"",$this->importe));
+            $this->importe = ($this->importe > 0)  ? $this->importe : "";
+            $this->validate();
+            $cuenta = Cuenta::find($this->cuenta);
+            $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
+            $registro = [
+                'id' => 0,
+                'codigoArea' => $this->selectCodigoArea,
+                'observaciones' => $this->observaciones,
+                'fechaRegistro' => $this->fechaRegistro,
+                'evento' => $this->numeroEvento,
+                'areaResponsableId' => $this->selectCodigoAreaResponsable,
+                'codigoAreaResponsable' =>$departamento->Codigo_completo,
+                'descripcionAreaResponsable' =>$departamento->Nombre,
+                'cuentaId' => $this->cuenta,
+                'codigoCuenta' => $cuenta->Codigo_cuenta,
+                'descripcionCuenta' =>$cuenta->Descripcion_cuenta,
+                'mes' => $this->mes,
+                'importe' => $this->importe,
+                'montoEvento' => $this->montoDelEvento
+            ];
+            Log::info($registro);
+            $this->dispatch('agregar-registro', registro: $registro);
+            $this->limpiar();
+        }catch(\Illuminate\Validation\ValidationException $exception){
+            Log::error($exception->getMessage());
+            if($exception->validator){
+                $errors = $exception->validator->errors()->all();
+                foreach ($errors as $value) {
+                    $this->dispatch('mostrarMensaje', mensaje: $value, tipo: 'warning', tiempo: 3000);
+                }
+            }
+            else{
+                throw $exception;
+            }
+        }
+    }
+
+    public function limpiar(){
+        $this->cuenta = "";
+        $this->cuentaPago = "";
+        $this->mes = "";
+        $this->importe = "";
+        $this->dispatch('limpiar');
     }
 
 }

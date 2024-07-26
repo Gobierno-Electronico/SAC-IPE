@@ -48,14 +48,65 @@ class IngresosRecaudadoTable extends Tabla
         ];
     }
 
-    public function edit($value)
+    public function edit($id)
     {
+        foreach ($this->dataCompleta as $key => $registro) {
+            if ($registro['id'] == $id) {
+                $datosRegistro = [
+                    'area' => $registro['areaResponsableId'],
+                    'cuenta' => $registro['cuentaId'],
+                    'mes' => $registro['mes'],
+                    'importe' => $registro['importe']
+                ];
+
+                unset($this->dataCompleta[$key]);
+                $this->dispatch('llenar-formulario', $datosRegistro);
+                break;
+            }
+        }
+
+        foreach ($this->cacheData as $key => $registro) {
+            if ($registro['id'] == $id) {
+                unset($this->cacheData[$key]);
+                break;
+            }
+        }
+        // Recalculamos los totales solo después de eliminar el registro
+        $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
+        $this->dispatch('cambioTotal', total: $totalActualizado);
     }
 
-    public function delete($value){
+    public function delete($id)
+    {
+        foreach ($this->cacheData as $key => $registro) {
+            if ($registro['id'] == $id) {
+                unset($this->cacheData[$key]);
+                break;
+            }
+        }
+
+        foreach ($this->dataCompleta as $key => $registro) {
+            if ($registro['id'] == $id) {
+                unset($this->dataCompleta[$key]);
+                break;
+            }
+        }
+        // Recalculamos los totales solo después de eliminar el registro
+        $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
+        $this->dispatch('cambioTotal', total: $totalActualizado);
     }
 
     public function changeState($value)
     {
+    }
+
+    #[On('agregar-registro')]
+    public function agregarRegistro($registro)
+    {
+        if ($this->total + $registro['importe'] > $registro['montoEvento']) {
+            $this->dispatch('mostrarMensaje', mensaje: 'Monto total del evento superado', tipo: 'error', tiempo: 3000);
+            return;
+        }
+        $anioActual = Carbon::now()->year;
     }
 }
