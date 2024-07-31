@@ -69,12 +69,12 @@
                 <label for="selectAreaResponsable" class="form-label mt-3">Área responsable</label>
                 <select name="selectAreaResponsable" id="selectAreaResponsable" class="form-select"
                     wire:model="selectCodigoAreaResponsable">
-                    <option value="" @if ($this->selectCodigoArea == '') selected @endif>
+                    <option value="" @if ($this->selectCodigoAreaResponsable == '') selected @endif>
                         Seleccionar un área
                     </option>
                     @foreach (\App\Models\CodigoDepartamento::all() as $departamento)
                         @if (strlen($departamento->Codigo_completo) >= 5)
-                            <option value="{{ $departamento->id }}" @if ($this->selectCodigoArea == $departamento->id) selected @endif>
+                            <option value="{{ $departamento->id }}" @if ($this->selectCodigoAreaResponsable == $departamento->id) selected @endif>
                                 {{ $departamento->Codigo_completo . ' ' . $departamento->Nombre }}
                             </option>
                         @endif
