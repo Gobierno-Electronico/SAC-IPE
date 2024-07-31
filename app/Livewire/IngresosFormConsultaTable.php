@@ -99,7 +99,7 @@ class IngresosFormConsultaTable extends Tabla
             // $this->dispatch('mostrarMensaje', mensaje: 'Se borró el movimiento de Reclasificación/Recalendarización', tipo: 'success', tiempo: 3000);
             $this->dispatch('cancelar-movimiento');
             DB::commit();
-            return redirect($this->urlFinalizar)->with(['message' => 'Se borró el movimiento de Reclasificación/Recalendarización', 'message_type' => 'success'])->setStatusCode(422);
+            return redirect($this->urlFinalizar)->with(['message' => 'Se borró el movimiento de Reclasificación/Recalendarización', 'message_type' => 'success']);
         } catch (\Throwable $th) {
             DB::rollBack();
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al borrar el movimiento', tipo: 'error', tiempo: 3000);
