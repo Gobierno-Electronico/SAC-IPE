@@ -96,7 +96,7 @@ class DevengadoPrevRecaudadoForm extends Component
                 'fechaRegistro' => $this->fechaRegistro,
                 'importe' => $this->importe,
                 'montoEvento' => $this->montoDelEvento,
-                'iva' => $this->causaIva
+                'iva' => $this->causaIva,
             ];
             Log::info($registro);
             $this->dispatch('agregar-registro', registro: $registro);
