@@ -21,7 +21,7 @@ class AutorizacionDevolucionTable extends Tabla
     public $numeroEvento;
 
     public function render(){
-        return view('livewire.devengado-prev-recaudado-table');
+        return view('livewire.autorizacion-devolucion-table');
     }
 
     public function query(): Builder
