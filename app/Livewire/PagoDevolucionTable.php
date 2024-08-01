@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Clases\Column;
 use App\Http\Controllers\BitacoraController;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Carbon\Carbon;
 
 class PagoDevolucionTable extends Tabla
 {
@@ -36,18 +37,18 @@ class PagoDevolucionTable extends Tabla
     public function columns(): array
     {
         return [
-            Column::make('', 'Area'),
-            Column::make('', 'Partida'),
-            Column::make('', 'Mes'),
-            Column::make('', 'Movimiento'),
-            Column::make('', 'PPTO devengado'),
-            Column::make('', 'Importe')->component('columns.importe'),
-            Column::make('', 'Nuevo importe'),
-            Column::make('', 'Acciones')->component('columns.accionesIngresos')
+            Column::make('area', 'Area'),
+            Column::make('partida', 'Partida'),
+            Column::make('mes', 'Mes'),
+            Column::make('movimiento', 'Movimiento'),
+            //Column::make('', 'PPTO devengado'),
+            Column::make('importe', 'Importe')->component('columns.importe'),
+           // Column::make('', 'Nuevo importe'),
+            Column::make('id', 'Acciones')->component('columns.accionesIngresos')
         ];
     }
 
-    public function edit($value)
+    public function edit($id)
     {
         foreach ($this->dataCompleta as $key => $registro) {
             if ($registro['id'] == $id) {
@@ -75,7 +76,7 @@ class PagoDevolucionTable extends Tabla
         $this->dispatch('cambioTotal', total: $totalActualizado);
     }
 
-    public function delete($value)
+    public function delete($id)
     {   
         foreach ($this->cacheData as $key => $registro) {
             if ($registro['id'] == $id) {
