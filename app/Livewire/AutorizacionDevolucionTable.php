@@ -10,6 +10,7 @@ use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
 use App\Http\Controllers\BitacoraController;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Log;
 
 class AutorizacionDevolucionTable extends Tabla
 {
@@ -118,7 +119,7 @@ class AutorizacionDevolucionTable extends Tabla
             'movimiento' => 'DEVENGADO',
             'devengado' => $registro['pttoDevengado'],
             'importe' => $registro['importe'] + $registro['iva'],
-            'nuevoImporte' => $registro['pttoDevengado'] - $registro['importe'],
+            'nuevoImporte' => $registro['pttoDevengado'] - $registro['importe'] - $registro['iva'],
         ];
         array_push($this->cacheData, $nuevoRegistro);
         array_push($this->dataCompleta, $registro);
@@ -201,11 +202,18 @@ class AutorizacionDevolucionTable extends Tabla
             foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
                 $importe = $movimiento['importe'];
                 if(str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')){
-                    $importe = $movimiento['iva'];
+                    if($movimiento['iva'] > 0){
+                        $importe = $movimiento['iva'];
+                    }else{
+                        //Saltamos la interacción con iva que no quieren que se le agregue el IVA, esto para no mostrarlo en la poliza
+                        break;
+                    }
                 }
+
                 if($dataCuenta['tipo_interaccion'] == 'Contable - Abono' || str_contains($dataCuenta['tipo_interaccion'], 'Presupuestal')){
                     $importe = $importe + $movimiento['iva'];
                 }
+                
                 array_push($polizas, [
                     'area' => $movimiento['codigoAreaResponsable'],
                     'tipo_poliza' => 'I',
