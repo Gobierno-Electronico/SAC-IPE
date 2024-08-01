@@ -174,6 +174,10 @@ class AutorizacionDevolucionTable extends Tabla
             $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
                 ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
                 ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
+            $importeMovimiento = $movimiento['importe'];
+            if($interaccionCuentaConceptoPrincipal->tipo_interaccion == 'Presupuestal - Cargo'){
+                $importeMovimiento = $movimiento['importe'] + $movimiento['iva'];
+            }
 
             $polizas = [
                 [
@@ -183,7 +187,7 @@ class AutorizacionDevolucionTable extends Tabla
                     'fecha' => $movimiento['fechaRegistro'],
                     'cuenta' => $movimiento['codigoCuenta'],
                     'concepto' => $movimiento['descripcionCuenta'],
-                    'total' => abs($movimiento['importe']),
+                    'total' => abs($importeMovimiento),
                     'mes' => $movimiento['mes'],
                     'descripcion' => $movimiento['observaciones'],
                     'evento' => $this->numeroEvento,
@@ -199,7 +203,7 @@ class AutorizacionDevolucionTable extends Tabla
                 if(str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')){
                     $importe = $movimiento['iva'];
                 }
-                if($dataCuenta['tipo_interaccion'] == 'Contable - Abono'){
+                if($dataCuenta['tipo_interaccion'] == 'Contable - Abono' || str_contains($dataCuenta['tipo_interaccion'], 'Presupuestal')){
                     $importe = $importe + $movimiento['iva'];
                 }
                 array_push($polizas, [
