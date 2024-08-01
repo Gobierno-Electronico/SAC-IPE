@@ -141,7 +141,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
             'mes' => $registro['mes'],
             'movimiento' => 'DEVENGADO',
             'ejecutar' => $solvencia[0]->Solvencia,
-            'importe' => $registro['importe'],
+            'importe' => $registro['importe'] + $registro['iva'],
             'disponibilidad' => $solvencia[0]->Solvencia - $registro['importe']
         ];
         array_push($this->cacheData, $nuevoRegistro);
@@ -213,6 +213,9 @@ class DevengadoPrevRecaudadoTable extends Tabla
                 $importe = $movimiento['importe'];
                 if(str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')){
                     $importe = $movimiento['iva'];
+                }
+                if($dataCuenta['tipo_interaccion'] == 'Contable - Cargo'){
+                    $importe = $importe + $movimiento['iva'];
                 }
                 array_push($polizas, [
                     'area' => $movimiento['codigoAreaResponsable'],

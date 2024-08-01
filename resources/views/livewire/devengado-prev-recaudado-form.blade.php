@@ -174,5 +174,6 @@
     function limpiar() {
         $('#selectCuentaContable').val('');
         $('#inputImporte').val('');
+        $('#inputIva').val('');
     }
 </script>

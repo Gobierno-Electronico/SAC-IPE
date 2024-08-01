@@ -118,7 +118,7 @@ class IngresosDevengadoTable extends Tabla
             'mes' => $registro['mes'],
             'movimiento' => 'DEVENGADO',
             'ejecutar' => $registro['pttoEjecutar'],
-            'importe' => $registro['importe'],
+            'importe' => $registro['importe'] + $registro['iva'],
             'disponibilidad' => $registro['pttoEjecutar'] - $registro['importe'],
         ];
         array_push($this->cacheData, $nuevoRegistro);
@@ -198,6 +198,9 @@ class IngresosDevengadoTable extends Tabla
                 $importe = $movimiento['importe'];
                 if(str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')){
                     $importe = $movimiento['iva'];
+                }
+                if($dataCuenta['tipo_interaccion'] == 'Contable - Cargo'){
+                    $importe = $importe + $movimiento['iva'];
                 }
                 array_push($polizas, [
                     'area' => $movimiento['codigoAreaResponsable'],

@@ -5,10 +5,13 @@ use Livewire\Attributes\On;
 use App\Models\Poliza;
 use Illuminate\Database\Eloquent\Builder;
 use App\Clases\Column;
+use App\Models\InteraccionCuentaCuenta;
+use App\Models\InteraccionCuentaConcepto;
 use App\Http\Controllers\BitacoraController;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Carbon\Carbon;
 use Log;
+use DB;
 
 class IngresosRecaudadoTable extends Tabla
 {
@@ -110,7 +113,27 @@ class IngresosRecaudadoTable extends Tabla
             return;
         }
         $anioActual = Carbon::now()->year;
-        //LOGICA PARA SOLVENCIA...
+        $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $registro['cuentaId'])
+            ->whereIn('concepto_id', [19, 20, 21, 35, 39])
+            ->where('tipo_interaccion', '=', 'Presupuestal - Abono')
+            ->first();
+
+        Log::info($interaccionCuentaConcepto);
+
+        $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
+            ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')
+            ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+            ->where('Descripcion_cuenta', 'LIKE', '%(Devengado)%')
+            ->first();
+        
+        Log::info($interaccionCuentaCuenta);  
+
+        $solvencia = DB::select('EXEC SolvenciaCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($registro['codigoAreaResponsable'], $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $registro['mes']));
+        Log::info($solvencia);
+        if ($solvencia[0]->Solvencia - $registro['importe'] < 0) {
+            $this->dispatch('mostrarMensaje', mensaje: 'Monto devengado insuficiente', tipo: 'error', tiempo: 3000);
+            return;
+        }
 
         //revisar
         $nuevoRegistro = [
@@ -119,9 +142,9 @@ class IngresosRecaudadoTable extends Tabla
             'partida' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
             'mes' => $registro['mes'],
             'movimiento' => 'RECAUDADO',
-            'ppto' => 'Prueba ppto',//$solvencia[0]->Solvencia,
+            'ppto' => $solvencia[0]->Solvencia,
             'importe' => $registro['importe'],
-            'disponibilidad' => 'Prueba disponibilidad',//$solvencia[0]->Solvencia - $registro['importe'],
+            'disponibilidad' => $solvencia[0]->Solvencia - $registro['importe'],
         ];
 
         array_push($this->cacheData, $nuevoRegistro);

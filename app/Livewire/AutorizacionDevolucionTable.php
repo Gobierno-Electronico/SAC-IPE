@@ -21,7 +21,7 @@ class AutorizacionDevolucionTable extends Tabla
     public $numeroEvento;
 
     public function render(){
-        return view('livewire.devengado-prev-recaudado-table');
+        return view('livewire.autorizacion-devolucion-table');
     }
 
     public function query(): Builder
@@ -117,7 +117,7 @@ class AutorizacionDevolucionTable extends Tabla
             'mes' => $registro['mes'],
             'movimiento' => 'DEVENGADO',
             'devengado' => $registro['pttoDevengado'],
-            'importe' => $registro['importe'],
+            'importe' => $registro['importe'] + $registro['iva'],
             'nuevoImporte' => $registro['pttoDevengado'] - $registro['importe'],
         ];
         array_push($this->cacheData, $nuevoRegistro);
@@ -198,6 +198,9 @@ class AutorizacionDevolucionTable extends Tabla
                 $importe = $movimiento['importe'];
                 if(str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')){
                     $importe = $movimiento['iva'];
+                }
+                if($dataCuenta['tipo_interaccion'] == 'Contable - Abono'){
+                    $importe = $importe + $movimiento['iva'];
                 }
                 array_push($polizas, [
                     'area' => $movimiento['codigoAreaResponsable'],
