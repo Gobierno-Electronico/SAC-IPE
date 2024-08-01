@@ -44,7 +44,9 @@ class DevengadoPrevRecaudadoForm extends Component
     #[Validate('required', message:'Fecha requerida')]
     public $fechaRegistro = "";
 
-    public $causaIva = "";
+    public $causaIva = 0;
+    public $agregarIVA = "";
+
     public $consultarRegistro = false;
     public $numeroPoliza;
     public $numeroPolizaRemanente;
@@ -75,6 +77,17 @@ class DevengadoPrevRecaudadoForm extends Component
 
     public function agregarRegistro(){
         try {
+            if($this->causaIva > 0){
+                if($this->agregarIVA != ""){
+                    if($this->agregarIVA == 'NO'){
+                        $this->causaIva = 0;
+                    }
+                }else{
+                    $this->dispatch('mostrarMensaje', mensaje: 'Selección agregar IVA requerido', tipo: 'warning', tiempo: 3000);
+                    return;
+                }
+            }
+
             $this->importe = floatval(str_replace(['$',','],"",$this->importe));
             $this->causaIva = floatval(str_replace(['$',','],"",$this->causaIva));
             $this->importe = ($this->importe > 0)  ? $this->importe : "";
@@ -98,7 +111,6 @@ class DevengadoPrevRecaudadoForm extends Component
                 'montoEvento' => $this->montoDelEvento,
                 'iva' => $this->causaIva,
             ];
-            Log::info($registro);
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -128,7 +140,7 @@ class DevengadoPrevRecaudadoForm extends Component
                     $this->dispatch('limpiarIVA');
                 }else{
                     $importeFormateado = str_replace(['$',','], '', $this->importe);          
-                    $this->causaIva = $importeFormateado* 0.16;
+                    $this->causaIva = $importeFormateado * 0.16;
                     $this->dispatch('formato_importe', id: 'inputIva', amount: "{$this->causaIva}");
                 }
             }
@@ -148,6 +160,8 @@ class DevengadoPrevRecaudadoForm extends Component
         $this->cuenta = "";
         $this->mes = "";
         $this->importe = "";
+        $this->causaIva = 0;
+        $this->agregarIVA = "";
         $this->dispatch('limpiar');
         $this->dispatch('limpiarIVA');
     }

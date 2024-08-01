@@ -41,7 +41,8 @@ class IngresosDevengadoForm extends Component
     #[Validate('required', message: 'Importe requerido')]
     public $importe = "";
 
-    public $causaIva = "";
+    public $causaIva = 0;
+    public $agregarIVA = "";
 
     public $consultarRegistro = false;
     public $numeroEvento;
@@ -60,6 +61,16 @@ class IngresosDevengadoForm extends Component
 
     public function agregarRegistro(){
         try {
+            if($this->causaIva > 0){
+                if($this->agregarIVA != ""){
+                    if($this->agregarIVA == 'NO'){
+                        $this->causaIva = 0;
+                    }
+                }else{
+                    $this->dispatch('mostrarMensaje', mensaje: 'Selección agregar IVA requerido', tipo: 'warning', tiempo: 3000);
+                    return;
+                }
+            }
             $this->importe = floatval(str_replace(['$',','],"",$this->importe));
             $this->causaIva = floatval(str_replace(['$',','],"",$this->causaIva));
             $this->importe = ($this->importe > 0)  ? $this->importe : "";
@@ -130,7 +141,7 @@ class IngresosDevengadoForm extends Component
                     $this->dispatch('limpiarIVA');
                 }else{
                     $importeFormateado = str_replace(['$',','], '', $this->importe);          
-                    $this->causaIva = $importeFormateado* 0.16;
+                    $this->causaIva = $importeFormateado * 0.16;
                     $this->dispatch('formato_importe', id: 'inputIva', amount: "{$this->causaIva}");
                 }
             }
@@ -139,16 +150,17 @@ class IngresosDevengadoForm extends Component
 
     public function limpiar(){
         $this->cuenta = "";
-        $this->causaIva = "";
+        $this->causaIva = 0;
         $this->mes = "";
         $this->PTTOEjecutar = 0;
         $this->importe = "";
+        $this->agregarIVA = "";
         $this->dispatch('limpiar');
         $this->dispatch('limpiarIVA');
     }
 
     public function limpiarImporteIva(){
-        $this->causaIva = "";
+        $this->causaIva = 0;
         $this->importe = "";
         $this->dispatch('limpiarImporteIva');
     }

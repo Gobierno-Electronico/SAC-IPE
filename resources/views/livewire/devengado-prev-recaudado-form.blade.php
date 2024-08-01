@@ -24,7 +24,9 @@
 
             </div>
         </div>
-        <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total tipoMovimiento="PolizaIngresosDevengadoPreviamenteRecaudado" tipoPoliza="I" urlFinalizar="/devengado-prev-recaudado" :$numeroPolizaRemanente />
+        <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+            tipoMovimiento="PolizaIngresosDevengadoPreviamenteRecaudado" tipoPoliza="I"
+            urlFinalizar="/devengado-prev-recaudado" :$numeroPolizaRemanente />
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
@@ -61,7 +63,7 @@
                         </option>
                         @foreach ($eventos as $evento => $descripcion)
                             <option value="{{ $evento }}">
-                                {{ $evento }} - {{$descripcion}}
+                                {{ $evento }} - {{ $descripcion }}
                             </option>
                         @endforeach
                     </select>
@@ -116,6 +118,18 @@
                 <label for="inputIva" class="form-label mt-3">Causa IVA</label>
                 <input type="text" name="inputIva" id="inputIva" class="form-control" disabled>
 
+                @if ($causaIva > 0)
+                    <label for="agregarIVA"class="form-label mt-3">¿Desea agregar el IVA?</label><br>
+                    <label>
+                        <input type="radio" name="agregarIVA" wire:model="agregarIVA" value="SI">
+                        Sí
+                    </label>
+                    &nbsp;&nbsp;&nbsp;
+                    <label>
+                        <input type="radio" name="agregarIVA" wire:model="agregarIVA" value="NO">
+                        No
+                    </label>
+                @endif
             </div>
             <div class="col">
                 <livewire:devengado-prev-recaudado-table />

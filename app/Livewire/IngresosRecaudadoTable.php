@@ -45,7 +45,7 @@ class IngresosRecaudadoTable extends Tabla
             Column::make('partida', 'Partida'),
             Column::make('mes', 'Mes'),
             Column::make('movimiento', 'Movimiento'),
-            Column::make('ppto', 'PPTO por ejecutar'),
+            Column::make('ppto', 'PPTO Devengado')->component('columns.importe'),
             Column::make('importe', 'Importe')->component('columns.importe'),
             Column::make('disponibilidad', 'Disponibilidad'),
            // Column::make('remanente', 'Remanente'),
@@ -118,19 +118,14 @@ class IngresosRecaudadoTable extends Tabla
             ->where('tipo_interaccion', '=', 'Presupuestal - Abono')
             ->first();
 
-        Log::info($interaccionCuentaConcepto);
-
         $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
             ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')
             ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
             ->where('Descripcion_cuenta', 'LIKE', '%(Devengado)%')
             ->first();
         
-        Log::info($interaccionCuentaCuenta);  
-
-        $solvencia = DB::select('EXEC SolvenciaCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($registro['codigoAreaResponsable'], $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $registro['mes']));
-        Log::info($solvencia);
-        if ($solvencia[0]->Solvencia - $registro['importe'] < 0) {
+        $solvencia = DB::select('EXEC DevengadoCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($registro['codigoAreaResponsable'], $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $registro['mes']));
+        if ($solvencia[0]->TotalDevengado - $registro['importe'] < 0) { 
             $this->dispatch('mostrarMensaje', mensaje: 'Monto devengado insuficiente', tipo: 'error', tiempo: 3000);
             return;
         }
@@ -142,9 +137,9 @@ class IngresosRecaudadoTable extends Tabla
             'partida' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
             'mes' => $registro['mes'],
             'movimiento' => 'RECAUDADO',
-            'ppto' => $solvencia[0]->Solvencia,
+            'ppto' => $solvencia[0]->TotalDevengado,
             'importe' => $registro['importe'],
-            'disponibilidad' => $solvencia[0]->Solvencia - $registro['importe'],
+            'disponibilidad' => $solvencia[0]->TotalDevengado - $registro['importe'],
         ];
 
         array_push($this->cacheData, $nuevoRegistro);

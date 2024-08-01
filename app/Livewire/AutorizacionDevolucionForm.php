@@ -30,8 +30,6 @@ class AutorizacionDevolucionForm extends Component
     #[Validate('required', message: 'Cuenta requerida')]
     public $cuenta = "";
 
-    public $causaIva = "";
-
     #[Validate('required', message: 'Mes requerido')]
     public $mes = "";
 
@@ -47,6 +45,10 @@ class AutorizacionDevolucionForm extends Component
     public $numeroPoliza;
     public $total;
     public $tipoMovimiento;
+
+    public $causaIva = 0;
+    public $agregarIVA = "";
+
     public function render()
     {
         $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
@@ -69,6 +71,16 @@ class AutorizacionDevolucionForm extends Component
 
     public function agregarRegistro(){
         try {
+            if($this->causaIva > 0){
+                if($this->agregarIVA != ""){
+                    if($this->agregarIVA == 'NO'){
+                        $this->causaIva = 0;
+                    }
+                }else{
+                    $this->dispatch('mostrarMensaje', mensaje: 'Selección agregar IVA requerido', tipo: 'warning', tiempo: 3000);
+                    return;
+                }
+            }
             $this->importe = floatval(str_replace(['$',','],"",$this->importe));
             $this->causaIva = floatval(str_replace(['$',','],"",$this->causaIva));
             $this->importe = ($this->importe > 0)  ? $this->importe : "";
@@ -95,7 +107,6 @@ class AutorizacionDevolucionForm extends Component
                 'pttoDevengado' => $this->presupuestoDevengado,
                 'iva' => $this->causaIva
             ];
-            Log::info($registro);
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -125,7 +136,7 @@ class AutorizacionDevolucionForm extends Component
                     $this->dispatch('limpiarIVA');
                 }else{
                     $importeFormateado = str_replace(['$',','], '', $this->importe);          
-                    $this->causaIva = $importeFormateado* 0.16;
+                    $this->causaIva = $importeFormateado * 0.16;
                     $this->dispatch('formato_importe', id: 'inputIva', amount: "{$this->causaIva}");
                 }
             }
@@ -152,15 +163,16 @@ class AutorizacionDevolucionForm extends Component
 
     public function limpiar(){
         $this->cuenta = "";
-        $this->causaIva = "";
         $this->mes = "";
         $this->presupuestoDevengado = 0;
         $this->importe = "";
+        $this->causaIva = 0;
+        $this->agregarIVA = "";
         $this->dispatch('limpiar');
     }
 
     public function limpiarImporteIva(){
-        $this->causaIva = "";
+        $this->causaIva = 0;
         $this->importe = "";
         $this->dispatch('limpiarImporteIva');
     }
