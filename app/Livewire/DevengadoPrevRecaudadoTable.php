@@ -142,7 +142,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
             'movimiento' => 'DEVENGADO',
             'ejecutar' => $solvencia[0]->Solvencia,
             'importe' => $registro['importe'] + $registro['iva'],
-            'disponibilidad' => $solvencia[0]->Solvencia - $registro['importe']
+            'disponibilidad' => $solvencia[0]->Solvencia - $registro['importe'] - $registro['iva']
         ];
         array_push($this->cacheData, $nuevoRegistro);
         array_push($this->dataCompleta, $registro);
