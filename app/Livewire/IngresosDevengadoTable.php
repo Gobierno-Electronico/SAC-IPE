@@ -197,7 +197,9 @@ class IngresosDevengadoTable extends Tabla
             foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
                 $importe = $movimiento['importe'];
                 if(str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')){
-                    $importe = $movimiento['iva'];
+                    if($movimiento['iva'] > 0){
+                        $importe = $movimiento['iva'];
+                    }
                 }
                 if($dataCuenta['tipo_interaccion'] == 'Contable - Cargo'){
                     $importe = $importe + $movimiento['iva'];
