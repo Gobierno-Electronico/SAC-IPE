@@ -9,6 +9,7 @@ use App\Models\Cuenta;
 use App\Models\Poliza;
 use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
+use App\Models\CodigoDepartamento;
 use DB;
 use Log;
 
@@ -37,6 +38,8 @@ class PagoDevolucionForm extends Component
 
     #[Validate('required', message: 'Mes requerido')]
     public $mes = "";
+
+    public $montoDelEvento = "";
     
     #[Validate('required', message: 'Importe requerido')]
     public $importe = "";
@@ -110,13 +113,12 @@ class PagoDevolucionForm extends Component
                 'cuentaId' => $this->cuenta,
                 'codigoCuenta' => $cuenta->Codigo_cuenta,
                 'descripcionCuenta' =>$cuenta->Descripcion_cuenta,
-                //VERIFICAR 
                 'cuentaPagoId' => $this->cuentaPago,
                 'codigoCuentaPago' => $cuentaPagoSeleccionada->Codigo_cuenta,
                 'descripcionCuentaPago' =>$cuentaPagoSeleccionada->Descripcion_cuenta,
                 'mes' => $this->mes,
                 'importe' => $this->importe,
-             //   'montoEvento' => $this->montoDelEvento
+                'montoEvento' => $this->montoDelEvento
             ];
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();

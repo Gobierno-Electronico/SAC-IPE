@@ -38,12 +38,12 @@
             </div>
             <label for="selectAreaResponsable" class="form-label mt-3">Área responsable</label>
             <select name="selectAreaResponsable" id="selectAreaResponsable" class="form-select" wire:model="selectCodigoAreaResponsable">
-                <option value="" @if ($this->selectCodigoArea == '') selected @endif>
+                <option value="" @if ($this->selectCodigoAreaResponsable == '') selected @endif>
                     Seleccionar un área
                 </option>
                 @foreach (\App\Models\CodigoDepartamento::all() as $departamento)
                     @if (strlen($departamento->Codigo_completo) >= 5)
-                        <option value="{{ $departamento->id }}" @if ($this->selectCodigoArea == $departamento->id) selected @endif>
+                        <option value="{{ $departamento->id }}" @if ($this->selectCodigoAreaResponsable == $departamento->id) selected @endif>
                             {{ $departamento->Codigo_completo . ' ' . $departamento->Nombre }}
                         </option>
                     @endif
@@ -52,7 +52,7 @@
 
             <label for="selectCuentaContable" class="form-label mt-3">Cuenta contable</label>
             <select name="selectCuentaContable" id="selectCuentaContable" class="form-select" wire:model="cuenta" wire:change="llenarCuentasPago">
-                <option value="0">
+                <option value="" disabled>
                     Seleccionar cuenta</option>
                 @foreach ($cuentas as $cuenta)
                     <option value="{{ $cuenta->cuenta_id }}">
@@ -81,8 +81,8 @@
                 @endforeach
             </select>
 
-            <label for="inputPPTODevengado" class="form-label mt-3">PPTO devengado</label>
-            <input type="number" name="inputPPTODevengado" id="inputPPTODevengado" class="form-control">
+            <label for="inputPPTODevengado" class="form-label mt-3">Monto del evento</label>
+            <input type="text" name="inputMontoEvento" id="inputMontoEvento" class="form-control" disabled>
 
             <label for="inputImporte" class="form-label mt-3">Importe</label>
             <input type="text" name="inputImporte" id="inputImporte" class="form-control"
