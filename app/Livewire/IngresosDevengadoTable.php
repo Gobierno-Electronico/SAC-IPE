@@ -205,7 +205,7 @@ class IngresosDevengadoTable extends Tabla
                         $importe = $movimiento['iva'];
                     }else{
                         //Saltamos la interacción con iva que no quieren que se le agregue el IVA, esto para no mostrarlo en la poliza
-                        break;
+                        continue;
                     }
                 }
                 if($dataCuenta['tipo_interaccion'] == 'Contable - Cargo' || str_contains($dataCuenta['tipo_interaccion'], 'Presupuestal')){

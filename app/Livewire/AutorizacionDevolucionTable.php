@@ -206,7 +206,7 @@ class AutorizacionDevolucionTable extends Tabla
                         $importe = $movimiento['iva'];
                     }else{
                         //Saltamos la interacción con iva que no quieren que se le agregue el IVA, esto para no mostrarlo en la poliza
-                        break;
+                        continue;
                     }
                 }
 
