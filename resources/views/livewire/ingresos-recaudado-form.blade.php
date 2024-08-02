@@ -1,5 +1,5 @@
 <div class="mt-5">
-    @if ("")
+    @if ($consultarRegistro)
         <div>
             <h4>Resumen de movimientos por registrar</h4>
 
@@ -24,8 +24,7 @@
 
             </div>
         </div>
-        <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaIngresosRecaudado" urlFinalizar="/ingresos-recaudado" tipoPoliza="I" />
+        <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total tipoMovimiento="PolizaIngresosRecaudado" tipoPoliza="I" urlFinalizar="/ingresos-recaudado" :$numeroPolizaRemanente />
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
