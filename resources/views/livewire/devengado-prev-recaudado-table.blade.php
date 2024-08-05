@@ -65,7 +65,7 @@
         $("#selectAreaResponsable option:contains('" + parametros.area + "')").prop("selected", true);
         $("#selectMes option:contains('" + parametros.mes + "')").prop("selected", true);
         $('#inputImporte').val(parametros.importe);
-        $('#inputIva').val(parametros.iva);
+        $('#agregarIVA').val(parametros.agregarIVA);
         formatearImporte({id: 'inputImporte'})
     });
 

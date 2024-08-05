@@ -51,6 +51,7 @@
         </div>
     </div>
 </div>
+
 <script>
     window.addEventListener('cambioTotal', event => {
         let parametros = event.__livewire.params

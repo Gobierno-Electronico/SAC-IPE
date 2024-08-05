@@ -6,6 +6,7 @@ use Livewire\Attributes\On;
 use App\Models\Poliza;
 use Illuminate\Database\Eloquent\Builder;
 use DB;
+use Log;
 use App\Clases\Column;
 use App\Http\Controllers\BitacoraController;
 use Carbon\Carbon;
@@ -65,9 +66,8 @@ class DevengadoPrevRecaudadoTable extends Tabla
                     'cuenta' => $registro['cuentaId'],
                     'mes' => $registro['mes'],
                     'importe' => $registro['importe'],
-                    'iva' => $registro['iva']
+                    'agregarIVA' => $registro['agregarIVA'],
                 ];
-
                 unset($this->dataCompleta[$key]);
                 $this->dispatch('llenar-formulario', $datosRegistro);
                 break;
@@ -83,7 +83,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
 
         // Recalculamos los totales solo después de eliminar el registro
         $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
-
+        $this->total = $totalActualizado;
         $this->dispatch('cambioTotal', total: $totalActualizado);
     }
 
@@ -105,7 +105,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
 
         // Recalculamos los totales solo después de eliminar el registro
         $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
-
+        $this->total = $totalActualizado;
         $this->dispatch('cambioTotal', total: $totalActualizado);
     }
 
@@ -116,7 +116,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
     #[On('agregar-registro')]
     public function agregarRegistro($registro)
     {
-        if ($this->total + $registro['importe'] > $registro['montoEvento']) {
+        if ($this->total + $registro['importe'] + $registro['iva'] > $registro['montoEvento']) {
             $this->dispatch('mostrarMensaje', mensaje: 'Monto total del evento superado', tipo: 'error', tiempo: 3000);
             return;
         }
@@ -142,7 +142,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
             'movimiento' => 'DEVENGADO',
             'ejecutar' => $solvencia[0]->Solvencia,
             'importe' => $registro['importe'] + $registro['iva'],
-            'disponibilidad' => $solvencia[0]->Solvencia - $registro['importe']
+            'disponibilidad' => $solvencia[0]->Solvencia - $registro['importe'] - $registro['iva']
         ];
         array_push($this->cacheData, $nuevoRegistro);
         array_push($this->dataCompleta, $registro);
@@ -189,6 +189,11 @@ class DevengadoPrevRecaudadoTable extends Tabla
             $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
                 ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
                 ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
+            $importeMovimiento = $movimiento['importe'];
+            if($interaccionCuentaConceptoPrincipal->tipo_interaccion == 'Presupuestal - Abono'){
+                $importeMovimiento = $movimiento['importe'] + $movimiento['iva'];
+            }
+                
 
             $polizas = [
                 [
@@ -198,7 +203,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
                     'fecha' => $movimiento['fechaRegistro'],
                     'cuenta' => $movimiento['codigoCuenta'],
                     'concepto' => $movimiento['descripcionCuenta'],
-                    'total' => abs($movimiento['importe']),
+                    'total' => abs($importeMovimiento),
                     'mes' => $movimiento['mes'],
                     'descripcion' => $movimiento['observaciones'],
                     'evento' => $this->numeroEvento,
@@ -212,9 +217,14 @@ class DevengadoPrevRecaudadoTable extends Tabla
             foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
                 $importe = $movimiento['importe'];
                 if(str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')){
-                    $importe = $movimiento['iva'];
+                    if($movimiento['iva'] > 0){
+                        $importe = $movimiento['iva'];
+                    }else{
+                        //Saltamos la interacción con iva que no quieren que se le agregue el IVA, esto para no mostrarlo en la poliza
+                        continue;
+                    }
                 }
-                if($dataCuenta['tipo_interaccion'] == 'Contable - Cargo'){
+                if($dataCuenta['tipo_interaccion'] == 'Contable - Cargo' || str_contains($dataCuenta['tipo_interaccion'], 'Presupuestal')){
                     $importe = $importe + $movimiento['iva'];
                 }
                 array_push($polizas, [

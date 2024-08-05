@@ -98,10 +98,24 @@
 
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control"
-                    onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model.live="importe" wire:change="verificarCausaIVA">
+                    onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model.live="importe"
+                    wire:change="verificarCausaIVA">
 
                 <label for="inputIva" class="form-label mt-3">Causa IVA</label>
                 <input type="text" name="inputIva" id="inputIva" class="form-control" disabled>
+
+                @if ($causaIva > 0)
+                    <label for="agregarIVA"class="form-label mt-3">¿Desea agregar el IVA?</label><br>
+                    <label>
+                        <input type="radio" name="agregarIVA" wire:model="agregarIVA" value="SI">
+                        Sí
+                    </label>
+                    &nbsp;&nbsp;&nbsp;
+                    <label>
+                        <input type="radio" name="agregarIVA" wire:model="agregarIVA" value="NO">
+                        No
+                    </label>
+                @endif
             </div>
             <div class="col">
                 <livewire:autorizacion-devolucion-table />
@@ -168,6 +182,7 @@
 
     function limpiar() {
         $('#inputPTODevengado').val('');
+        $('#inputIva').val('');
     }
 
     function limpiarIVA() {
@@ -182,7 +197,6 @@
     window.addEventListener('llenarFormulario', event => {
         let parametros = event.__livewire.params
         $('#inputPTODevengado').val(parametros.presupuesto);
-        $('#inputIva').val(parametros.iva);
         $('#inputImporte').val(parametros.importe);
         formatearImporte({
             id: 'inputImporte'

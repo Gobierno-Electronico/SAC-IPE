@@ -62,7 +62,6 @@
     window.addEventListener('llenarFormulario', event => {
         let parametros = event.__livewire.params
         $('#inputPTTOEjecutar').val(parametros.presupuesto);
-        $('#inputIva').val(parametros.iva);
         $('#inputImporte').val(parametros.importe);
         formatearImporte({id: 'inputImporte'})
         formatearImporte({id: 'inputPTTOEjecutar'})
