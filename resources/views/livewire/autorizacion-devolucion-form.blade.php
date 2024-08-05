@@ -182,6 +182,7 @@
 
     function limpiar() {
         $('#inputPTODevengado').val('');
+        $('#inputIva').val('');
     }
 
     function limpiarIVA() {
@@ -196,7 +197,6 @@
     window.addEventListener('llenarFormulario', event => {
         let parametros = event.__livewire.params
         $('#inputPTODevengado').val(parametros.presupuesto);
-        $('#inputIva').val(parametros.iva);
         $('#inputImporte').val(parametros.importe);
         formatearImporte({
             id: 'inputImporte'

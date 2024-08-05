@@ -66,10 +66,8 @@ class DevengadoPrevRecaudadoTable extends Tabla
                     'cuenta' => $registro['cuentaId'],
                     'mes' => $registro['mes'],
                     'importe' => $registro['importe'],
-                    'iva' => $registro['iva'],
                     'agregarIVA' => $registro['agregarIVA'],
                 ];
-                Log::info($datosRegistro);
                 unset($this->dataCompleta[$key]);
                 $this->dispatch('llenar-formulario', $datosRegistro);
                 break;
@@ -85,7 +83,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
 
         // Recalculamos los totales solo después de eliminar el registro
         $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
-
+        $this->total = $totalActualizado;
         $this->dispatch('cambioTotal', total: $totalActualizado);
     }
 
@@ -107,7 +105,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
 
         // Recalculamos los totales solo después de eliminar el registro
         $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
-
+        $this->total = $totalActualizado;
         $this->dispatch('cambioTotal', total: $totalActualizado);
     }
 
@@ -118,7 +116,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
     #[On('agregar-registro')]
     public function agregarRegistro($registro)
     {
-        if ($this->total + $registro['importe'] > $registro['montoEvento']) {
+        if ($this->total + $registro['importe'] + $registro['iva'] > $registro['montoEvento']) {
             $this->dispatch('mostrarMensaje', mensaje: 'Monto total del evento superado', tipo: 'error', tiempo: 3000);
             return;
         }

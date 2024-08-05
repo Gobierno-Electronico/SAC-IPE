@@ -54,6 +54,7 @@ class AutorizacionDevolucionForm extends Component
         $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
             ->whereIn('interaccion_cuenta_conceptos.concepto_id', [22,23,24,25])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
             ->where('cuentas.Descripcion_cuenta', 'LIKE', '%(Devengado)%')->orderBy('cuentas.Codigo_cuenta')->get();
+        $this->verificarCausaIVA();
         return view('livewire.autorizacion-devolucion-form', ['cuentas' => $cuentas]);
     }
 
@@ -85,7 +86,7 @@ class AutorizacionDevolucionForm extends Component
             $this->causaIva = floatval(str_replace(['$',','],"",$this->causaIva));
             $this->importe = ($this->importe > 0)  ? $this->importe : "";
             $this->validate();
-            if($this->importe > $this->presupuestoDevengado){
+            if(($this->importe + $this->causaIva) > $this->presupuestoDevengado){
                 $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto devengado insuficiente', tipo: 'warning', tiempo: 3000);
                 return;
             }
@@ -105,7 +106,8 @@ class AutorizacionDevolucionForm extends Component
                 'mes' => $this->mes,
                 'importe' => $this->importe,
                 'pttoDevengado' => $this->presupuestoDevengado,
-                'iva' => $this->causaIva
+                'iva' => $this->causaIva,
+                'agregarIVA' => $this->agregarIVA
             ];
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
@@ -184,7 +186,8 @@ class AutorizacionDevolucionForm extends Component
         $this->importe = $datosRegistro['importe'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->presupuestoDevengado = $datosRegistro['devengado'];
-        $this->causaIva = $datosRegistro['iva'];
+        $this->agregarIVA = $datosRegistro['agregarIVA'];
+        $this->verificarCausaIVA();
         $this->dispatch('llenarFormulario', presupuesto: $this->presupuestoDevengado, iva: $this->causaIva, importe: $this->importe);
     }
 

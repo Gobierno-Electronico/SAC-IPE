@@ -61,7 +61,7 @@ class AutorizacionDevolucionTable extends Tabla
                     'mes' => $registro['mes'],
                     'importe' => $registro['importe'],
                     'devengado' => $registro['pttoDevengado'],
-                    'iva' => $registro['iva']
+                    'agregarIVA' => $registro['agregarIVA']
                 ];
 
                 unset($this->dataCompleta[$key]);
@@ -79,7 +79,7 @@ class AutorizacionDevolucionTable extends Tabla
 
         // Recalculamos los totales solo después de eliminar el registro
         $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
-
+        $this->total = $totalActualizado;
         $this->dispatch('cambioTotal', total: $totalActualizado);
     }
 
@@ -100,7 +100,7 @@ class AutorizacionDevolucionTable extends Tabla
 
         // Recalculamos los totales solo después de eliminar el registro
         $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
-
+        $this->total = $totalActualizado;
         $this->dispatch('cambioTotal', total: $totalActualizado);
     }
 

@@ -61,7 +61,7 @@ class IngresosDevengadoTable extends Tabla
                     'mes' => $registro['mes'],
                     'importe' => $registro['importe'],
                     'ejecutar' => $registro['pttoEjecutar'],
-                    'iva' => $registro['iva']
+                    'agregarIVA' => $registro['agregarIVA']
                 ];
  
                 unset($this->dataCompleta[$key]);
@@ -79,7 +79,7 @@ class IngresosDevengadoTable extends Tabla
 
         // Recalculamos los totales solo después de eliminar el registro
         $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
-
+        $this->total = $totalActualizado;
         $this->dispatch('cambioTotal', total: $totalActualizado);
     }
 
@@ -100,7 +100,7 @@ class IngresosDevengadoTable extends Tabla
 
         // Recalculamos los totales solo después de eliminar el registro
         $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
-
+        $this->total = $totalActualizado;
         $this->dispatch('cambioTotal', total: $totalActualizado);
     }
 
