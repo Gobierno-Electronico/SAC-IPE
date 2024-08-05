@@ -53,6 +53,10 @@ class IngresosRecaudadoForm extends Component
 
     public $cambiarCuentaPagoSeleccionada = true;
 
+    public $consultarRegistro = false;
+    public $numeroPolizaRemanente;
+    public $total;
+
     public function render()
     {
         $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
@@ -116,7 +120,6 @@ class IngresosRecaudadoForm extends Component
                 'cuentaId' => $this->cuenta,
                 'codigoCuenta' => $cuenta->Codigo_cuenta,
                 'descripcionCuenta' => $cuenta->Descripcion_cuenta,
-                //VERIFICAR 
                 'cuentaPagoId' => $this->cuentaPago,
                 'codigoCuentaPago' => $cuentaPagoSeleccionada->Codigo_cuenta,
                 'descripcionCuentaPago' => $cuentaPagoSeleccionada->Descripcion_cuenta,
@@ -157,5 +160,19 @@ class IngresosRecaudadoForm extends Component
         $this->importe = $datosRegistro['importe'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->dispatch('llenarFormulario', cuenta: $datosRegistro['cuenta'], cuentaPago: $datosRegistro['cuentaPago'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe'], area: $datosRegistro['area']);
+    }
+
+    public function finalizarRegistros(){
+        $this->dispatch('finalizar-registros');
+    }
+
+    #[On('consultar-registro')]
+    public function consultarRegistros($numeroEvento, $numeroPoliza, $total, $numeroPolizaRemanente) {
+        $this->numeroEvento = $numeroEvento;
+        $this->numeroPoliza = $numeroPoliza;
+        $this->total = $total;
+        $this->numeroPolizaRemanente = $numeroPolizaRemanente;
+        $this->consultarRegistro = true;
+
     }
 }

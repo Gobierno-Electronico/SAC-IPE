@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Livewire;
+
 use Livewire\Attributes\On;
 use App\Models\Poliza;
 use Illuminate\Database\Eloquent\Builder;
@@ -21,8 +22,10 @@ class IngresosRecaudadoTable extends Tabla
     public $total = 0;
     public $numeroPoliza;
     public $numeroEvento;
+    public $numeroPolizaRemanente;
 
-    public function render(){
+    public function render()
+    {
         return view('livewire.ingresos-recaudado-table');
     }
 
@@ -43,12 +46,13 @@ class IngresosRecaudadoTable extends Tabla
         return [
             Column::make('area', 'Area'),
             Column::make('partida', 'Partida'),
+            Column::make('cuentaPago', 'Cuenta de pago'),
             Column::make('mes', 'Mes'),
             Column::make('movimiento', 'Movimiento'),
             Column::make('ppto', 'PPTO Devengado')->component('columns.importe'),
             Column::make('importe', 'Importe')->component('columns.importe'),
-            Column::make('disponibilidad', 'Disponibilidad'),
-           // Column::make('remanente', 'Remanente'),
+            Column::make('disponibilidad', 'Disponibilidad')->component('columns.importe'),
+            // Column::make('remanente', 'Remanente'),
             Column::make('id', 'Acciones')->component('columns.accionesIngresos')
         ];
     }
@@ -123,9 +127,9 @@ class IngresosRecaudadoTable extends Tabla
             ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
             ->where('Descripcion_cuenta', 'LIKE', '%(Devengado)%')
             ->first();
-        
+
         $solvencia = DB::select('EXEC DevengadoCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($registro['codigoAreaResponsable'], $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $registro['mes']));
-        if ($solvencia[0]->TotalDevengado - $registro['importe'] < 0) { 
+        if ($solvencia[0]->TotalDevengado - $registro['importe'] < 0) {
             $this->dispatch('mostrarMensaje', mensaje: 'Monto devengado insuficiente', tipo: 'error', tiempo: 3000);
             return;
         }
@@ -135,6 +139,7 @@ class IngresosRecaudadoTable extends Tabla
             'id' => 0,
             'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
             'partida' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
+            'cuentaPago' => $registro['codigoCuentaPago'] . ' ' . $registro['descripcionCuentaPago'],
             'mes' => $registro['mes'],
             'movimiento' => 'RECAUDADO',
             'ppto' => $solvencia[0]->TotalDevengado,
@@ -151,5 +156,140 @@ class IngresosRecaudadoTable extends Tabla
             $this->total += $registro['importe'];
         }
         $this->dispatch('cambioTotal', total: $this->total);
+    }
+
+    #[On('finalizar-registros')]
+    public function finalizarRegistros()
+    {
+        if (empty($this->cacheData)) {
+            $this->dispatch('mostrarMensaje', mensaje: 'Tabla sin registros', tipo: 'error', tiempo: 3000);
+            return;
+        }
+
+
+        $numerosPolizas = Poliza::select('numero_poliza')
+            ->where('tipo_poliza', '=', 'I')
+            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->distinct()
+            ->orderBy('numero_poliza')
+            ->pluck('numero_poliza')
+            ->toArray();
+        sort($numerosPolizas);
+        $this->numeroPoliza = (int)end($numerosPolizas) + 1;
+
+        $this->numeroEvento = $this->dataCompleta[0]['evento'];
+        $polizasInicialesIngresosDevengado = Poliza::where('tipo_poliza', '=', 'I')->where('categoria', '=', 'INGRESOS DEVENGADO')
+            ->where('evento', '=', $this->numeroEvento)->get();
+        $anioActual = Carbon::now()->year;
+        $fecha = Carbon::now('America/Mexico_City');
+        $fecha->year($anioActual);
+
+
+        foreach ($this->dataCompleta as $movimiento) {
+            $movimiento['importe'] = doubleval($movimiento['importe']);
+            $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaId'])
+                ->whereIn('concepto_id', [19, 20, 21, 35, 39])
+                ->where('tipo_interaccion', '=', 'Presupuestal - Abono')
+                ->first();
+            $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
+                ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
+
+            // Inicializar un nuevo arreglo para almacenar los resultados filtrados
+            $interaccionCuentaCuentasFiltradas = [];
+
+            // Recorrer las cuentas de interaccionCuentaCuentas
+            foreach ($interaccionCuentaCuentas as $cuenta) {
+                if ($cuenta['tipo_interaccion'] === 'Contable - Cargo') {
+                    foreach ($this->dataCompleta as $mov) {
+                        if ($cuenta['Codigo_cuenta'] === $mov['codigoCuentaPago']) {
+                            $interaccionCuentaCuentasFiltradas[] = $cuenta; // Agregar a la lista filtrada
+                            break; // Salir del loop interno cuando se encuentra una coincidencia
+                        }
+                    }
+                } else {
+                    // Si no es 'Contable - Cargo', mantener el registro
+                    $interaccionCuentaCuentasFiltradas[] = $cuenta;
+                }
+            }
+
+            // Reemplazar el arreglo original con el filtrado
+            $interaccionCuentaCuentas = $interaccionCuentaCuentasFiltradas;
+            $polizas = [
+                [
+                    'area' => $movimiento['codigoAreaResponsable'],
+                    'tipo_poliza' => 'I',
+                    'numero_poliza' =>  $this->numeroPoliza,
+                    'fecha' => $movimiento['fechaRegistro'],
+                    'cuenta' => $movimiento['codigoCuenta'],
+                    'concepto' => $movimiento['descripcionCuenta'],
+                    'total' => abs($movimiento['importe']),
+                    'mes' => $movimiento['mes'],
+                    'descripcion' => $movimiento['observaciones'],
+                    'evento' => $this->numeroEvento,
+                    'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
+                    'validado' => false,
+                    'categoria' => 'INGRESOS RECAUDADO',
+                    'created_at' => $fecha,
+                    'updated_at' => $fecha
+                ]
+            ];
+            foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
+                array_push($polizas, [
+                    'area' => $movimiento['codigoAreaResponsable'],
+                    'tipo_poliza' => 'I',
+                    'numero_poliza' =>  $this->numeroPoliza,
+                    'fecha' => $movimiento['fechaRegistro'],
+                    'cuenta' => $dataCuenta['Codigo_cuenta'],
+                    'concepto' => $dataCuenta['Descripcion_cuenta'],
+                    'total' => $movimiento['importe'],
+                    'mes' => $movimiento['mes'],
+                    'descripcion' => $movimiento['observaciones'],
+                    'evento' => $this->numeroEvento,
+                    'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
+                    'validado' => false,
+                    'categoria' => 'INGRESOS RECAUDADO',
+                    'created_at' => $fecha,
+                    'updated_at' => $fecha
+                ]);
+            }
+            Poliza::insert($polizas);
+        }
+
+
+        $numerosPolizas = Poliza::select('numero_poliza')
+            ->where('tipo_poliza', '=', 'IAUX')
+            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->distinct()
+            ->orderBy('numero_poliza')
+            ->pluck('numero_poliza')
+            ->toArray();
+        sort($numerosPolizas);
+        $this->numeroPolizaRemanente = (int)end($numerosPolizas) + 1;
+        $totalRemanente = DB::select('EXEC ImporteTotalRecaudado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
+        if ($totalRemanente > 0) {
+            foreach ($polizasInicialesIngresosDevengado as $polizaInicial) {
+                Poliza::create([
+                    'area' => $polizaInicial->area,
+                    'tipo_poliza' => 'IAUX',
+                    'numero_poliza' =>  $this->numeroPolizaRemanente,
+                    'fecha' => $movimiento['fechaRegistro'],
+                    'cuenta' => $polizaInicial->cuenta,
+                    'concepto' => $polizaInicial->concepto,
+                    'total' => $totalRemanente,
+                    'mes' => $polizaInicial->mes,
+                    'descripcion' => $polizaInicial->descripcion,
+                    'evento' => $this->numeroEvento,
+                    'tipo_interaccion' => $polizaInicial->tipo_interaccion,
+                    'validado' => false,
+                    'categoria' => 'INGRESOS DEVENGADO REMANENTE',
+                    'created_at' => $fecha,
+                    'updated_at' => $fecha
+                ]);
+            }
+        } else {
+            $this->numeroPolizaRemanente = 0;
+        }
+        $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente);
     }
 }
