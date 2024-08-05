@@ -121,12 +121,12 @@
                 @if ($causaIva > 0)
                     <label for="agregarIVA"class="form-label mt-3">¿Desea agregar el IVA?</label><br>
                     <label>
-                        <input type="radio" name="agregarIVA" wire:model="agregarIVA" value="SI">
+                        <input type="radio" id="agregarIVA" name="agregarIVA" wire:model="agregarIVA" value="SI">
                         Sí
                     </label>
                     &nbsp;&nbsp;&nbsp;
                     <label>
-                        <input type="radio" name="agregarIVA" wire:model="agregarIVA" value="NO">
+                        <input type="radio" id="agregarIVA" name="agregarIVA" wire:model="agregarIVA" value="NO">
                         No
                     </label>
                 @endif
