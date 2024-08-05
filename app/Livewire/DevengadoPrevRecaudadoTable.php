@@ -6,6 +6,7 @@ use Livewire\Attributes\On;
 use App\Models\Poliza;
 use Illuminate\Database\Eloquent\Builder;
 use DB;
+use Log;
 use App\Clases\Column;
 use App\Http\Controllers\BitacoraController;
 use Carbon\Carbon;
@@ -65,9 +66,10 @@ class DevengadoPrevRecaudadoTable extends Tabla
                     'cuenta' => $registro['cuentaId'],
                     'mes' => $registro['mes'],
                     'importe' => $registro['importe'],
-                    'iva' => $registro['iva']
+                    'iva' => $registro['iva'],
+                    'agregarIVA' => $registro['agregarIVA'],
                 ];
-
+                Log::info($datosRegistro);
                 unset($this->dataCompleta[$key]);
                 $this->dispatch('llenar-formulario', $datosRegistro);
                 break;

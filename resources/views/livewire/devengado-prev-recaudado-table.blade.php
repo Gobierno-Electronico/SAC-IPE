@@ -61,11 +61,13 @@
 
     window.addEventListener('llenarFormulario', event => {
         let parametros = event.__livewire.params
+        console.log(parametros)
         $("#selectCuentaContable option:contains('" + parametros.cuenta + "')").prop("selected", true);
         $("#selectAreaResponsable option:contains('" + parametros.area + "')").prop("selected", true);
         $("#selectMes option:contains('" + parametros.mes + "')").prop("selected", true);
         $('#inputImporte').val(parametros.importe);
         $('#inputIva').val(parametros.iva);
+        $('#agregarIVA').val(parametros.agregarIVA);
         formatearImporte({id: 'inputImporte'})
     });
 

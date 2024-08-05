@@ -110,6 +110,7 @@ class DevengadoPrevRecaudadoForm extends Component
                 'importe' => $this->importe,
                 'montoEvento' => $this->montoDelEvento,
                 'iva' => $this->causaIva,
+                'agregarIVA' => $this->agregarIVA,
             ];
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
@@ -178,7 +179,8 @@ class DevengadoPrevRecaudadoForm extends Component
         $this->importe = $datosRegistro['importe'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->causaIva = $datosRegistro['iva'];
-        $this->dispatch('llenarFormulario', cuenta: $datosRegistro['cuenta'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe'], area: $datosRegistro['area']);
+        $this->agregarIVA = $datosRegistro['agregarIVA'];
+        $this->dispatch('llenarFormulario', cuenta: $datosRegistro['cuenta'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe'], area: $datosRegistro['area'], iva: $datosRegistro['iva'], agregarIVA: $datosRegistro['agregarIVA']);
     }
 
     #[On('consultar-registro')]
