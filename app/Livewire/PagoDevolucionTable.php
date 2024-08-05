@@ -19,7 +19,7 @@ class PagoDevolucionTable extends Tabla
     public $numeroEvento;
 
     public function render(){
-        return view('livewire.devengado-prev-recaudado-table');
+        return view('livewire.pago-devolucion-table');
     }
 
     public function query(): Builder
@@ -116,7 +116,7 @@ class PagoDevolucionTable extends Tabla
             'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
             'partida' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
             'mes' => $registro['mes'],
-            'movimiento' => 'RECAUDADO',
+            'movimiento' => 'PAGO DE DEVOLUCION',
             'ppto' => 'Prueba ppto',//$solvencia[0]->Solvencia,
             'importe' => $registro['importe'],
             'disponibilidad' => 'Prueba disponibilidad',//$solvencia[0]->Solvencia - $registro['importe'],
