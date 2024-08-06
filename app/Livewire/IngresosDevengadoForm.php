@@ -56,6 +56,7 @@ class IngresosDevengadoForm extends Component
         $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
             ->whereIn('interaccion_cuenta_conceptos.concepto_id', [15,16,17,18,38])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Abono')
             ->orderBy('cuentas.Codigo_cuenta')->get();
+        $this->verificarCausaIVA();
         return view('livewire.ingresos-devengado-form', ['cuentas' => $cuentas]);
     }
 
@@ -75,7 +76,7 @@ class IngresosDevengadoForm extends Component
             $this->causaIva = floatval(str_replace(['$',','],"",$this->causaIva));
             $this->importe = ($this->importe > 0)  ? $this->importe : "";
             $this->validate();
-            if($this->importe > $this->PTTOEjecutar){
+            if(($this->importe + $this->causaIva) > $this->PTTOEjecutar){
                 $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar insuficiente', tipo: 'warning', tiempo: 3000);
                 return;
             }
@@ -95,7 +96,8 @@ class IngresosDevengadoForm extends Component
                 'mes' => $this->mes,
                 'importe' => $this->importe,
                 'pttoEjecutar' => $this->PTTOEjecutar,
-                'iva' => $this->causaIva
+                'iva' => $this->causaIva,
+                'agregarIVA' => $this->agregarIVA,
             ];
 
             $this->dispatch('agregar-registro', registro: $registro);
@@ -181,7 +183,8 @@ class IngresosDevengadoForm extends Component
         $this->importe = $datosRegistro['importe'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->PTTOEjecutar = $datosRegistro['ejecutar'];
-        $this->causaIva = $datosRegistro['iva'];
+        $this->agregarIVA = $datosRegistro['agregarIVA'];
+        $this->verificarCausaIVA();
         $this->dispatch('llenarFormulario', presupuesto: $this->PTTOEjecutar, iva: $this->causaIva, importe: $this->importe);
     }
 

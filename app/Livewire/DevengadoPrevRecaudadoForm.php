@@ -64,6 +64,7 @@ class DevengadoPrevRecaudadoForm extends Component
             ->distinct()
             ->pluck('descripcion', 'evento');
 
+        $this->verificarCausaIVA();
         return view('livewire.devengado-prev-recaudado-form', ['eventos' => $eventos, 'cuentas' => $cuentas]);
     }
 
@@ -178,9 +179,9 @@ class DevengadoPrevRecaudadoForm extends Component
         $this->mes = $datosRegistro['mes'];
         $this->importe = $datosRegistro['importe'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
-        $this->causaIva = $datosRegistro['iva'];
         $this->agregarIVA = $datosRegistro['agregarIVA'];
-        $this->dispatch('llenarFormulario', cuenta: $datosRegistro['cuenta'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe'], area: $datosRegistro['area'], iva: $datosRegistro['iva'], agregarIVA: $datosRegistro['agregarIVA']);
+        $this->verificarCausaIVA();
+        $this->dispatch('llenarFormulario', cuenta: $datosRegistro['cuenta'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe'], area: $datosRegistro['area'], agregarIVA: $datosRegistro['agregarIVA']);
     }
 
     #[On('consultar-registro')]

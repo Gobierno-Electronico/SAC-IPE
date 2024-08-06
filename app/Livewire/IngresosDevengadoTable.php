@@ -11,6 +11,7 @@ use App\Models\InteraccionCuentaConcepto;
 use App\Http\Controllers\BitacoraController;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Log;
+use DB;
 
 class IngresosDevengadoTable extends Tabla
 {
@@ -61,7 +62,7 @@ class IngresosDevengadoTable extends Tabla
                     'mes' => $registro['mes'],
                     'importe' => $registro['importe'],
                     'ejecutar' => $registro['pttoEjecutar'],
-                    'iva' => $registro['iva']
+                    'agregarIVA' => $registro['agregarIVA']
                 ];
  
                 unset($this->dataCompleta[$key]);
@@ -79,7 +80,7 @@ class IngresosDevengadoTable extends Tabla
 
         // Recalculamos los totales solo después de eliminar el registro
         $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
-
+        $this->total = $totalActualizado;
         $this->dispatch('cambioTotal', total: $totalActualizado);
     }
 
@@ -100,7 +101,7 @@ class IngresosDevengadoTable extends Tabla
 
         // Recalculamos los totales solo después de eliminar el registro
         $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
-
+        $this->total = $totalActualizado;
         $this->dispatch('cambioTotal', total: $totalActualizado);
     }
 
@@ -140,99 +141,112 @@ class IngresosDevengadoTable extends Tabla
             return;
         }
 
-        $numerosPolizas = Poliza::select('numero_poliza')
-            ->where('tipo_poliza', '=', 'I')
-            ->whereYear('fecha', '=', Carbon::now()->year)
-            ->distinct()
-            ->orderBy('numero_poliza')
-            ->pluck('numero_poliza')
-            ->toArray();
-        sort($numerosPolizas);
-        $this->numeroPoliza = (int)end($numerosPolizas) + 1;
-
-        $numerosEvento = Poliza::select('evento')
-            ->whereYear('fecha', '=', Carbon::now()->year)
-            ->distinct()
-            ->orderBy('evento')
-            ->pluck('evento')
-            ->toArray();
-        sort($numerosEvento);
-        if (!empty($numerosEvento)) {
-            $this->numeroEvento = (int)end($numerosEvento) + 1;
-        } else {
-            $this->numeroEvento = 1;
-        }
-
-        $anioActual = Carbon::now()->year;
-        $fecha = Carbon::now('America/Mexico_City');
-        $fecha->year($anioActual);
-
-        foreach ($this->dataCompleta as $movimiento) {
-            $movimiento['importe'] = doubleval($movimiento['importe']);
-            $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaId'])->whereIn('concepto_id', [15,16,17,18,38])
-                ->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
-            $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
-                ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
-                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
-            $importeMovimiento = $movimiento['importe'];
-            if($interaccionCuentaConceptoPrincipal->tipo_interaccion == 'Presupuestal - Abono'){
-                $importeMovimiento = $movimiento['importe'] + $movimiento['iva'];
+        try {
+            $numerosPolizas = Poliza::select('numero_poliza')
+                ->where('tipo_poliza', '=', 'I')
+                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->distinct()
+                ->orderBy('numero_poliza')
+                ->pluck('numero_poliza')
+                ->toArray();
+            sort($numerosPolizas);
+            $this->numeroPoliza = (int)end($numerosPolizas) + 1;
+    
+            $numerosEvento = Poliza::select('evento')
+                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->distinct()
+                ->orderBy('evento')
+                ->pluck('evento')
+                ->toArray();
+            sort($numerosEvento);
+            if (!empty($numerosEvento)) {
+                $this->numeroEvento = (int)end($numerosEvento) + 1;
+            } else {
+                $this->numeroEvento = 1;
             }
 
-            $polizas = [
-                [
-                    'area' => $movimiento['codigoAreaResponsable'],
-                    'tipo_poliza' => 'I',
-                    'numero_poliza' =>  $this->numeroPoliza,
-                    'fecha' => $movimiento['fechaRegistro'],
-                    'cuenta' => $movimiento['codigoCuenta'],
-                    'concepto' => $movimiento['descripcionCuenta'],
-                    'total' => abs($importeMovimiento),
-                    'mes' => $movimiento['mes'],
-                    'descripcion' => $movimiento['observaciones'],
-                    'evento' => $this->numeroEvento,
-                    'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
-                    'validado' => false,
-                    'categoria' => 'INGRESOS DEVENGADO',
-                    'created_at' => $fecha,
-                    'updated_at' => $fecha
-                ]
-            ];
-            foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
-                $importe = $movimiento['importe'];
-                if(str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')){
-                    if($movimiento['iva'] > 0){
-                        $importe = $movimiento['iva'];
-                    }else{
-                        //Saltamos la interacción con iva que no quieren que se le agregue el IVA, esto para no mostrarlo en la poliza
-                        continue;
+            $bitacora = new BitacoraController();
+            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un devengado con evento: '.$this->numeroEvento, request());
+
+            DB::beginTransaction();
+    
+            $anioActual = Carbon::now()->year;
+            $fecha = Carbon::now('America/Mexico_City');
+            $fecha->year($anioActual);
+    
+            foreach ($this->dataCompleta as $movimiento) {
+                $movimiento['importe'] = doubleval($movimiento['importe']);
+                $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaId'])->whereIn('concepto_id', [15,16,17,18,38])
+                    ->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
+                $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
+                    ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+                    ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
+                $importeMovimiento = $movimiento['importe'];
+                if($interaccionCuentaConceptoPrincipal->tipo_interaccion == 'Presupuestal - Abono'){
+                    $importeMovimiento = $movimiento['importe'] + $movimiento['iva'];
+                }
+    
+                $polizas = [
+                    [
+                        'area' => $movimiento['codigoAreaResponsable'],
+                        'tipo_poliza' => 'I',
+                        'numero_poliza' =>  $this->numeroPoliza,
+                        'fecha' => $movimiento['fechaRegistro'],
+                        'cuenta' => $movimiento['codigoCuenta'],
+                        'concepto' => $movimiento['descripcionCuenta'],
+                        'total' => abs($importeMovimiento),
+                        'mes' => $movimiento['mes'],
+                        'descripcion' => $movimiento['observaciones'],
+                        'evento' => $this->numeroEvento,
+                        'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
+                        'validado' => false,
+                        'categoria' => 'INGRESOS DEVENGADO',
+                        'created_at' => $fecha,
+                        'updated_at' => $fecha
+                    ]
+                ];
+                foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
+                    $importe = $movimiento['importe'];
+                    if(str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')){
+                        if($movimiento['iva'] > 0){
+                            $importe = $movimiento['iva'];
+                        }else{
+                            //Saltamos la interacción con iva que no quieren que se le agregue el IVA, esto para no mostrarlo en la poliza
+                            continue;
+                        }
                     }
+                    if($dataCuenta['tipo_interaccion'] == 'Contable - Cargo' || str_contains($dataCuenta['tipo_interaccion'], 'Presupuestal')){
+                        $importe = $importe + $movimiento['iva'];
+                    }
+                    array_push($polizas, [
+                        'area' => $movimiento['codigoAreaResponsable'],
+                        'tipo_poliza' => 'I',
+                        'numero_poliza' =>  $this->numeroPoliza,
+                        'fecha' => $movimiento['fechaRegistro'],
+                        'cuenta' => $dataCuenta['Codigo_cuenta'],
+                        'concepto' => $dataCuenta['Descripcion_cuenta'],
+                        'total' => $importe,
+                        'mes' => $movimiento['mes'],
+                        'descripcion' => $movimiento['observaciones'],
+                        'evento' => $this->numeroEvento,
+                        'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
+                        'validado' => false,
+                        'categoria' => 'INGRESOS DEVENGADO',
+                        'created_at' => $fecha,
+                        'updated_at' => $fecha
+                    ]);
                 }
-                if($dataCuenta['tipo_interaccion'] == 'Contable - Cargo' || str_contains($dataCuenta['tipo_interaccion'], 'Presupuestal')){
-                    $importe = $importe + $movimiento['iva'];
-                }
-                array_push($polizas, [
-                    'area' => $movimiento['codigoAreaResponsable'],
-                    'tipo_poliza' => 'I',
-                    'numero_poliza' =>  $this->numeroPoliza,
-                    'fecha' => $movimiento['fechaRegistro'],
-                    'cuenta' => $dataCuenta['Codigo_cuenta'],
-                    'concepto' => $dataCuenta['Descripcion_cuenta'],
-                    'total' => $importe,
-                    'mes' => $movimiento['mes'],
-                    'descripcion' => $movimiento['observaciones'],
-                    'evento' => $this->numeroEvento,
-                    'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
-                    'validado' => false,
-                    'categoria' => 'INGRESOS DEVENGADO',
-                    'created_at' => $fecha,
-                    'updated_at' => $fecha
-                ]);
+                Poliza::insert($polizas);
+                DB::commit();
             }
-            Poliza::insert($polizas);
+            $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error('Ocurrió un error al finalizarRegistro en devengado: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
-        $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
 
 
     }
+
 }

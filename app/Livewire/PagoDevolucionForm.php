@@ -47,7 +47,9 @@ class PagoDevolucionForm extends Component
     public $subcuentas = [];
     public $cambiarCuentaPagoSeleccionada = true;
 
-
+    public $numeroPoliza;
+    public $consultarRegistro = false;
+    public $total;
 
     public function render()
     {
@@ -152,5 +154,17 @@ class PagoDevolucionForm extends Component
         $this->importe = $datosRegistro['importe'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->dispatch('llenarFormulario', cuenta: $datosRegistro['cuenta'], cuentaPago: $datosRegistro['cuentaPago'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe'], area: $datosRegistro['area']);
+    }
+
+    public function finalizarRegistros(){
+        $this->dispatch('finalizar-registros');
+    }
+
+    #[On('consultar-registro')]
+    public function consultarRegistros($numeroEvento, $numeroPoliza, $total) {
+        $this->consultarRegistro = true;
+        $this->numeroEvento = $numeroEvento;
+        $this->numeroPoliza = $numeroPoliza;
+        $this->total = $total;
     }
 }

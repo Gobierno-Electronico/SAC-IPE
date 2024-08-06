@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Clases\Column;
 use App\Http\Controllers\BitacoraController;
 use Carbon\Carbon;
+use DB;
+use Log;
 use App\Models\Cuenta;
 use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
@@ -133,78 +135,90 @@ class DepositosBancosTable extends Tabla
             $this->dispatch('mostrarMensaje', mensaje: 'Tabla sin registros', tipo: 'error', tiempo: 3000);
             return;
         }
+        try {
+            
+            $numerosPolizas = Poliza::select('numero_poliza')
+                ->where('tipo_poliza', '=', 'I')
+                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->distinct()
+                ->orderBy('numero_poliza')
+                ->pluck('numero_poliza')
+                ->toArray();
+            sort($numerosPolizas);
+            $this->numeroPoliza = (int)end($numerosPolizas) + 1;
+            $numerosEvento = Poliza::select('evento')
+                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->distinct()
+                ->orderBy('evento')
+                ->pluck('evento')
+                ->toArray();
+            sort($numerosEvento);
+            if (!empty($numerosEvento)) {
+                $this->numeroEvento = (int)end($numerosEvento) + 1;
+            } else {
+                $this->numeroEvento = 1;
+            }
+    
+            $bitacora = new BitacoraController();
+            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un depósito en bancos con evento: '.$this->numeroEvento, request());
 
-        $numerosPolizas = Poliza::select('numero_poliza')
-            ->where('tipo_poliza', '=', 'I')
-            ->whereYear('fecha', '=', Carbon::now()->year)
-            ->distinct()
-            ->orderBy('numero_poliza')
-            ->pluck('numero_poliza')
-            ->toArray();
-        sort($numerosPolizas);
-        $this->numeroPoliza = (int)end($numerosPolizas) + 1;
-        $numerosEvento = Poliza::select('evento')
-            ->whereYear('fecha', '=', Carbon::now()->year)
-            ->distinct()
-            ->orderBy('evento')
-            ->pluck('evento')
-            ->toArray();
-        sort($numerosEvento);
-        if (!empty($numerosEvento)) {
-            $this->numeroEvento = (int)end($numerosEvento) + 1;
-        } else {
-            $this->numeroEvento = 1;
+            DB::beginTransaction();
+
+            $anioActual = Carbon::now()->year;
+            $fecha = Carbon::now('America/Mexico_City');
+            $fecha->year($anioActual);
+            foreach ($this->dataCompleta as $movimiento) {
+    
+                $responsable = CodigoDepartamento::find($movimiento['codigoArea']);
+                $interaccionCuentaConceptoIzquierda = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaId'])->where('concepto_id', '=', 13)->first();
+                $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoIzquierda->id)->first();
+                $interaccionCuentaConceptoDerecha = InteraccionCuentaConcepto::where('id', '=', $interaccionCuentaCuenta->id_interaccion_concepto_cuenta_2)->first();
+                $cuentaDerecha = Cuenta::find($interaccionCuentaConceptoDerecha->cuenta_id);
+    
+                $poliza = new Poliza([
+                    'area' => $responsable->Codigo_completo,
+                    'tipo_poliza' => 'I',
+                    'numero_poliza' =>  $this->numeroPoliza,
+                    'fecha' => $movimiento['fechaRegistro'],
+                    'cuenta' => $movimiento['codigoCuenta'],
+                    'concepto' => $movimiento['descripcionCuenta'],
+                    'total' => abs($movimiento['importe']),
+                    'mes' => $movimiento['mes'],
+                    'descripcion' => $movimiento['observaciones'],
+                    'evento' => $this->numeroEvento,
+                    'tipo_interaccion' => $interaccionCuentaConceptoIzquierda->tipo_interaccion,
+                    'validado' => false,
+                    'categoria' => 'INGRESOS DEPOSITOS EN BANCOS',
+                    'created_at' => $fecha,
+                    'updated_at' => $fecha
+                ]);
+                $polizaDerecha = new Poliza([
+                    'area' => $responsable->Codigo_completo,
+                    'tipo_poliza' => 'I',
+                    'numero_poliza' =>  $this->numeroPoliza,
+                    'fecha' => $movimiento['fechaRegistro'],
+                    'cuenta' => $cuentaDerecha->Codigo_cuenta,
+                    'concepto' => $cuentaDerecha->Descripcion_cuenta,
+                    'total' => abs($movimiento['importe']),
+                    'mes' => $movimiento['mes'],
+                    'descripcion' => $movimiento['observaciones'],
+                    'evento' => $this->numeroEvento,
+                    'tipo_interaccion' => $interaccionCuentaConceptoDerecha->tipo_interaccion,
+                    'validado' => false,
+                    'categoria' => 'INGRESOS DEPOSITOS EN BANCOS',
+                    'created_at' => $fecha,
+                    'updated_at' => $fecha
+                ]);
+                $poliza->save();
+                $polizaDerecha->save();
+                DB::commit();
+            }
+            $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error('Ocurrió un error al finalizarRegistro en depósitos en bancos: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
-
-        $anioActual = Carbon::now()->year;
-        $fecha = Carbon::now('America/Mexico_City');
-        $fecha->year($anioActual);
-        foreach ($this->dataCompleta as $movimiento) {
-
-            $responsable = CodigoDepartamento::find($movimiento['codigoArea']);
-            $interaccionCuentaConceptoIzquierda = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaId'])->where('concepto_id', '=', 13)->first();
-            $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoIzquierda->id)->first();
-            $interaccionCuentaConceptoDerecha = InteraccionCuentaConcepto::where('id', '=', $interaccionCuentaCuenta->id_interaccion_concepto_cuenta_2)->first();
-            $cuentaDerecha = Cuenta::find($interaccionCuentaConceptoDerecha->cuenta_id);
-
-            $poliza = new Poliza([
-                'area' => $responsable->Codigo_completo,
-                'tipo_poliza' => 'I',
-                'numero_poliza' =>  $this->numeroPoliza,
-                'fecha' => $movimiento['fechaRegistro'],
-                'cuenta' => $movimiento['codigoCuenta'],
-                'concepto' => $movimiento['descripcionCuenta'],
-                'total' => abs($movimiento['importe']),
-                'mes' => $movimiento['mes'],
-                'descripcion' => $movimiento['observaciones'],
-                'evento' => $this->numeroEvento,
-                'tipo_interaccion' => $interaccionCuentaConceptoIzquierda->tipo_interaccion,
-                'validado' => false,
-                'categoria' => 'INGRESOS DEPOSITOS EN BANCOS',
-                'created_at' => $fecha,
-                'updated_at' => $fecha
-            ]);
-            $polizaDerecha = new Poliza([
-                'area' => $responsable->Codigo_completo,
-                'tipo_poliza' => 'I',
-                'numero_poliza' =>  $this->numeroPoliza,
-                'fecha' => $movimiento['fechaRegistro'],
-                'cuenta' => $cuentaDerecha->Codigo_cuenta,
-                'concepto' => $cuentaDerecha->Descripcion_cuenta,
-                'total' => abs($movimiento['importe']),
-                'mes' => $movimiento['mes'],
-                'descripcion' => $movimiento['observaciones'],
-                'evento' => $this->numeroEvento,
-                'tipo_interaccion' => $interaccionCuentaConceptoDerecha->tipo_interaccion,
-                'validado' => false,
-                'categoria' => 'INGRESOS DEPOSITOS EN BANCOS',
-                'created_at' => $fecha,
-                'updated_at' => $fecha
-            ]);
-            $poliza->save();
-            $polizaDerecha->save();
-        }
-        $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
 
     }
 }

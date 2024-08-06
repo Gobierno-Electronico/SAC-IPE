@@ -46,8 +46,30 @@
         <div class="d-flex justify-content-end">
             <div>
                 <label for="total">Total</label>
-                <input type="text" name="total" id="total" class="form-control" disabled wire:model.live="total">
+                <input type="text" name="total" id="total" class="form-control" disabled
+                    wire:model.live="total">
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    window.addEventListener('cambioTotal', event => {
+        let parametros = event.__livewire.params
+        $('#total').val(parametros.total);
+        formatearImporte({
+            id: 'total'
+        })
+    });
+
+    window.addEventListener('llenarFormulario', event => {
+        let parametros = event.__livewire.params
+        $("#selectCuentaContable option:contains('" + parametros.cuenta + "')").prop("selected", true);
+        $("#selectAreaResponsable option:contains('" + parametros.area + "')").prop("selected", true);
+        $("#selectMes option:contains('" + parametros.mes + "')").prop("selected", true);
+        $('#inputImporte').val(parametros.importe);
+        formatearImporte({
+            id: 'inputImporte'
+        })
+    });
+</script>
