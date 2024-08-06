@@ -159,72 +159,84 @@ class PagoReintegroTable extends Tabla
             return;
         }
 
-        $numerosPolizas = Poliza::select('numero_poliza')
-        ->where('tipo_poliza', '=', 'I')
-        ->whereYear('fecha', '=', Carbon::now()->year)
-        ->distinct()
-        ->orderBy('numero_poliza')
-        ->pluck('numero_poliza')
-        ->toArray();
-        sort($numerosPolizas);
-        $this->numeroPoliza = (int)end($numerosPolizas) + 1;
+        try{
+            $numerosPolizas = Poliza::select('numero_poliza')
+            ->where('tipo_poliza', '=', 'I')
+            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->distinct()
+            ->orderBy('numero_poliza')
+            ->pluck('numero_poliza')
+            ->toArray();
+            sort($numerosPolizas);
+            $this->numeroPoliza = (int)end($numerosPolizas) + 1;
 
-        $this->numeroEvento = $this->dataCompleta[0]['evento'];
-        $anioActual = Carbon::now()->year;
-        $fecha = Carbon::now('America/Mexico_City');
-        $fecha->year($anioActual);
+            $this->numeroEvento = $this->dataCompleta[0]['evento'];
+            $anioActual = Carbon::now()->year;
+            $fecha = Carbon::now('America/Mexico_City');
+            $fecha->year($anioActual);
 
-        foreach ($this->dataCompleta as $movimiento) {
-            $movimiento['importe'] = doubleval($movimiento['importe']);
-            $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaId'])
-                ->whereIn('concepto_id', [31, 32])
-                ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')
-                ->first();
-            $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
-                ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
-                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
-            
-            $polizas = [
-                [
-                    'area' => $movimiento['codigoAreaResponsable'],
-                    'tipo_poliza' => 'I',
-                    'numero_poliza' =>  $this->numeroPoliza,
-                    'fecha' => $movimiento['fechaRegistro'],
-                    'cuenta' => $movimiento['codigoCuenta'],
-                    'concepto' => $movimiento['descripcionCuenta'],
-                    'total' => abs($movimiento['importe']),
-                    'mes' => $movimiento['mes'],
-                    'descripcion' => $movimiento['observaciones'],
-                    'evento' => $this->numeroEvento,
-                    'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
-                    'validado' => false,
-                    'categoria' => 'INGRESOS PAGO REINTEGRO',
-                    'created_at' => $fecha,
-                    'updated_at' => $fecha
-                ]
-            ];
+            $bitacora = new BitacoraController();
+            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un pago de devolución con evento: '.$this->numeroEvento, request());
 
-            foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
-                array_push($polizas, [
-                    'area' => $movimiento['codigoAreaResponsable'],
-                    'tipo_poliza' => 'I',
-                    'numero_poliza' =>  $this->numeroPoliza,
-                    'fecha' => $movimiento['fechaRegistro'],
-                    'cuenta' => $dataCuenta['Codigo_cuenta'],
-                    'concepto' => $dataCuenta['Descripcion_cuenta'],
-                    'total' => $movimiento['importe'],
-                    'mes' => $movimiento['mes'],
-                    'descripcion' => $movimiento['observaciones'],
-                    'evento' => $this->numeroEvento,
-                    'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
-                    'validado' => false,
-                    'categoria' => 'INGRESOS PAGO REINTEGRO',
-                    'created_at' => $fecha,
-                    'updated_at' => $fecha
-                ]);
+            DB::beginTransaction();
+
+            foreach ($this->dataCompleta as $movimiento) {
+                $movimiento['importe'] = doubleval($movimiento['importe']);
+                $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaId'])
+                    ->whereIn('concepto_id', [31, 32])
+                    ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')
+                    ->first();
+                $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
+                    ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+                    ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
+                
+                $polizas = [
+                    [
+                        'area' => $movimiento['codigoAreaResponsable'],
+                        'tipo_poliza' => 'I',
+                        'numero_poliza' =>  $this->numeroPoliza,
+                        'fecha' => $movimiento['fechaRegistro'],
+                        'cuenta' => $movimiento['codigoCuenta'],
+                        'concepto' => $movimiento['descripcionCuenta'],
+                        'total' => abs($movimiento['importe']),
+                        'mes' => $movimiento['mes'],
+                        'descripcion' => $movimiento['observaciones'],
+                        'evento' => $this->numeroEvento,
+                        'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
+                        'validado' => false,
+                        'categoria' => 'INGRESOS PAGO REINTEGRO',
+                        'created_at' => $fecha,
+                        'updated_at' => $fecha
+                    ]
+                ];
+
+                foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
+                    array_push($polizas, [
+                        'area' => $movimiento['codigoAreaResponsable'],
+                        'tipo_poliza' => 'I',
+                        'numero_poliza' =>  $this->numeroPoliza,
+                        'fecha' => $movimiento['fechaRegistro'],
+                        'cuenta' => $dataCuenta['Codigo_cuenta'],
+                        'concepto' => $dataCuenta['Descripcion_cuenta'],
+                        'total' => $movimiento['importe'],
+                        'mes' => $movimiento['mes'],
+                        'descripcion' => $movimiento['observaciones'],
+                        'evento' => $this->numeroEvento,
+                        'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
+                        'validado' => false,
+                        'categoria' => 'INGRESOS PAGO REINTEGRO',
+                        'created_at' => $fecha,
+                        'updated_at' => $fecha
+                    ]);
+                }
+                Poliza::insert($polizas);
+                DB::commit();
             }
-            Poliza::insert($polizas);
+            $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
+        }catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error('Ocurrió un error al finalizarRegistro en pago de devolución: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
-        $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
     }
 }
