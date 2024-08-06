@@ -84,6 +84,8 @@ class IngresosFormConsultaTable extends Tabla
     public function borrar()
     {
         try {
+            $usuariosController = new BitacoraController();
+            $usuariosController->bitacora('borrar', 'borró o intentó borrar un movimiento de ingresos con número de evento: ' . $this->numeroEvento, request());
             DB::beginTransaction();
             if ($this->validado)
                 return;
@@ -93,13 +95,11 @@ class IngresosFormConsultaTable extends Tabla
                 Poliza::searchByYear('fecha', Carbon::now()->year)->where('tipo_poliza', '=', 'IAUX')->where('evento', '=', $this->numeroEvento)->where('validado','=', false)->delete();
             }
             // PresupuestoInicial::where('anio', '=', $this->selectedYear)->where('categoria', '=', 'INGRESOS')->where('tipo', '=', 'P')->delete();
-            $usuariosController = new BitacoraController();
-            $usuariosController->bitacora('borrar', 'borró o intentó borrar la Reclasificación/Recalendarización con número de evento: ' . $this->numeroEvento, request());
             $this->validado = true;
             // $this->dispatch('mostrarMensaje', mensaje: 'Se borró el movimiento de Reclasificación/Recalendarización', tipo: 'success', tiempo: 3000);
             $this->dispatch('cancelar-movimiento');
             DB::commit();
-            return redirect($this->urlFinalizar)->with(['message' => 'Se borró el movimiento de Reclasificación/Recalendarización', 'message_type' => 'success']);
+            return redirect($this->urlFinalizar)->with(['message' => 'Se borró el movimiento de ingresos', 'message_type' => 'success']);
         } catch (\Throwable $th) {
             DB::rollBack();
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al borrar el movimiento', tipo: 'error', tiempo: 3000);
@@ -109,21 +109,21 @@ class IngresosFormConsultaTable extends Tabla
     public function validar()
     {
         try {
+            $usuariosController = new BitacoraController();
+            $usuariosController->bitacora('validar', 'validó o intentó validar un movimiento de ingresos con número de evento: ' . $this->numeroEvento, request());
             DB::beginTransaction();
             Poliza::searchByYear('fecha', Carbon::now()->year)->where('tipo_poliza', '=', $this->tipoPoliza)->where('evento', '=', $this->numeroEvento)->update(["validado" => true]);
             if ($this->numeroPolizaRemanente > 0) {
                 Poliza::searchByYear('fecha', Carbon::now()->year)->where('tipo_poliza', '=','IAUX')->where('evento', '=', $this->numeroEvento)->update(["validado" => true]);
             }
             // PresupuestoInicial::where('anio', '=', $this->selectedYear)->where('categoria', '=', 'INGRESOS')->where('tipo', '=', 'P')->update(["validado" => true]);
-            $usuariosController = new BitacoraController();
-            $usuariosController->bitacora('validarPresupuestoInicial', 'validó o intentó validar la Reclasificación/Recalendarización con número de evento: ' . $this->numeroEvento, request());
             $this->validado = true;
             DB::commit();
-            $this->dispatch('mostrarMensaje', mensaje: 'Se validó la ampliación de ingresos', tipo: 'success', tiempo: 3000);
+            $this->dispatch('mostrarMensaje', mensaje: 'Se validó el movimiento de ingresos', tipo: 'success', tiempo: 3000);
         } catch (\Throwable $th) {
             Log::debug($th->getMessage());
             DB::rollBack();
-            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al validar la ampliación', tipo: 'error', tiempo: 3000);
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al validar el movimiento', tipo: 'error', tiempo: 3000);
         }
     }
 
@@ -139,8 +139,8 @@ class IngresosFormConsultaTable extends Tabla
     public function finalizar($tipo)
     {
         $bitacora = new BitacoraController();
-        $bitacora->bitacora('agregarRegistro', 'concluyó o intentó concluir el' . $tipo . ' con evento : ' . $this->numeroEvento, request());
-        $this->dispatch('mostrarMensaje', mensaje: 'Se realizó el registro del ingreso por clasificar con éxito', tipo: 'success', tiempo: 5000);
+        $bitacora->bitacora('finalizar', 'concluyó o intentó concluir el' . $tipo . ' con evento : ' . $this->numeroEvento, request());
+        $this->dispatch('mostrarMensaje', mensaje: 'Se realizó el registro del ingreso con éxito', tipo: 'success', tiempo: 5000);
         $this->dispatch('reiniciar');
         $this->numeroEvento = 0;
         $this->numeroPoliza = 0;
