@@ -153,7 +153,7 @@ class IngresosFormConsultaTable extends Tabla
     public function finalizar($tipo)
     {
         $bitacora = new BitacoraController();
-        $bitacora->bitacora('finalizar', 'concluyó o intentó concluir el' . $tipo . ' con evento : ' . $this->numeroEvento, request());
+        $bitacora->bitacora('finalizar', 'concluyó o intentó concluir el ' . $tipo . ' con evento : ' . $this->numeroEvento, request());
         $this->dispatch('mostrarMensaje', mensaje: 'Se realizó el registro del ingreso de '. $this->categoriaModulo .' con éxito', tipo: 'success', tiempo: 5000);
         $this->numeroEvento = 0;
         $this->numeroPoliza = 0;
