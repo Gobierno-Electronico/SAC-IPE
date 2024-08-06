@@ -192,16 +192,13 @@ class PagoDevolucionTable extends Tabla
             // Inicializar un nuevo arreglo para almacenar los resultados filtrados
             $interaccionCuentaCuentasFiltradas = [];
 
-            // Recorrer las cuentas de interaccionCuentaCuentas
             foreach ($interaccionCuentaCuentas as $cuenta) {
-                if ($cuenta['tipo_interaccion'] === 'Contable - Abono') {
-                    foreach ($this->dataCompleta as $mov) {
-                        if ($cuenta['Codigo_cuenta'] === $mov['codigoCuentaPago']) {
-                            $interaccionCuentaCuentasFiltradas[] = $cuenta; // Agregar a la lista filtrada
-                            break; // Salir del loop interno cuando se encuentra una coincidencia
-                        }
+                if ($cuenta['tipo_interaccion'] == 'Contable - Abono') {
+                    if ($cuenta['Codigo_cuenta'] == $movimiento['codigoCuentaPago']) {
+                        $interaccionCuentaCuentasFiltradas[] = $cuenta; // Agregar a la lista filtrada
+                        continue; // Salir del loop interno cuando se encuentra una coincidencia
                     }
-                } else {
+                }else {
                     // Si no es 'Contable - Abono', mantener el registro
                     $interaccionCuentaCuentasFiltradas[] = $cuenta;
                 }
