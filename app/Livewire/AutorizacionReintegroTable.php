@@ -249,9 +249,6 @@ class AutorizacionReintegroTable extends Tabla
             Log::error('Ocurrió un error al finalizarRegistro en autorización de reintegro: '. $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
-
-
-
     }
 
     public function changeState($value)
