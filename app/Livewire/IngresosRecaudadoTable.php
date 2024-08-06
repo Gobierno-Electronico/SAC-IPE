@@ -440,8 +440,6 @@ class IngresosRecaudadoTable extends Tabla
                 }
             }            
             
-
-
             foreach ($resultado as $polizaInicial) { //devengado
                 $total=$polizaInicial['total'];
                 foreach ($polizaRecaudadoRecaudado as $polizaRecaudado) {    //recaudado
