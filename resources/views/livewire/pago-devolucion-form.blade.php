@@ -23,7 +23,7 @@
             </div>
         </div>
         <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaIngresosPagoDevolucion" urlFinalizar="/pago-devolucion" tipoPoliza="I" />
+            tipoMovimiento="PolizaIngresosPagoDevolucion" urlFinalizar="/pago-devolucion" tipoPoliza="I" categoriaModulo='INGRESOS PAGO DEVOLUCION'/>
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
