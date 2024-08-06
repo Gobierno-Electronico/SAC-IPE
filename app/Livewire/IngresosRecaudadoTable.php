@@ -183,6 +183,7 @@ class IngresosRecaudadoTable extends Tabla
         $anioActual = Carbon::now()->year;
         $fecha = Carbon::now('America/Mexico_City');
         $fecha->year($anioActual);
+        // Log::info($polizasInicialesIngresosRecaudado);
 
 
         foreach ($this->dataCompleta as $movimiento) {
@@ -200,12 +201,10 @@ class IngresosRecaudadoTable extends Tabla
 
             // Recorrer las cuentas de interaccionCuentaCuentas
             foreach ($interaccionCuentaCuentas as $cuenta) {
-                if ($cuenta['tipo_interaccion'] === 'Contable - Cargo') {
-                    foreach ($this->dataCompleta as $mov) {
-                        if ($cuenta['Codigo_cuenta'] === $mov['codigoCuentaPago']) {
-                            $interaccionCuentaCuentasFiltradas[] = $cuenta; // Agregar a la lista filtrada
-                            break; // Salir del loop interno cuando se encuentra una coincidencia
-                        }
+                if ($cuenta['tipo_interaccion'] == 'Contable - Cargo') {
+                    if ($cuenta['Codigo_cuenta'] == $movimiento['codigoCuentaPago']) {
+                        $interaccionCuentaCuentasFiltradas[] = $cuenta; // Agregar a la lista filtrada
+                        continue; // Salir del loop interno cuando se encuentra una coincidencia
                     }
                 } else {
                     // Si no es 'Contable - Cargo', mantener el registro
@@ -266,30 +265,79 @@ class IngresosRecaudadoTable extends Tabla
             ->toArray();
         sort($numerosPolizas);
         $this->numeroPolizaRemanente = (int)end($numerosPolizas) + 1;
+
+        $polizasInicialesIngresosRecaudado = Poliza::where('tipo_poliza', '=', 'I')->where('categoria', '=', 'INGRESOS RECAUDADO')
+        ->where('evento', '=', $this->numeroEvento)->get();
+
+        $polizaRecaudadoRecaudado = Poliza::where('tipo_poliza', '=', 'I')->where('categoria', '=', 'INGRESOS RECAUDADO')
+        ->where('evento', '=', $this->numeroEvento)->where('concepto', 'LIKE', '%(Recaudado)%' )->get();
+
+
+
         $totalRemanente = DB::select('EXEC ImporteTotalRecaudado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
         if ($totalRemanente > 0) {
-            foreach ($polizasInicialesIngresosDevengado as $polizaInicial) {
-                Poliza::create([
-                    'area' => $polizaInicial->area,
+
+
+
+            foreach ($polizasInicialesIngresosDevengado as $polizaImporte){
+                $clave = $polizaImporte->cuenta . '-' . $polizaImporte->concepto;
+                if (isset($resultado[$clave])) {
+                    $resultado[$clave]['total'] += $polizaImporte['total'];
+                } else {
+                    // Si la clave no existe, agregar el nuevo depósito al resultado
+                    $resultado[$clave] = [
+                    'area' => $polizaImporte->area,                                                      
                     'tipo_poliza' => 'IAUX',
                     'numero_poliza' =>  $this->numeroPolizaRemanente,
                     'fecha' => $movimiento['fechaRegistro'],
-                    'cuenta' => $polizaInicial->cuenta,
-                    'concepto' => $polizaInicial->concepto,
-                    'total' => $totalRemanente,
-                    'mes' => $polizaInicial->mes,
-                    'descripcion' => $polizaInicial->descripcion,
+                    'cuenta' => $polizaImporte->cuenta,
+                    'concepto' => $polizaImporte->concepto,
+                    'total' => $polizaImporte['total'],
+                    'mes' => $polizaImporte->mes,
+                    'descripcion' => $polizaImporte->descripcion,
                     'evento' => $this->numeroEvento,
-                    'tipo_interaccion' => $polizaInicial->tipo_interaccion,
+                    'tipo_interaccion' => $polizaImporte->tipo_interaccion,
+                    'validado' => false,
+                    'categoria' => 'INGRESOS DEVENGADO REMANENTE',
+                    'created_at' => $fecha,
+                    'updated_at' => $fecha
+                    ];
+                }
+            }            
+            
+
+
+            foreach ($resultado as $polizaInicial) { //devengado
+                $total=$polizaInicial['total'];
+                foreach ($polizaRecaudadoRecaudado as $polizaRecaudado) {    //recaudado
+                    $conceptoGeneral = explode('(', $polizaRecaudado->concepto);
+
+                    if (str_contains($polizaInicial['concepto'], rtrim($conceptoGeneral[0])) !== false && $conceptoGeneral[1] == 'Recaudado)'){
+                        $total= $total - $polizaRecaudado['total'];
+                    }
+                }
+                Poliza::create([
+                    'area' => $polizaInicial['area'],                                                      
+                    'tipo_poliza' => 'IAUX',
+                    'numero_poliza' =>  $this->numeroPolizaRemanente,
+                    'fecha' => $movimiento['fechaRegistro'],
+                    'cuenta' => $polizaInicial['cuenta'],
+                    'concepto' => $polizaInicial['concepto'],
+                    'total' => $total,
+                    'mes' => $polizaInicial['mes'],
+                    'descripcion' => $polizaInicial['descripcion'],
+                    'evento' => $this->numeroEvento,
+                    'tipo_interaccion' => $polizaInicial['tipo_interaccion'],
                     'validado' => false,
                     'categoria' => 'INGRESOS DEVENGADO REMANENTE',
                     'created_at' => $fecha,
                     'updated_at' => $fecha
                 ]);
-            }
+                }
         } else {
             $this->numeroPolizaRemanente = 0;
         }
+
         $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente);
     }
 }
