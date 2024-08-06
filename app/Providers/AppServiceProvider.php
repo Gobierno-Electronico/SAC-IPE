@@ -26,13 +26,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // DB::listen(function ($query) {
-        //     Log::info(
-        //         $query->sql,
-        //         $query->bindings,
-        //         $query->time
-        //     );
-        // });
+        DB::listen(function ($query) {
+            Log::info(
+                $query->sql,
+                $query->bindings,
+                $query->time
+            );
+        });
 
         Builder::macro('search', function ($fields, $string) {
             if (!$string)

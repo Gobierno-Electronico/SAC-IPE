@@ -86,7 +86,7 @@
                 </select>
 
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
-                <select name="selectMes" id="selectMes" class="form-select">
+                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes">
                     <option value="" selected>Seleccionar mes...</option>
                     @foreach (range(1, 12) as $mes)
                         @php
@@ -97,25 +97,71 @@
                     @endforeach
                 </select>
 
-                <label for="inputPPTODevengado" class="form-label mt-3">PPTO devengado</label>
-                <input type="number" name="inputPPTODevengado" id="inputPPTODevengado" class="form-control">
+                <label for="inputMontoEvento" class="form-label mt-3">Monto del evento</label>
+                <input type="number" name="inputMontoEvento" id="inputMontoEvento" class="form-control" disabled>
 
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
-                <input type="number" name="inputImporte" id="inputImporte" class="form-control">
+                <input type="text" name="inputImporte" id="inputImporte" class="form-control" 
+                onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model="importe">
 
             </div>
             <div class="col">
-                <livewire:pago-devolucion-table />
+                <livewire:pago-reintegro-table />
             </div>
 
             <div class="row mt-4">
                 <div class="col">
-                    <button class="btn btn-success">Agregar registro</button>
+                    <button class="btn btn-success" wire:click="agregarRegistro">Agregar registro</button>
                 </div>
                 <div class="col text-end">
-                    <button class="btn btn-success">Finalizar registros</button>
+                    <button class="btn btn-success" wire:click="finalizarRegistros">Finalizar registros</button>
                 </div>
             </div>
         </div>
     @endif
 </div>
+
+<script>
+    window.addEventListener('formato_importe', event => {
+        let params = event.__livewire.params
+        formatearImporte({
+            id: params.id
+        }, params.amount)
+    })
+
+    window.addEventListener('limpiar', event => {
+        limpiar()
+    })
+
+    function keyPress(e, obj) {
+        let isCurrency = $('#' + obj.id).val().search(/[$]/)
+        let texto = $('#' + obj.id).val().replace(/[^0-9.]/g, '');
+        let isDecimal = texto.search(/[.]/)
+        let amount = parseFloat(texto);
+        if (!isNaN(amount) && isDecimal < 0 || isCurrency == 0) {
+            $('#' + obj.id).val(amount.toLocaleString());
+        }
+    }
+
+    function formatearImporte(obj, amount = '') {
+        amount = (amount) ? amount : $('#' + obj.id).val().replace(/[^0-9.]/g, '');
+        amount = parseFloat(amount);
+        if (!isNaN(amount)) {
+            var formattedAmount = amount.toLocaleString('es-MX', {
+                style: 'currency',
+                currency: 'MXN',
+                minimumFractionDigits: 2,
+            });
+            $('#' + obj.id).val(formattedAmount);
+            console.log("Ejecuta: " + obj);
+        } else {
+            toastr.warning('Ingrese valores numéricos en el campo de importe');
+            $('#' + obj.id).val('');
+        }
+    }
+
+    function limpiar() {
+        $('#selectCuentaContable').val('');
+        $('#inputImporte').val('');
+    }
+</script>
