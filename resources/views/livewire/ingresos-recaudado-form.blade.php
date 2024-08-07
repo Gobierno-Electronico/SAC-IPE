@@ -134,8 +134,9 @@
                 </div>
             </div>
         </div>
+    @endif
 </div>
-@endif
+
 <script>
     window.addEventListener('formato_importe', event => {
         let params = event.__livewire.params
