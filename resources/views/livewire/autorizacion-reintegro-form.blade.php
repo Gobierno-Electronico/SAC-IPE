@@ -26,7 +26,7 @@
         </div>
         <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
             tipoMovimiento="PolizaIngresosAutorizacionReintegro" urlFinalizar="/autorizacion-reintegro"
-            tipoPoliza="I" />
+            tipoPoliza="I" categoriaModulo='INGRESOS AUTORIZACION REINTEGRO'/>
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"

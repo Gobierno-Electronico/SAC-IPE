@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 use Livewire\Component;
+use Livewire\Attributes\Validate;
 use Livewire\Attributes\On;
 use App\Models\Cuenta;
 use App\Models\Poliza;
@@ -9,6 +10,9 @@ use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
 use App\Models\CodigoDepartamento;
 use Carbon\Carbon;
+use DB;
+use Log;
+
 class PagoReintegroForm extends Component
 {
     public $numeroPoliza;

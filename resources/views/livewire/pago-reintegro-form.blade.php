@@ -23,7 +23,7 @@
             </div>
         </div>
         <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaIngresosPagoReintegro" urlFinalizar="/pago-reintegro" tipoPoliza="I" />
+            tipoMovimiento="PolizaIngresosPagoReintegro" urlFinalizar="/pago-reintegro" tipoPoliza="I" categoriaModulo='INGRESOS PAGO REINTEGRO'/>
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select" wire:model="selectCodigoArea">
@@ -80,7 +80,7 @@
                     <option value="" disabled>
                         Seleccionar cuenta</option>
                     @foreach ($cuentas as $cuenta)
-                        <option value="{{ $cuenta->Codigo_cuenta }}">
+                        <option value="{{ $cuenta->cuenta_id }}">
                             {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
                     @endforeach
                 </select>

@@ -31,6 +31,7 @@ class IngresosFormConsultaTable extends Tabla
     public $observaciones;
     public $urlFinalizar;
     public $numeroPolizaRemanente;
+    public $categoriaModulo;
 
     public $tipoMovimiento;
 
@@ -85,24 +86,30 @@ class IngresosFormConsultaTable extends Tabla
     {
         try {
             $usuariosController = new BitacoraController();
-            $usuariosController->bitacora('borrar', 'borró o intentó borrar un movimiento de ingresos con número de evento: ' . $this->numeroEvento, request());
+            $usuariosController->bitacora('borrar', 'borró o intentó borrar un movimiento de '. $this->categoriaModulo .' con número de evento: ' . $this->numeroEvento, request());
             DB::beginTransaction();
             if ($this->validado)
                 return;
-            // dd($this->numeroEvento);
-            Poliza::searchByYear('fecha', Carbon::now()->year)->where('tipo_poliza', '=', $this->tipoPoliza)->where('evento', '=', $this->numeroEvento)->where('validado','=', false)->delete();
+            Poliza::searchByYear('fecha', Carbon::now()->year)
+                ->where('tipo_poliza', '=', $this->tipoPoliza)
+                ->where('evento', '=', $this->numeroEvento)
+                ->where('categoria', '=', $this->categoriaModulo)
+                ->where('validado','=', false)->delete();
             if ($this->numeroPolizaRemanente && $this->numeroPolizaRemanente > 0) {
-                Poliza::searchByYear('fecha', Carbon::now()->year)->where('tipo_poliza', '=', 'IAUX')->where('evento', '=', $this->numeroEvento)->where('validado','=', false)->delete();
+                Poliza::searchByYear('fecha', Carbon::now()->year)
+                ->where('tipo_poliza', '=', 'IAUX')
+                ->where('evento', '=', $this->numeroEvento)
+                ->where('validado','=', false)->delete();
             }
             // PresupuestoInicial::where('anio', '=', $this->selectedYear)->where('categoria', '=', 'INGRESOS')->where('tipo', '=', 'P')->delete();
             $this->validado = true;
             // $this->dispatch('mostrarMensaje', mensaje: 'Se borró el movimiento de Reclasificación/Recalendarización', tipo: 'success', tiempo: 3000);
             $this->dispatch('cancelar-movimiento');
             DB::commit();
-            return redirect($this->urlFinalizar)->with(['message' => 'Se borró el movimiento de ingresos', 'message_type' => 'success']);
+            return redirect($this->urlFinalizar)->with(['message' => 'Se borró el movimiento de '. $this->categoriaModulo, 'message_type' => 'success']);
         } catch (\Throwable $th) {
             DB::rollBack();
-            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al borrar el movimiento', tipo: 'error', tiempo: 3000);
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al borrar el movimiento de '. $this->categoriaModulo, tipo: 'error', tiempo: 3000);
         }
     }
 
@@ -110,20 +117,27 @@ class IngresosFormConsultaTable extends Tabla
     {
         try {
             $usuariosController = new BitacoraController();
-            $usuariosController->bitacora('validar', 'validó o intentó validar un movimiento de ingresos con número de evento: ' . $this->numeroEvento, request());
+            $usuariosController->bitacora('validar', 'validó o intentó validar un movimiento de '. $this->categoriaModulo .' con número de evento: ' . $this->numeroEvento, request());
             DB::beginTransaction();
-            Poliza::searchByYear('fecha', Carbon::now()->year)->where('tipo_poliza', '=', $this->tipoPoliza)->where('evento', '=', $this->numeroEvento)->update(["validado" => true]);
+            Poliza::searchByYear('fecha', Carbon::now()->year)
+                ->where('tipo_poliza', '=', $this->tipoPoliza)
+                ->where('evento', '=', $this->numeroEvento)
+                ->where('categoria', '=', $this->categoriaModulo)
+                ->update(["validado" => true]);
             if ($this->numeroPolizaRemanente > 0) {
-                Poliza::searchByYear('fecha', Carbon::now()->year)->where('tipo_poliza', '=','IAUX')->where('evento', '=', $this->numeroEvento)->update(["validado" => true]);
+                Poliza::searchByYear('fecha', Carbon::now()->year)
+                ->where('tipo_poliza', '=','IAUX')
+                ->where('evento', '=', $this->numeroEvento)
+                ->update(["validado" => true]);
             }
             // PresupuestoInicial::where('anio', '=', $this->selectedYear)->where('categoria', '=', 'INGRESOS')->where('tipo', '=', 'P')->update(["validado" => true]);
             $this->validado = true;
             DB::commit();
-            $this->dispatch('mostrarMensaje', mensaje: 'Se validó el movimiento de ingresos', tipo: 'success', tiempo: 3000);
+            $this->dispatch('mostrarMensaje', mensaje: 'Se validó el movimiento de '. $this->categoriaModulo, tipo: 'success', tiempo: 3000);
         } catch (\Throwable $th) {
             Log::debug($th->getMessage());
             DB::rollBack();
-            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al validar el movimiento', tipo: 'error', tiempo: 3000);
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al validar el movimiento de '. $this->categoriaModulo, tipo: 'error', tiempo: 3000);
         }
     }
 
@@ -139,11 +153,10 @@ class IngresosFormConsultaTable extends Tabla
     public function finalizar($tipo)
     {
         $bitacora = new BitacoraController();
-        $bitacora->bitacora('finalizar', 'concluyó o intentó concluir el' . $tipo . ' con evento : ' . $this->numeroEvento, request());
-        $this->dispatch('mostrarMensaje', mensaje: 'Se realizó el registro del ingreso con éxito', tipo: 'success', tiempo: 5000);
-        $this->dispatch('reiniciar');
+        $bitacora->bitacora('finalizar', 'concluyó o intentó concluir el ' . $tipo . ' con evento : ' . $this->numeroEvento, request());
+        $this->dispatch('mostrarMensaje', mensaje: 'Se realizó el registro del ingreso de '. $this->categoriaModulo .' con éxito', tipo: 'success', tiempo: 5000);
         $this->numeroEvento = 0;
         $this->numeroPoliza = 0;
-
+        return redirect($this->urlFinalizar)->with(['message' => 'Se realizó el registro del ingreso de '. $this->categoriaModulo .' con éxito', 'message_type' => 'success']);
     }
 }
