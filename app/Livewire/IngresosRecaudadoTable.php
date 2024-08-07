@@ -260,7 +260,6 @@ class IngresosRecaudadoTable extends Tabla
                 Poliza::insert($polizas);
             }
 
-
             $numerosPolizas = Poliza::select('numero_poliza')
                 ->where('tipo_poliza', '=', 'IAUX')
                 ->whereYear('fecha', '=', Carbon::now()->year)
@@ -271,18 +270,11 @@ class IngresosRecaudadoTable extends Tabla
             sort($numerosPolizas);
             $this->numeroPolizaRemanente = (int)end($numerosPolizas) + 1;
 
-            $polizasInicialesIngresosRecaudado = Poliza::where('tipo_poliza', '=', 'I')->where('categoria', '=', 'INGRESOS RECAUDADO')
-                ->where('evento', '=', $this->numeroEvento)->get();
-
             $polizaRecaudadoRecaudado = Poliza::where('tipo_poliza', '=', 'I')->where('categoria', '=', 'INGRESOS RECAUDADO')
                 ->where('evento', '=', $this->numeroEvento)->where('concepto', 'LIKE', '%(Recaudado)%')->get();
 
-
-
             $totalRemanente = DB::select('EXEC ImporteTotalRecaudado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             if ($totalRemanente > 0) {
-
-
 
                 foreach ($polizasInicialesIngresosDevengado as $polizaImporte) {
                     $clave = $polizaImporte->cuenta . '-' . $polizaImporte->concepto;
