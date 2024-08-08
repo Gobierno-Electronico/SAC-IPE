@@ -272,9 +272,12 @@ class IngresosRecaudadoTable extends Tabla
             sort($numerosPolizas);
             $this->numeroPolizaRemanente = (int)end($numerosPolizas) + 1;
 
-            $polizaRecaudadoRecaudado = Poliza::where('tipo_poliza', '=', 'I')->where('categoria', '=', 'INGRESOS RECAUDADO')
+            $polizaRecaudadoRecaudado = Poliza::where('tipo_poliza', '=', 'I')
+                ->where(function($query){
+                    $query->where('categoria', '=', 'INGRESOS RECAUDADO')
+                    ->orwhere('categoria', '=', 'INGRESOS COBRO ESPECIE');
+                })
                 ->where('evento', '=', $this->numeroEvento)->where('concepto', 'LIKE', '%(Recaudado)%')->get();
-
             $totalRemanente = DB::select('EXEC ImporteTotalRecaudado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             if ($totalRemanente > 0) {
 
@@ -297,7 +300,7 @@ class IngresosRecaudadoTable extends Tabla
                             'evento' => $this->numeroEvento,
                             'tipo_interaccion' => $polizaImporte->tipo_interaccion,
                             'validado' => false,
-                            'categoria' => 'INGRESOS DEVENGADO REMANENTE',
+                            'categoria' => 'INGRESOS DEVENGADO REMANENTE RECAUDADO',
                             'created_at' => $fecha,
                             'updated_at' => $fecha
                         ];
@@ -313,6 +316,7 @@ class IngresosRecaudadoTable extends Tabla
                             $total = $total - $polizaRecaudado['total'];
                         }
                     }
+                    
                     Poliza::create([
                         'area' => $polizaInicial['area'],
                         'tipo_poliza' => 'IAUX',
@@ -326,7 +330,7 @@ class IngresosRecaudadoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $polizaInicial['tipo_interaccion'],
                         'validado' => false,
-                        'categoria' => 'INGRESOS DEVENGADO REMANENTE',
+                        'categoria' => 'INGRESOS DEVENGADO REMANENTE RECAUDADO',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);
@@ -338,7 +342,7 @@ class IngresosRecaudadoTable extends Tabla
             $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente);
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('Ocurrió un error al finalizarRegistro en devengado previamente recaudado: ' . $th->getMessage());
+            Log::error('Ocurrió un error al finalizarRegistro en Recaudado: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }

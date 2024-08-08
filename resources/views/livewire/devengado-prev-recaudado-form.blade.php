@@ -26,7 +26,7 @@
         </div>
         <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
             tipoMovimiento="PolizaIngresosDevengadoPreviamenteRecaudado" tipoPoliza="I"
-            urlFinalizar="/devengado-prev-recaudado" :$numeroPolizaRemanente categoriaModulo='INGRESOS DEVENGADO PREVIAMENTE RECAUDADO'/>
+            urlFinalizar="/devengado-prev-recaudado" :$numeroPolizaRemanente categoriaModulo='INGRESOS DEVENGADO PREVIAMENTE RECAUDADO' categoriaRemanente='INGRESOS POR CLASIFICAR REMANENTE'/>
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
