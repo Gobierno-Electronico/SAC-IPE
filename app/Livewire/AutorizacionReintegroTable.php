@@ -80,7 +80,7 @@ class AutorizacionReintegroTable extends Tabla
 
         // Recalculamos los totales solo después de eliminar el registro
         $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
-
+        $this->total = $totalActualizado;
         $this->dispatch('cambioTotal', total: $totalActualizado);
     }
 
@@ -101,7 +101,7 @@ class AutorizacionReintegroTable extends Tabla
 
         // Recalculamos los totales solo después de eliminar el registro
         $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
-
+        $this->total = $totalActualizado;
         $this->dispatch('cambioTotal', total: $totalActualizado);
     }
 

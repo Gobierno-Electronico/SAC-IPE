@@ -32,6 +32,7 @@ class IngresosFormConsultaTable extends Tabla
     public $urlFinalizar;
     public $numeroPolizaRemanente;
     public $categoriaModulo;
+    public $categoriaRemanente;
 
     public $tipoMovimiento;
 
@@ -99,6 +100,7 @@ class IngresosFormConsultaTable extends Tabla
                 Poliza::searchByYear('fecha', Carbon::now()->year)
                 ->where('tipo_poliza', '=', 'IAUX')
                 ->where('evento', '=', $this->numeroEvento)
+                ->where('categoria', '=', $this->categoriaRemanente)
                 ->where('validado','=', false)->delete();
             }
             // PresupuestoInicial::where('anio', '=', $this->selectedYear)->where('categoria', '=', 'INGRESOS')->where('tipo', '=', 'P')->delete();
@@ -128,6 +130,7 @@ class IngresosFormConsultaTable extends Tabla
                 Poliza::searchByYear('fecha', Carbon::now()->year)
                 ->where('tipo_poliza', '=','IAUX')
                 ->where('evento', '=', $this->numeroEvento)
+                ->where('categoria', '=', $this->categoriaRemanente)
                 ->update(["validado" => true]);
             }
             // PresupuestoInicial::where('anio', '=', $this->selectedYear)->where('categoria', '=', 'INGRESOS')->where('tipo', '=', 'P')->update(["validado" => true]);

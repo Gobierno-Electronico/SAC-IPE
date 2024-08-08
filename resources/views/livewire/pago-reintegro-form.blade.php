@@ -80,7 +80,7 @@
                     <option value="" disabled>
                         Seleccionar cuenta</option>
                     @foreach ($cuentas as $cuenta)
-                        <option value="{{ $cuenta->Codigo_cuenta }}">
+                        <option value="{{ $cuenta->cuenta_id }}">
                             {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
                     @endforeach
                 </select>
