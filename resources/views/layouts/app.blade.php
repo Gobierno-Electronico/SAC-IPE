@@ -270,7 +270,8 @@
                                         <a href="{{route('ingresosRecaudado')}}" method="GET" class="dropdown-item" onclick="mostrarCargando()">Recaudado</a>
                                     </li>
 
-                                    <li class="dropend">
+                                    {{-- Las funcionalidades comentadas a continuación estaban en desarrollo pero realizando un análisis junto con el equipo de contabilidad se llegó a la conclusión de que no formarían parte del alcance de la primera versión del sistema, aunque en versiones siguientes si serán desarrolladas, por lo cual, no se deben eliminar del sistema, simplemente inhabilitarlas un tiempo --}}
+                                    {{-- <li class="dropend">
                                         <a class="dropdown-item dropdown-toggle" href=""
                                             data-bs-toggle="dropdown">Devolución</a>
                                         <ul class="dropdown-menu">
@@ -302,7 +303,7 @@
                                                 </a>
                                             </li>
                                         </ul>
-                                    </li>
+                                    </li> --}}
 
                                     <li class="dropend">
                                         <a class="dropdown-item dropdown-toggle" href=""
@@ -313,11 +314,11 @@
                                                     Cobro
                                                 </a>
                                             </li>
-                                            <li>
+                                            {{-- <li>
                                                 <a class="dropdown-item" href="{{route('devolucionEspecie')}}" method="GET" onclick="mostrarCargando()">
                                                     Devolución
                                                 </a>
-                                            </li>
+                                            </li> --}}
                                         </ul>
                                     </li>
 
