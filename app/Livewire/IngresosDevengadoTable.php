@@ -119,8 +119,8 @@ class IngresosDevengadoTable extends Tabla
             'mes' => $registro['mes'],
             'movimiento' => 'DEVENGADO',
             'ejecutar' => $registro['pttoEjecutar'],
-            'importe' => $registro['importe'] + $registro['iva'],
-            'disponibilidad' => $registro['pttoEjecutar'] - $registro['importe'] - $registro['iva'],
+            'importe' => $registro['importe'],
+            'disponibilidad' => $registro['pttoEjecutar'] - $registro['importe'],
         ];
         array_push($this->cacheData, $nuevoRegistro);
         array_push($this->dataCompleta, $registro);
@@ -183,7 +183,7 @@ class IngresosDevengadoTable extends Tabla
                     ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
                 $importeMovimiento = $movimiento['importe'];
                 if($interaccionCuentaConceptoPrincipal->tipo_interaccion == 'Presupuestal - Abono'){
-                    $importeMovimiento = $movimiento['importe'] + $movimiento['iva'];
+                    $importeMovimiento = $movimiento['importe'] - $movimiento['iva'];
                 }
     
                 $polizas = [
@@ -215,8 +215,8 @@ class IngresosDevengadoTable extends Tabla
                             continue;
                         }
                     }
-                    if($dataCuenta['tipo_interaccion'] == 'Contable - Cargo' || str_contains($dataCuenta['tipo_interaccion'], 'Presupuestal')){
-                        $importe = $importe + $movimiento['iva'];
+                    if($dataCuenta['tipo_interaccion'] != 'Contable - Cargo' && !str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')){
+                        $importe = $importe - $movimiento['iva'];
                     }
                     array_push($polizas, [
                         'area' => $movimiento['codigoAreaResponsable'],

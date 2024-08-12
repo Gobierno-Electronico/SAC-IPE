@@ -119,6 +119,7 @@ class IngresosDevengadoForm extends Component
     public function cambioPresupuesto() {
         if(!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
         $this->limpiarImporteIva();
+    
         $anioActual = Carbon::now()->year;
         $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
         $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [15,16,17,18, 38])->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
@@ -146,7 +147,7 @@ class IngresosDevengadoForm extends Component
                     $this->causaIva = $importeFormateado * 0.16;
                     $this->dispatch('formato_importe', id: 'inputIva', amount: "{$this->causaIva}");
                 }
-            }
+            } 
         }
     }
 

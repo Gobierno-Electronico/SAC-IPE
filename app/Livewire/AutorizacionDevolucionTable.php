@@ -119,7 +119,7 @@ class AutorizacionDevolucionTable extends Tabla
             'mes' => $registro['mes'],
             'movimiento' => 'DEVENGADO',
             'devengado' => $registro['pttoDevengado'],
-            'importe' => $registro['importe'] + $registro['iva'],
+            'importe' => $registro['importe'],
             'nuevoImporte' => $registro['pttoDevengado'] - $registro['importe'] - $registro['iva'],
         ];
         array_push($this->cacheData, $nuevoRegistro);
@@ -184,7 +184,7 @@ class AutorizacionDevolucionTable extends Tabla
                     ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
                 $importeMovimiento = $movimiento['importe'];
                 if($interaccionCuentaConceptoPrincipal->tipo_interaccion == 'Presupuestal - Cargo'){
-                    $importeMovimiento = $movimiento['importe'] + $movimiento['iva'];
+                    $importeMovimiento = $movimiento['importe'] - $movimiento['iva'];
                 }
     
                 $polizas = [
@@ -217,8 +217,8 @@ class AutorizacionDevolucionTable extends Tabla
                         }
                     }
     
-                    if($dataCuenta['tipo_interaccion'] == 'Contable - Abono' || str_contains($dataCuenta['tipo_interaccion'], 'Presupuestal')){
-                        $importe = $importe + $movimiento['iva'];
+                    if($dataCuenta['tipo_interaccion'] != 'Contable - Abono' || !str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')){
+                        $importe = $importe - $movimiento['iva'];
                     }
                     
                     array_push($polizas, [

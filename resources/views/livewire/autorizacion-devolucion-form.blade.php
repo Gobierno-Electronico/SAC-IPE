@@ -100,10 +100,17 @@
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control"
                     onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model.live="importe"
                     wire:change="verificarCausaIVA">
-
-                <label for="inputIva" class="form-label mt-3">Causa IVA</label>
-                <input type="text" name="inputIva" id="inputIva" class="form-control" disabled>
-
+                    @if($causaIva > 0)
+                    <div id="id2" class="">
+                        <label for="inputIva" class="form-label mt-3">Causa IVA</label>
+                        <input type="text" name="inputIva" id="inputIva" class="form-control" wire:model='causaIva'>
+                    </div>
+                @else
+                    <div id="id1" class="">
+                        <label for="inputIva" class="form-label mt-3">Causa IVA</label>
+                        <input type="text" name="inputIva" id="inputIva" class="form-control" disabled>
+                    </div>
+                @endif
                 @if ($causaIva > 0)
                     <label for="agregarIVA"class="form-label mt-3">¿Desea agregar el IVA?</label><br>
                     <label>
