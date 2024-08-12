@@ -130,7 +130,7 @@ class IngresosRecaudadoTable extends Tabla
             ->where('Descripcion_cuenta', 'LIKE', '%(Devengado)%')
             ->first();
 
-        $solvencia = DB::select('EXEC DevengadoCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($registro['codigoAreaResponsable'], $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $registro['mes']));
+        $solvencia = DB::select('EXEC DevengadoCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?', array($registro['codigoAreaResponsable'], $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $registro['mes'], $registro['evento']));
         if ($solvencia[0]->TotalDevengado - $registro['importe'] < 0) {
             $this->dispatch('mostrarMensaje', mensaje: 'Monto devengado insuficiente', tipo: 'error', tiempo: 3000);
             return;
