@@ -141,10 +141,15 @@ class DevengadoPrevRecaudadoForm extends Component
                 if($this->importe == ""){
                     $this->dispatch('limpiarIVA');
                 }else{
+
                     $importeFormateado = str_replace(['$',','], '', $this->importe);          
                     $this->causaIva = $importeFormateado * 0.16;
                     $this->dispatch('formato_importe', id: 'inputIva', amount: "{$this->causaIva}");
                 }
+            }else{
+                $this->causaIva = 0;
+                $this->agregarIVA = "";
+                $this->dispatch('limpiarIVA');
             }
         }
     }
