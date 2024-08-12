@@ -146,7 +146,7 @@ class IngresosRecaudadoForm extends Component
     {
         $this->cuenta = "";
         $this->cuentaPago = "";
-        $this->mes = "";
+        $this->mes = "";  
         $this->importe = "";
         $this->dispatch('limpiar');
     }
