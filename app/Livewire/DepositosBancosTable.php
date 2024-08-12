@@ -111,7 +111,7 @@ class DepositosBancosTable extends Tabla
     {
         $solvencia = DB::select('exec SolvenciaCajaGeneral @anio = ?', [Carbon::now()->year]);
 
-        if($solvencia[0]->total - $registro['importe'] <= 0){
+        if($solvencia[0]->total - ($this->total + $registro['importe']) < 0){
             $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto en Caja General insuficiente', tipo: 'error', tiempo: 3000);
             return;
         }
