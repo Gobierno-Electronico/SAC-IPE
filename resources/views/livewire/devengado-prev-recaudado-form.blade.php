@@ -85,7 +85,7 @@
 
                 <label for="selectCuentaContable" class="form-label mt-3">Cuenta contable</label>
                 <select name="selectCuentaContable" id="selectCuentaContable" class="form-select"
-                    wire:model.live="cuenta">
+                    wire:model.live="cuenta" wire:change="verificarCausaIVA">
                     <option value="" disabled>
                         Seleccionar cuenta</option>
                     @foreach ($cuentas as $cuenta)
@@ -115,8 +115,17 @@
                     onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model.live="importe"
                     wire:model.live="importe" wire:change="verificarCausaIVA">
 
-                <label for="inputIva" class="form-label mt-3">Causa IVA</label>
-                <input type="text" name="inputIva" id="inputIva" class="form-control" disabled>
+                    @if($causaIva > 0)
+                    <div id="id2" class="">
+                        <label for="inputIva" class="form-label mt-3">Causa IVA</label>
+                        <input type="text" name="inputIva" id="inputIva" class="form-control" wire:model='causaIva'>
+                    </div>
+                @else
+                    <div id="id1" class="">
+                        <label for="inputIva" class="form-label mt-3">Causa IVA</label>
+                        <input type="text" name="inputIva" id="inputIva" class="form-control" disabled>
+                    </div>
+                @endif
 
                 @if ($causaIva > 0)
                     <label for="agregarIVA"class="form-label mt-3">¿Desea agregar el IVA?</label><br>
@@ -147,6 +156,7 @@
     @endif
 </div>
 <script>
+    
     window.addEventListener('formato_importe', event => {
         let params = event.__livewire.params
         formatearImporte({
@@ -156,6 +166,10 @@
 
     window.addEventListener('limpiar', event => {
         limpiar()
+    })
+
+    window.addEventListener('limpiarIVA', event => {
+        $('#inputIva').val('');
     })
 
     function keyPress(e, obj) {

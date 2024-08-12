@@ -116,7 +116,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
     #[On('agregar-registro')]
     public function agregarRegistro($registro)
     {
-        if ($this->total + $registro['importe'] + $registro['iva'] > $registro['montoEvento']) {
+        if ($this->total + $registro['importe'] > $registro['montoEvento']) {
             $this->dispatch('mostrarMensaje', mensaje: 'Monto total del evento superado', tipo: 'error', tiempo: 3000);
             return;
         }
@@ -141,8 +141,8 @@ class DevengadoPrevRecaudadoTable extends Tabla
             'mes' => $registro['mes'],
             'movimiento' => 'DEVENGADO',
             'ejecutar' => $solvencia[0]->Solvencia,
-            'importe' => $registro['importe'] + $registro['iva'],
-            'disponibilidad' => $solvencia[0]->Solvencia - $registro['importe'] - $registro['iva']
+            'importe' => $registro['importe'],
+            'disponibilidad' => $solvencia[0]->Solvencia - $registro['importe']
         ];
         array_push($this->cacheData, $nuevoRegistro);
         array_push($this->dataCompleta, $registro);
@@ -195,8 +195,9 @@ class DevengadoPrevRecaudadoTable extends Tabla
                     ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
                     ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
                 $importeMovimiento = $movimiento['importe'];
+
                 if($interaccionCuentaConceptoPrincipal->tipo_interaccion == 'Presupuestal - Abono'){
-                    $importeMovimiento = $movimiento['importe'] + $movimiento['iva'];
+                    $importeMovimiento = $movimiento['importe'] - $movimiento['iva'];
                 }
                     
     
@@ -229,8 +230,8 @@ class DevengadoPrevRecaudadoTable extends Tabla
                             continue;
                         }
                     }
-                    if($dataCuenta['tipo_interaccion'] == 'Contable - Cargo' || str_contains($dataCuenta['tipo_interaccion'], 'Presupuestal')){
-                        $importe = $importe + $movimiento['iva'];
+                    if($dataCuenta['tipo_interaccion'] != 'Contable - Cargo' &&  !str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')){
+                        $importe = $importe - $movimiento['iva'];
                     }
                     array_push($polizas, [
                         'area' => $movimiento['codigoAreaResponsable'],
