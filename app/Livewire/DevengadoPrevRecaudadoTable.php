@@ -128,10 +128,9 @@ class DevengadoPrevRecaudadoTable extends Tabla
 
         $solvencia = DB::select('EXEC SolvenciaCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($registro['codigoAreaResponsable'], $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $registro['mes']));
 
-        if ($solvencia[0]->Solvencia - $registro['importe'] < 0) {
+        if ($solvencia[0]->Solvencia - $registro['importe'] <= 0) {
             $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar insuficiente', tipo: 'error', tiempo: 3000);
             return;
-            
         }
 
         $nuevoRegistro = [
