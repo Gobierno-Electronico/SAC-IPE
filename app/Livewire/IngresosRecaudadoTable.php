@@ -192,7 +192,6 @@ class IngresosRecaudadoTable extends Tabla
                 $this->dispatch('mostrarMensaje', mensaje: 'Monto devengado insuficiente', tipo: 'error', tiempo: 3000);
                 return;
             }
-            
     
             $nuevoRegistro = [
                 'id' => 0,

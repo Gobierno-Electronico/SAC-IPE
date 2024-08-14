@@ -56,7 +56,7 @@ class CobroEspecieTable extends Tabla
     public function edit($id)
     {
         try {
-            //code...
+            $this->recalcularDisponibilidad($id);
             foreach ($this->dataCompleta as $key => $registro) {
                 if ($registro['id'] == $id) {
                     $datosRegistro = [
@@ -89,7 +89,7 @@ class CobroEspecieTable extends Tabla
     public function delete($id)
     {
         try {
-            //code...
+            $this->recalcularDisponibilidad($id);
             foreach ($this->cacheData as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->cacheData[$key]);
@@ -112,6 +112,35 @@ class CobroEspecieTable extends Tabla
         }
     }
 
+    public function recalcularDisponibilidad($id)
+    {
+        $datosSeleccionado = [];
+        foreach ($this->dataCompleta as $key => $registro) {
+            if ($registro['id'] == $id) {
+                $datosSeleccionado = [
+                    'codigoArea' => $registro['codigoAreaResponsable'],
+                    'codigoCuenta' => $registro['codigoCuenta'],
+                    'mes' => $registro['mes'],
+                    'evento' => $registro['evento']
+                ];
+            }
+        }
+
+        $totalImportes = 0;
+        foreach($this->cacheData as $key => $movimiento) {
+            if($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuenta']) && $movimiento['mes'] == $datosSeleccionado['mes'] && $movimiento['evento'] == $datosSeleccionado['evento']) {
+                if($totalImportes == 0){
+                    $movimiento['disponibilidad'] = $movimiento['ppto'] - $movimiento['importe'];
+                    $totalImportes += $movimiento['importe'];
+                }else{
+                    $movimiento['disponibilidad'] = $movimiento['ppto'] - $totalImportes - $movimiento['importe'];
+                    $totalImportes += $movimiento['importe'];
+                }
+                $this->cacheData[$key] = $movimiento;
+            }
+        }
+    }
+
     public function changeState($value)
     {
     }
@@ -120,7 +149,6 @@ class CobroEspecieTable extends Tabla
     public function agregarRegistro($registro)
     {
         try {
-            //code...
             if ($this->total + $registro['importe'] > $registro['montoEvento']) {
                 $this->dispatch('mostrarMensaje', mensaje: 'Monto total del evento superado', tipo: 'error', tiempo: 3000);
                 return;
@@ -138,8 +166,20 @@ class CobroEspecieTable extends Tabla
                 ->where('Descripcion_cuenta', 'LIKE', '%(Devengado)%')
                 ->first();
     
-            $solvencia = DB::select('EXEC SolvenciaCobroEspecie @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($registro['codigoAreaResponsable'], $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $registro['mes']));
-            if ($solvencia[0]->Total - $registro['importe'] < 0) {
+            $solvencia = DB::select('EXEC SolvenciaCobroEspecie @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?', array($registro['codigoAreaResponsable'], $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $registro['mes'], $registro['evento']));
+            $totalDisponible = $solvencia[0]->Total - $registro['importe'];
+            $totalImportes = 0;
+            foreach ($this->cacheData as $movimiento) {
+                if(str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoCuenta']) && $movimiento['mes'] == $registro['mes'] && $movimiento['evento'] == $registro['evento']) {
+                    $totalImportes += $movimiento['importe'];
+                }
+            }
+
+            if($totalImportes > 0){
+                $totalDisponible = $solvencia[0]->Total - $totalImportes - $registro['importe'];
+            }
+    
+            if($totalDisponible < 0){
                 $this->dispatch('mostrarMensaje', mensaje: 'Monto devengado insuficiente', tipo: 'error', tiempo: 3000);
                 return;
             }
@@ -149,10 +189,11 @@ class CobroEspecieTable extends Tabla
                 'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
                 'partida' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
                 'mes' => $registro['mes'],
+                'evento' => $registro['evento'],
                 'movimiento' => 'COBRO EN ESPECIE',
                 'ppto' => $solvencia[0]->Total,
                 'importe' => $registro['importe'],
-                'disponibilidad' => $solvencia[0]->Total - $registro['importe'],
+                'disponibilidad' => $totalDisponible,
             ];
     
             array_push($this->cacheData, $nuevoRegistro);
