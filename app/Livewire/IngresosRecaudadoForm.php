@@ -59,44 +59,62 @@ class IngresosRecaudadoForm extends Component
 
     public function render()
     {
-        $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [19, 20, 21, 35, 39])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Abono')
-            ->orderBy('cuentas.Codigo_cuenta')->get();
-        $eventos =  Poliza::select('evento', 'descripcion')->whereYear('fecha', '=', Carbon::now()->year)->where('tipo_poliza', '=', 'I')
-            ->where('categoria', '=', 'INGRESOS DEVENGADO')->distinct()->pluck('descripcion', 'evento');
-        $this->cambiarCuentaPagoSeleccionada = false;
-        $this->llenarCuentasPago();
-        return view('livewire.ingresos-recaudado-form', ['eventos' => $eventos, 'cuentas' => $cuentas]);
+        try {
+            //code...
+            $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+                ->whereIn('interaccion_cuenta_conceptos.concepto_id', [19, 20, 21, 35, 39])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Abono')
+                ->orderBy('cuentas.Codigo_cuenta')->get();
+            $eventos =  Poliza::select('evento', 'descripcion')->whereYear('fecha', '=', Carbon::now()->year)->where('tipo_poliza', '=', 'I')
+                ->where('categoria', '=', 'INGRESOS DEVENGADO')->distinct()->pluck('descripcion', 'evento');
+            $this->cambiarCuentaPagoSeleccionada = false;
+            $this->llenarCuentasPago();
+            return view('livewire.ingresos-recaudado-form', ['eventos' => $eventos, 'cuentas' => $cuentas]);
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al cargar cuentas en Recaudado: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar cuentas, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
     }
 
     public function cambioEvento()
     {
-        $this->montoDelEvento = DB::select('EXEC ImporteTotalRecaudado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
-        $this->dispatch('formato_importe', id: 'inputMontoEvento', amount: ($this->montoDelEvento > 0) ? $this->montoDelEvento : '');
-        $this->dispatch('mostrarMensaje', mensaje: 'Monto del evento cargado', tipo: 'success', tiempo: 1500);
-        $this->cambiarCuentaPagoSeleccionada = false;
-        $this->llenarCuentasPago();
+        try {
+            //code...
+            $this->montoDelEvento = DB::select('EXEC ImporteTotalRecaudado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
+            $this->dispatch('formato_importe', id: 'inputMontoEvento', amount: ($this->montoDelEvento > 0) ? $this->montoDelEvento : '');
+            $this->dispatch('mostrarMensaje', mensaje: 'Monto del evento cargado', tipo: 'success', tiempo: 1500);
+            $this->cambiarCuentaPagoSeleccionada = false;
+            $this->llenarCuentasPago();
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al cargar el evento en recaudado: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
     }
 
     public function llenarCuentasPago()
     {
-        if (!$this->cuenta) {
-            return;
+        try {
+            //code...
+            if (!$this->cuenta) {
+                return;
+            }
+    
+            if ($this->cambiarCuentaPagoSeleccionada) {
+                $this->cuentaPago = "";
+            }
+    
+            $this->cambiarCuentaPagoSeleccionada = true;
+            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [19, 20, 21, 35, 39])
+                ->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
+            $this->subcuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
+                ->join('interaccion_cuenta_conceptos', function ($join) {
+                    $join->on('interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+                        ->where('tipo_interaccion', '=', 'Contable - Cargo');
+                })
+                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get();
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al cargar las cuentas de pago en recaudado: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas de pago, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
-
-        if ($this->cambiarCuentaPagoSeleccionada) {
-            $this->cuentaPago = "";
-        }
-
-        $this->cambiarCuentaPagoSeleccionada = true;
-        $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [19, 20, 21, 35, 39])
-            ->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
-        $this->subcuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
-            ->join('interaccion_cuenta_conceptos', function ($join) {
-                $join->on('interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
-                    ->where('tipo_interaccion', '=', 'Contable - Cargo');
-            })
-            ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get();
     }
 
     public function agregarRegistro()
@@ -129,16 +147,9 @@ class IngresosRecaudadoForm extends Component
             ];
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
-        } catch (\Illuminate\Validation\ValidationException $exception) {
-            Log::error($exception->getMessage());
-            if ($exception->validator) {
-                $errors = $exception->validator->errors()->all();
-                foreach ($errors as $value) {
-                    $this->dispatch('mostrarMensaje', mensaje: $value, tipo: 'warning', tiempo: 3000);
-                }
-            } else {
-                throw $exception;
-            }
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al agregar registro en devengado: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 

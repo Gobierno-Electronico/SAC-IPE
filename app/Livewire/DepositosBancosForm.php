@@ -1,10 +1,14 @@
 <?php
 
 namespace App\Livewire;
+
 use Livewire\Component;
 use Livewire\Attributes\Validate;
 use Livewire\Attributes\On;
 use App\Models\Cuenta;
+use PDOException;
+use Log;
+use DB;
 
 class DepositosBancosForm extends Component
 {
@@ -23,7 +27,7 @@ class DepositosBancosForm extends Component
     #[Validate('required', message: 'Importe requerido')]
     public $importe = "";
 
-    #[Validate('required', message:'Fecha requerida')]
+    #[Validate('required', message: 'Fecha requerida')]
     public $fechaRegistro = "";
 
     public $consultarRegistro = false;
@@ -33,15 +37,23 @@ class DepositosBancosForm extends Component
 
     public function render()
     {
-        $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-            ->where('interaccion_cuenta_conceptos.concepto_id', '=', 13)->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Cargo')
-            ->orderBy('cuentas.Codigo_cuenta')->get();
-        return view('livewire.depositos-bancos-form', ['cuentas' => $cuentas]);
+        try {
+            //code...
+            $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+                ->where('interaccion_cuenta_conceptos.concepto_id', '=', 13)->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Cargo')
+                ->orderBy('cuentas.Codigo_cuenta')->get();
+            return view('livewire.depositos-bancos-form', ['cuentas' => $cuentas]);
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al cargar cuentas en depósitos en bancos: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar cuentas, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
     }
 
-    public function agregarRegistro(){
+    public function agregarRegistro()
+    {
         try {
-            $this->importe = floatval(str_replace(['$',','],"",$this->importe));
+           
+            $this->importe = floatval(str_replace(['$', ','], "", $this->importe));
             $this->importe = ($this->importe > 0)  ? $this->importe : "";
             $this->validate();
             $cuenta = Cuenta::find($this->cuenta);
@@ -51,28 +63,23 @@ class DepositosBancosForm extends Component
                 'observaciones' => $this->observaciones,
                 'cuentaId' => $this->cuenta,
                 'codigoCuenta' => $cuenta->Codigo_cuenta,
-                'descripcionCuenta' =>$cuenta->Descripcion_cuenta,
+                'descripcionCuenta' => $cuenta->Descripcion_cuenta,
                 'mes' => $this->mes,
                 'fechaRegistro' => $this->fechaRegistro,
                 'importe' => $this->importe
             ];
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            if($e->validator){
-                $errors = $e->validator->errors()->all();
-                foreach ($errors as $value) {
-                    $this->dispatch('mostrarMensaje', mensaje: $value, tipo: 'warning', tiempo: 3000);
-                }
-            }
-            else{
-                throw $e;
-            }
+        
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al agregarRegistro en depósitos en bancos: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 
     #[On('reiniciar')]
-    public function reiniciar() {
+    public function reiniciar()
+    {
         $this->limpiar();
         $this->consultarRegistro = false;
         $this->numeroEvento = 0;
@@ -80,32 +87,41 @@ class DepositosBancosForm extends Component
         $this->total = 0;
     }
 
-    public function limpiar(){
+    public function limpiar()
+    {
         $this->cuenta = "";
         $this->mes = "";
         $this->importe = "";
         $this->dispatch('limpiar');
     }
 
-    public function finalizarRegistros(){
+    public function finalizarRegistros()
+    {
         $this->dispatch('finalizar-registros');
     }
 
     #[On('consultar-registro')]
-    public function consultarRegistros($numeroEvento, $numeroPoliza, $total) {
+    public function consultarRegistros($numeroEvento, $numeroPoliza, $total)
+    {
         $this->consultarRegistro = true;
         $this->numeroEvento = $numeroEvento;
         $this->numeroPoliza = $numeroPoliza;
         $this->total = $total;
     }
     #[On('llenar-formulario')]
-    public function llenarFormulario ($datosRegistro) {
-        $idCuenta = Cuenta::where('Codigo_cuenta', '=', $datosRegistro['codigoCuenta'])->value('id');
-        $this->cuenta = $idCuenta;
-        $this->mes = $datosRegistro['mes'];
-        $this->importe = $datosRegistro['importe'];
-
-        $this->dispatch('llenarFormulario', cuenta: $datosRegistro['codigoCuenta'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe']);
+    public function llenarFormulario($datosRegistro)
+    {
+        try {
+            //code...
+            $idCuenta = Cuenta::where('Codigo_cuenta', '=', $datosRegistro['codigoCuenta'])->value('id');
+            $this->cuenta = $idCuenta;
+            $this->mes = $datosRegistro['mes'];
+            $this->importe = $datosRegistro['importe'];
+    
+            $this->dispatch('llenarFormulario', cuenta: $datosRegistro['codigoCuenta'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe']);
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al llenarFormulario en depósitos en bancos: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al llenar el formulario, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
     }
-
 }

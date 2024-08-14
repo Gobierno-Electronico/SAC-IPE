@@ -53,52 +53,65 @@ class IngresosPorClasificarTable extends Tabla
 
     public function edit($id)
     {
-        foreach ($this->cacheData as $key => $registro) {
-            if ($registro['id'] == $id) {
-                $datosRegistro = [
-                    'codigoCuenta' => $registro['cuenta'],
-                    'descripcion' => $registro['descripcion'],
-                    'mes' => $registro['mes'],
-                    'importe' => $registro['importe']
-                ];
-
-                unset($this->cacheData[$key]);
-                $this->dispatch('llenar-formulario', $datosRegistro);
-                break;
+        try {
+            //code...
+            foreach ($this->cacheData as $key => $registro) {
+                if ($registro['id'] == $id) {
+                    $datosRegistro = [
+                        'codigoCuenta' => $registro['cuenta'],
+                        'descripcion' => $registro['descripcion'],
+                        'mes' => $registro['mes'],
+                        'importe' => $registro['importe']
+                    ];
+    
+                    unset($this->cacheData[$key]);
+                    $this->dispatch('llenar-formulario', $datosRegistro);
+                    break;
+                }
             }
-        }
-
-        foreach ($this->dataCompleta as $key => $registro) {
-            if ($registro['id'] == $id) {
-                unset($this->dataCompleta[$key]);
-                break;
+    
+            foreach ($this->dataCompleta as $key => $registro) {
+                if ($registro['id'] == $id) {
+                    unset($this->dataCompleta[$key]);
+                    break;
+                }
             }
+            // Recalculamos los totales solo después de eliminar el registro
+            $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
+            $this->total = $totalActualizado;
+            $this->dispatch('cambioTotal', total: $totalActualizado);
+        } catch (\Throwable $th) {
+            //throw $th;
+            Log::error('Ocurrió un error al editar en ingresos por clasificar: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al editar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
-        // Recalculamos los totales solo después de eliminar el registro
-        $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
-        $this->total = $totalActualizado;
-        $this->dispatch('cambioTotal', total: $totalActualizado);
     }
 
     public function delete($id){
-        foreach ($this->cacheData as $key => $registro) {
-            if ($registro['id'] == $id) {
-                unset($this->cacheData[$key]);
-                break;
+        try {
+            //code...
+            foreach ($this->cacheData as $key => $registro) {
+                if ($registro['id'] == $id) {
+                    unset($this->cacheData[$key]);
+                    break;
+                }
             }
-        }
-
-        foreach ($this->dataCompleta as $key => $registro) {
-            if ($registro['id'] == $id) {
-                unset($this->dataCompleta[$key]);
-                break;
+    
+            foreach ($this->dataCompleta as $key => $registro) {
+                if ($registro['id'] == $id) {
+                    unset($this->dataCompleta[$key]);
+                    break;
+                }
             }
+    
+            // Recalculamos los totales solo después de eliminar el registro
+            $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
+            $this->total = $totalActualizado;
+            $this->dispatch('cambioTotal', total: $totalActualizado );
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al eliminar en ingresos por clasificar: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al eliminar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
-
-        // Recalculamos los totales solo después de eliminar el registro
-        $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
-        $this->total = $totalActualizado;
-        $this->dispatch('cambioTotal', total: $totalActualizado );
     }
 
     public function changeState($value)
@@ -108,22 +121,28 @@ class IngresosPorClasificarTable extends Tabla
     #[On('agregar-registro')]
     public function agregarRegistro($registro)
     {
-        $nuevoRegistro = [
-            'id' => 0,
-            'cuenta' => $registro['codigoCuenta'],
-            'descripcion' => $registro['descripcionCuenta'],
-            'mes' => $registro['mes'],
-            'importe' => $registro['importe']
-        ];
-        array_push($this->cacheData, $nuevoRegistro);
-        array_push($this->dataCompleta, $registro);
-        $this->total = 0;
-        foreach ($this->cacheData as $key => $registro) {
-            $this->cacheData[$key]['id'] = $key + 1; // El ID comienza en 1
-            $this->dataCompleta[$key]['id'] = $key + 1;
-            $this->total += $registro['importe'];
+        try {
+            //code...
+            $nuevoRegistro = [
+                'id' => 0,
+                'cuenta' => $registro['codigoCuenta'],
+                'descripcion' => $registro['descripcionCuenta'],
+                'mes' => $registro['mes'],
+                'importe' => $registro['importe']
+            ];
+            array_push($this->cacheData, $nuevoRegistro);
+            array_push($this->dataCompleta, $registro);
+            $this->total = 0;
+            foreach ($this->cacheData as $key => $registro) {
+                $this->cacheData[$key]['id'] = $key + 1; // El ID comienza en 1
+                $this->dataCompleta[$key]['id'] = $key + 1;
+                $this->total += $registro['importe'];
+            }
+            $this->dispatch('cambioTotal', total: $this->total);
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al eliminar en ingresos por clasificar: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al eliminar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
-        $this->dispatch('cambioTotal', total: $this->total);
 
     }
 

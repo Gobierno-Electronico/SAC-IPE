@@ -24,7 +24,7 @@ class BitacoraController extends Controller
             $bitacora->created_at = Carbon::now('America/Mexico_City');
             $bitacora->save();
         } catch (\Throwable $error) {
-            Log::debug($error->getMessage());
+            Log::error($error->getMessage());
         }
     }
 

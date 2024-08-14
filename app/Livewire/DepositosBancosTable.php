@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Livewire;
+
 use Livewire\Attributes\On;
 use App\Models\Poliza;
 use Illuminate\Database\Eloquent\Builder;
@@ -24,7 +25,8 @@ class DepositosBancosTable extends Tabla
     public $numeroPoliza;
     public $numeroEvento;
 
-    public function render(){
+    public function render()
+    {
         return view('livewire.depositos-bancos-table');
     }
 
@@ -53,96 +55,111 @@ class DepositosBancosTable extends Tabla
 
     public function edit($id)
     {
+        try {
+            //code...
             foreach ($this->cacheData as $key => $registro) {
-            if ($registro['id'] == $id) {
-                $datosRegistro = [
-                    'codigoCuenta' => $registro['cuenta'],
-                    'descripcion' => $registro['descripcion'],
-                    'mes' => $registro['mes'],
-                    'importe' => $registro['importe']
-                ];
-
-                unset($this->cacheData[$key]);
-                $this->dispatch('llenar-formulario', $datosRegistro);
-                break;
+                if ($registro['id'] == $id) {
+                    $datosRegistro = [
+                        'codigoCuenta' => $registro['cuenta'],
+                        'descripcion' => $registro['descripcion'],
+                        'mes' => $registro['mes'],
+                        'importe' => $registro['importe']
+                    ];
+    
+                    unset($this->cacheData[$key]);
+                    $this->dispatch('llenar-formulario', $datosRegistro);
+                    break;
+                }
             }
-        }
-
-        foreach ($this->dataCompleta as $key => $registro) {
-            if ($registro['id'] == $id) {
-                unset($this->dataCompleta[$key]);
-                break;
+    
+            foreach ($this->dataCompleta as $key => $registro) {
+                if ($registro['id'] == $id) {
+                    unset($this->dataCompleta[$key]);
+                    break;
+                }
             }
+            // Recalculamos los totales solo después de eliminar el registro
+            $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
+            $this->total = $totalActualizado;
+            $this->dispatch('cambioTotal', total: $totalActualizado);
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al editar en depósitos en bancos: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al editar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
-        // Recalculamos los totales solo después de eliminar el registro
-        $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
-        $this->total = $totalActualizado;
-        $this->dispatch('cambioTotal', total: $totalActualizado);
     }
 
-    public function delete($id){
-        foreach ($this->cacheData as $key => $registro) {
-            if ($registro['id'] == $id) {
-                unset($this->cacheData[$key]);
-                break;
-            }
-        }
-
-        foreach ($this->dataCompleta as $key => $registro) {
-            if ($registro['id'] == $id) {
-                unset($this->dataCompleta[$key]);
-                break;
-            }
-        }
-
-        // Recalculamos los totales solo después de eliminar el registro
-        $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
-        $this->total = $totalActualizado;
-        $this->dispatch('cambioTotal', total: $totalActualizado );
-    }
-
-    public function changeState($value)
+    public function delete($id)
     {
+        try {
+            //code...
+            foreach ($this->cacheData as $key => $registro) {
+                if ($registro['id'] == $id) {
+                    unset($this->cacheData[$key]);
+                    break;
+                }
+            }
+    
+            foreach ($this->dataCompleta as $key => $registro) {
+                if ($registro['id'] == $id) {
+                    unset($this->dataCompleta[$key]);
+                    break;
+                }
+            }
+    
+            // Recalculamos los totales solo después de eliminar el registro
+            $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
+            $this->total = $totalActualizado;
+            $this->dispatch('cambioTotal', total: $totalActualizado);
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al eliminar en depósitos en bancos: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al eliminar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
     }
+
+    public function changeState($value) {}
 
 
     #[On('agregar-registro')]
     public function agregarRegistro($registro)
     {
-        $solvencia = DB::select('exec SolvenciaCajaGeneral @anio = ?', [Carbon::now()->year]);
+        try {
+            $solvencia = DB::select('exec SolvenciaCajaGeneral @anio = ?', [Carbon::now()->year]);
 
-        if($solvencia[0]->total - ($this->total + $registro['importe']) < 0){
-            $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto en Caja General insuficiente', tipo: 'error', tiempo: 3000);
-            return;
+            if ($solvencia[0]->total - ($this->total + $registro['importe']) < 0) {
+                $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto en Caja General insuficiente', tipo: 'error', tiempo: 3000);
+                return;
+            }
+            $nuevoRegistro = [
+                'id' => 0,
+                'cuenta' => $registro['codigoCuenta'],
+                'descripcion' => $registro['descripcionCuenta'],
+                'mes' => $registro['mes'],
+                'importe' => $registro['importe']
+            ];
+            array_push($this->cacheData, $nuevoRegistro);
+            array_push($this->dataCompleta, $registro);
+            $this->total = 0;
+            foreach ($this->cacheData as $key => $registro) {
+                $this->cacheData[$key]['id'] = $key + 1; // El ID comienza en 1
+                $this->dataCompleta[$key]['id'] = $key + 1;
+                $this->total += $registro['importe'];
+            }
+            $this->dispatch('cambioTotal', total: $this->total);
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al agregarRegistro en depósitos en bancos: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
-        $nuevoRegistro = [
-            'id' => 0,
-            'cuenta' => $registro['codigoCuenta'],
-            'descripcion' => $registro['descripcionCuenta'],
-            'mes' => $registro['mes'],
-            'importe' => $registro['importe']
-        ];
-        array_push($this->cacheData, $nuevoRegistro);
-        array_push($this->dataCompleta, $registro);
-        $this->total = 0;
-        foreach ($this->cacheData as $key => $registro) {
-            $this->cacheData[$key]['id'] = $key + 1; // El ID comienza en 1
-            $this->dataCompleta[$key]['id'] = $key + 1;
-            $this->total += $registro['importe'];
-        }
-        $this->dispatch('cambioTotal', total: $this->total);
-
     }
 
     #[On('finalizar-registros')]
     public function finalizarRegistros()
     {
-        if(empty($this->cacheData)){
+        if (empty($this->cacheData)) {
             $this->dispatch('mostrarMensaje', mensaje: 'Tabla sin registros', tipo: 'error', tiempo: 3000);
             return;
         }
         try {
-            
+
             $numerosPolizas = Poliza::select('numero_poliza')
                 ->where('tipo_poliza', '=', 'I')
                 ->whereYear('fecha', '=', Carbon::now()->year)
@@ -164,9 +181,9 @@ class DepositosBancosTable extends Tabla
             } else {
                 $this->numeroEvento = 1;
             }
-    
+
             $bitacora = new BitacoraController();
-            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un depósito en bancos con evento: '.$this->numeroEvento, request());
+            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un depósito en bancos con evento: ' . $this->numeroEvento, request());
 
             DB::beginTransaction();
 
@@ -174,13 +191,13 @@ class DepositosBancosTable extends Tabla
             $fecha = Carbon::now('America/Mexico_City');
             $fecha->year($anioActual);
             foreach ($this->dataCompleta as $movimiento) {
-    
+
                 $responsable = CodigoDepartamento::find($movimiento['codigoArea']);
                 $interaccionCuentaConceptoIzquierda = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaId'])->where('concepto_id', '=', 13)->first();
                 $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoIzquierda->id)->first();
                 $interaccionCuentaConceptoDerecha = InteraccionCuentaConcepto::where('id', '=', $interaccionCuentaCuenta->id_interaccion_concepto_cuenta_2)->first();
                 $cuentaDerecha = Cuenta::find($interaccionCuentaConceptoDerecha->cuenta_id);
-    
+
                 $poliza = new Poliza([
                     'area' => $responsable->Codigo_completo,
                     'tipo_poliza' => 'I',
@@ -222,9 +239,8 @@ class DepositosBancosTable extends Tabla
             $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('Ocurrió un error al finalizarRegistro en depósitos en bancos: '. $th->getMessage());
+            Log::error('Ocurrió un error al finalizarRegistro en depósitos en bancos: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
-
     }
 }

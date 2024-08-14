@@ -53,11 +53,18 @@ class IngresosDevengadoForm extends Component
 
     public function render()
     {
-        $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [15,16,17,18,38])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Abono')
-            ->orderBy('cuentas.Codigo_cuenta')->get();
-        $this->verificarCausaIVA();
-        return view('livewire.ingresos-devengado-form', ['cuentas' => $cuentas]);
+        try {
+            //code...
+            $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+                ->whereIn('interaccion_cuenta_conceptos.concepto_id', [15,16,17,18,38])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Abono')
+                ->orderBy('cuentas.Codigo_cuenta')->get();
+            $this->verificarCausaIVA();
+            return view('livewire.ingresos-devengado-form', ['cuentas' => $cuentas]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            Log::error('Ocurrió un error al cargar cuentas en Devengado: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
     }
 
     public function agregarRegistro(){
@@ -98,52 +105,56 @@ class IngresosDevengadoForm extends Component
 
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            Log::error($e->getMessage());
-            if($e->validator){
-                $errors = $e->validator->errors()->all();
-                foreach ($errors as $value) {
-                    $this->dispatch('mostrarMensaje', mensaje: $value, tipo: 'warning', tiempo: 3000);
-                }
-            }
-            else{
-                throw $e;
-            }
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al agregar registro en Devengado: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 
     public function cambioPresupuesto() {
-        if(!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
-        $this->limpiarImporteIva();
-    
-        $anioActual = Carbon::now()->year;
-        $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
-        $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [15,16,17,18, 38])->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
-        $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')
-            ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->where('Descripcion_cuenta', 'LIKE', '%(Por ejecutar)%')->first();
-        $solvencia = DB::select('EXEC SolvenciaCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($departamento->Codigo_completo, $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $this->mes))[0]->Solvencia;
-        $this->PTTOEjecutar = ($solvencia > 0) ? floatval($solvencia) : 0;
-        $this->dispatch('formato_importe', id: 'inputPTTOEjecutar', amount: "{$this->PTTOEjecutar}");
-        $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar cargado', tipo : 'success', tiempo: 1500);
+        try {
+            //code...
+            if(!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
+            $this->limpiarImporteIva();
+        
+            $anioActual = Carbon::now()->year;
+            $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
+            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [15,16,17,18, 38])->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
+            $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')
+                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->where('Descripcion_cuenta', 'LIKE', '%(Por ejecutar)%')->first();
+            $solvencia = DB::select('EXEC SolvenciaCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($departamento->Codigo_completo, $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $this->mes))[0]->Solvencia;
+            $this->PTTOEjecutar = ($solvencia > 0) ? floatval($solvencia) : 0;
+            $this->dispatch('formato_importe', id: 'inputPTTOEjecutar', amount: "{$this->PTTOEjecutar}");
+            $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar cargado', tipo : 'success', tiempo: 1500);
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al cargar presupuesto en Devengado: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar presupuesto, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
     }
 
     public function verificarCausaIVA() {
-        if(!$this->cuenta) return;
-        $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [15,16,17,18, 38])->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
-        $interaccionCuentasCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
-        ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
-        ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
-
-        foreach ($interaccionCuentasCuentas as $key => $dataCuenta) {
-            if(str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')){
-                if($this->importe == ""){
-                    $this->dispatch('limpiarIVA');
-                }else{
-                    $importeFormateado = str_replace(['$',','], '', $this->importe);          
-                    $this->causaIva = $importeFormateado * 0.16;
-                    $this->dispatch('formato_importe', id: 'inputIva', amount: "{$this->causaIva}");
-                }
-            } 
+        try {
+            //code...
+            if(!$this->cuenta) return;
+            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [15,16,17,18, 38])->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
+            $interaccionCuentasCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
+            ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+            ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
+    
+            foreach ($interaccionCuentasCuentas as $key => $dataCuenta) {
+                if(str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')){
+                    if($this->importe == ""){
+                        $this->dispatch('limpiarIVA');
+                    }else{
+                        $importeFormateado = str_replace(['$',','], '', $this->importe);          
+                        $this->causaIva = $importeFormateado * 0.16;
+                        $this->dispatch('formato_importe', id: 'inputIva', amount: "{$this->causaIva}");
+                    }
+                } 
+            }
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al calcular IVA en Devengado: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al calcular IVA, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 

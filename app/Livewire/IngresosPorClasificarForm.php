@@ -37,10 +37,16 @@ class IngresosPorClasificarForm extends Component
 
     public function render()
     {
-        $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-            ->where('interaccion_cuenta_conceptos.concepto_id', '=', 12)->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Cargo')
-            ->orderBy('cuentas.Codigo_cuenta')->get();
-        return view('livewire.ingresos-por-clasificar-form', ['cuentas' => $cuentas]);
+        try {
+            //code...
+            $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+                ->where('interaccion_cuenta_conceptos.concepto_id', '=', 12)->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Cargo')
+                ->orderBy('cuentas.Codigo_cuenta')->get();
+            return view('livewire.ingresos-por-clasificar-form', ['cuentas' => $cuentas]);
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al cargar cuentas en ingresos por clasificar: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar cuentas, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
     }
 
     public function agregarRegistro(){
@@ -63,17 +69,9 @@ class IngresosPorClasificarForm extends Component
             Log::info($registro);
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            Log::error($e->getMessage());
-            if($e->validator){
-                $errors = $e->validator->errors()->all();
-                foreach ($errors as $value) {
-                    $this->dispatch('mostrarMensaje', mensaje: $value, tipo: 'warning', tiempo: 3000);
-                }
-            }
-            else{
-                throw $e;
-            }
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al agregar registro en ingresos por clasificar: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 
