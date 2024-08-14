@@ -59,6 +59,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
 
     public function edit($id)
     {
+        $this->recalcularDisponibilidad($id);
         foreach ($this->dataCompleta as $key => $registro) {
             if ($registro['id'] == $id) {
                 $datosRegistro = [
@@ -89,6 +90,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
 
     public function delete($id)
     {
+        $this->recalcularDisponibilidad($id);
         foreach ($this->cacheData as $key => $registro) {
             if ($registro['id'] == $id) {
                 unset($this->cacheData[$key]);
@@ -107,6 +109,35 @@ class DevengadoPrevRecaudadoTable extends Tabla
         $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
         $this->total = $totalActualizado;
         $this->dispatch('cambioTotal', total: $totalActualizado);
+    }
+
+    public function recalcularDisponibilidad($id)
+    {
+        $datosSeleccionado = [];
+        foreach ($this->dataCompleta as $key => $registro) {
+            if ($registro['id'] == $id) {
+                $datosSeleccionado = [
+                    'codigoArea' => $registro['codigoAreaResponsable'],
+                    'codigoCuenta' => $registro['codigoCuenta'],
+                    'mes' => $registro['mes'],
+                    'evento' => $registro['evento']
+                ];
+            }
+        }
+
+        $totalImportes = 0;
+        foreach($this->cacheData as $key => $movimiento) {
+            if($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuenta']) && $movimiento['mes'] == $datosSeleccionado['mes'] && $movimiento['evento'] == $datosSeleccionado['evento']) {
+                if($totalImportes == 0){
+                    $movimiento['disponibilidad'] = $movimiento['ejecutar'] - $movimiento['importe'];
+                    $totalImportes += $movimiento['importe'];
+                }else{
+                    $movimiento['disponibilidad'] = $movimiento['ejecutar'] - $totalImportes - $movimiento['importe'];
+                    $totalImportes += $movimiento['importe'];
+                }
+                $this->cacheData[$key] = $movimiento;
+            }
+        }
     }
 
     public function changeState($value)
@@ -128,7 +159,20 @@ class DevengadoPrevRecaudadoTable extends Tabla
 
         $solvencia = DB::select('EXEC SolvenciaCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($registro['codigoAreaResponsable'], $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $registro['mes']));
 
-        if ($solvencia[0]->Solvencia - $registro['importe'] <= 0) {
+        $totalDisponible = $solvencia[0]->Solvencia - $registro['importe'];
+        $totalImportes = 0;
+
+        foreach ($this->cacheData as $movimiento) {
+            if(str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoCuenta']) && $movimiento['mes'] == $registro['mes'] && $movimiento['evento'] == $registro['evento']) {
+                $totalImportes += $movimiento['importe'];
+            }
+        }
+
+        if($totalImportes > 0){
+            $totalDisponible = $solvencia[0]->Solvencia - $totalImportes - $registro['importe'];
+        }
+
+        if($totalDisponible < 0){
             $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar insuficiente', tipo: 'error', tiempo: 3000);
             return;
         }
@@ -138,10 +182,11 @@ class DevengadoPrevRecaudadoTable extends Tabla
             'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
             'partida' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
             'mes' => $registro['mes'],
-            'movimiento' => 'DEVENGADO',
+            'evento' => $registro['evento'],
+            'movimiento' => 'DEVENGADO PREVIAMENTE RECAUDADO',
             'ejecutar' => $solvencia[0]->Solvencia,
             'importe' => $registro['importe'],
-            'disponibilidad' => $solvencia[0]->Solvencia - $registro['importe']
+            'disponibilidad' => $totalDisponible
         ];
         array_push($this->cacheData, $nuevoRegistro);
         array_push($this->dataCompleta, $registro);

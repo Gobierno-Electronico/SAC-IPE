@@ -54,6 +54,7 @@ class IngresosDevengadoTable extends Tabla
 
     public function edit($id)
     {
+        $this->recalcularDisponibilidad($id);
         foreach ($this->dataCompleta as $key => $registro) {
             if ($registro['id'] == $id) {
                 $datosRegistro = [
@@ -85,6 +86,7 @@ class IngresosDevengadoTable extends Tabla
     }
 
     public function delete($id){
+        $this->recalcularDisponibilidad($id);
         foreach ($this->cacheData as $key => $registro) {
             if ($registro['id'] == $id) {
                 unset($this->cacheData[$key]);
@@ -105,6 +107,34 @@ class IngresosDevengadoTable extends Tabla
         $this->dispatch('cambioTotal', total: $totalActualizado);
     }
 
+    public function recalcularDisponibilidad($id)
+    {
+        $datosSeleccionado = [];
+        foreach ($this->dataCompleta as $key => $registro) {
+            if ($registro['id'] == $id) {
+                $datosSeleccionado = [
+                    'codigoArea' => $registro['codigoAreaResponsable'],
+                    'codigoCuenta' => $registro['codigoCuenta'],
+                    'mes' => $registro['mes']
+                ];
+            }
+        }
+
+        $totalImportes = 0;
+        foreach($this->cacheData as $key => $movimiento) {
+            if($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuenta']) && $movimiento['mes'] == $datosSeleccionado['mes']) {
+                if($totalImportes == 0){
+                    $movimiento['disponibilidad'] = $movimiento['ejecutar'] - $movimiento['importe'];
+                    $totalImportes += $movimiento['importe'];
+                }else{
+                    $movimiento['disponibilidad'] = $movimiento['ejecutar'] - $totalImportes - $movimiento['importe'];
+                    $totalImportes += $movimiento['importe'];
+                }
+                $this->cacheData[$key] = $movimiento;
+            }
+        }
+    }
+
     public function changeState($value)
     {
     }
@@ -112,6 +142,24 @@ class IngresosDevengadoTable extends Tabla
     #[On('agregar-registro')]
     public function agregarRegistro($registro)
     {
+        $solvencia = $registro['pttoEjecutar'];
+        $totalDisponible = $solvencia - $registro['importe'];
+        $totalImportes = 0;
+        foreach ($this->cacheData as $movimiento){
+            if(str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoCuenta']) && $movimiento['mes'] == $registro['mes']){
+                $totalImportes += $movimiento['importe'];
+            }
+
+            if($totalImportes > 0){
+                $totalDisponible = $solvencia - $totalImportes - $registro['importe'];
+            }
+
+            if($totalDisponible < 0){
+                $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar insuficiente', tipo: 'warning', tiempo: 3000);
+                return;
+            }
+        }
+
         $nuevoRegistro = [
             'id' => 0,
             'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
@@ -120,7 +168,7 @@ class IngresosDevengadoTable extends Tabla
             'movimiento' => 'DEVENGADO',
             'ejecutar' => $registro['pttoEjecutar'],
             'importe' => $registro['importe'],
-            'disponibilidad' => $registro['pttoEjecutar'] - $registro['importe'],
+            'disponibilidad' => $totalDisponible,
         ];
         array_push($this->cacheData, $nuevoRegistro);
         array_push($this->dataCompleta, $registro);

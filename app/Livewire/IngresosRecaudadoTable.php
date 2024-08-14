@@ -52,13 +52,13 @@ class IngresosRecaudadoTable extends Tabla
             Column::make('ppto', 'PPTO Devengado')->component('columns.importe'),
             Column::make('importe', 'Importe')->component('columns.importe'),
             Column::make('disponibilidad', 'Disponibilidad')->component('columns.importe'),
-            // Column::make('remanente', 'Remanente'),
             Column::make('id', 'Acciones')->component('columns.accionesIngresos')
         ];
     }
 
     public function edit($id)
     {
+        $this->recalcularDisponibilidad($id);
         foreach ($this->dataCompleta as $key => $registro) {
             if ($registro['id'] == $id) {
                 $datosRegistro = [
@@ -88,6 +88,7 @@ class IngresosRecaudadoTable extends Tabla
 
     public function delete($id)
     {
+        $this->recalcularDisponibilidad($id);
         foreach ($this->cacheData as $key => $registro) {
             if ($registro['id'] == $id) {
                 unset($this->cacheData[$key]);
@@ -105,6 +106,35 @@ class IngresosRecaudadoTable extends Tabla
         $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
         $this->total = $totalActualizado;
         $this->dispatch('cambioTotal', total: $totalActualizado);
+    }
+
+    public function recalcularDisponibilidad($id)
+    {
+        $datosSeleccionado = [];
+        foreach ($this->dataCompleta as $key => $registro) {
+            if ($registro['id'] == $id) {
+                $datosSeleccionado = [
+                    'codigoArea' => $registro['codigoAreaResponsable'],
+                    'codigoCuenta' => $registro['codigoCuenta'],
+                    'mes' => $registro['mes'],
+                    'evento' => $registro['evento']
+                ];
+            }
+        }
+
+        $totalImportes = 0;
+        foreach($this->cacheData as $key => $movimiento) {
+            if($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuenta']) && $movimiento['mes'] == $datosSeleccionado['mes'] && $movimiento['evento'] == $datosSeleccionado['evento']) {
+                if($totalImportes == 0){
+                    $movimiento['disponibilidad'] = $movimiento['ppto'] - $movimiento['importe'];
+                    $totalImportes += $movimiento['importe'];
+                }else{
+                    $movimiento['disponibilidad'] = $movimiento['ppto'] - $totalImportes - $movimiento['importe'];
+                    $totalImportes += $movimiento['importe'];
+                }
+                $this->cacheData[$key] = $movimiento;
+            }
+        }
     }
 
     public function changeState($value)
@@ -131,22 +161,36 @@ class IngresosRecaudadoTable extends Tabla
             ->first();
 
         $solvencia = DB::select('EXEC DevengadoCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?', array($registro['codigoAreaResponsable'], $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $registro['mes'], $registro['evento']));
-        if ($solvencia[0]->TotalDevengado - $registro['importe'] < 0) {
+        
+        $totalDisponible = $solvencia[0]->TotalDevengado - $registro['importe'];
+        $totalImportes = 0;
+        foreach ($this->cacheData as $movimiento) {
+            if(str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoCuenta']) && $movimiento['mes'] == $registro['mes'] && $movimiento['evento'] == $registro['evento']) {
+                $totalImportes += $movimiento['importe'];
+            }
+        }
+
+        if($totalImportes > 0){
+            $totalDisponible = $solvencia[0]->TotalDevengado - $totalImportes - $registro['importe'];
+        }
+
+        if($totalDisponible < 0){
             $this->dispatch('mostrarMensaje', mensaje: 'Monto devengado insuficiente', tipo: 'error', tiempo: 3000);
             return;
         }
         
-        //revisar
+
         $nuevoRegistro = [
             'id' => 0,
             'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
             'partida' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
             'cuentaPago' => $registro['codigoCuentaPago'] . ' ' . $registro['descripcionCuentaPago'],
             'mes' => $registro['mes'],
+            'evento' => $registro['evento'],
             'movimiento' => 'RECAUDADO',
             'ppto' => $solvencia[0]->TotalDevengado,
             'importe' => $registro['importe'],
-            'disponibilidad' => $solvencia[0]->TotalDevengado - $registro['importe'],
+            'disponibilidad' => $totalDisponible,
         ];
 
         array_push($this->cacheData, $nuevoRegistro);
@@ -186,7 +230,6 @@ class IngresosRecaudadoTable extends Tabla
             $anioActual = Carbon::now()->year;
             $fecha = Carbon::now('America/Mexico_City');
             $fecha->year($anioActual);
-            // Log::info($polizasInicialesIngresosRecaudado);
             $bitacora = new BitacoraController();
             $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un ingreso recaudado con evento: '.$this->numeroEvento, request());
 

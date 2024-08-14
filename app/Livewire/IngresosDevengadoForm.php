@@ -76,10 +76,6 @@ class IngresosDevengadoForm extends Component
             $this->causaIva = floatval(str_replace(['$',','],"",$this->causaIva));
             $this->importe = ($this->importe > 0)  ? $this->importe : "";
             $this->validate();
-            if(($this->importe) > $this->PTTOEjecutar){
-                $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar insuficiente', tipo: 'warning', tiempo: 3000);
-                return;
-            }
             $cuenta = Cuenta::find($this->cuenta);
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $registro = [
