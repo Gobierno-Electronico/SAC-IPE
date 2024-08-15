@@ -70,7 +70,7 @@ class IngresosRecaudadoForm extends Component
             $this->llenarCuentasPago();
             return view('livewire.ingresos-recaudado-form', ['eventos' => $eventos, 'cuentas' => $cuentas]);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al cargar cuentas en Recaudado: '. $th->getMessage());
+            Log::error('Ocurrió un error al cargar cuentas en Recaudado: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar cuentas, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -85,7 +85,7 @@ class IngresosRecaudadoForm extends Component
             $this->cambiarCuentaPagoSeleccionada = false;
             $this->llenarCuentasPago();
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al cargar el evento en recaudado: '. $th->getMessage());
+            Log::error('Ocurrió un error al cargar el evento en recaudado: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -97,11 +97,11 @@ class IngresosRecaudadoForm extends Component
             if (!$this->cuenta) {
                 return;
             }
-    
+
             if ($this->cambiarCuentaPagoSeleccionada) {
                 $this->cuentaPago = "";
             }
-    
+
             $this->cambiarCuentaPagoSeleccionada = true;
             $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [19, 20, 21, 35, 39])
                 ->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
@@ -112,7 +112,7 @@ class IngresosRecaudadoForm extends Component
                 })
                 ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get();
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al cargar las cuentas de pago en recaudado: '. $th->getMessage());
+            Log::error('Ocurrió un error al cargar las cuentas de pago en recaudado: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas de pago, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -147,8 +147,10 @@ class IngresosRecaudadoForm extends Component
             ];
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatch('mostrarMensaje', mensaje: $e->getMessage(), tipo: 'warning', tiempo: 3000);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al agregar registro en devengado: '. $th->getMessage());
+            Log::error('Ocurrió un error al agregar registro en devengado: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -157,7 +159,7 @@ class IngresosRecaudadoForm extends Component
     {
         $this->cuenta = "";
         $this->cuentaPago = "";
-        $this->mes = "";  
+        $this->mes = "";
         $this->importe = "";
         $this->dispatch('limpiar');
     }
@@ -173,17 +175,18 @@ class IngresosRecaudadoForm extends Component
         $this->dispatch('llenarFormulario', cuenta: $datosRegistro['cuenta'], cuentaPago: $datosRegistro['cuentaPago'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe'], area: $datosRegistro['area']);
     }
 
-    public function finalizarRegistros(){
+    public function finalizarRegistros()
+    {
         $this->dispatch('finalizar-registros');
     }
 
     #[On('consultar-registro')]
-    public function consultarRegistros($numeroEvento, $numeroPoliza, $total, $numeroPolizaRemanente) {
+    public function consultarRegistros($numeroEvento, $numeroPoliza, $total, $numeroPolizaRemanente)
+    {
         $this->numeroEvento = $numeroEvento;
         $this->numeroPoliza = $numeroPoliza;
         $this->total = $total;
         $this->numeroPolizaRemanente = $numeroPolizaRemanente;
         $this->consultarRegistro = true;
-
     }
 }

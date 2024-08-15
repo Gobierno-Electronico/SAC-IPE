@@ -44,7 +44,7 @@ class DepositosBancosForm extends Component
                 ->orderBy('cuentas.Codigo_cuenta')->get();
             return view('livewire.depositos-bancos-form', ['cuentas' => $cuentas]);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al cargar cuentas en depósitos en bancos: '. $th->getMessage());
+            Log::error('Ocurrió un error al cargar cuentas en depósitos en bancos: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar cuentas, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -52,7 +52,7 @@ class DepositosBancosForm extends Component
     public function agregarRegistro()
     {
         try {
-           
+
             $this->importe = floatval(str_replace(['$', ','], "", $this->importe));
             $this->importe = ($this->importe > 0)  ? $this->importe : "";
             $this->validate();
@@ -70,7 +70,8 @@ class DepositosBancosForm extends Component
             ];
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
-        
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatch('mostrarMensaje', mensaje: $e->getMessage(), tipo: 'warning', tiempo: 3000);
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al agregarRegistro en depósitos en bancos: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
@@ -117,10 +118,10 @@ class DepositosBancosForm extends Component
             $this->cuenta = $idCuenta;
             $this->mes = $datosRegistro['mes'];
             $this->importe = $datosRegistro['importe'];
-    
+
             $this->dispatch('llenarFormulario', cuenta: $datosRegistro['codigoCuenta'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe']);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al llenarFormulario en depósitos en bancos: '. $th->getMessage());
+            Log::error('Ocurrió un error al llenarFormulario en depósitos en bancos: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al llenar el formulario, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Livewire;
+
 use Livewire\Component;
 use Livewire\Attributes\Validate;
 use Livewire\Attributes\On;
@@ -26,7 +27,7 @@ class IngresosPorClasificarForm extends Component
     #[Validate('required', message: 'Importe requerido')]
     public $importe = "";
 
-    #[Validate('required', message:'Fecha requerida')]
+    #[Validate('required', message: 'Fecha requerida')]
     public $fechaRegistro = "";
 
     public $consultarRegistro = false;
@@ -44,14 +45,15 @@ class IngresosPorClasificarForm extends Component
                 ->orderBy('cuentas.Codigo_cuenta')->get();
             return view('livewire.ingresos-por-clasificar-form', ['cuentas' => $cuentas]);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al cargar cuentas en ingresos por clasificar: '. $th->getMessage());
+            Log::error('Ocurrió un error al cargar cuentas en ingresos por clasificar: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar cuentas, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 
-    public function agregarRegistro(){
+    public function agregarRegistro()
+    {
         try {
-            $this->importe = floatval(str_replace(['$',','],"",$this->importe));
+            $this->importe = floatval(str_replace(['$', ','], "", $this->importe));
             $this->importe = ($this->importe > 0)  ? $this->importe : "";
             $this->validate();
             $cuenta = Cuenta::find($this->cuenta);
@@ -61,7 +63,7 @@ class IngresosPorClasificarForm extends Component
                 'observaciones' => $this->observaciones,
                 'cuentaId' => $this->cuenta,
                 'codigoCuenta' => $cuenta->Codigo_cuenta,
-                'descripcionCuenta' =>$cuenta->Descripcion_cuenta,
+                'descripcionCuenta' => $cuenta->Descripcion_cuenta,
                 'mes' => $this->mes,
                 'fechaRegistro' => $this->fechaRegistro,
                 'importe' => $this->importe
@@ -69,14 +71,17 @@ class IngresosPorClasificarForm extends Component
             Log::info($registro);
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatch('mostrarMensaje', mensaje: $e->getMessage(), tipo: 'warning', tiempo: 3000);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al agregar registro en ingresos por clasificar: '. $th->getMessage());
+            Log::error('Ocurrió un error al agregar registro en ingresos por clasificar: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 
     #[On('reiniciar')]
-    public function reiniciar() {
+    public function reiniciar()
+    {
         $this->limpiar();
         $this->consultarRegistro = false;
         $this->numeroEvento = 0;
@@ -84,19 +89,22 @@ class IngresosPorClasificarForm extends Component
         $this->total = 0;
     }
 
-    public function limpiar(){
+    public function limpiar()
+    {
         $this->cuenta = "";
         $this->mes = "";
         $this->importe = "";
         $this->dispatch('limpiar');
     }
 
-    public function finalizarRegistros(){
+    public function finalizarRegistros()
+    {
         $this->dispatch('finalizar-registros');
     }
 
     #[On('consultar-registro')]
-    public function consultarRegistros($numeroEvento, $numeroPoliza, $total) {
+    public function consultarRegistros($numeroEvento, $numeroPoliza, $total)
+    {
         $this->consultarRegistro = true;
         $this->numeroEvento = $numeroEvento;
         $this->numeroPoliza = $numeroPoliza;
@@ -104,7 +112,8 @@ class IngresosPorClasificarForm extends Component
     }
 
     #[On('llenar-formulario')]
-    public function llenarFormulario ($datosRegistro) {
+    public function llenarFormulario($datosRegistro)
+    {
         $idCuenta = Cuenta::where('Codigo_cuenta', '=', $datosRegistro['codigoCuenta'])->value('id');
         Log::info($idCuenta);
         $this->cuenta = $idCuenta;
@@ -113,6 +122,4 @@ class IngresosPorClasificarForm extends Component
 
         $this->dispatch('llenarFormulario', cuenta: $datosRegistro['codigoCuenta'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe']);
     }
-
-
 }
