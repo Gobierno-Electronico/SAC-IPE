@@ -210,24 +210,24 @@ class PresupuestoController extends Controller
                             $cuentasFaltantes[] = $row["Cuenta"];
                         }
                     }
-                    // $cri = ClasificadorRubroIngreso::where('Codificacion_rubro_ingreso', '=', $row["CRI"])->where('Nombre' , '=' , $row["Descripción"])->first();
-                    // if (!$cri) {
-                    //     ClasificadorRubroIngreso::create([
-                    //         'Codificacion_rubro_ingreso' => $row["CRI"],
-                    //         'Nombre' => $row["Descripción"],
-                    //         'Cuenta_contable' => $row["Cuenta"],
-                    //         'Cuenta_registro' => $cuenta->Cuenta_registro
-                    //     ]);
-                    // }
-                    // $cff = ClasificadorFuenteFinanciamiento::where('Codificacion_fuente_financiamiento', '=', $row["CFF"])->where('Nombre' , '=' , $row["Descripción"])->first();
-                    // if (!$cff) {
-                    //     ClasificadorFuenteFinanciamiento::create([
-                    //         'Codificacion_fuente_financiamiento' => $row["CFF"],
-                    //         'Nombre' => $row["Descripción"],
-                    //         'Cuenta_contable' => $row["Cuenta"],
-                    //         'Cuenta_registro' => $cuenta->Cuenta_registro
-                    //     ]);
-                    // }
+                    $cri = ClasificadorRubroIngreso::where('Codificacion_rubro_ingreso', '=', $row["CRI"])->where('Nombre' , '=' , $row["Descripción"])->first();
+                    if (!$cri) {
+                        ClasificadorRubroIngreso::create([
+                            'Codificacion_rubro_ingreso' => $row["CRI"],
+                            'Nombre' => $row["Descripción"],
+                            'Cuenta_contable' => $row["Cuenta"],
+                            'Cuenta_registro' => $cuenta->Cuenta_registro
+                        ]);
+                    }
+                    $cff = ClasificadorFuenteFinanciamiento::where('Codificacion_fuente_financiamiento', '=', $row["CFF"])->where('Nombre' , '=' , $row["Descripción"])->first();
+                    if (!$cff) {
+                        ClasificadorFuenteFinanciamiento::create([
+                            'Codificacion_fuente_financiamiento' => $row["CFF"],
+                            'Nombre' => $row["Descripción"],
+                            'Cuenta_contable' => $row["Cuenta"],
+                            'Cuenta_registro' => $cuenta->Cuenta_registro
+                        ]);
+                    }
 
                     $buscarPresupuesto = Poliza::where('cuenta', '=', $row['Cuenta'])->whereYear('fecha', '=', Carbon::now()->year)->where('categoria', '=', 'INICIAL INGRESOS')->first();
                     if ($buscarPresupuesto) {
@@ -376,26 +376,26 @@ class PresupuestoController extends Controller
                 'created_at' => $fecha,
                 'updated_at' => $fecha
             ];
-            // $cri = ClasificadorRubroIngreso::where('Codificacion_rubro_ingreso', '=', $presupuesto["CRI"])->where('Nombre' , '=' , $cuentaDerecha->Descripcion_cuenta)->first();
-            // $cff = ClasificadorFuenteFinanciamiento::where('Codificacion_fuente_financiamiento', '=', $presupuesto["CFF"])->where('Nombre' , '=' , $cuentaDerecha->Descripcion_cuenta)->first();
+            $cri = ClasificadorRubroIngreso::where('Codificacion_rubro_ingreso', '=', $presupuesto["CRI"])->where('Nombre' , '=' , $cuentaDerecha->Descripcion_cuenta)->first();
+            $cff = ClasificadorFuenteFinanciamiento::where('Codificacion_fuente_financiamiento', '=', $presupuesto["CFF"])->where('Nombre' , '=' , $cuentaDerecha->Descripcion_cuenta)->first();
 
-            // if (!$cri) {
-            //     ClasificadorRubroIngreso::create([
-            //         'Codificacion_rubro_ingreso' => $presupuesto["CRI"],
-            //         'Nombre' => $cuentaDerecha->Descripcion_cuenta,
-            //         'Cuenta_contable' => $cuentaDerecha->Codigo_cuenta,
-            //         'Cuenta_registro' => $cuentaDerecha->Cuenta_registro
-            //     ]);
-            // }
+            if (!$cri) {
+                ClasificadorRubroIngreso::create([
+                    'Codificacion_rubro_ingreso' => $presupuesto["CRI"],
+                    'Nombre' => $cuentaDerecha->Descripcion_cuenta,
+                    'Cuenta_contable' => $cuentaDerecha->Codigo_cuenta,
+                    'Cuenta_registro' => $cuentaDerecha->Cuenta_registro
+                ]);
+            }
 
-            // if (!$cff) {
-            //     ClasificadorFuenteFinanciamiento::create([
-            //         'Codificacion_fuente_financiamiento' => $presupuesto["CFF"],
-            //         'Nombre' => $cuentaDerecha->Descripcion_cuenta,
-            //         'Cuenta_contable' => $cuentaDerecha->Codigo_cuenta,
-            //         'Cuenta_registro' => $cuentaDerecha->Cuenta_registro
-            //     ]);
-            // }
+            if (!$cff) {
+                ClasificadorFuenteFinanciamiento::create([
+                    'Codificacion_fuente_financiamiento' => $presupuesto["CFF"],
+                    'Nombre' => $cuentaDerecha->Descripcion_cuenta,
+                    'Cuenta_contable' => $cuentaDerecha->Codigo_cuenta,
+                    'Cuenta_registro' => $cuentaDerecha->Cuenta_registro
+                ]);
+            }
 
             $polizaPorEjecutar[] = [
                 'area' => $presupuesto['Area Recaudadora'],
