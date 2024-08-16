@@ -107,6 +107,8 @@ class IngresosDevengadoForm extends Component
 
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatch('mostrarMensaje', mensaje: $e->getMessage(), tipo: 'warning', tiempo: 3000);
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al agregar registro en Devengado: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
