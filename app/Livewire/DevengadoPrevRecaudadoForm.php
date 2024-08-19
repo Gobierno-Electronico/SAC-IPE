@@ -64,6 +64,7 @@ class DevengadoPrevRecaudadoForm extends Component
                 ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where('tipo_poliza', '=', 'I')
                 ->where('categoria', '=', 'INGRESOS POR CLASIFICAR')
+                ->where('estatus_evento', '=', true)
                 ->distinct()
                 ->pluck('descripcion', 'evento');
 

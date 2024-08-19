@@ -265,6 +265,7 @@ class CobroEspecieTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
+                        'estatus_evento' => true,
                         'categoria' => 'INGRESOS COBRO ESPECIE',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -285,6 +286,7 @@ class CobroEspecieTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
+                        'estatus_evento' => true,
                         'categoria' => 'INGRESOS COBRO ESPECIE',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -369,6 +371,12 @@ class CobroEspecieTable extends Tabla
                 }
             } else {
                 $this->numeroPolizaRemanente = 0;
+            }
+            $importeTotalEvento = DB::select('EXEC ImporteTotalCobroEspecie @evento = ?', [$this->numeroEvento]);
+            if ($importeTotalEvento[0]->MontoDelEvento == 0) {
+                Poliza::where('evento', '=', $this->numeroEvento)
+                    ->whereIn('categoria', ['INGRESOS DEVENGADO', 'INGRESOS RECAUDADO', 'INGRESOS COBRO ESPECIE'])
+                    ->update(['estatus_evento' => false]);
             }
             DB::commit();
             $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente);

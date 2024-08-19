@@ -206,6 +206,7 @@ class IngresosPorClasificarTable extends Tabla
                     'evento' => $this->numeroEvento,
                     'tipo_interaccion' => $interaccionCuentaConceptoIzquierda->tipo_interaccion,
                     'validado' => false,
+                    'estatus_evento' => true,
                     'categoria' => 'INGRESOS POR CLASIFICAR',
                     'created_at' => $fecha,
                     'updated_at' => $fecha
@@ -223,6 +224,7 @@ class IngresosPorClasificarTable extends Tabla
                     'evento' => $this->numeroEvento,
                     'tipo_interaccion' => $interaccionCuentaConceptoDerecha->tipo_interaccion,
                     'validado' => false,
+                    'estatus_evento' => true,
                     'categoria' => 'INGRESOS POR CLASIFICAR',
                     'created_at' => $fecha,
                     'updated_at' => $fecha

@@ -211,6 +211,7 @@ class DepositosBancosTable extends Tabla
                     'evento' => $this->numeroEvento,
                     'tipo_interaccion' => $interaccionCuentaConceptoIzquierda->tipo_interaccion,
                     'validado' => false,
+                    'estatus_evento' => false,
                     'categoria' => 'INGRESOS DEPOSITOS EN BANCOS',
                     'created_at' => $fecha,
                     'updated_at' => $fecha
@@ -228,6 +229,7 @@ class DepositosBancosTable extends Tabla
                     'evento' => $this->numeroEvento,
                     'tipo_interaccion' => $interaccionCuentaConceptoDerecha->tipo_interaccion,
                     'validado' => false,
+                    'estatus_evento' => false,
                     'categoria' => 'INGRESOS DEPOSITOS EN BANCOS',
                     'created_at' => $fecha,
                     'updated_at' => $fecha

@@ -295,6 +295,7 @@ class IngresosRecaudadoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
+                        'estatus_evento' => true,
                         'categoria' => 'INGRESOS RECAUDADO',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -314,6 +315,7 @@ class IngresosRecaudadoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
+                        'estatus_evento' => true,
                         'categoria' => 'INGRESOS RECAUDADO',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -360,6 +362,7 @@ class IngresosRecaudadoTable extends Tabla
                             'evento' => $this->numeroEvento,
                             'tipo_interaccion' => $polizaImporte->tipo_interaccion,
                             'validado' => false,
+                            'estatus_evento' => false,
                             'categoria' => 'INGRESOS DEVENGADO REMANENTE RECAUDADO',
                             'created_at' => $fecha,
                             'updated_at' => $fecha
@@ -390,6 +393,7 @@ class IngresosRecaudadoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $polizaInicial['tipo_interaccion'],
                         'validado' => false,
+                        'estatus_evento' => false,
                         'categoria' => 'INGRESOS DEVENGADO REMANENTE RECAUDADO',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -397,6 +401,12 @@ class IngresosRecaudadoTable extends Tabla
                 }
             } else {
                 $this->numeroPolizaRemanente = 0;
+            }
+            $importeTotalEvento = DB::select('EXEC ImporteTotalRecaudado @evento = ?', [$this->numeroEvento]);
+            if ($importeTotalEvento[0]->MontoDelEvento == 0) {
+                Poliza::where('evento', '=', $this->numeroEvento)
+                    ->whereIn('categoria', ['INGRESOS DEVENGADO', 'INGRESOS RECAUDADO', 'INGRESOS COBRO ESPECIE'])
+                    ->update(['estatus_evento' => false]);
             }
             DB::commit();
             $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente);

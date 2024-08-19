@@ -64,8 +64,13 @@ class IngresosRecaudadoForm extends Component
             $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
                 ->whereIn('interaccion_cuenta_conceptos.concepto_id', [19, 20, 21, 35, 39])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Abono')
                 ->orderBy('cuentas.Codigo_cuenta')->get();
-            $eventos =  Poliza::select('evento', 'descripcion')->whereYear('fecha', '=', Carbon::now()->year)->where('tipo_poliza', '=', 'I')
-                ->where('categoria', '=', 'INGRESOS DEVENGADO')->distinct()->pluck('descripcion', 'evento');
+            $eventos =  Poliza::select('evento', 'descripcion')
+                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->where('tipo_poliza', '=', 'I')
+                ->where('categoria', '=', 'INGRESOS DEVENGADO')
+                ->where('estatus_evento', '=', true)
+                ->distinct()
+                ->pluck('descripcion', 'evento');
             $this->cambiarCuentaPagoSeleccionada = false;
             $this->llenarCuentasPago();
             return view('livewire.ingresos-recaudado-form', ['eventos' => $eventos, 'cuentas' => $cuentas]);

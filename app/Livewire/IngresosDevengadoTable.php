@@ -266,6 +266,7 @@ class IngresosDevengadoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
+                        'estatus_evento' => true,
                         'categoria' => 'INGRESOS DEVENGADO',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -297,6 +298,7 @@ class IngresosDevengadoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
+                        'estatus_evento' => true,
                         'categoria' => 'INGRESOS DEVENGADO',
                         'created_at' => $fecha,
                         'updated_at' => $fecha

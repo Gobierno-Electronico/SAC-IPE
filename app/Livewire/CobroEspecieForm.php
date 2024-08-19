@@ -57,8 +57,13 @@ class CobroEspecieForm extends Component
                 ->whereIn('interaccion_cuenta_conceptos.concepto_id', [33])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Abono')
                 ->where('cuentas.Descripcion_cuenta', 'LIKE', '%(Recaudado)%')->orderBy('cuentas.Codigo_cuenta')->get();
 
-            $eventos =  Poliza::select('evento', 'descripcion')->whereYear('fecha', '=', Carbon::now()->year)->where('tipo_poliza', '=', 'I')
-                ->where('categoria', '=', 'INGRESOS DEVENGADO')->distinct()->pluck('descripcion', 'evento');
+            $eventos =  Poliza::select('evento', 'descripcion')
+                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->where('tipo_poliza', '=', 'I')
+                ->where('categoria', '=', 'INGRESOS DEVENGADO')
+                ->where('estatus_evento', '=', true)
+                ->distinct()
+                ->pluck('descripcion', 'evento');
 
             return view('livewire.cobro-especie-form', ['cuentas' => $cuentas, 'eventos' => $eventos]);
         } catch (\Throwable $th) {
