@@ -343,8 +343,66 @@
                                 </a>
 
                                 <ul class="dropdown-menu">
+                                    <li class="dropend">
+                                        <a class="dropdown-item dropdown-toggle" href=""
+                                            data-bs-toggle="dropdown">Capítulo 1000 Servicios personales</a>
+                                        <ul class="dropdown-menu">
+                
+                                        </ul>
+                                    </li>
 
+                                    <li class="dropend">
+                                        <a class="dropdown-item dropdown-toggle" href=""
+                                            data-bs-toggle="dropdown">Capítulo 2000 y 3000 Materiales y servicios</a>
+                                        <ul class="dropdown-menu">
+                
+                                        </ul>
+                                    </li>
 
+                                    <li class="dropend">
+                                        <a class="dropdown-item dropdown-toggle" href=""
+                                            data-bs-toggle="dropdown">Capítulo 4000 Transferencias y Pensiones</a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item" href="{{route('capitulo4Comprometido')}}" method="GET" onclick="mostrarCargando()">
+                                                    Comprometido
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{route('depositosBancos')}}" method="GET" onclick="mostrarCargando()">
+                                                    Devengado
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{route('depositosBancos')}}" method="GET" onclick="mostrarCargando()">
+                                                    Ejercido
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{route('depositosBancos')}}" method="GET" onclick="mostrarCargando()">
+                                                    Pagado
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                    <li class="dropend">
+                                        <a class="dropdown-item dropdown-toggle" href=""
+                                            data-bs-toggle="dropdown">Capítulo 5000 Bienes</a>
+                                        <ul class="dropdown-menu">
+                
+                                        </ul>
+                                    </li>
+
+                                    <li class="dropend">
+                                        <a class="dropdown-item dropdown-toggle" href=""
+                                            data-bs-toggle="dropdown">Capítulo 7000 Préstamos</a>
+                                        <ul class="dropdown-menu">
+                
+                                        </ul>
+                                    </li>
+
+                                    
                                 </ul>
                             </li>
 

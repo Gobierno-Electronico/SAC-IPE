@@ -9,6 +9,7 @@ use App\Http\Controllers\BitacoraController;
 use App\Http\Controllers\ReportesController;
 use App\Http\Controllers\ContabilidadController;
 use App\Http\Controllers\IngresosController;
+use App\Http\Controllers\EgresosController;
 use Illuminate\Support\Facades\Route;
 USE App\Http\Controllers\HomeController;
 use App\Http\Middleware\ResetPassword;
@@ -120,6 +121,9 @@ Route::get("/autorizacion-reintegro", [IngresosController::class, 'autorizacionR
 Route::get("/pago-reintegro", [IngresosController::class, 'pagoReintegro'])->name('pagoReintegro')->middleware('role:Administrador');
 Route::get("/cobro-especie", [IngresosController::class, 'cobroEspecie'])->name('cobroEspecie')->middleware('role:Administrador');
 Route::get("/devolucion-especie", [IngresosController::class, 'devolucionEspecie'])->name('devolucionEspecie')->middleware('role:Administrador');
+
+//Egresos
+Route::get("/capitulo4-comprometido", [EgresosController::class, 'capitulo4Comprometido'])->name('capitulo4Comprometido')->middleware('role:Administrador');
 
 //ruta de prueba
 Route::get("/bancos", [IngresosController::class, 'bancos'])->name('bancos')->middleware('role:Administrador');
