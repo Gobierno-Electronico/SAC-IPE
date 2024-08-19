@@ -23,7 +23,8 @@ class Poliza extends Model
         'mes',
         'tipo_interaccion',
         'validado',
-        'categoria'
+        'categoria',
+        'estatus_evento'
     ];
 
     // protected $casts = [
