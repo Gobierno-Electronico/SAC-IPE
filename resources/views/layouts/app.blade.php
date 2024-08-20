@@ -390,7 +390,26 @@
                                         <a class="dropdown-item dropdown-toggle" href=""
                                             data-bs-toggle="dropdown">Capítulo 5000 Bienes</a>
                                         <ul class="dropdown-menu">
-                
+                                            <li>
+                                                <a class="dropdown-item" href="{{route('capitulo5Comprometido')}}" method="GET" onclick="mostrarCargando()">
+                                                    Comprometido
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{route('capitulo4Devengado')}}" method="GET" onclick="mostrarCargando()">
+                                                    Devengado
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{route('capitulo4Ejercido')}}" method="GET" onclick="mostrarCargando()">
+                                                    Ejercido
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{route('capitulo4Pagado')}}" method="GET" onclick="mostrarCargando()">
+                                                    Pagado
+                                                </a>
+                                            </li>
                                         </ul>
                                     </li>
 
