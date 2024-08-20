@@ -374,12 +374,12 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" href="{{route('depositosBancos')}}" method="GET" onclick="mostrarCargando()">
+                                                <a class="dropdown-item" href="{{route('capitulo4Ejercido')}}" method="GET" onclick="mostrarCargando()">
                                                     Ejercido
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" href="{{route('depositosBancos')}}" method="GET" onclick="mostrarCargando()">
+                                                <a class="dropdown-item" href="{{route('capitulo4Pagado')}}" method="GET" onclick="mostrarCargando()">
                                                     Pagado
                                                 </a>
                                             </li>

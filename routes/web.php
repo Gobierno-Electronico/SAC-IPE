@@ -125,6 +125,8 @@ Route::get("/devolucion-especie", [IngresosController::class, 'devolucionEspecie
 //Egresos
 Route::get("/capitulo4-comprometido", [EgresosController::class, 'capitulo4Comprometido'])->name('capitulo4Comprometido')->middleware('role:Administrador');
 Route::get("/capitulo4-devengado", [EgresosController::class, 'capitulo4Devengado'])->name('capitulo4Devengado')->middleware('role:Administrador');
+Route::get("/capitulo4-ejercido", [EgresosController::class, 'capitulo4Ejercido'])->name('capitulo4Ejercido')->middleware('role:Administrador');
+Route::get("/capitulo4-pagado", [EgresosController::class, 'capitulo4Pagado'])->name('capitulo4Pagado')->middleware('role:Administrador');
 
 //ruta de prueba
 Route::get("/bancos", [IngresosController::class, 'bancos'])->name('bancos')->middleware('role:Administrador');
