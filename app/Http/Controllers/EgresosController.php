@@ -16,4 +16,9 @@ class EgresosController extends Controller
     {
         return view('egresos.egresos-capitulo4-comprometido');
     }
+
+    public function capitulo4Devengado()
+    {
+        return view('egresos.egresos-capitulo4-devengado');
+    }
 }

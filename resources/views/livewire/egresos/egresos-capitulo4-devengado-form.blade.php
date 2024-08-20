@@ -54,6 +54,18 @@
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
         <div class="row">
             <div class="col-3">
+                <label for="inputSeguimientoEvento" class="form-label mt-3">Número de seguimiento de evento</label>
+                <select name="selectSeguimientoEvento" id="selectSeguimientoEvento" class="form-select" wire:model="numeroEvento" wire:change="cambioEvento">
+                    <option value="" disabled>
+                        Seleccionar un evento
+                    </option>
+                    @foreach ($eventos as $evento /* => $descripcion */)
+                        <option value="{{ $evento }}">
+                           {{ $evento }} {{-- {{ $evento }} - {{$descripcion}} --}}
+                        </option>
+                    @endforeach
+                </select>
+
                 <label for="selectAreaResponsable" class="form-label mt-3">Área responsable</label>
                 <select name="selectAreaResponsable" id="selectAreaResponsable" class="form-select"
                     wire:model="selectCodigoAreaResponsable">
@@ -67,6 +79,11 @@
                             </option>
                         @endif
                     @endforeach
+                </select>
+
+                <label for="selectPartidaPresupuestal" class="form-label mt-3">Partida presupuestal</label>
+                <select name="selectPartidaPresupuestal" id="selectPartidaPresupuestal" class="form-select">
+                    <option value="" selected disabled>Seleccionar partida presupuestal</option>
                 </select>
 
                 <label for="selectCuenta" class="form-label mt-3">Cuenta contable</label>
@@ -99,7 +116,7 @@
             </div>
 
             <div class="col">
-                <livewire:egresos.egresos-capitulo4-comprometido-table />
+                <livewire:egresos.egresos-capitulo4-devengado-table />
             </div> 
 
             <div class="row mt-4">
