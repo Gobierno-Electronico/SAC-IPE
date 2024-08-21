@@ -401,7 +401,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" href="{{route('capitulo4Ejercido')}}" method="GET" onclick="mostrarCargando()">
+                                                <a class="dropdown-item" href="{{route('capitulo5Ejercido')}}" method="GET" onclick="mostrarCargando()">
                                                     Ejercido
                                                 </a>
                                             </li>

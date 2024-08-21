@@ -111,7 +111,7 @@
             </div>
 
             <div class="col">
-                <livewire:egresos.egresos-capitulo4-ejercido-table />
+                <livewire:egresos.egresos-capitulo5-ejercido-table />
             </div> 
 
             <div class="row mt-4">
