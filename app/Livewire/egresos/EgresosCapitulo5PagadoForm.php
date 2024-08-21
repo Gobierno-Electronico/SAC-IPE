@@ -28,15 +28,17 @@ class EgresosCapitulo5PagadoForm extends Component
     #[Validate('required', message: 'Partida presupuestal requerida')]
     public $partidaPresupuestal = "";
 
-    #[Validate('required', message: 'Pago de retenciones requerido')]
-    public $pagoRetenciones = "";
-
     #[Validate('required', message: 'Método de pago requerido')]
     public $metodoPago = "";
 
     #[Validate('required', message: 'Mes requerido')]
     public $mes = "";
 
+    #[Validate('required', message: 'Importe requerido')]
+    public $importe = "";
+
+    #[Validate('required', message: 'Pago de retenciones requerido')]
+    public $pagoRetenciones = "";
 
     public function render() 
     {

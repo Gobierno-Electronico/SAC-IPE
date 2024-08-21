@@ -82,12 +82,16 @@
                 </select>
 
                 <label for="selectPartidaPresupuestal" class="form-label mt-3">Partida presupuestal</label>
-                <select name="selectPartidaPresupuestal" id="selectPartidaPresupuestal" class="form-select">
+                <select name="selectPartidaPresupuestal" id="selectPartidaPresupuestal" class="form-select" wire:model="partidaPresupuestal">
                     <option value="" selected disabled>Seleccionar partida presupuestal</option>
+                    @foreach ($cuentas as $cuenta)
+                        <option value="{{ $cuenta }}"> <!-- $cuenta->cuenta_id -->
+                            {{ $cuenta /* $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta */ }}</option>
+                    @endforeach
                 </select>
 
                 <label for="selectCuenta" class="form-label mt-3">Banco</label>
-                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta">
+                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuentaBanco">
                     <option value="" disabled>Seleccionar cuenta</option>
                     @foreach ($cuentas as $cuenta)
                         <option value="{{ $cuenta }}"> <!-- $cuenta->cuenta_id -->

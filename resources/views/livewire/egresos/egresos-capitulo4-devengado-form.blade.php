@@ -82,12 +82,12 @@
                 </select>
 
                 <label for="selectPartidaPresupuestal" class="form-label mt-3">Partida presupuestal</label>
-                <select name="selectPartidaPresupuestal" id="selectPartidaPresupuestal" class="form-select">
+                <select name="selectPartidaPresupuestal" id="selectPartidaPresupuestal" class="form-select" wire:model="partidaPresupuestal">
                     <option value="" selected disabled>Seleccionar partida presupuestal</option>
                 </select>
 
                 <label for="selectCuenta" class="form-label mt-3">Cuenta contable</label>
-                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta">
+                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuentaContable">
                     <option value="" disabled>Seleccionar cuenta</option>
                     @foreach ($cuentas as $cuenta)
                         <option value="{{ $cuenta }}"> <!-- $cuenta->cuenta_id -->

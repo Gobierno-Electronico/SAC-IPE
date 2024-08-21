@@ -31,6 +31,8 @@ class EgresosCapitulo4EjercidoForm extends Component
     #[Validate('required', message: 'Mes requerido')]
     public $mes = "";
 
+    #[Validate('required', message: 'Importe requerido')]
+    public $importe = "";
 
     public function render() 
     {

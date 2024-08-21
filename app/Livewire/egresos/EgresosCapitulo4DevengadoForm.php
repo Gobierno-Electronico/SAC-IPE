@@ -25,12 +25,17 @@ class EgresosCapitulo4DevengadoForm extends Component
     #[Validate('required', message: 'Área responsable requerida')]
     public $selectCodigoAreaResponsable = "";
 
-    #[Validate('required', message: 'Cuenta requerida')]
-    public $cuenta = "";
+    #[Validate('required', message: 'Partida presupuestal requerida')]
+    public $partidaPresupuestal = "";
+
+    #[Validate('required', message: 'Cuenta contable requerida')]
+    public $cuentaContable = "";
 
     #[Validate('required', message: 'Mes requerido')]
     public $mes = "";
 
+    #[Validate('required', message: 'Importe requerido')]
+    public $importe = "";
 
     public function render() 
     {
