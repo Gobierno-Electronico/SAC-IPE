@@ -406,7 +406,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" href="{{route('capitulo4Pagado')}}" method="GET" onclick="mostrarCargando()">
+                                                <a class="dropdown-item" href="{{route('capitulo5Pagado')}}" method="GET" onclick="mostrarCargando()">
                                                     Pagado
                                                 </a>
                                             </li>
