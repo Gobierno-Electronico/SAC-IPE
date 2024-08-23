@@ -248,9 +248,9 @@ class IngresosDevengadoTable extends Tabla
                     ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
                     ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
                 $importeMovimiento = $movimiento['importe'];
-                if($interaccionCuentaConceptoPrincipal->tipo_interaccion == 'Presupuestal - Abono'){
-                    $importeMovimiento = $movimiento['importe'] - $movimiento['iva'];
-                }
+                // if($interaccionCuentaConceptoPrincipal->tipo_interaccion == 'Presupuestal - Abono'){
+                //     $importeMovimiento = $movimiento['importe'] - $movimiento['iva'];
+                // }
     
                 $polizas = [
                     [
@@ -282,7 +282,7 @@ class IngresosDevengadoTable extends Tabla
                             continue;
                         }
                     }
-                    if($dataCuenta['tipo_interaccion'] != 'Contable - Cargo' && !str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')){
+                    if($dataCuenta['tipo_interaccion'] == 'Contable - Abono' && !str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')){
                         $importe = $importe - $movimiento['iva'];
                     }
                     array_push($polizas, [

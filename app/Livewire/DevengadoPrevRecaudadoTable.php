@@ -256,9 +256,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
                     ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
                 $importeMovimiento = $movimiento['importe'];
 
-                if ($interaccionCuentaConceptoPrincipal->tipo_interaccion == 'Presupuestal - Abono') {
-                    $importeMovimiento = $movimiento['importe'] - $movimiento['iva'];
-                }
+
 
 
                 $polizas = [
@@ -291,7 +289,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
                             continue;
                         }
                     }
-                    if ($dataCuenta['tipo_interaccion'] != 'Contable - Cargo' &&  !str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')) {
+                    if ($dataCuenta['tipo_interaccion'] == 'Contable - Abono' &&  !str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')) {
                         $importe = $importe - $movimiento['iva'];
                     }
                     array_push($polizas, [
