@@ -55,7 +55,6 @@ class IngresosDevengadoForm extends Component
     public function render()
     {
         try {
-            //code...
             $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
                 ->whereIn('interaccion_cuenta_conceptos.concepto_id', [15, 16, 17, 18, 38])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Abono')
                 ->orderBy('cuentas.Codigo_cuenta')->get();
@@ -118,7 +117,6 @@ class IngresosDevengadoForm extends Component
     public function cambioPresupuesto()
     {
         try {
-            //code...
             if (!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
             $this->limpiarImporteIva();
 
@@ -140,7 +138,6 @@ class IngresosDevengadoForm extends Component
     public function verificarCausaIVA()
     {
         try {
-            //code...
             if (!$this->cuenta) return;
             $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [15, 16, 17, 18, 38])->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
             $interaccionCuentasCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
@@ -153,7 +150,7 @@ class IngresosDevengadoForm extends Component
                         $this->dispatch('limpiarIVA');
                     } else {
                         $importeFormateado = str_replace(['$', ','], '', $this->importe);
-                        $this->causaIva = $importeFormateado * 0.16;
+                        $this->causaIva = ($importeFormateado / 1.16 ) * 0.16;
                         $this->dispatch('formato_importe', id: 'inputIva', amount: "{$this->causaIva}");
                     }
                 }

@@ -56,7 +56,6 @@ class DevengadoPrevRecaudadoForm extends Component
     public function render()
     {
         try {
-            //code...
             $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
                 ->where('interaccion_cuenta_conceptos.concepto_id', '=', 14)->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Abono')
                 ->where('cuentas.Descripcion_cuenta', 'LIKE', '%(Devengado)%')->orderBy('cuentas.Codigo_cuenta')->get();
@@ -79,7 +78,6 @@ class DevengadoPrevRecaudadoForm extends Component
     public function cambioEvento()
     {
         try {
-            //code...
             $this->montoDelEvento = DB::select('EXEC ImporteTotalDevengadoPrevRecaudado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             $this->dispatch('formato_importe', id: 'inputMontoEvento', amount: ($this->montoDelEvento > 0) ? $this->montoDelEvento : '');
 
@@ -141,7 +139,6 @@ class DevengadoPrevRecaudadoForm extends Component
     public function verificarCausaIVA()
     {
         try {
-            //code...
             if (!$this->cuenta) return;
             $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [14])->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
             $interaccionCuentasCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
@@ -155,7 +152,7 @@ class DevengadoPrevRecaudadoForm extends Component
                     } else {
 
                         $importeFormateado = str_replace(['$', ','], '', $this->importe);
-                        $this->causaIva = $importeFormateado * 0.16;
+                        $this->causaIva = ($importeFormateado / 1.16 ) * 0.16;
                         $this->dispatch('formato_importe', id: 'inputIva', amount: "{$this->causaIva}");
                     }
                 } else {
