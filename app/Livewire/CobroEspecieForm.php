@@ -23,8 +23,8 @@ class CobroEspecieForm extends Component
     #[Validate('required', message: 'Observaciones requeridas')]
     public $observaciones = "";
 
-    #[Validate('required', message: 'Fecha requerida')]
-    public $fechaRegistro = "";
+    #[Validate('required', message: 'Fecha de afectación requerida')]
+    public $fechaAfectacion = "";
 
     #[Validate('required', message: 'Evento requerido')]
     public $numeroEvento = '';
@@ -97,7 +97,7 @@ class CobroEspecieForm extends Component
                 'id' => 0,
                 'codigoArea' => $this->selectCodigoArea,
                 'observaciones' => $this->observaciones,
-                'fechaRegistro' => $this->fechaRegistro,
+                'fechaAfectacion' => $this->fechaAfectacion,
                 'evento' => $this->numeroEvento,
                 'areaResponsableId' => $this->selectCodigoAreaResponsable,
                 'codigoAreaResponsable' => $departamento->Codigo_completo,

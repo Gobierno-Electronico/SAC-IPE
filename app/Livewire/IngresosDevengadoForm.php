@@ -22,8 +22,8 @@ class IngresosDevengadoForm extends Component
     #[Validate('required', message: 'Observaciones requeridas')]
     public $observaciones = "";
 
-    #[Validate('required', message: 'Fecha requerida')]
-    public $fechaRegistro = "";
+    #[Validate('required', message: 'Fecha de afectación requerida')]
+    public $fechaAfectacion = "";
 
     #[Validate('required', message: 'Área responsable requerida')]
     public $selectCodigoAreaResponsable = "";
@@ -90,7 +90,7 @@ class IngresosDevengadoForm extends Component
                 'id' => 0,
                 'codigoArea' => $this->selectCodigoArea,
                 'observaciones' => $this->observaciones,
-                'fechaRegistro' => $this->fechaRegistro,
+                'fechaAfectacion' => $this->fechaAfectacion,
                 'areaResponsableId' => $this->selectCodigoAreaResponsable,
                 'codigoAreaResponsable' => $departamento->Codigo_completo,
                 'descripcionAreaResponsable' => $departamento->Nombre,

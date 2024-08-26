@@ -41,8 +41,8 @@ class IngresosRecaudadoForm extends Component
     #[Validate('required', message: 'Importe requerido')]
     public $importe = "";
 
-    #[Validate('required', message: 'Fecha requerida')]
-    public $fechaRegistro = "";
+    #[Validate('required', message: 'Fecha de afectación requerida')]
+    public $fechaAfectacion = "";
 
     #[Validate('required', message: 'Cuenta de pago requerida')]
     public $cuentaPago = "";
@@ -135,7 +135,7 @@ class IngresosRecaudadoForm extends Component
                 'id' => 0,
                 'codigoArea' => $this->selectCodigoArea,
                 'observaciones' => $this->observaciones,
-                'fechaRegistro' => $this->fechaRegistro,
+                'fechaAfectacion' => $this->fechaAfectacion,
                 'evento' => $this->numeroEvento,
                 'areaResponsableId' => $this->selectCodigoAreaResponsable,
                 'codigoAreaResponsable' => $departamento->Codigo_completo,
