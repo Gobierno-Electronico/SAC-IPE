@@ -16,8 +16,8 @@ class EgresosCapitulo5ComprometidoForm extends Component
     #[Validate('required', message: 'Observaciones requeridas')]
     public $observaciones = "";
 
-    #[Validate('required', message: 'Fecha requerida')]
-    public $fechaRegistro = "";
+    #[Validate('required', message: 'Fecha de afectación requerida')]
+    public $fechaAfectacion = "";
 
     #[Validate('required', message: 'Área responsable requerida')]
     public $selectCodigoAreaResponsable = "";
