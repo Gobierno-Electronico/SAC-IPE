@@ -5,6 +5,8 @@ namespace App\Livewire\egresos;
 use Livewire\Component;
 use Livewire\Attributes\Validate;
 use Livewire\Attributes\On;
+use App\Models\Cuenta;
+use Log;
 
 class EgresosCapitulo4PagadoForm extends Component
 {
@@ -39,9 +41,21 @@ class EgresosCapitulo4PagadoForm extends Component
 
     public function render() 
     {
-        $cuentas = ['prueba1', 'prueba2'];
-        $eventos = ['pruebaEvento1', 'pruebaEvento2'];
-        return view('livewire.egresos.egresos-capitulo4-pagado-form', ['cuentas' => $cuentas], ['eventos' => $eventos]);
+        try{
+            $partidasPresupuestales = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [40, 43, 46, 48, 49, 51])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
+            ->orderBy('cuentas.Codigo_cuenta')->get();
+
+            $cuentasBanco = ['Banco1', 'Banco2'];
+            $eventos = ['pruebaEvento1', 'pruebaEvento2'];
+            return view('livewire.egresos.egresos-capitulo4-pagado-form', [
+                'partidasPresupuestales' => $partidasPresupuestales, 
+                'cuentasBanco' => $cuentasBanco,
+                'eventos' => $eventos]);
+        }catch(\Throwable $th){
+            Log::error('Ocurrió un error al cargar cuentas en Devengado: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000); 
+        }
     }
 
     public function cambioEvento(){

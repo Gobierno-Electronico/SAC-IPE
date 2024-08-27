@@ -5,6 +5,9 @@ namespace App\Livewire\egresos;
 use Livewire\Component;
 use Livewire\Attributes\Validate;
 use Livewire\Attributes\On;
+use App\Models\Cuenta;
+use Log;
+use DB;
 
 class EgresosCapitulo4ComprometidoForm extends Component
 {
@@ -33,8 +36,16 @@ class EgresosCapitulo4ComprometidoForm extends Component
 
     public function render() 
     {
-        $cuentas = ['prueba1', 'prueba2'];
-        return view('livewire.egresos.egresos-capitulo4-comprometido-form', ['cuentas' => $cuentas]);
+        try{
+            $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [52, 53, 54, 55])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
+            ->orderBy('cuentas.Codigo_cuenta')->get();
+
+            return view('livewire.egresos.egresos-capitulo4-comprometido-form', ['cuentas' => $cuentas]);
+        }catch(\Throwable $th){
+            Log::error('Ocurrió un error al cargar cuentas en Devengado: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000); 
+        }
     }
 
     public function agregarRegistro()

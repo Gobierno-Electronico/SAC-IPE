@@ -84,6 +84,10 @@
                 <label for="selectPartidaPresupuestal" class="form-label mt-3">Partida presupuestal</label>
                 <select name="selectPartidaPresupuestal" id="selectPartidaPresupuestal" class="form-select" wire:model="partidaPresupuestal">
                     <option value="" selected disabled>Seleccionar partida presupuestal</option>
+                    @foreach ($partidasPresupuestales as $partida)
+                        <option value="{{ $partida->cuenta_id }}">
+                            {{ $partida->Codigo_cuenta . '  ' . $partida->Descripcion_cuenta }}</option>
+                    @endforeach
                 </select>
 
                 <label for="selectCuenta" class="form-label mt-3">Cuenta contable</label>
