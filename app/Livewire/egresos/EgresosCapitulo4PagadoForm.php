@@ -6,6 +6,8 @@ use Livewire\Component;
 use Livewire\Attributes\Validate;
 use Livewire\Attributes\On;
 use App\Models\Cuenta;
+use App\Models\InteraccionCuentaCuenta;
+use App\Models\InteraccionCuentaConcepto;
 use Log;
 
 class EgresosCapitulo4PagadoForm extends Component
@@ -39,6 +41,9 @@ class EgresosCapitulo4PagadoForm extends Component
     #[Validate('required', message: 'Importe requerido')]
     public $importe = "";
 
+    public $cuentasBanco = [];
+    public $cambiarCuentaBancoSeleccionada = true;
+
     public function render() 
     {
         try{
@@ -46,20 +51,46 @@ class EgresosCapitulo4PagadoForm extends Component
             ->whereIn('interaccion_cuenta_conceptos.concepto_id', [40, 43, 46, 48, 49, 51])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
             ->orderBy('cuentas.Codigo_cuenta')->get();
 
-            $cuentasBanco = ['Banco1', 'Banco2'];
             $eventos = ['pruebaEvento1', 'pruebaEvento2'];
+
+            $this->cambiarCuentaBancoSeleccionada = false;
+            $this->llenarCuentasBanco();
+
             return view('livewire.egresos.egresos-capitulo4-pagado-form', [
                 'partidasPresupuestales' => $partidasPresupuestales, 
-                'cuentasBanco' => $cuentasBanco,
                 'eventos' => $eventos]);
         }catch(\Throwable $th){
-            Log::error('Ocurrió un error al cargar cuentas en Devengado: ' . $th->getMessage());
+            Log::error('Ocurrió un error al cargar cuentas en Pagado del capítulo 4: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000); 
         }
     }
 
     public function cambioEvento(){
+            $this->cambiarCuentaBancoSeleccionada = false;
+            $this->llenarCuentasBanco();
+    }
 
+    public function llenarCuentasBanco(){
+        if(!$this->partidaPresupuestal) return;
+
+        if ($this->cambiarCuentaBancoSeleccionada) {
+            $this->cuentaBanco = "";
+        }
+
+        try{
+            $this->cambiarCuentaBancoSeleccionada = true;
+            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('interaccion_cuenta_conceptos.concepto_id', [40, 43, 46, 48, 49, 51])
+            ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
+            $this->cuentasBanco = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
+                ->join('interaccion_cuenta_conceptos', function ($join) {
+                    $join->on('interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+                        ->where('tipo_interaccion', '=', 'Contable - Abono');
+                })
+                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get(); 
+        }catch (\Throwable $th) {
+            Log::error('Ocurrió un error al cargar las cuentas de banco en pagado capítulo 4000: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas de banco, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
     }
 
     public function agregarRegistro()
