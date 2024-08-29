@@ -108,7 +108,8 @@ class DevengadoPrevRecaudadoForm extends Component
             $this->subcuentas = Poliza::where('evento', '=', $this->numeroEvento)
                 ->join('cuentas', function ($join) {
                     $join->on('cuentas.Codigo_cuenta', '=', 'polizas.cuenta')
-                        ->where('tipo_interaccion', '=', 'Contable - Cargo');
+                        ->where('tipo_interaccion', '=', 'Contable - Cargo')
+                        ->where('categoria', '=', 'INGRESOS POR CLASIFICAR');
                 })->get();
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar las cuentas de pago en devengado previamente recaudado: ' . $th->getMessage());

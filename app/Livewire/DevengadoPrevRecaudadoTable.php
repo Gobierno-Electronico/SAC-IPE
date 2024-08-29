@@ -25,6 +25,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
     public $numeroPoliza;
     public $numeroEvento;
     public $numeroPolizaRemanente;
+    public $totalRegistrosPorCuentaPago = 0;
 
     public function render()
     {
@@ -160,11 +161,11 @@ class DevengadoPrevRecaudadoTable extends Tabla
     public function agregarRegistro($registro)
     {
         try {
-            //code...
             if ($this->total + $registro['importe'] > $registro['montoEvento']) {
                 $this->dispatch('mostrarMensaje', mensaje: 'Monto total del evento superado', tipo: 'error', tiempo: 3000);
                 return;
             }
+            
             $anioActual = Carbon::now()->year;
             $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $registro['cuentaId'])->where('concepto_id', '=', 14)->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
             $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')
@@ -172,6 +173,13 @@ class DevengadoPrevRecaudadoTable extends Tabla
 
 
             $solvencia = DB::select('EXEC SolvenciaCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($registro['codigoAreaResponsable'], $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $registro['mes']));
+            $solvenciaCuentaPago = DB::select('EXEC SolvenciaIngresosPorClasificar @cuenta = ?, @cuentaPago = ?, @evento =?', array($registro['codigoCuenta'], $registro['codigoCuentaPago'], $registro['evento']));
+            
+            $this->sumarRegistrosPorCuentaPago($registro);
+            if($this->totalRegistrosPorCuentaPago + $registro['importe'] > $solvenciaCuentaPago[0]->Total) {
+                $this->dispatch('mostrarMensaje', mensaje: 'Solvencia de la cuenta de pago insuficiente', tipo: 'error', tiempo: 3000);
+                return;
+            }
 
             $totalDisponible = $solvencia[0]->Solvencia - $registro['importe'];
             $totalImportes = 0;
@@ -215,6 +223,15 @@ class DevengadoPrevRecaudadoTable extends Tabla
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al agregar registro en Devengado previamente recaudado: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
+    }
+
+    public function sumarRegistrosPorCuentaPago($registro){
+        $this->totalRegistrosPorCuentaPago = 0;
+        foreach ($this->dataCompleta as $key => $movimiento) {
+            if($registro['codigoCuentaPago'] == $movimiento['codigoCuentaPago']) {
+                $this->totalRegistrosPorCuentaPago += $movimiento['importe'];
+            }
         }
     }
 
