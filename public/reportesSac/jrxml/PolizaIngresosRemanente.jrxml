@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.20.5.final using JasperReports Library version 6.20.5-3efcf2e67f959db3888d79f73dde2dbd7acb4f8e  -->
+<!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PolizaIngresosRemanente" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="55a8c4bf-9344-4264-a6b2-ecc8cd2fda35">
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -35,6 +35,10 @@
 		<property name="com.jaspersoft.studio.field.name" value="evento"/>
 		<property name="com.jaspersoft.studio.field.label" value="evento"/>
 	</field>
+	<field name="FechaRegistro" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="FechaRegistro"/>
+		<property name="com.jaspersoft.studio.field.label" value="FechaRegistro"/>
+	</field>
 	<field name="descripcion" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="descripcion"/>
 		<property name="com.jaspersoft.studio.field.label" value="descripcion"/>
@@ -69,7 +73,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<pageHeader>
-		<band height="100" splitType="Stretch">
+		<band height="120" splitType="Stretch">
 			<image>
 				<reportElement x="20" y="0" width="137" height="50" uuid="13cd4ec7-8468-4e49-b7ec-344540383739"/>
 				<imageExpression><![CDATA["C:/xampp/htdocs/SAC-IPE/public/imagenes/ipe_reportes.png"]]></imageExpression>
@@ -89,41 +93,42 @@
 				<text><![CDATA[POLIZA AUXILIAR DE INGRESOS]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="687" y="0" width="50" height="20" uuid="8c206f97-bf18-47f6-93df-85b27a0f630d">
+				<reportElement x="604" y="0" width="50" height="20" uuid="8c206f97-bf18-47f6-93df-85b27a0f630d">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Left">
 					<font fontName="Times New Roman" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["TIPO."]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="687" y="20" width="50" height="20" uuid="6def13a6-ea14-4bc9-9338-25cd566f291d">
+				<reportElement x="604" y="20" width="50" height="20" uuid="6def13a6-ea14-4bc9-9338-25cd566f291d">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Left">
 					<font fontName="Times New Roman" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["NO."]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="687" y="40" width="50" height="20" uuid="59c4e039-3aa3-466e-a691-8b348888c71b">
-					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				<reportElement x="604" y="40" width="133" height="20" uuid="59c4e039-3aa3-466e-a691-8b348888c71b">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Left">
 					<font fontName="Times New Roman" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["FECHA"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["FECHA AFECTACIÓN"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="687" y="60" width="50" height="20" uuid="de6f328b-7ccb-4882-b512-9b0520225f08">
+				<reportElement x="604" y="80" width="50" height="20" uuid="de6f328b-7ccb-4882-b512-9b0520225f08">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Left">
 					<font fontName="Times New Roman" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["HORA"]]></textFieldExpression>
@@ -158,7 +163,7 @@
 				<text><![CDATA[NO VALIDADO]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="737" y="80" width="64" height="20" uuid="80ab161b-7fd1-4c90-9614-5dbf15769158">
+				<reportElement x="737" y="100" width="64" height="20" uuid="80ab161b-7fd1-4c90-9614-5dbf15769158">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
@@ -168,11 +173,11 @@
 				<textFieldExpression><![CDATA[$F{evento}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="687" y="80" width="50" height="20" uuid="c5ddb66e-641b-4a3f-8b09-0a9a24111231">
+				<reportElement x="604" y="100" width="50" height="20" uuid="c5ddb66e-641b-4a3f-8b09-0a9a24111231">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Left">
 					<font fontName="Times New Roman" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["EVENTO"]]></textFieldExpression>
@@ -188,7 +193,7 @@
 				<textFieldExpression><![CDATA[$P{Fecha}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="737" y="60" width="64" height="20" uuid="301d9c86-85ca-4b19-90ee-45d1d8654609">
+				<reportElement x="737" y="80" width="64" height="20" uuid="301d9c86-85ca-4b19-90ee-45d1d8654609">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
@@ -196,6 +201,27 @@
 					<font fontName="Times New Roman" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{Hora}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="604" y="60" width="133" height="20" uuid="c5e2d26b-f83f-45c6-bdd1-58b9f971d226">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FECHA REGISTRO"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="737" y="60" width="64" height="20" uuid="d62ec8e7-77a7-4434-b10e-50f6154f2785">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FechaRegistro}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

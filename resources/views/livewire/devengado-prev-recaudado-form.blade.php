@@ -26,7 +26,7 @@
         </div>
         <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
             tipoMovimiento="PolizaIngresosDevengadoPreviamenteRecaudado" tipoPoliza="I"
-            urlFinalizar="/devengado-prev-recaudado" :$numeroPolizaRemanente categoriaModulo='INGRESOS DEVENGADO PREVIAMENTE RECAUDADO' categoriaRemanente='INGRESOS POR CLASIFICAR REMANENTE'/>
+            urlFinalizar="/devengado-prev-recaudado" :$numeroPolizaRemanente categoriaModulo='INGRESOS DEVENGADO PREVIAMENTE RECAUDADO' categoriaRemanente='INGRESOS POR CLASIFICAR REMANENTE DEVENGADO PREVIAMENTE RECAUDADO'/>
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
@@ -57,7 +57,7 @@
                 <div class="col-auto">
                     <label for="selectSeguimientoEvento" class="form-label">Número de seguimiento de evento</label>
                     <select name="selectSeguimientoEvento" id="selectSeguimientoEvento" class="form-select"
-                        wire:model.live="numeroEvento" wire:change="cambioEvento">
+                        wire:model.live="numeroEvento" wire:change="cambioEvento" >
                         <option value="" disabled>
                             Seleccionar un evento
                         </option>
@@ -91,6 +91,17 @@
                     @foreach ($cuentas as $cuenta)
                         <option value="{{ $cuenta->cuenta_id }}">
                             {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
+                    @endforeach
+                </select>
+
+                <label for="selectCuentaPago" class="form-label mt-3">Cuenta de pago</label>
+                <select name="selectCuentaPago" id="selectCuentaPago" class="form-select"
+                    wire:model="cuentaPago">
+                    <option value="" disabled>
+                        Seleccionar cuenta pago</option>
+                    @foreach ($subcuentas as $cuentaPago)
+                        <option value="{{ $cuentaPago->id }}">
+                            {{ $cuentaPago->Codigo_cuenta . '  ' . $cuentaPago->Descripcion_cuenta }}</option>
                     @endforeach
                 </select>
 

@@ -235,14 +235,6 @@
                                             </li>
                                         </ul>
                                     </li>
-
-                                    <li class="dropend">
-                                        <a class="dropdown-item" id="" href="{{ route('movimientos') }}"
-                                            method="GET">
-                                            {{ __('Movimientos') }}
-                                        </a>
-                                    </li>
-
                                 </ul>
 
 
