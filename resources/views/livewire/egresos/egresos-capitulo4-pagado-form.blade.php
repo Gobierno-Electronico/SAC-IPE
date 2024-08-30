@@ -45,11 +45,11 @@
 
         <label for="inputObservacion" class="form-label mt-3">Observación</label>
         <input type="text" name="inputObservacion" id="inputObservacion" class="form-control"
-            wire.model="observaciones">
+            wire:model="observaciones">
 
         <label for="inputFechaAfectacion" class="form-label mt-3">Fecha de afectación</label>
         <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control"
-            wire.model="fechaAfectacion">
+            wire:model="fechaAfectacion">
 
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
         <div class="row">
@@ -82,20 +82,20 @@
                 </select>
 
                 <label for="selectPartidaPresupuestal" class="form-label mt-3">Partida presupuestal</label>
-                <select name="selectPartidaPresupuestal" id="selectPartidaPresupuestal" class="form-select" wire:model="partidaPresupuestal">
+                <select name="selectPartidaPresupuestal" id="selectPartidaPresupuestal" class="form-select" wire:model="partidaPresupuestal" wire:change="llenarCuentasBanco">
                     <option value="" selected disabled>Seleccionar partida presupuestal</option>
-                    @foreach ($cuentas as $cuenta)
-                        <option value="{{ $cuenta }}"> <!-- $cuenta->cuenta_id -->
-                            {{ $cuenta /* $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta */ }}</option>
+                    @foreach ($partidasPresupuestales as $partida)
+                        <option value="{{ $partida->cuenta_id }}">
+                            {{ $partida->Codigo_cuenta . '  ' . $partida->Descripcion_cuenta }}</option>
                     @endforeach
                 </select>
 
                 <label for="selectCuenta" class="form-label mt-3">Banco</label>
                 <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuentaBanco">
                     <option value="" disabled>Seleccionar cuenta</option>
-                    @foreach ($cuentas as $cuenta)
-                        <option value="{{ $cuenta }}"> <!-- $cuenta->cuenta_id -->
-                            {{ $cuenta /* $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta */ }}</option>
+                    @foreach ($cuentasBanco as $cuenta)
+                        <option value="{{ $cuenta->cuenta_id }}"> 
+                            {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
                     @endforeach
                 </select>
 

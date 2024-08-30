@@ -45,11 +45,11 @@
 
         <label for="inputObservacion" class="form-label mt-3">Observación</label>
         <input type="text" name="inputObservacion" id="inputObservacion" class="form-control"
-            wire.model="observaciones">
+            wire:model="observaciones">
 
         <label for="inputFechaAfectacion" class="form-label mt-3">Fecha de afectación</label>
         <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control"
-            wire.model="fechaAfectacion">
+            wire:model="fechaAfectacion">
 
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
         <div class="row">
@@ -81,12 +81,12 @@
                     @endforeach
                 </select>
 
-                <label for="selectCuenta" class="form-label mt-3">Cuenta contable</label>
+                <label for="selectCuenta" class="form-label mt-3">Cuenta</label>
                 <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta">
                     <option value="" disabled>Seleccionar cuenta</option>
                     @foreach ($cuentas as $cuenta)
-                        <option value="{{ $cuenta }}"> <!-- $cuenta->cuenta_id -->
-                            {{ $cuenta /* $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta */ }}</option>
+                        <option value="{{ $cuenta->cuenta_id }}">
+                            {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
                     @endforeach
                 </select>
 

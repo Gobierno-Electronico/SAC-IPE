@@ -45,6 +45,13 @@ class DevengadoPrevRecaudadoForm extends Component
     #[Validate('required', message: 'Fecha de afectación requerida')]
     public $fechaAfectacion = "";
 
+    #[Validate('required', message: 'Cuenta de pago requerida')]
+    public $cuentaPago = "";
+
+    public $subcuentas = [];
+
+    public $cambiarCuentaPagoSeleccionada = true;
+
     public $causaIva = 0;
     public $agregarIVA = "";
 
@@ -66,7 +73,8 @@ class DevengadoPrevRecaudadoForm extends Component
                 ->where('estatus_evento', '=', true)
                 ->distinct()
                 ->pluck('descripcion', 'evento');
-
+            $this->cambiarCuentaPagoSeleccionada = false;
+            $this->llenarCuentasPago();
             $this->verificarCausaIVA();
             return view('livewire.devengado-prev-recaudado-form', ['eventos' => $eventos, 'cuentas' => $cuentas]);
         } catch (\Throwable $th) {
@@ -80,11 +88,32 @@ class DevengadoPrevRecaudadoForm extends Component
         try {
             $this->montoDelEvento = DB::select('EXEC ImporteTotalDevengadoPrevRecaudado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             $this->dispatch('formato_importe', id: 'inputMontoEvento', amount: ($this->montoDelEvento > 0) ? $this->montoDelEvento : '');
-
             $this->dispatch('mostrarMensaje', mensaje: 'Monto del evento cargado', tipo: 'success', tiempo: 1500);
+            $this->cambiarCuentaPagoSeleccionada = false;
+            $this->llenarCuentasPago();
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar el evento en devengado prv. recaudado: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
+    }
+
+    public function llenarCuentasPago()
+    {
+        try {
+            
+            if ($this->cambiarCuentaPagoSeleccionada) {
+                $this->cuentaPago = "";
+            }
+            $this->cambiarCuentaPagoSeleccionada = true;
+            $this->subcuentas = Poliza::where('evento', '=', $this->numeroEvento)
+                ->join('cuentas', function ($join) {
+                    $join->on('cuentas.Codigo_cuenta', '=', 'polizas.cuenta')
+                        ->where('tipo_interaccion', '=', 'Contable - Cargo')
+                        ->where('categoria', '=', 'INGRESOS POR CLASIFICAR');
+                })->get();
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al cargar las cuentas de pago en devengado previamente recaudado: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas de pago, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 
@@ -107,6 +136,7 @@ class DevengadoPrevRecaudadoForm extends Component
             $this->importe = ($this->importe > 0)  ? $this->importe : "";
             $this->validate();
             $cuenta = Cuenta::find($this->cuenta);
+            $cuentaPagoSeleccionada = Cuenta::find($this->cuentaPago);
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $registro = [
                 'id' => 0,
@@ -119,6 +149,9 @@ class DevengadoPrevRecaudadoForm extends Component
                 'cuentaId' => $this->cuenta,
                 'codigoCuenta' => $cuenta->Codigo_cuenta,
                 'descripcionCuenta' => $cuenta->Descripcion_cuenta,
+                'cuentaPagoId' => $this->cuentaPago,
+                'codigoCuentaPago' => $cuentaPagoSeleccionada->Codigo_cuenta,
+                'descripcionCuentaPago' => $cuentaPagoSeleccionada->Descripcion_cuenta,
                 'mes' => $this->mes,
                 'fechaAfectacion' => $this->fechaAfectacion,
                 'importe' => $this->importe,
@@ -152,7 +185,7 @@ class DevengadoPrevRecaudadoForm extends Component
                     } else {
 
                         $importeFormateado = str_replace(['$', ','], '', $this->importe);
-                        $this->causaIva = ($importeFormateado / 1.16 ) * 0.16;
+                        $this->causaIva = ($importeFormateado / 1.16) * 0.16;
                         $this->dispatch('formato_importe', id: 'inputIva', amount: "{$this->causaIva}");
                     }
                 } else {
@@ -183,6 +216,7 @@ class DevengadoPrevRecaudadoForm extends Component
         $this->mes = "";
         $this->importe = "";
         $this->causaIva = 0;
+        $this->cuentaPago = "";
         $this->agregarIVA = "";
         $this->dispatch('limpiar');
         $this->dispatch('limpiarIVA');
@@ -204,6 +238,7 @@ class DevengadoPrevRecaudadoForm extends Component
             $this->importe = $datosRegistro['importe'];
             $this->selectCodigoAreaResponsable = $datosRegistro['area'];
             $this->agregarIVA = $datosRegistro['agregarIVA'];
+            $this->cuentaPago = $datosRegistro['cuentaPago'];
             $this->verificarCausaIVA();
             $this->dispatch('llenarFormulario', cuenta: $datosRegistro['cuenta'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe'], area: $datosRegistro['area'], agregarIVA: $datosRegistro['agregarIVA']);
         } catch (\Throwable $th) {
