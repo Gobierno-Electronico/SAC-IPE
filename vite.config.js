@@ -7,7 +7,9 @@ export default defineConfig({
             input: [
                 'resources/sass/app.scss',
                 'resources/js/app.js',
-                // 'resources/js/metodos.js'
+                'resources/css/layouts/app.css',
+                'resources/css/layouts/loading.css',
+                'resources/css/layouts/loadingDots.css',
             ],
             refresh: true,
         }),
