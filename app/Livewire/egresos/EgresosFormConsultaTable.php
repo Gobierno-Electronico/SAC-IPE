@@ -10,6 +10,7 @@ use App\Clases\Column;
 use App\Http\Controllers\BitacoraController;
 use Livewire\Attributes\Reactive;
 use Carbon\Carbon;
+use App\Livewire\Tabla;
 use Log;
 
 class EgresosFormConsultaTable extends Tabla
@@ -39,7 +40,7 @@ class EgresosFormConsultaTable extends Tabla
     public function render()
     {
 
-        return view('livewire.egresos-form-consulta-table');
+        return view('livewire.egresos.egresos-form-consulta-table');
     }
 
     public function init()

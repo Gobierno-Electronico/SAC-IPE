@@ -106,6 +106,7 @@ class EgresosCapitulo4ComprometidoTable extends Tabla
             $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar insuficiente', tipo: 'warning', tiempo: 3000);
             return false;
         }
+        return true;
     }
 
     public function edit($id)
@@ -253,7 +254,7 @@ class EgresosCapitulo4ComprometidoTable extends Tabla
                         'fecha' => $movimiento['fechaAfectacion'],
                         'cuenta' => $movimiento['codigoCuenta'],
                         'concepto' => $movimiento['descripcionCuenta'],
-                        'total' => abs($importeMovimiento),
+                        'total' => abs($movimiento['importe']),
                         'mes' => $movimiento['mes'],
                         'descripcion' => $movimiento['observaciones'],
                         'evento' => $this->numeroEvento,
@@ -274,7 +275,7 @@ class EgresosCapitulo4ComprometidoTable extends Tabla
                         'fecha' => $movimiento['fechaAfectacion'],
                         'cuenta' => $dataCuenta['Codigo_cuenta'],
                         'concepto' => $dataCuenta['Descripcion_cuenta'],
-                        'total' => $importe,
+                        'total' => $movimiento['importe'],
                         'mes' => $movimiento['mes'],
                         'descripcion' => $movimiento['observaciones'],
                         'evento' => $this->numeroEvento,
@@ -287,10 +288,10 @@ class EgresosCapitulo4ComprometidoTable extends Tabla
                     ]);
                 }
 
-                //Poliza::insert($polizas);
-                //DB::commit();
+                Poliza::insert($polizas);
+                DB::commit();
             }
-            //$this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
+            $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
         }catch (\Throwable $th) {
             DB::rollBack();
             Log::error('Ocurrió un error al finalizarRegistro en comprometido del capítulo 4: '. $th->getMessage());

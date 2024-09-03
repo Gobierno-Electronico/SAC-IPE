@@ -17,6 +17,9 @@ use DB;
 class EgresosCapitulo4ComprometidoForm extends Component
 {
     public $consultarRegistro = false;
+    public $numeroEvento;
+    public $numeroPoliza;
+    public $total;
 
     #[Validate('required', message: 'Área solicitante requerida')]
     public $selectCodigoArea = "";
@@ -40,6 +43,7 @@ class EgresosCapitulo4ComprometidoForm extends Component
     public $importe = "";
 
     public $PTTOEjecutar = 0;
+
 
     public function render() 
     {
@@ -87,7 +91,6 @@ class EgresosCapitulo4ComprometidoForm extends Component
             $cuenta = Cuenta::find($this->cuenta);
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             
-
             $registro = [
                 'id' => 0,
                 'codigoArea' => $this->selectCodigoArea,
