@@ -84,7 +84,8 @@ class GuiaContabilizadoraController extends Controller
                             'cuenta_id' => $cuenta->id,
                             'cuenta' => $cuenta->Codigo_cuenta,
                             'capitulo' => '4000'
-                        ]);                    }
+                        ]);                    
+                    }
                  
 
                     if ($interaccion) {

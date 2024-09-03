@@ -164,13 +164,14 @@ class IngresosDevengadoTable extends Tabla
                     $totalImportes += $movimiento['importe'];
                 }
     
-                if($totalImportes > 0){
-                    $totalDisponible = $solvencia - $totalImportes - $registro['importe'];
-                }
-                if($totalDisponible < 0){
-                    $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar insuficiente', tipo: 'warning', tiempo: 3000);
-                    return;
-                }
+            }
+            if($totalImportes > 0){
+                $totalDisponible = $solvencia - $totalImportes - $registro['importe'];
+            }
+
+            if($totalDisponible < 0){
+                $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar insuficiente', tipo: 'warning', tiempo: 3000);
+                return;
             }
     
             $nuevoRegistro = [

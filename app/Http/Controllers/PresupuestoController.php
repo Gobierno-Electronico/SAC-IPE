@@ -577,11 +577,19 @@ class PresupuestoController extends Controller
                 $cuentasFaltantes = [];
                 $cuentasEnLaGuiaFaltantes = [];
                 // Se procesan los datos de cada fila del archivo Excel y se crea un nuevo registro en la base de datos utilizando el modelo Cuenta.
-                foreach ($rows as $row) {
+                foreach ($rows as $row) { 
                     $cuenta = Cuenta::where("Codigo_cuenta", $row["Cuenta"])->first();
 
+                    $cuentaCapitulo = CuentaCapitulo::where('cuenta_id', '=', $cuenta->id)->first();
+                    if (!$cuentaCapitulo) {
+                        $relacionesCuentaCapitulo[] = CuentaCapitulo::create([
+                            'cuenta_id' => $cuenta->id,
+                            'cuenta' => $cuenta->Codigo_cuenta,
+                            'capitulo' => $capitulo
+                        ]);                    
+                    }
+
                     if (!$cuenta) {
-                        dd($row);
                         if (!$cuenta && !in_array($row["Cuenta"], $cuentasFaltantes)) {
 
                             $cuentasFaltantes[] = $row["Cuenta"];
@@ -595,17 +603,17 @@ class PresupuestoController extends Controller
                             return back();
                         }
                     }
-                    // $relacionCuentaClasificador = cuentaClasificadorEgreso::where('codigoCuenta', '=', $row["Cuenta"])->first();
-                    // if(!$relacionCuentaClasificador){
-                    //     CuentaClasificadorEgreso::create([
-                    //         'codigoCuenta' => $row["Cuenta"],
-                    //         'CTG' => $row["CTG"],
-                    //         'CP' => $row["CP"],
-                    //         'COG' => $row["COG"],
-                    //         'CFG' => $row["CFG"],
-                    //         'CA' => $row["CA"]
-                    //     ]);
-                    // }
+                    $relacionCuentaClasificador = cuentaClasificadorEgreso::where('codigoCuenta', '=', $row["Cuenta"])->first();
+                    if(!$relacionCuentaClasificador){
+                        CuentaClasificadorEgreso::create([
+                            'codigoCuenta' => $row["Cuenta"],
+                            'CTG' => $row["CTG"],
+                            'CP' => $row["CP"],
+                            'COG' => $row["COG"],
+                            'CFG' => $row["CFG"],
+                            'CA' => $row["CA"]
+                        ]);
+                    }
                     // $cri = ClasificadorRubroIngreso::where('Codificacion_rubro_ingreso', '=', $row["CRI"])->where('Nombre' , '=' , $row["Descripción"])->first();
                     // if (!$cri) {
                     //     ClasificadorRubroIngreso::create([
