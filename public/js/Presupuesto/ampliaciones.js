@@ -1,4 +1,6 @@
 const IP_PORT = '10.0.2.62:8080'
+// const IP_PORT = '10.0.0.12:8080'
+//ReporteadorSAC-IPE
 function generarPolizaAmpliacion(btn) {
     if($('#botonNumeroPoliza').val() == 'detalles'){
         var tipoPoliza = btn.id;

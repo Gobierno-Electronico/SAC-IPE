@@ -60,12 +60,12 @@
                         @else
                             @tecnico
                                 <li class="nav-item dropdown">
-                                    <a id="navbarCuentas" class="nav-link" href="/bitacoras" role="button">
+                                    <a id="navbarCuentas" class="nav-link" onclick="mostrarCargando()" href="/bitacoras" role="button">
                                         {{ __('Bitácora') }}</a>
                                 </li>
                             @endtecnico
                             <li class="nav-item dropdown">
-                                <a id="navbarCuentas" class="nav-link" href="/cuentas" role="button">
+                                <a id="navbarCuentas" class="nav-link" href="/cuentas" onclick="mostrarCargando()" role="button">
                                     {{ __('Cuentas') }}</a>
                             </li>
                             <li class="nav-item dropdown">
@@ -81,13 +81,13 @@
                                             data-bs-toggle="dropdown">Cargar Presupuesto</a>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <a class="dropdown-item" id=""
+                                                <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                                     href="{{ route('presupuestoInicialIngresos') }}" method="GET">
                                                     {{ __('Ingresos') }}
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" id=""
+                                                <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                                     href="{{ route('presupuestoInicialEgresos') }}" method="GET">
                                                     {{ __('Egresos') }}
                                                 </a>
@@ -99,13 +99,13 @@
                                             data-bs-toggle="dropdown">Consultar Presupuesto</a>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <a class="dropdown-item" id=""
+                                                <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                                     href="{{ route('consultaPresupuestoIngresos') }}" method="GET">
                                                     {{ __('Ingresos') }}
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" id=""
+                                                <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                                     href="{{ route('consultaPresupuestoEgresos') }}" method="GET">
                                                     {{ __('Egresos') }}
                                                 </a>
@@ -117,13 +117,13 @@
                                             data-bs-toggle="dropdown">Consultas</a>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <a class="dropdown-item" id=""
+                                                <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                                     href="{{ route('tiposPresupuesto') }}" method="GET">
                                                     {{ __('Tipos de presupuesto') }}
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" id="" wire:navigate.hover
+                                                <a class="dropdown-item" id="" onclick="mostrarCargando()" wire:navigate.hover
                                                     href="{{ route('consultaAmpliacionesReducciones') }}" method="GET">
                                                     {{ __('Ampliaciones/Reducciones') }}
                                                 </a>
@@ -135,13 +135,13 @@
                                             data-bs-toggle="dropdown">Afectaciones ingresos</a>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <a class="dropdown-item" id=""
+                                                <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                                     href="{{ route('ampliacionIngresos') }}" method="GET">
                                                     {{ __('Ampliación') }}
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" id=""
+                                                <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                                     href="{{ route('reduccionIngresos') }}" method="GET">
                                                     {{ __('Reducción') }}
                                                 </a>
@@ -153,14 +153,14 @@
                                             data-bs-toggle="dropdown">Afectaciones egresos</a>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <a class="dropdown-item" id=""
+                                                <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                                     href="{{ route('ampliacionEgresos') }}" method="GET">
                                                     {{ __('Ampliación') }}
                                                 </a>
 
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" id=""
+                                                <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                                     href="{{ route('reduccionEgresos') }}" method="GET">
                                                     {{ __('Reducción') }}
                                                 </a>
@@ -168,7 +168,7 @@
                                         </ul>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" id="" href="{{ route('recalendarizacion') }}"
+                                        <a class="dropdown-item" id="" onclick="mostrarCargando()" href="{{ route('recalendarizacion') }}"
                                             method="GET">
                                             {{ __('Reclasificación/Recalendarización') }}
                                         </a>
