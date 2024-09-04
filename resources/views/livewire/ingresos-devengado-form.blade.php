@@ -1,4 +1,4 @@
-<div class="mt-5">
+ <div class="mt-5">
     @if ($consultarRegistro)
         <div>
             <h4>Resumen de movimientos por registrar</h4>

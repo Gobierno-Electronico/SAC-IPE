@@ -1,0 +1,22 @@
+[2024-09-04 12:17:35] local.INFO: array (
+  'id' => 0,
+  'codigoArea' => '6',
+  'observaciones' => 'prueba',
+  'cuentaId' => '45',
+  'codigoCuenta' => '1.1.1.2.05.02',
+  'descripcionCuenta' => 'Santander 65509583425',
+  'mes' => 'Enero',
+  'fechaAfectacion' => '2024-09-06',
+  'importe' => 1000.0,
+)  
+[2024-09-04 12:19:08] local.INFO: array (
+  'id' => 0,
+  'codigoArea' => '6',
+  'observaciones' => 'prueba',
+  'cuentaId' => '11368',
+  'codigoCuenta' => '1.1.1.2.05.06',
+  'descripcionCuenta' => 'Santander 65510206216',
+  'mes' => 'Enero',
+  'fechaAfectacion' => '2024-09-05',
+  'importe' => 5000.0,
+)  
