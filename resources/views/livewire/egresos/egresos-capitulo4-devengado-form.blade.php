@@ -59,9 +59,9 @@
                     <option value="" disabled>
                         Seleccionar un evento
                     </option>
-                    @foreach ($eventos as $evento /* => $descripcion */)
+                    @foreach ($eventos as $evento  => $descripcion)
                         <option value="{{ $evento }}">
-                           {{ $evento }} {{-- {{ $evento }} - {{$descripcion}} --}}
+                           {{ $evento }} - {{$descripcion}}
                         </option>
                     @endforeach
                 </select>
@@ -112,9 +112,12 @@
                     @endforeach
                 </select>
 
+                <label for="inputMontoEvento" class="form-label mt-3">Monto del evento</label>
+                <input type="text" name="inputMontoEvento" id="inputMontoEvento" class="form-control" disabled>
+
                 <label for="inputPTTOEjecutar" class="form-label mt-3">Presupuesto por ejecutar</label>
                 <input type="text" name="inputPTTOEjecutar" id="inputPTTOEjecutar" class="form-control" disabled>
-
+                
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control"
                     onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model="importe">

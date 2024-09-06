@@ -334,7 +334,7 @@
                                     {{ __('Egresos') }}
                                 </a>
 
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu dropstart">
                                     <li class="dropend">
                                         <a class="dropdown-item dropdown-toggle" href=""
                                             data-bs-toggle="dropdown">Capítulo 1000 Servicios personales</a>
