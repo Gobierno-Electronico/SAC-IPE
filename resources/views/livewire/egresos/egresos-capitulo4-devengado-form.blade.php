@@ -92,7 +92,7 @@
 
                 <label for="selectCuenta" class="form-label mt-3">Cuenta contable</label>
                 <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuentaContable">
-                    <option value="" disabled>Seleccionar cuenta</option>
+                    <option value="" selected disabled>Seleccionar cuenta</option>
                     @foreach ($cuentasContables as $cuenta)
                         <option value="{{ $cuenta->cuenta_id }}"> 
                             {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}

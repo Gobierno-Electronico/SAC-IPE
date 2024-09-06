@@ -10,6 +10,7 @@ use App\Models\Poliza;
 use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
 use App\Models\CodigoDepartamento;
+use Illuminate\Support\Collection;
 use Carbon\Carbon;
 use Log;
 use DB;
@@ -49,6 +50,7 @@ class EgresosCapitulo4DevengadoForm extends Component
     public $cambiarCuentaContableSeleccionada = true;
 
     public $partidasPresupuestales = [];
+    public $subcuentas = [];
     public $cambiarPartidaPresupuestalSeleccionada = true;
 
     public function render() 
@@ -61,6 +63,9 @@ class EgresosCapitulo4DevengadoForm extends Component
                 ->where('estatus_evento', '=', true)
                 ->distinct()
                 ->pluck('descripcion', 'evento');
+
+            $this->cambiarPartidaPresupuestalSeleccionada = false;
+            $this->llenarPartidasPresupuestales();
 
             $this->cambiarCuentaContableSeleccionada = false;
             $this->llenarCuentasContables();
@@ -79,7 +84,7 @@ class EgresosCapitulo4DevengadoForm extends Component
 
             $this->cambiarCuentaContableSeleccionada = false;
             $this->llenarCuentasContables();
-    
+            
 
         }catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar el evento en Devengado del capítulo 4: ' . $th->getMessage());
@@ -90,30 +95,34 @@ class EgresosCapitulo4DevengadoForm extends Component
 
     public function llenarPartidasPresupuestales(){
         try{
-                    if ($this->cambiarCuentaContableSeleccionada) {
-                        $this->cuentaContable = "";
+                    if ($this->cambiarPartidaPresupuestalSeleccionada) {
+                        $this->partidaPresupuestal = "";
                     }
                     
-                    $cuentasComprometidas = Cuenta::join('polizas', 'polizas.cuenta', '=', 'cuentas.Codigo_cuenta')
-                    ->where('evento', '=', $this->numeroEvento)
+                    $this->cambiarPartidaPresupuestalSeleccionada = true;
+                    
+                    $cuentasComprometidas = Poliza::where('evento', '=', $this->numeroEvento)
                     ->where('tipo_poliza', '=', 'E')
                     ->where('concepto', 'LIKE', '%Comprometido%')
-                    ->select('cuentas.id')->get();
-           
-                    foreach ($cuentasComprometidas as $cuentaComprometida) {
-                        $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $cuentaComprometida->id)->whereIn('interaccion_cuenta_conceptos.concepto_id', [63, 64, 56, 58])
-                        ->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
-            
-                        $partida = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_2', '=', $interaccionCuentaConcepto->id)
-                        ->join('interaccion_cuenta_conceptos', function ($join) {
-                            $join->on('interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_1')
-                                ->where('tipo_interaccion', '=', 'Presupuestal - Cargo');
-                        })
-                        ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->first(); 
-                        array_push($this->partidasPresupuestales, $partida);
-                    } 
-                    $this->partidasPresupuestales = collect($this->partidasPresupuestales);
+                    ->get();
 
+                    $cuentasDevengadas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+                    ->whereIn('interaccion_cuenta_conceptos.concepto_id', [63, 64, 56, 58])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
+                    ->orderBy('cuentas.Codigo_cuenta')->get();
+           
+                    // Log::info($cuentasComprometidas);
+                    // Log::info('______________________________________________________________________________');
+                    // Log::info($cuentasDevengadas);
+                    $cuentasDevengadasAux = new Collection();
+                    foreach($cuentasDevengadas as $devengada){
+                        foreach($cuentasComprometidas as $comprometida){
+                             $conceptoComprometida = explode('(', $comprometida->concepto);
+                             if(str_contains($devengada->Descripcion_cuenta, $conceptoComprometida[0])){
+                                 $cuentasDevengadasAux->push($devengada);
+                             }
+                        }
+                    }
+                    $this->partidasPresupuestales = $cuentasDevengadasAux;
         }catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar el evento en Devengado del capítulo 4: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
@@ -123,14 +132,16 @@ class EgresosCapitulo4DevengadoForm extends Component
 
     public function llenarCuentasContables(){
         if(!$this->partidaPresupuestal) return;
-
+        
         if ($this->cambiarCuentaContableSeleccionada) {
             $this->cuentaContable = "";
         }
-
+        
         try{
             $this->cambiarCuentaContableSeleccionada = true;
+            
             $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('interaccion_cuenta_conceptos.concepto_id', [63, 64, 56, 58])
+           
             ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
             $this->cuentasContables = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
                 ->join('interaccion_cuenta_conceptos', function ($join) {
