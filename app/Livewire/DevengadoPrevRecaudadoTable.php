@@ -462,6 +462,8 @@ class DevengadoPrevRecaudadoTable extends Tabla
                         'updated_at' => $fecha
                     ]);
                 }
+            }else{
+                $this->numeroPolizaRemanente = 0;
             }
             $importeTotalEvento = DB::select('EXEC ImporteTotalDevengadoPrevRecaudado @evento = ?', [$this->numeroEvento]);
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
