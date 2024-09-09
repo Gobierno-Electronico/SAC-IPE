@@ -234,7 +234,7 @@ class EgresosCapitulo4ComprometidoTable extends Tabla
             $fecha->year($anioActual);
 
             $bitacora = new BitacoraController();
-            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un devengado con evento: '.$this->numeroEvento, request());
+            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un comprometido del capítulo 4 con evento: '.$this->numeroEvento, request());
             DB::beginTransaction();
 
             foreach ($this->dataCompleta as $movimiento) {
