@@ -7,14 +7,21 @@ use App\Clases\Column;
 use Livewire\Attributes\On;
 use App\Livewire\Tabla;
 use Illuminate\Database\Eloquent\Builder;
+use App\Http\Controllers\BitacoraController;
 use App\Models\Poliza;
-
+use Carbon\Carbon;
+use App\Models\InteraccionCuentaCuenta;
+use App\Models\InteraccionCuentaConcepto;
+use Log;
+use DB;
 class EgresosCapitulo4EjercidoTable extends Tabla
 {
     public $cacheData = [];
     public $dataCompleta = [];
     public $perPage = 6;
     public $total = 0;
+    public $totalDisponible = 0;
+    public $numeroEvento;
     
     public function render()
     {
@@ -63,8 +70,8 @@ class EgresosCapitulo4EjercidoTable extends Tabla
                     'partida' => $registro['codigoPartida'] . ' ' . $registro['descripcionPartida'],
                     'cuentaContable' => $registro['codigoCuentaContable'] . ' ' . $registro['descripcionCuentaContable'],
                     'mes' => $registro['mes'],
-                    'movimiento' => 'DEVENGADO', 
-                    'pttoComprometido' => $registro['pttoComprometido'],
+                    'movimiento' => 'EJERCIDO', 
+                    'pttoComprometido' => $registro['pttoDevengado'],
                     'importe' => $registro['importe'],
                     'disponibilidad' => $this->totalDisponible,
                 ];
@@ -79,9 +86,32 @@ class EgresosCapitulo4EjercidoTable extends Tabla
                 $this->dispatch('cambioTotal', total: $this->total);
             }
         }catch (\Throwable $th) {
-            Log::error('Ocurrió un error al agregar registro en devengado del capítulo 4: '. $th->getMessage());
+            Log::error('Ocurrió un error al agregar registro en ejercido del capítulo 4: '. $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
+    }
+
+    public function verificarPresupuesto($registro)
+    {
+        $solvencia = $registro['pttoDevengado'];
+        $this->totalDisponible = $solvencia - $registro['importe'];
+        $totalImportes = 0;
+
+        foreach ($this->cacheData as $movimiento){
+            if(str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoPartida']) && $movimiento['mes'] == $registro['mes']){
+                $totalImportes += $movimiento['importe'];
+            }
+        }
+
+        if($totalImportes > 0){
+            $this->totalDisponible = $solvencia - $totalImportes - $registro['importe'];
+        }
+
+        if($this->totalDisponible < 0){
+            $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto devengado insuficiente', tipo: 'warning', tiempo: 3000);
+            return false;
+        }
+        return true;
     }
 
     public function edit($id)
@@ -149,6 +179,35 @@ class EgresosCapitulo4EjercidoTable extends Tabla
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al eliminar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
+
+    public function recalcularDisponibilidad($id)
+    {
+        $datosSeleccionado = [];
+        foreach ($this->dataCompleta as $key => $registro) {
+            if ($registro['id'] == $id) {
+                $datosSeleccionado = [
+                    'codigoArea' => $registro['codigoAreaResponsable'],
+                    'codigoCuentaPartida' => $registro['codigoPartida'],
+                    'mes' => $registro['mes']
+                ];
+            }
+        }
+
+        $totalImportes = 0;
+        foreach($this->cacheData as $key => $movimiento) {
+            if($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuentaPartida']) && $movimiento['mes'] == $datosSeleccionado['mes']) {
+                if($totalImportes == 0){
+                    $movimiento['disponibilidad'] = $movimiento['pttoDevengado'] - $movimiento['importe'];
+                    $totalImportes += $movimiento['importe'];
+                }else{
+                    $movimiento['disponibilidad'] = $movimiento['pttoDevengado'] - $totalImportes - $movimiento['importe'];
+                    $totalImportes += $movimiento['importe'];
+                }
+                $this->cacheData[$key] = $movimiento;
+            }
+        }
+    }
+
 
     public function changeState($value)
     {

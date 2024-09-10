@@ -19,6 +19,8 @@ use DB;
 class EgresosCapitulo4EjercidoForm extends Component
 {
     public $consultarRegistro = false;
+    public $numeroPoliza;
+    public $total;
 
     #[Validate('required', message: 'Área solicitante requerida')]
     public $selectCodigoArea = "";
