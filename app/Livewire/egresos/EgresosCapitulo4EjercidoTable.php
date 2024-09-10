@@ -47,6 +47,43 @@ class EgresosCapitulo4EjercidoTable extends Tabla
         ];
     }
 
+    #[On('agregar-registro')]
+    public function agregarRegistro($registro)
+    {
+        try{
+            if ($this->total + $registro['importe'] > $registro['montoEvento']) {
+                $this->dispatch('mostrarMensaje', mensaje: 'Monto total del evento superado', tipo: 'error', tiempo: 3000);
+                return;
+            }
+
+            if($this->verificarPresupuesto($registro)){
+                $nuevoRegistro = [
+                    'id' => 0,
+                    'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
+                    'partida' => $registro['codigoPartida'] . ' ' . $registro['descripcionPartida'],
+                    'cuentaContable' => $registro['codigoCuentaContable'] . ' ' . $registro['descripcionCuentaContable'],
+                    'mes' => $registro['mes'],
+                    'movimiento' => 'DEVENGADO', 
+                    'pttoComprometido' => $registro['pttoComprometido'],
+                    'importe' => $registro['importe'],
+                    'disponibilidad' => $this->totalDisponible,
+                ];
+                array_push($this->cacheData, $nuevoRegistro);
+                array_push($this->dataCompleta, $registro);
+                $this->total = 0;
+                foreach ($this->cacheData as $key => $registro) {
+                    $this->cacheData[$key]['id'] = $key + 1; 
+                    $this->dataCompleta[$key]['id'] = $key + 1;
+                    $this->total += $registro['importe'];
+                }
+                $this->dispatch('cambioTotal', total: $this->total);
+            }
+        }catch (\Throwable $th) {
+            Log::error('Ocurrió un error al agregar registro en devengado del capítulo 4: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
+    }
+
     public function edit($id)
     {
         {
