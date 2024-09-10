@@ -6,7 +6,7 @@ use Livewire\Component;
 use Livewire\Attributes\Validate;
 use Livewire\Attributes\On;
 
-class EgresosCapitulo5PagadoForm extends Component
+class EgresosCapitulo5DevengadoForm extends Component
 {
     public $consultarRegistro = false;
 
@@ -28,8 +28,8 @@ class EgresosCapitulo5PagadoForm extends Component
     #[Validate('required', message: 'Partida presupuestal requerida')]
     public $partidaPresupuestal = "";
 
-    #[Validate('required', message: 'Método de pago requerido')]
-    public $metodoPago = "";
+    #[Validate('required', message: 'Cuenta contable requerida')]
+    public $cuentaContable = "";
 
     #[Validate('required', message: 'Mes requerido')]
     public $mes = "";
@@ -40,14 +40,17 @@ class EgresosCapitulo5PagadoForm extends Component
     #[Validate('required', message: 'Monto del evento requerido')]
     public $montoDelEvento = "";
 
-    #[Validate('required', message: 'Pago de retenciones requerido')]
-    public $pagoRetenciones = "";
+    public $PTTOComprometido = 0;
+
+    public $partidasPresupuestales = [];
+    public $cuentasContables = [];
 
     public function render() 
     {
-        $cuentas = ['prueba1', 'prueba2'];
+        $partidasPresupuestales = ['prueba1', 'prueba2'];
+        $cuentasContables = ['prueba1', 'prueba2'];
         $eventos = ['pruebaEvento1', 'pruebaEvento2'];
-        return view('livewire.egresos.egresos-capitulo5-pagado-form', ['cuentas' => $cuentas], ['eventos' => $eventos]);
+        return view('livewire.egresos.egresos-capitulo5-devengado-form', ['cuentas' => $cuentasContables, 'partidas' => $partidasPresupuestales, 'eventos' => $eventos]);
     }
 
     public function cambioEvento(){

@@ -34,6 +34,10 @@ class EgresosCapitulo5EjercidoForm extends Component
     #[Validate('required', message: 'Importe requerido')]
     public $importe = "";
 
+    #[Validate('required', message: 'Monto del evento requerido')]
+    public $montoDelEvento = "";
+
+
     public function render() 
     {
         $cuentas = ['prueba1', 'prueba2'];

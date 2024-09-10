@@ -18,15 +18,12 @@
                                 disabled>
                         </div>
                     </div>
-
-
                 </div>
-
             </div>
         </div>
-        <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-        tipoMovimiento="PolizaEgresosComprometidoCapitulo5" urlFinalizar="/capitulo5-comprometido" tipoPoliza="E"
-        categoriaModulo='EGRESOS COMPROMETIDO CAPITULO 5' />
+        <livewire:egresos.egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+            tipoMovimiento="PolizaEgresosDevengadoCapitulo5" urlFinalizar="/capitulo5-devengado" tipoPoliza="E"
+            categoriaModulo='EGRESOS DEVENGADO CAPITULO 5' />
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
@@ -54,9 +51,21 @@
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
         <div class="row">
             <div class="col-3">
+                <label for="inputSeguimientoEvento" class="form-label mt-3">Número de seguimiento de evento</label>
+                <select name="selectSeguimientoEvento" id="selectSeguimientoEvento" class="form-select" wire:model="numeroEvento" wire:change="cambioEvento">
+                    <option value="" disabled>
+                        Seleccionar un evento
+                    </option>
+                    @foreach ($eventos as $evento  => $descripcion)
+                        <option value="{{ $evento }}">
+                           {{ $evento }} - {{$descripcion}}
+                        </option>
+                    @endforeach
+                </select>
+
                 <label for="selectAreaResponsable" class="form-label mt-3">Área responsable</label>
                 <select name="selectAreaResponsable" id="selectAreaResponsable" class="form-select"
-                    wire:model="selectCodigoAreaResponsable">
+                    wire:model="selectCodigoAreaResponsable" wire:change="cargarPresupuestoComprometido">
                     <option value="" @if ($this->selectCodigoAreaResponsable == '') selected @endif disabled>
                         Seleccionar un área
                     </option>
@@ -69,17 +78,27 @@
                     @endforeach
                 </select>
 
+                <label for="selectPartidaPresupuestal" class="form-label mt-3">Partida presupuestal</label>
+                <select name="selectPartidaPresupuestal" id="selectPartidaPresupuestal" class="form-select" wire:model="partidaPresupuestal" wire:change="llenarCuentasContables">
+                    <option value="" selected disabled>Seleccionar partida presupuestal</option>
+                    @foreach ($partidasPresupuestales as $partida)
+                        <option value="{{ $partida->cuenta_id }}">
+                            {{ $partida->Codigo_cuenta . '  ' . $partida->Descripcion_cuenta }}</option>
+                    @endforeach
+                </select>
+
                 <label for="selectCuenta" class="form-label mt-3">Cuenta contable</label>
-                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta">
-                    <option value="" disabled>Seleccionar cuenta</option>
-                    @foreach ($cuentas as $cuenta)
-                        <option value="{{ $cuenta }}"> <!-- $cuenta->cuenta_id -->
-                            {{ $cuenta /* $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta */ }}</option>
+                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuentaContable">
+                    <option value="" selected disabled>Seleccionar cuenta</option>
+                    @foreach ($cuentasContables as $cuenta)
+                        <option value="{{ $cuenta->cuenta_id }}"> 
+                            {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}
+                        </option>
                     @endforeach
                 </select>
 
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
-                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes">
+                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes" wire:change="cargarPresupuestoComprometido">
                     <option value="" selected disabled>Seleccionar mes...</option>
                     @foreach (range(1, 12) as $mes)
                         @php
@@ -90,16 +109,19 @@
                     @endforeach
                 </select>
 
-                <label for="inputPTTOEjecutar" class="form-label mt-3">Presupuesto por ejecutar</label>
-                <input type="text" name="inputPTTOEjecutar" id="inputPTTOEjecutar" class="form-control" disabled>
+                <label for="inputMontoEvento" class="form-label mt-3">Monto del evento</label>
+                <input type="text" name="inputMontoEvento" id="inputMontoEvento" class="form-control" disabled>
 
+                <label for="inputPTTOComprometido" class="form-label mt-3">Presupuesto comprometido</label>
+                <input type="text" name="inputPTTOComprometido" id="inputPTTOComprometido" class="form-control" disabled>
+                
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control"
                     onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model="importe">
             </div>
 
             <div class="col">
-                <livewire:egresos.egresos-capitulo4-comprometido-table />
+                <livewire:egresos.egresos-capitulo5-devengado-table />
             </div> 
 
             <div class="row mt-4">
@@ -124,14 +146,6 @@
 
     window.addEventListener('limpiar', event => {
         limpiar()
-    })
-
-    window.addEventListener('limpiarIVA', event => {
-        limpiarIVA()
-    })
-
-    window.addEventListener('limpiarImporteIva', event => {
-        limpiarImporteIva()
     })
 
     function keyPress(e, obj) {
@@ -162,6 +176,6 @@
     }
 
     function limpiar() {
-        $('#inputPTTOEjecutar').val('');
+        $('#inputPTTOComprometido').val('');
     }
 </script>

@@ -24,9 +24,9 @@
 
             </div>
         </div>
-        {{--         <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaIngresosDevengado" urlFinalizar="/ingresos-devengado" tipoPoliza="I"
-            categoriaModulo='INGRESOS DEVENGADO' /> --}}
+        <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+        tipoMovimiento="PolizaEgresosPagadoCapitulo5" urlFinalizar="/capitulo5-pagado" tipoPoliza="E"
+        categoriaModulo='EGRESOS PAGADO CAPITULO 5' />
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
@@ -112,6 +112,9 @@
                         </option>
                     @endforeach
                 </select>
+
+                <label for="inputMontoEvento" class="form-label mt-3">Monto del evento</label>
+                <input type="text" name="inputMontoEvento" id="inputMontoEvento" class="form-control" disabled>
 
                 <label for="inputPTTOEjercido" class="form-label mt-3">Presupuesto ejercido</label>
                 <input type="text" name="inputPTTOEjercido" id="inputPTTOEjercido" class="form-control" disabled>

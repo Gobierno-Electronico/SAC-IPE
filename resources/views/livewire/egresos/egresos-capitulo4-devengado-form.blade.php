@@ -148,14 +148,6 @@
         limpiar()
     })
 
-    window.addEventListener('limpiarIVA', event => {
-        limpiarIVA()
-    })
-
-    window.addEventListener('limpiarImporteIva', event => {
-        limpiarImporteIva()
-    })
-
     function keyPress(e, obj) {
         let isCurrency = $('#' + obj.id).val().search(/[$]/)
         let texto = $('#' + obj.id).val().replace(/[^0-9.]/g, '');
