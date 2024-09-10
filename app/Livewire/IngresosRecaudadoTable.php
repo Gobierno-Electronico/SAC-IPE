@@ -342,7 +342,7 @@ class IngresosRecaudadoTable extends Tabla
                 ->where('evento', '=', $this->numeroEvento)->where('concepto', 'LIKE', '%(Recaudado)%')->get();
             $totalRemanente = DB::select('EXEC ImporteTotalRecaudado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             if ($totalRemanente > 0) {
-
+                // Se suma el total de los movimientos agrupados por conceptos
                 foreach ($polizasInicialesIngresosDevengado as $polizaImporte) {
                     $clave = $polizaImporte->cuenta . '-' . $polizaImporte->concepto;
                     if (isset($resultado[$clave])) {
@@ -379,7 +379,7 @@ class IngresosRecaudadoTable extends Tabla
                             $total = $total - $polizaRecaudado['total'];
                         }
                     }
-                    
+                    // se creal la poliza con los importes sumados
                     Poliza::create([
                         'area' => $polizaInicial['area'],
                         'tipo_poliza' => 'IAUX',

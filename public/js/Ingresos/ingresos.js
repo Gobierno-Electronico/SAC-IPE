@@ -15,7 +15,7 @@ function generarPoliza(btn) {
     console.log(nombrereporte)
     const wsUrl = "http://"+IP_PORT+"/Reporteador/webresources/service/report?name="+nombrereporte+"&params="
     url = `${wsUrl}Fecha;${$('#botonFecha').val()},Hora;${$('#botonHora').val()},Numero;${$('#botonNumeroPoliza').val()},Evento;${$('#botonEvento').val()}`;
-    let mensajeEdoSolicitud = toastr.info("Procesando solicitud, espere un momento por favor . . .", "", { timeOut: "0" });
+    let mensajeEdoSolicitud = toastr.info("Procesando solicitud, espere un momento por favor . . .", "", { timeOut: "0" }); 
     fetch(url, {
         method: "GET",
     })
