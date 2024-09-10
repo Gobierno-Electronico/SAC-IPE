@@ -47,7 +47,7 @@
         <input type="text" name="inputObservacion" id="inputObservacion" class="form-control"
             wire:model="observaciones">
 
-        <label for="inputFechaAfectacion" class="form-label mt-3">Fecha de afetación</label>
+        <label for="inputFechaAfectacion" class="form-label mt-3">Fecha de afectación</label>
         <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control"
             wire:model="fechaAfectacion">
 
