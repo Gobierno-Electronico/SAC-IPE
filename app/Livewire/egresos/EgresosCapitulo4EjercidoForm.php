@@ -174,15 +174,67 @@ class EgresosCapitulo4EjercidoForm extends Component
     public function agregarRegistro()
     {
         try{
+            $this->importe = floatval(str_replace(['$', ','], "", $this->importe));
+            $this->importe = ($this->importe > 0)  ? $this->importe : "";
             $this->validate();
+
+            $cuenta = Cuenta::find($this->cuenta);
+            $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
+
+            $registro = [
+                'id' => 0,
+                'codigoArea' => $this->selectCodigoArea,
+                'observaciones' => $this->observaciones,
+                'fechaAfectacion' => $this->fechaAfectacion,
+                'evento' => $this->numeroEvento,
+                'areaResponsableId' => $this->selectCodigoAreaResponsable,
+                'codigoAreaResponsable' => $departamento->Codigo_completo,
+                'descripcionAreaResponsable' => $departamento->Nombre,
+                'cuentaId' => $this->cuenta,
+                'codigoCuenta' => $cuenta->Codigo_cuenta,
+                'descripcionCuenta' => $cuenta->Descripcion_cuenta,
+                'mes' => $this->mes,
+                'importe' => $this->importe,
+                'montoEvento' => $this->montoDelEvento,
+                'pttoDevengado' => $this->PTTODevengado
+            ];
+
+            $this->dispatch('agregar-registro', registro: $registro);
+            $this->limpiar();
         }catch (\Illuminate\Validation\ValidationException $e) {
             $this->dispatch('mostrarMensaje', mensaje: $e->getMessage(), tipo: 'warning', tiempo: 3000);
         }
     }
 
-    public function finalizarRegistro()
+    public function limpiar()
     {
-        
+        $this->PTTODevengado = "";
+        $this->importe = "";
+        $this->mes = "";
+        $this->dispatch('limpiar');
     }
 
+    public function llenarFormulario($datosRegistro)
+    {
+        $this->cuenta = $datosRegistro['partida'];
+        $this->mes = $datosRegistro['mes'];
+        $this->importe = $datosRegistro['importe'];
+        $this->selectCodigoAreaResponsable = $datosRegistro['area'];
+        $this->PTTODevengado = $datosRegistro['pttoDevengado'];
+        $this->dispatch('llenarFormulario', presupuesto: $this->PTTODevengado, importe: $this->importe);
+
+    }
+
+    #[On('consultar-registro')]
+    public function consultarRegistros($numeroEvento, $numeroPoliza, $total)
+    {
+        $this->consultarRegistro = true;
+        $this->numeroEvento = $numeroEvento;
+        $this->numeroPoliza = $numeroPoliza;
+        $this->total = $total;
+    }
+    public function finalizarRegistros()
+    {
+        $this->dispatch('finalizar-registros');
+    }
 }

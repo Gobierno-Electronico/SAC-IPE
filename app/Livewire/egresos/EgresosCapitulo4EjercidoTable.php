@@ -47,7 +47,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
             Column::make('partida', 'Partida'),
             Column::make('mes', 'Mes'),
             Column::make('movimiento', 'Movimiento'),
-            Column::make('pptoDevengado', 'PPTO Devengado')->component('columns.importe'),
+            Column::make('pttoDevengado', 'PPTO Devengado')->component('columns.importe'),
             Column::make('importe', 'Importe')->component('columns.importe'),
             Column::make('disponibilidad', 'Disponibilidad')->component('columns.importe'),
             Column::make('id', 'Acciones')->component('columns.accionesIngresos')
@@ -67,11 +67,10 @@ class EgresosCapitulo4EjercidoTable extends Tabla
                 $nuevoRegistro = [
                     'id' => 0,
                     'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
-                    'partida' => $registro['codigoPartida'] . ' ' . $registro['descripcionPartida'],
-                    'cuentaContable' => $registro['codigoCuentaContable'] . ' ' . $registro['descripcionCuentaContable'],
+                    'partida' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
                     'mes' => $registro['mes'],
                     'movimiento' => 'EJERCIDO', 
-                    'pttoComprometido' => $registro['pttoDevengado'],
+                    'pttoDevengado' => $registro['pttoDevengado'],
                     'importe' => $registro['importe'],
                     'disponibilidad' => $this->totalDisponible,
                 ];
@@ -98,7 +97,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
         $totalImportes = 0;
 
         foreach ($this->cacheData as $movimiento){
-            if(str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoPartida']) && $movimiento['mes'] == $registro['mes']){
+            if(str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoCuenta']) && $movimiento['mes'] == $registro['mes']){
                 $totalImportes += $movimiento['importe'];
             }
         }
@@ -125,9 +124,9 @@ class EgresosCapitulo4EjercidoTable extends Tabla
                         $datosRegistro = [
                             'area' => $registro['areaResponsableId'],
                             'cuenta' => $registro['cuentaId'],
-                            'cuentaPago' => $registro['cuentaPagoId'],
                             'mes' => $registro['mes'],
-                            'importe' => $registro['importe']
+                            'importe' => $registro['importe'],
+                            'pttoDevengado' => $registro['pttoDevengado']
                         ];
                         unset($this->dataCompleta[$key]);
                         $this->dispatch('llenar-formulario', $datosRegistro);
@@ -146,7 +145,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
                 $this->total = $totalActualizado;
                 $this->dispatch('cambioTotal', total: $totalActualizado);
             } catch (\Throwable $th) {
-                Log::error('Ocurrió un error al editar en ejercido: '. $th->getMessage());
+                Log::error('Ocurrió un error al editar en ejercido del capitulo 4: '. $th->getMessage());
                 $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al editar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
             }
         }
@@ -187,7 +186,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
             if ($registro['id'] == $id) {
                 $datosSeleccionado = [
                     'codigoArea' => $registro['codigoAreaResponsable'],
-                    'codigoCuentaPartida' => $registro['codigoPartida'],
+                    'codigoCuentaPartida' => $registro['codigoCuenta'],
                     'mes' => $registro['mes']
                 ];
             }
@@ -208,6 +207,111 @@ class EgresosCapitulo4EjercidoTable extends Tabla
         }
     }
 
+
+    #[On('finalizar-registros')]
+    public function finalizarRegistros()
+    {
+        if (empty($this->cacheData)) {
+            $this->dispatch('mostrarMensaje', mensaje: 'Tabla sin registros', tipo: 'error', tiempo: 3000);
+            return;
+        }
+
+        try {
+            $numerosPolizas = Poliza::select('numero_poliza')
+                ->where('tipo_poliza', '=', 'E')
+                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->distinct()
+                ->orderBy('numero_poliza')
+                ->pluck('numero_poliza')
+                ->toArray();
+            sort($numerosPolizas);
+            $this->numeroPoliza = (int)end($numerosPolizas) + 1;
+
+            $this->numeroEvento = $this->dataCompleta[0]['evento'];
+
+            $anioActual = Carbon::now()->year;
+            $fecha = Carbon::now('America/Mexico_City');
+            $fecha->year($anioActual);
+
+            $bitacora = new BitacoraController();
+            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un ejercido del capítulo 4 con evento: ' . $this->numeroEvento, request());
+            DB::beginTransaction();
+
+            foreach ($this->dataCompleta as $movimiento) {
+                $movimiento['importe'] = doubleval($movimiento['importe']);
+                $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaId'])->whereIn('concepto_id', [59, 60, 61, 62])
+                    ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
+
+                $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
+                    ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+                    ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
+
+                $interaccionCuentaCuentasFiltradas = [];
+                foreach ($interaccionCuentaCuentas as $cuenta) {
+                    if ($cuenta['tipo_interaccion'] == 'Contable - Abono') {
+                        if ($cuenta['Codigo_cuenta'] == $movimiento['codigoCuentaContable']) {
+                            $interaccionCuentaCuentasFiltradas[] = $cuenta;
+                            continue;
+                        }
+                    } else {
+                        $interaccionCuentaCuentasFiltradas[] = $cuenta;
+                    }
+                }
+
+                $interaccionCuentaCuentas = $interaccionCuentaCuentasFiltradas;
+
+                $polizas = [
+                    [
+                        'area' => $movimiento['codigoAreaResponsable'],
+                        'tipo_poliza' => 'E',
+                        'numero_poliza' =>  $this->numeroPoliza,
+                        'fecha' => $movimiento['fechaAfectacion'],
+                        'cuenta' => $movimiento['codigoCuenta'],
+                        'concepto' => $movimiento['descripcionCuenta'],
+                        'total' => abs($movimiento['importe']),
+                        'mes' => $movimiento['mes'],
+                        'descripcion' => $movimiento['observaciones'],
+                        'evento' => $this->numeroEvento,
+                        'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
+                        'validado' => false,
+                        'estatus_evento' => true,
+                        'categoria' => 'EGRESOS EJERCIDO CAPITULO 4',
+                        'created_at' => $fecha,
+                        'updated_at' => $fecha
+                    ]
+                ];
+
+                foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
+                    array_push($polizas, [
+                        'area' => $movimiento['codigoAreaResponsable'],
+                        'tipo_poliza' => 'E',
+                        'numero_poliza' =>  $this->numeroPoliza,
+                        'fecha' => $movimiento['fechaAfectacion'],
+                        'cuenta' => $dataCuenta['Codigo_cuenta'],
+                        'concepto' => $dataCuenta['Descripcion_cuenta'],
+                        'total' => $movimiento['importe'],
+                        'mes' => $movimiento['mes'],
+                        'descripcion' => $movimiento['observaciones'],
+                        'evento' => $this->numeroEvento,
+                        'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
+                        'validado' => false,
+                        'estatus_evento' => true,
+                        'categoria' => 'EGRESOS EJERCIDO CAPITULO 4',
+                        'created_at' => $fecha,
+                        'updated_at' => $fecha
+                    ]);
+                }
+
+                Poliza::insert($polizas);
+                DB::commit();
+            }
+            $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error('Ocurrió un error al finalizarRegistro en ejercido del capítulo 4: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
+    }
 
     public function changeState($value)
     {
