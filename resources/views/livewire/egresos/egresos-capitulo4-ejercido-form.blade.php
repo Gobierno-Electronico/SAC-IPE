@@ -148,6 +148,15 @@
         }
     }
 
+    window.addEventListener('llenarFormulario', event => {
+        let parametros = event.__livewire.params
+        console.log(parametros)
+        $('#inputPTTODevengado').val(parametros.presupuesto);
+        $('#inputImporte').val(parametros.importe);
+        formatearImporte({id: 'inputImporte'})
+        formatearImporte({id: 'inputPTTODevengado'})
+    });
+
     function formatearImporte(obj, amount = '') {
         amount = (amount) ? amount : $('#' + obj.id).val().replace(/[^0-9.]/g, '');
         amount = parseFloat(amount);

@@ -128,8 +128,9 @@ class EgresosCapitulo4EjercidoTable extends Tabla
                             'importe' => $registro['importe'],
                             'pttoDevengado' => $registro['pttoDevengado']
                         ];
+
                         unset($this->dataCompleta[$key]);
-                        $this->dispatch('llenar-formulario', $datosRegistro);
+                        $this->dispatch('llenarFormulario', $datosRegistro);
                         break;
                     }
                 }

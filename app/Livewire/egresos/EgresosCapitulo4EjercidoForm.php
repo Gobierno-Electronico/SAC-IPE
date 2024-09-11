@@ -47,7 +47,7 @@ class EgresosCapitulo4EjercidoForm extends Component
     public $montoDelEvento = "";
 
     #[Validate('required', message: 'Importe requerido')]
-    public $importe = "";
+    public $importe;
 
     public $cuentasContables = [];
     public $cambiarCuentaSeleccionada = true;
@@ -216,6 +216,7 @@ class EgresosCapitulo4EjercidoForm extends Component
 
     public function llenarFormulario($datosRegistro)
     {
+
         $this->cuenta = $datosRegistro['partida'];
         $this->mes = $datosRegistro['mes'];
         $this->importe = $datosRegistro['importe'];
