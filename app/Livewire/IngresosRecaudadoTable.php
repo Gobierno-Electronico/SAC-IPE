@@ -377,8 +377,16 @@ class IngresosRecaudadoTable extends Tabla
 
                         if (str_contains($polizaInicial['concepto'], rtrim($conceptoGeneral[0])) !== false && $conceptoGeneral[1] == 'Recaudado)') {
                             $total = $total - $polizaRecaudado['total'];
+                            
+                            if(number_format($total, 2) < 0){
+                                dd($total);
+                                DB::rollBack();
+                                $this->dispatch('mostrarMensaje', mensaje: 'Se excedió el monto $' .number_format($polizaInicial['total'], 2). ' de la cuenta de ' . $polizaInicial['concepto']. ' con IVA', tipo: 'error', tiempo: 3000);
+                                return;
+                            }
                         }
                     }
+                    if(number_format($total, 2) > 0){
                     // se creal la poliza con los importes sumados
                     Poliza::create([
                         'area' => $polizaInicial['area'],
@@ -398,6 +406,7 @@ class IngresosRecaudadoTable extends Tabla
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);
+                }
                 }
             } else {
                 $this->numeroPolizaRemanente = 0;
