@@ -220,7 +220,7 @@ class EgresosCapitulo4DevengadoForm extends Component
     #[On('llenar-formulario')]
     public function llenarFormulario($datosRegistro)
     {
-        $this->partidaPresupuestal = $datosRegistro['partida'];
+        $this->partidaPresupuestal = $datosRegistro['partida']; 
         $this->cuentaContable = $datosRegistro['cuentaContable'];
         $this->mes = $datosRegistro['mes'];
         $this->importe = $datosRegistro['importe'];
