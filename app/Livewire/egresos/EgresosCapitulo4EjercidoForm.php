@@ -49,11 +49,8 @@ class EgresosCapitulo4EjercidoForm extends Component
     #[Validate('required', message: 'Importe requerido')]
     public $importe;
 
-    public $cuentasContables = [];
     public $cambiarCuentaSeleccionada = true;
-
     public $partidasPresupuestales = [];
-    public $cambiarPartidaPresupuestalSeleccionada = true;
     public $PTTODevengado = 0;
 
     public function render() 
@@ -188,6 +185,9 @@ class EgresosCapitulo4EjercidoForm extends Component
             $this->limpiar();
         }catch (\Illuminate\Validation\ValidationException $e) {
             $this->dispatch('mostrarMensaje', mensaje: $e->getMessage(), tipo: 'warning', tiempo: 3000);
+        }catch (\Throwable $th) {
+            Log::error('Ocurrió un error al agregar registro en ejercido del capítulo 4: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 

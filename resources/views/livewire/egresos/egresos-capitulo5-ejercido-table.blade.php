@@ -51,3 +51,18 @@
         </div>
     </div>
 </div>
+<script>
+    window.addEventListener('cambioTotal', event => {
+        let parametros = event.__livewire.params
+        $('#total').val(parametros.total);
+        formatearImporte({id: 'total'})
+    });
+
+    window.addEventListener('llenarFormulario', event => {
+        let parametros = event.__livewire.params
+        $('#inputPTTODevengado').val(parametros.presupuesto);
+        $('#inputImporte').val(parametros.importe);
+        formatearImporte({id: 'inputImporte'})
+        formatearImporte({id: 'inputPTTODevengado'})
+    }); 
+</script>

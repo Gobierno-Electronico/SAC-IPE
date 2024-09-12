@@ -302,7 +302,6 @@ class EgresosCapitulo4DevengadoTable extends Tabla
                 }
 
                 Poliza::insert($polizas);
-                DB::commit();
             }
             $importeTotalEvento = DB::select('EXEC ImporteTotalCapitulo4Devengado @evento = ?', [$this->numeroEvento]);
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
@@ -310,6 +309,7 @@ class EgresosCapitulo4DevengadoTable extends Tabla
                     ->whereIn('categoria', ['EGRESOS COMPROMETIDO CAPITULO 4'])
                     ->update(['estatus_evento' => false]);
             }
+            DB::commit();
             $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
         }catch (\Throwable $th) {
             DB::rollBack();
