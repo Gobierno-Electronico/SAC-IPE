@@ -31,7 +31,7 @@ class EgresosCapitulo4ComprometidoTable extends Tabla
 
     public function query(): Builder
     {
-
+        return Poliza::query();
     }
 
     public function data()
