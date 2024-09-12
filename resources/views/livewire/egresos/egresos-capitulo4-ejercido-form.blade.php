@@ -102,6 +102,9 @@
                     @endforeach
                 </select>
 
+                <label for="inputMontoEvento" class="form-label mt-3">Monto del evento</label>
+                <input type="text" name="inputMontoEvento" id="inputMontoEvento" class="form-control" disabled>
+
                 <label for="inputPTTODevengado" class="form-label mt-3">Presupuesto devengado</label>
                 <input type="text" name="inputPTTODevengado" id="inputPTTODevengado" class="form-control" disabled>
 
@@ -147,15 +150,6 @@
             $('#' + obj.id).val(amount.toLocaleString());
         }
     }
-
-    window.addEventListener('llenarFormulario', event => {
-        let parametros = event.__livewire.params
-        console.log(parametros)
-        $('#inputPTTODevengado').val(parametros.presupuesto);
-        $('#inputImporte').val(parametros.importe);
-        formatearImporte({id: 'inputImporte'})
-        formatearImporte({id: 'inputPTTODevengado'})
-    });
 
     function formatearImporte(obj, amount = '') {
         amount = (amount) ? amount : $('#' + obj.id).val().replace(/[^0-9.]/g, '');

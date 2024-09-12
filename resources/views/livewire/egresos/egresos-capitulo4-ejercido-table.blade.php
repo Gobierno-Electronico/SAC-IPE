@@ -65,5 +65,5 @@
         $('#inputImporte').val(parametros.importe);
         formatearImporte({id: 'inputImporte'})
         formatearImporte({id: 'inputPTTODevengado'})
-    });
+    }); 
 </script>
