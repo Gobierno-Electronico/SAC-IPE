@@ -133,6 +133,7 @@ class PresupuestoController extends Controller
                 $reemplazarCaracterEspecial = function ($texto) {
                     return str_replace("\xc2\xa0", '', $texto);
                 };
+            
                 $numeroRegistros = 0;
                 foreach ($xlsx->rows() as $numero_fila => $datos_fila) {
                     if ($numero_fila === 0) {
@@ -143,7 +144,54 @@ class PresupuestoController extends Controller
                     if (count($encabezados) != count($datos_fila)) {
                         dd($encabezados, $datos_fila);
                     }
-                    $rows[] = array_combine(array_map('trim', array_filter($encabezados)), array_map('trim', array_map($reemplazarCaracterEspecial, $datos_fila)));
+            
+                    // Se combinan los encabezados y los datos de la fila para formar un array asociativo
+                    $row = array_combine(
+                        array_map('trim', array_filter($encabezados)),
+                        array_map('trim', array_map($reemplazarCaracterEspecial, $datos_fila))
+                    );
+            
+                    // Verificar las columnas 'TOTAL', 'ENERO', 'FEBRERO', etc.
+                    $meses = ['TOTAL', 'ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
+            
+                    foreach ($meses as $mes) {
+                        if (isset($row[$mes])) {
+                            $valor = $row[$mes];
+            
+                            // Eliminar posibles caracteres no numéricos (espacios o caracteres especiales)
+                            $valor = preg_replace('/[^\d.-]/', '', $valor);
+            
+                            // Validar si el valor es numérico
+                            if (!is_numeric($valor)) {
+                                $errores[] = "El valor de $mes en la fila $numero_fila no es numérico.";
+                                continue;
+                            }
+            
+                            // Validar si el valor es mayor o igual a 0 (no negativo)
+                            if ($valor < 0) {
+                                $errores[] = "El valor de $mes en la fila $numero_fila no debe ser negativo.";
+                            }
+            
+                            // Validar si el valor tiene como máximo dos decimales
+                            if (!preg_match('/^\d+(\.\d{1,2})?$/', $valor)) {
+                                $errores[] = "El valor de $mes en la fila $numero_fila debe tener como máximo dos dígitos después del punto decimal.";
+                            }
+            
+                            // Asignar el valor limpio de vuelta al array
+                            $row[$mes] = $valor;
+                        }
+                    }
+            
+                    // Agregar la fila procesada al array de filas válidas
+                    $rows[] = $row;
+                }
+            
+                // Si hay errores, devolverlos y abortar la operación
+                if (!empty($errores)) {
+                    // dd($errores);
+                    session()->flash('message', implode('<br>', $errores));
+                    session()->flash('message_type', 'error');
+                    return back();
                 }
                 // Se inicia una transacción de base de datos para que todas las operaciones de base de datos dentro del bloque se puedan revertir si ocurre algún error.
                 $usuariosController = new BitacoraController();
