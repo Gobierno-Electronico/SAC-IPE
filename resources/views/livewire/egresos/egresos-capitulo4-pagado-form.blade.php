@@ -24,9 +24,9 @@
 
             </div>
         </div>
-        {{--         <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaIngresosDevengado" urlFinalizar="/ingresos-devengado" tipoPoliza="I"
-            categoriaModulo='INGRESOS DEVENGADO' /> --}}
+                <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+            tipoMovimiento="PolizaEgresosPagadoCapitulo4" urlFinalizar="/capitulo4-pagado" tipoPoliza="E"
+            categoriaModulo='EGRESOS DEVENGADO CAPITULO 4' />
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
@@ -59,16 +59,16 @@
                     <option value="" disabled>
                         Seleccionar un evento
                     </option>
-                    @foreach ($eventos as $evento /* => $descripcion */)
+                    @foreach ($eventos as $evento => $descripcion )
                         <option value="{{ $evento }}">
-                           {{ $evento }} {{-- {{ $evento }} - {{$descripcion}} --}}
+                           {{ $evento }} - {{$descripcion}}
                         </option>
                     @endforeach
                 </select>
 
                 <label for="selectAreaResponsable" class="form-label mt-3">Área responsable</label>
                 <select name="selectAreaResponsable" id="selectAreaResponsable" class="form-select"
-                    wire:model="selectCodigoAreaResponsable">
+                    wire:model="selectCodigoAreaResponsable"  wire:change="cargarPresupuestoEjercido">
                     <option value="" @if ($this->selectCodigoAreaResponsable == '') selected @endif disabled>
                         Seleccionar un área
                     </option>
@@ -99,17 +99,17 @@
                     @endforeach
                 </select>
 
-                <label for="selectCuenta" class="form-label mt-3">Banco</label>
-                <select name="selectRetenciones" id="selectRetenciones" class="form-select" wire:model="cuentaRetenciones">
+                <label for="selectCuenta" class="form-label mt-3">Retenciones</label>
+                <select name="selectRetenciones" id="selectRetenciones" class="form-select" wire:model="cuentaDeRetenciones">
                     <option value="" disabled>Seleccionar cuenta de retención</option>
-                    @foreach ($cuentasBanco as $cuenta)
-                        <option value="{{ $cuenta->cuenta_id }}"> 
-                            {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
+                    @foreach ($cuentasRetenciones as $retencion)
+                        <option value="{{ $retencion->cuenta_id }}"> 
+                            {{ $retencion->Codigo_cuenta . '  ' . $retencion->Descripcion_cuenta }}</option>
                     @endforeach
                 </select>
 
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
-                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes">
+                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes" wire:change="cargarPresupuestoEjercido">
                     <option value="" selected disabled>Seleccionar mes...</option>
                     @foreach (range(1, 12) as $mes)
                         @php
@@ -119,6 +119,9 @@
                         </option>
                     @endforeach
                 </select>
+
+                <label for="inputMontoEvento" class="form-label mt-3">Monto del evento</label>
+                <input type="text" name="inputMontoEvento" id="inputMontoEvento" class="form-control" disabled>
 
                 <label for="inputPTTOEjercido" class="form-label mt-3">Presupuesto ejercido</label>
                 <input type="text" name="inputPTTOEjercido" id="inputPTTOEjercido" class="form-control" disabled>
