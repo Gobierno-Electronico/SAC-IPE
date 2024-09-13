@@ -102,6 +102,9 @@
                     @endforeach
                 </select>
 
+                <label for="inputMontoEvento" class="form-label mt-3">Monto del evento</label>
+                <input type="text" name="inputMontoEvento" id="inputMontoEvento" class="form-control" disabled>
+
                 <label for="inputPTTODevengado" class="form-label mt-3">Presupuesto devengado</label>
                 <input type="text" name="inputPTTODevengado" id="inputPTTODevengado" class="form-control" disabled>
 
