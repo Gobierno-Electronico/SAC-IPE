@@ -98,7 +98,6 @@ class EgresosCapitulo4PagadoForm extends Component
             $this->montoDelEvento = DB::select('EXEC ImporteTotalCapitulo4Pagado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             $this->dispatch('formato_importe', id: 'inputMontoEvento', amount: ($this->montoDelEvento > 0) ? $this->montoDelEvento : '');
             $this->dispatch('mostrarMensaje', mensaje: 'Monto del evento cargado', tipo: 'success', tiempo: 1500);
-
             $this->llenarPartidasPresupuestales();
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar el evento en Devengado del capítulo 4: ' . $th->getMessage());
@@ -260,7 +259,9 @@ class EgresosCapitulo4PagadoForm extends Component
 
     public function limpiar()
     {
+        $this->cuentasBanco = [];
         $this->PPTOEjercido = "";
+        $this->partidaPresupuestal = "";
         $this->cuentaBanco = "";
         $this->cuentaDeRetenciones = "";
         $this->importe = "";
