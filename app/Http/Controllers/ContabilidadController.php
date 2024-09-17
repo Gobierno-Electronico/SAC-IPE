@@ -19,16 +19,19 @@ class ContabilidadController extends Controller
     {
         $this->middleware('auth');
     }
-    
-    public function polizaInicial() {
+
+    public function polizaInicial()
+    {
         return view('contabilidad.carga-poliza-inicial');
     }
 
-    public function consultaPolizaInicial() {
+    public function consultaPolizaInicial()
+    {
         return view('contabilidad.consulta-poliza-inicial');
     }
 
-    public function cargarPolizaInicial(Request $request) {
+    public function cargarPolizaInicial(Request $request)
+    {
         $validator = Validator::make(request()->all(), [
             'input-archivo' => 'required',
             'input-archivo.*' => 'mimes:xlsx'
@@ -69,7 +72,58 @@ class ContabilidadController extends Controller
                     if (count($encabezados) != count($datos_fila)) {
                         dd($encabezados, $datos_fila);
                     }
-                    $rows[] = array_combine(array_map('trim', array_filter($encabezados)), array_map('trim', array_map($reemplazarCaracterEspecial, $datos_fila)));
+                    $fila = array_combine(
+                        array_map('trim', array_filter($encabezados)),
+                        array_map('trim', array_map($reemplazarCaracterEspecial, $datos_fila))
+                    );
+
+                    $columnas = ['Cargo', 'Abono'];
+
+                    foreach ($columnas as $columna) {
+
+                        if (isset($fila[$columna])) {
+                            $valor = $fila[$columna];
+
+                            // Eliminar posibles caracteres no numéricos (espacios o caracteres especiales)
+                            $valor = preg_replace('/[^\d.-]/', '', $valor);
+
+                            // Validar si el valor es numérico solo si no está vacío
+                            if ($valor !== '' && !is_numeric($valor)) {
+                                $errores[] = "El valor de $columna en la fila $numero_fila no es numérico.";
+                                continue;
+                            }
+
+                            // Validar si el valor es mayor o igual a 0 (no negativo) solo si no está vacío
+                            if ($valor !== '' && $valor < 0) {
+                                $errores[] = "El valor de $columna en la fila $numero_fila no debe ser negativo.";
+                            }
+
+                            // Validar si el valor tiene como máximo dos decimales solo si no está vacío
+                            if ($valor !== '' && !preg_match('/^\d+(\.\d{1,2})?$/', $valor)) {
+                                $errores[] = "El valor de $columna en la fila $numero_fila debe tener como máximo dos dígitos después del punto decimal.";
+                            }
+
+                            // Asignar el valor limpio de vuelta al array
+                            $fila[$columna] = $valor;
+                        }
+                    }
+                    if (empty($fila['Cargo']) && empty($fila['Abono'])) {
+                        $errores[] = "Al menos una de las columnas 'Cargo' o 'Abono' debe estar llena en la fila $numero_fila.";
+                    }
+                    // Agregar la fila procesada al array de filas válidas
+                    $rows[] = $fila;
+                }
+
+
+                // Validar que al menos una de las columnas "Cargo" o "Abono" no esté vacía
+
+
+                // Si hay errores, devolverlos y abortar la operación
+                if (!empty($errores)) {
+                    dd($errores);
+                    session()->flash('message', implode('<br>', $errores));
+                    session()->flash('message_type', 'error');
+                    return back();
                 }
                 // Se inicia una transacción de base de datos para que todas las operaciones de base de datos dentro del bloque se puedan revertir si ocurre algún error.
                 $usuariosController = new BitacoraController();
@@ -179,7 +233,7 @@ class ContabilidadController extends Controller
                     $archivo = fopen($txtFilePath, 'w');
 
                     fwrite($archivo, 'Cuentas Faltantes' . PHP_EOL . '---------------------------------------------------------------------------------------' . PHP_EOL);
-                    
+
                     foreach ($cuentasFaltantes as $cuenta) {
                         $linea = 'Código de cuenta: ' . $cuenta;
                         fwrite($archivo, $linea . PHP_EOL . '---------------------------------------------------------------------------------------' . PHP_EOL);
@@ -209,10 +263,10 @@ class ContabilidadController extends Controller
             session()->flash('message_type', 'error');
             return back();
         }
-
     }
 
-    public function generarPolizasInicial($row, $numeroEvento) {
+    public function generarPolizasInicial($row, $numeroEvento)
+    {
         $anioActual = Carbon::now()->year;
         $fecha = Carbon::now('America/Mexico_City');
         $fecha->year($anioActual);
@@ -237,7 +291,8 @@ class ContabilidadController extends Controller
         return true;
     }
 
-    public function plantillaPolizaInicial(){
+    public function plantillaPolizaInicial()
+    {
         $rutaArchivo = public_path('PresupuestoInicial/Formato carga poliza inicial.xlsx');
         // Verificar si el archivo existe
         if (file_exists($rutaArchivo)) {
@@ -251,5 +306,4 @@ class ContabilidadController extends Controller
             abort(404);
         }
     }
-
 }
