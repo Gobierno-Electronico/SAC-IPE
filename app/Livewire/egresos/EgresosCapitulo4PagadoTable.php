@@ -73,7 +73,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
                     'cuentaBanco' => $registro['codigoCuentaBanco'] . ' ' . $registro['descripcionCuentaBanco'],
                     'cuentaRetenciones' => $registro['codigoCuentaRetenciones'] . ' ' . $registro['descripcionCuentaRetenciones'],
                     'mes' => $registro['mes'],
-                    'movimiento' => 'DEVENGADO',
+                    'movimiento' => 'PAGADO',
                     'pttoEjercido' => $registro['pttoEjercido'],
                     'importe' => $registro['importe'],
                     'disponibilidad' => $this->totalDisponible,

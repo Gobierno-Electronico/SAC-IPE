@@ -64,7 +64,7 @@ class EgresosCapitulo4PagadoForm extends Component
     public $cambiarCuentaBancoSeleccionada = true;
 
     public $cuentasRetenciones = [];
-    public $cambiarCuentaRetencioesSeleccionada = true;
+    public $cambiarCuentaRetencionesSeleccionada = true;
 
 
     public function render()
@@ -82,6 +82,7 @@ class EgresosCapitulo4PagadoForm extends Component
             $this->llenarPartidasPresupuestales();
             $this->cambiarCuentaBancoSeleccionada = false;
             $this->llenarCuentasBanco();
+            $this->cambiarCuentaRetencionesSeleccionada = false;
 
             return view('livewire.egresos.egresos-capitulo4-pagado-form', ['eventos' => $eventos]);
         } catch (\Throwable $th) {
@@ -99,8 +100,6 @@ class EgresosCapitulo4PagadoForm extends Component
             $this->dispatch('mostrarMensaje', mensaje: 'Monto del evento cargado', tipo: 'success', tiempo: 1500);
 
             $this->llenarPartidasPresupuestales();
-            $this->cuentaBanco = "";
-            $this->cuentaDeRetenciones = "";
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar el evento en Devengado del capítulo 4: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
@@ -163,7 +162,6 @@ class EgresosCapitulo4PagadoForm extends Component
                 })
                 ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get();
 
-            $this->cuentaDeRetenciones = "";
             $this->llenarCuentasRetenciones($interaccionCuentaConcepto->id);
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar las cuentas de banco en pagado capítulo 4000: ' . $th->getMessage());
@@ -174,6 +172,10 @@ class EgresosCapitulo4PagadoForm extends Component
     public function llenarCuentasRetenciones($idInteraccionCuentaConcepto)
     {
         try {
+            if ($this->cambiarCuentaRetencionesSeleccionada) {
+                $this->cuentaDeRetenciones = "";
+            }
+            $this->cambiarCuentaRetencionesSeleccionada = true;
             $this->cuentasRetenciones = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $idInteraccionCuentaConcepto)
                 ->join('interaccion_cuenta_conceptos', function ($join) {
                     $join->on('interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
@@ -259,6 +261,8 @@ class EgresosCapitulo4PagadoForm extends Component
     public function limpiar()
     {
         $this->PPTOEjercido = "";
+        $this->cuentaBanco = "";
+        $this->cuentaDeRetenciones = "";
         $this->importe = "";
         $this->mes = "";
         $this->dispatch('limpiar');
