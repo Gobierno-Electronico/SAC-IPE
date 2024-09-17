@@ -238,7 +238,7 @@ class ContabilidadController extends Controller
     }
 
     public function plantillaPolizaInicial(){
-        $rutaArchivo = public_path('PresupuestoInicial/Formato carga poliza inicial.xlsx');
+        $rutaArchivo = public_path('PresupuestoInicial/ -Formato carga poliza inicial.xlsx');
         // Verificar si el archivo existe
         if (file_exists($rutaArchivo)) {
             // Descargar el archivo Excel

@@ -19,6 +19,7 @@ class EgresosCapitulo4PagadoForm extends Component
 {
     public $consultarRegistro = false;
     public $numeroPoliza;
+    public $numeroPolizaRemanente;
     public $total;
 
     #[Validate('required', message: 'Área solicitante requerida')]
@@ -280,11 +281,12 @@ class EgresosCapitulo4PagadoForm extends Component
     }
 
     #[On('consultar-registro')]
-    public function consultarRegistros($numeroEvento, $numeroPoliza, $total)
+    public function consultarRegistros($numeroEvento, $numeroPoliza, $total, $numeroPolizaRemanente)
     {
         $this->consultarRegistro = true;
         $this->numeroEvento = $numeroEvento;
         $this->numeroPoliza = $numeroPoliza;
+        $this->numeroPolizaRemanente = $numeroPolizaRemanente;
         $this->total = $total;
     }
 }

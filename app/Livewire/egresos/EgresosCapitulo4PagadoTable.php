@@ -23,17 +23,15 @@ class EgresosCapitulo4PagadoTable extends Tabla
     public $total = 0;
     public $totalDisponible = 0;
     public $numeroEvento;
+    public $numeroPolizaRemanente;
 
-    
+
     public function render()
     {
         return view('livewire.egresos.egresos-capitulo4-pagado-table');
     }
 
-    public function query(): Builder
-    {
-
-    }
+    public function query(): Builder {}
 
     public function data()
     {
@@ -61,13 +59,13 @@ class EgresosCapitulo4PagadoTable extends Tabla
     #[On('agregar-registro')]
     public function agregarRegistro($registro)
     {
-        try{
+        try {
             if ($this->total + $registro['importe'] > $registro['montoEvento']) {
                 $this->dispatch('mostrarMensaje', mensaje: 'Monto total del evento superado', tipo: 'error', tiempo: 3000);
                 return;
             }
 
-            if($this->verificarPresupuesto($registro)){
+            if ($this->verificarPresupuesto($registro)) {
                 $nuevoRegistro = [
                     'id' => 0,
                     'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
@@ -75,7 +73,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
                     'cuentaBanco' => $registro['codigoCuentaBanco'] . ' ' . $registro['descripcionCuentaBanco'],
                     'cuentaRetenciones' => $registro['codigoCuentaRetenciones'] . ' ' . $registro['descripcionCuentaRetenciones'],
                     'mes' => $registro['mes'],
-                    'movimiento' => 'DEVENGADO', 
+                    'movimiento' => 'DEVENGADO',
                     'pttoEjercido' => $registro['pttoEjercido'],
                     'importe' => $registro['importe'],
                     'disponibilidad' => $this->totalDisponible,
@@ -84,14 +82,14 @@ class EgresosCapitulo4PagadoTable extends Tabla
                 array_push($this->dataCompleta, $registro);
                 $this->total = 0;
                 foreach ($this->cacheData as $key => $registro) {
-                    $this->cacheData[$key]['id'] = $key + 1; 
+                    $this->cacheData[$key]['id'] = $key + 1;
                     $this->dataCompleta[$key]['id'] = $key + 1;
                     $this->total += $registro['importe'];
                 }
                 $this->dispatch('cambioTotal', total: $this->total);
             }
-        }catch (\Throwable $th) {
-            Log::error('Ocurrió un error al agregar registro en pagado del capítulo 4: '. $th->getMessage());
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al agregar registro en pagado del capítulo 4: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -102,17 +100,17 @@ class EgresosCapitulo4PagadoTable extends Tabla
         $this->totalDisponible = $solvencia - $registro['importe'];
         $totalImportes = 0;
 
-        foreach ($this->cacheData as $movimiento){
-            if(str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoPartida']) && $movimiento['mes'] == $registro['mes']){
+        foreach ($this->cacheData as $movimiento) {
+            if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoPartida']) && $movimiento['mes'] == $registro['mes']) {
                 $totalImportes += $movimiento['importe'];
             }
         }
 
-        if($totalImportes > 0){
+        if ($totalImportes > 0) {
             $this->totalDisponible = $solvencia - $totalImportes - $registro['importe'];
         }
 
-        if($this->totalDisponible < 0){
+        if ($this->totalDisponible < 0) {
             $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto ejercido insuficiente', tipo: 'warning', tiempo: 3000);
             return false;
         }
@@ -121,7 +119,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
 
     public function edit($id)
     {
-        try{
+        try {
             $this->recalcularDisponibilidad($id);
             foreach ($this->dataCompleta as $key => $registro) {
                 if ($registro['id'] == $id) {
@@ -135,32 +133,32 @@ class EgresosCapitulo4PagadoTable extends Tabla
                         'cuentaRetenciones' => $registro['cuentaRetencionesId'],
                         'pttoEjercido' => $registro['pttoEjercido'],
                     ];
-                    
+
                     unset($this->dataCompleta[$key]);
                     $this->dispatch('llenar-formulario', $datosRegistro);
                     break;
                 }
             }
-    
+
             foreach ($this->cacheData as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->cacheData[$key]);
                     break;
                 }
             }
-    
+
             $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
             $this->total = $totalActualizado;
             $this->dispatch('cambioTotal', total: $totalActualizado);
-        }catch (\Throwable $th) {
-            Log::error('Ocurrió un error al editar en pagado del capítulo 4: '. $th->getMessage());
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al editar en pagado del capítulo 4: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al editar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 
     public function delete($id)
     {
-        try{
+        try {
             $this->recalcularDisponibilidad($id);
             foreach ($this->cacheData as $key => $registro) {
                 if ($registro['id'] == $id) {
@@ -168,19 +166,19 @@ class EgresosCapitulo4PagadoTable extends Tabla
                     break;
                 }
             }
-    
+
             foreach ($this->dataCompleta as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->dataCompleta[$key]);
                     break;
                 }
             }
-    
+
             $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
             $this->total = $totalActualizado;
             $this->dispatch('cambioTotal', total: $totalActualizado);
-        }catch (\Throwable $th) {
-            Log::error('Ocurrió un error al eliminar en pagado del capítulo 4: '. $th->getMessage());
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al eliminar en pagado del capítulo 4: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al editar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -199,12 +197,12 @@ class EgresosCapitulo4PagadoTable extends Tabla
         }
 
         $totalImportes = 0;
-        foreach($this->cacheData as $key => $movimiento) {
-            if($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuentaPartida']) && $movimiento['mes'] == $datosSeleccionado['mes']) {
-                if($totalImportes == 0){
+        foreach ($this->cacheData as $key => $movimiento) {
+            if ($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuentaPartida']) && $movimiento['mes'] == $datosSeleccionado['mes']) {
+                if ($totalImportes == 0) {
                     $movimiento['disponibilidad'] = $movimiento['pttoEjercido'] - $movimiento['importe'];
                     $totalImportes += $movimiento['importe'];
-                }else{
+                } else {
                     $movimiento['disponibilidad'] = $movimiento['pttoEjercido'] - $totalImportes - $movimiento['importe'];
                     $totalImportes += $movimiento['importe'];
                 }
@@ -221,7 +219,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
             return;
         }
 
-        try{
+        try {
             $numerosPolizas = Poliza::select('numero_poliza')
                 ->where('tipo_poliza', '=', 'E')
                 ->whereYear('fecha', '=', Carbon::now()->year)
@@ -239,34 +237,33 @@ class EgresosCapitulo4PagadoTable extends Tabla
             $fecha->year($anioActual);
 
             $bitacora = new BitacoraController();
-            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un pagado del capítulo 4 con evento: '.$this->numeroEvento, request());
+            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un pagado del capítulo 4 con evento: ' . $this->numeroEvento, request());
             DB::beginTransaction();
 
             foreach ($this->dataCompleta as $movimiento) {
                 $movimiento['importe'] = doubleval($movimiento['importe']);
                 $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['partidaId'])->whereIn('concepto_id', [40, 43, 46, 48, 49, 51])
-                ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
+                    ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
 
                 $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
-                ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
-                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
+                    ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+                    ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
 
                 $interaccionCuentaCuentasFiltradas = [];
                 foreach ($interaccionCuentaCuentas as $cuenta) {
                     if ($cuenta['tipo_interaccion'] == 'Contable - Cargo') {
                         if ($cuenta['Codigo_cuenta'] == $movimiento['codigoCuentaRetenciones']) {
-                            $interaccionCuentaCuentasFiltradas[] = $cuenta; 
-                            continue; 
+                            $interaccionCuentaCuentasFiltradas[] = $cuenta;
+                            continue;
                         }
-                    }else if($cuenta['tipo_interaccion'] == 'Contable - Abono'){
+                    } else if ($cuenta['tipo_interaccion'] == 'Contable - Abono') {
                         if ($cuenta['Codigo_cuenta'] == $movimiento['codigoCuentaBanco']) {
-                            $interaccionCuentaCuentasFiltradas[] = $cuenta; 
-                            continue; 
+                            $interaccionCuentaCuentasFiltradas[] = $cuenta;
+                            continue;
                         }
-                    }else {
+                    } else {
                         $interaccionCuentaCuentasFiltradas[] = $cuenta;
                     }
-                    
                 }
 
                 $interaccionCuentaCuentas = $interaccionCuentaCuentasFiltradas;
@@ -316,6 +313,87 @@ class EgresosCapitulo4PagadoTable extends Tabla
                 Poliza::insert($polizas);
             }
 
+            $numerosPolizas = Poliza::select('numero_poliza')
+                ->where('tipo_poliza', '=', 'IAUX')
+                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->distinct()
+                ->orderBy('numero_poliza')
+                ->pluck('numero_poliza')
+                ->toArray();
+            sort($numerosPolizas);
+            $this->numeroPolizaRemanente = (int)end($numerosPolizas) + 1;
+            $polizasInicialesEgresosEjercido = Poliza::where('tipo_poliza', '=', 'E')
+                                                    ->where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 4')
+                                                    ->where('evento', '=', $this->numeroEvento)
+                                                    ->get();
+
+            $polizasInicialesEgresosPagado = Poliza::where('tipo_poliza', '=', 'E')
+                                                    ->where('categoria', '=', 'EGRESOS PAGADO CAPITULO 4')
+                                                    ->where('evento', '=', $this->numeroEvento)
+                                                    ->where('concepto', 'LIKE', '%(Pagado)%')
+                                                    ->get();
+
+            $totalRemanente = DB::select('EXEC ImporteTotalCapitulo4Pagado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
+            if ($totalRemanente > 0) {
+                foreach ($polizasInicialesEgresosEjercido as $polizaImporte) {
+                    $clave = $polizaImporte->cuenta . '-' . $polizaImporte->concepto;
+                    if (isset($resultado[$clave])) {
+                        $resultado[$clave]['total'] += $polizaImporte['total'];
+                    } else {
+                        // Si la clave no existe, agregar el nuevo depósito al resultado
+                        $resultado[$clave] = [
+                            'area' => $polizaImporte->area,
+                            'tipo_poliza' => 'IAUX',
+                            'numero_poliza' =>  $this->numeroPolizaRemanente,
+                            'fecha' => $movimiento['fechaAfectacion'],
+                            'cuenta' => $polizaImporte->cuenta,
+                            'concepto' => $polizaImporte->concepto,
+                            'total' => $polizaImporte['total'],
+                            'mes' => $polizaImporte->mes,
+                            'descripcion' => $polizaImporte->descripcion,
+                            'evento' => $this->numeroEvento,
+                            'tipo_interaccion' => $polizaImporte->tipo_interaccion,
+                            'validado' => false,
+                            'estatus_evento' => false,
+                            'categoria' => 'EGRESOS EJERCIDO CAPITULO 4 REMANENTE PAGADO',
+                            'created_at' => $fecha,
+                            'updated_at' => $fecha
+                        ];
+                    }
+                }
+
+                foreach ($resultado as $polizaInicial) { 
+                    $total = $polizaInicial['total'];
+                    foreach ($polizasInicialesEgresosPagado as $polizaPagado) {   
+                        $conceptoGeneral = explode('(', $polizaPagado->concepto);
+
+                        if (str_contains($polizaInicial['concepto'], rtrim($conceptoGeneral[0])) !== false && $conceptoGeneral[1] == 'Pagado)') {
+                            $total = $total - $polizaPagado['total'];
+                        }
+                    }
+                        Poliza::create([
+                            'area' => $polizaInicial['area'],
+                            'tipo_poliza' => 'IAUX',
+                            'numero_poliza' =>  $this->numeroPolizaRemanente,
+                            'fecha' => $movimiento['fechaAfectacion'],
+                            'cuenta' => $polizaInicial['cuenta'],
+                            'concepto' => $polizaInicial['concepto'],
+                            'total' => $total,
+                            'mes' => $polizaInicial['mes'],
+                            'descripcion' => $polizaInicial['descripcion'],
+                            'evento' => $this->numeroEvento,
+                            'tipo_interaccion' => $polizaInicial['tipo_interaccion'],
+                            'validado' => false,
+                            'estatus_evento' => false,
+                            'categoria' => 'EGRESOS EJERCIDO CAPITULO 4 REMANENTE PAGADO',
+                            'created_at' => $fecha,
+                            'updated_at' => $fecha
+                        ]);
+                }
+            } else {
+                $this->numeroPolizaRemanente = 0;
+            }
+
             $importeTotalEvento = DB::select('EXEC ImporteTotalCapitulo4Pagado @evento = ?', [$this->numeroEvento]);
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
                 Poliza::where('evento', '=', $this->numeroEvento)
@@ -324,18 +402,14 @@ class EgresosCapitulo4PagadoTable extends Tabla
             }
 
             DB::commit();
-
-            $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
-        }catch (\Throwable $th) {
+            $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente);
+        } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('Ocurrió un error al finalizarRegistro en pagado del capítulo 4: '. $th->getMessage());
+            Log::error('Ocurrió un error al finalizarRegistro en pagado del capítulo 4: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 
-
-    public function changeState($value)
-    {
-
-    }
+    
+    public function changeState($value) {}
 }
