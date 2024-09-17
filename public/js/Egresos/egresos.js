@@ -57,7 +57,7 @@ function generarPolizaRemanente(btn) {
     $('#loadingScreen').prop('hidden', false);
 
   console.log($('#botonRemanente').val())
-    const wsUrl = "http://"+IP_PORT+"/Reporteador/webresources/service/report?name=PolizaIngresosRemanente&params="
+    const wsUrl = "http://"+IP_PORT+"/Reporteador/webresources/service/report?name=PolizaEgresosRemanente&params="
     url = `${wsUrl}Fecha;${$('#botonFecha').val()},Hora;${$('#botonHora').val()},Evento;${$('#botonEvento').val()},categoriaRemanente;${$('#botonRemanente').val()}`;
     let mensajeEdoSolicitud = toastr.info("Procesando solicitud, espere un momento por favor . . .", "", { timeOut: "0" });
     fetch(url, {

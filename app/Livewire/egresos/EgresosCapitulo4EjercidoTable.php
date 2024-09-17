@@ -44,7 +44,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
     {
         return [
             Column::make('area', 'Area'),
-            Column::make('partida', 'Partida'),
+            Column::make('cuenta', 'Partida'),
             Column::make('mes', 'Mes'),
             Column::make('movimiento', 'Movimiento'),
             Column::make('pttoDevengado', 'PPTO Devengado')->component('columns.importe'),
@@ -67,7 +67,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
                 $nuevoRegistro = [
                     'id' => 0,
                     'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
-                    'partida' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
+                    'cuenta' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
                     'mes' => $registro['mes'],
                     'movimiento' => 'EJERCIDO', 
                     'pttoDevengado' => $registro['pttoDevengado'],
@@ -97,7 +97,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
         $totalImportes = 0;
 
         foreach ($this->cacheData as $movimiento){
-            if(str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoCuenta']) && $movimiento['mes'] == $registro['mes']){
+            if(str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['cuenta'], $registro['codigoCuenta']) && $movimiento['mes'] == $registro['mes']){
                 $totalImportes += $movimiento['importe'];
             }
         }
@@ -115,47 +115,43 @@ class EgresosCapitulo4EjercidoTable extends Tabla
 
     public function edit($id)
     {
-        {
-            try {
-                //code...
-                $this->recalcularDisponibilidad($id);
-                foreach ($this->dataCompleta as $key => $registro) {
-                    if ($registro['id'] == $id) {
-                        $datosRegistro = [
-                            'area' => $registro['areaResponsableId'],
-                            'cuenta' => $registro['cuentaId'],
-                            'mes' => $registro['mes'],
-                            'importe' => $registro['importe'],
-                            'pttoDevengado' => $registro['pttoDevengado']
-                        ];
+        try {
+            $this->recalcularDisponibilidad($id);
+            foreach ($this->dataCompleta as $key => $registro) {
+                if ($registro['id'] == $id) {
+                    $datosRegistro = [
+                        'area' => $registro['areaResponsableId'],
+                        'cuenta' => $registro['cuentaId'],
+                        'mes' => $registro['mes'],
+                        'importe' => $registro['importe'],
+                        'pttoDevengado' => $registro['pttoDevengado']
+                    ];
 
-                        unset($this->dataCompleta[$key]);
-                        $this->dispatch('llenarFormulario', $datosRegistro);
-                        break;
-                    }
+                    unset($this->dataCompleta[$key]);
+                    $this->dispatch('llenar-formulario', $datosRegistro);
+                    break;
                 }
-        
-                foreach ($this->cacheData as $key => $registro) {
-                    if ($registro['id'] == $id) {
-                        unset($this->cacheData[$key]);
-                        break;
-                    }
-                }
-                // Recalculamos los totales solo después de eliminar el registro
-                $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
-                $this->total = $totalActualizado;
-                $this->dispatch('cambioTotal', total: $totalActualizado);
-            } catch (\Throwable $th) {
-                Log::error('Ocurrió un error al editar en ejercido del capitulo 4: '. $th->getMessage());
-                $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al editar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
             }
+        
+            foreach ($this->cacheData as $key => $registro) {
+                if ($registro['id'] == $id) {
+                    unset($this->cacheData[$key]);
+                    break;
+                }
+            }
+
+            $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
+            $this->total = $totalActualizado;
+            $this->dispatch('cambioTotal', total: $totalActualizado);
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al editar en ejercido del capitulo 4: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al editar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 
     public function delete($id)
     {
         try {
-            //code...
             $this->recalcularDisponibilidad($id);
             foreach ($this->cacheData as $key => $registro) {
                 if ($registro['id'] == $id) {
@@ -170,7 +166,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
                     break;
                 }
             }
-            // Recalculamos los totales solo después de eliminar el registro
+
             $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
             $this->total = $totalActualizado;
             $this->dispatch('cambioTotal', total: $totalActualizado);
@@ -187,7 +183,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
             if ($registro['id'] == $id) {
                 $datosSeleccionado = [
                     'codigoArea' => $registro['codigoAreaResponsable'],
-                    'codigoCuentaPartida' => $registro['codigoCuenta'],
+                    'codigoCuenta' => $registro['codigoCuenta'],
                     'mes' => $registro['mes']
                 ];
             }
@@ -195,7 +191,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
 
         $totalImportes = 0;
         foreach($this->cacheData as $key => $movimiento) {
-            if($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuentaPartida']) && $movimiento['mes'] == $datosSeleccionado['mes']) {
+            if($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['cuenta'], $datosSeleccionado['codigoCuenta']) && $movimiento['mes'] == $datosSeleccionado['mes']) {
                 if($totalImportes == 0){
                     $movimiento['disponibilidad'] = $movimiento['pttoDevengado'] - $movimiento['importe'];
                     $totalImportes += $movimiento['importe'];
@@ -247,20 +243,6 @@ class EgresosCapitulo4EjercidoTable extends Tabla
                     ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
                     ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
 
-                $interaccionCuentaCuentasFiltradas = [];
-                foreach ($interaccionCuentaCuentas as $cuenta) {
-                    if ($cuenta['tipo_interaccion'] == 'Contable - Abono') {
-                        if ($cuenta['Codigo_cuenta'] == $movimiento['codigoCuentaContable']) {
-                            $interaccionCuentaCuentasFiltradas[] = $cuenta;
-                            continue;
-                        }
-                    } else {
-                        $interaccionCuentaCuentasFiltradas[] = $cuenta;
-                    }
-                }
-
-                $interaccionCuentaCuentas = $interaccionCuentaCuentasFiltradas;
-
                 $polizas = [
                     [
                         'area' => $movimiento['codigoAreaResponsable'],
@@ -304,8 +286,14 @@ class EgresosCapitulo4EjercidoTable extends Tabla
                 }
 
                 Poliza::insert($polizas);
-                DB::commit();
             }
+            $importeTotalEvento = DB::select('EXEC ImporteTotalCapitulo4Ejercido @evento = ?', [$this->numeroEvento]);
+            if ($importeTotalEvento[0]->MontoDelEvento == 0) {
+                Poliza::where('evento', '=', $this->numeroEvento)
+                    ->whereIn('categoria', ['EGRESOS DEVENGADO CAPITULO 4'])
+                    ->update(['estatus_evento' => false]);
+            }
+            DB::commit();
             $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
         } catch (\Throwable $th) {
             DB::rollBack();

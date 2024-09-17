@@ -118,7 +118,7 @@
                 Visualizar póliza
             </button>
             @if ($numeroPolizaRemanente > 0)
-            <button id="botonGenerarPolizaRemanente" onclick="" type="button"
+            <button id="botonGenerarPolizaRemanente" onclick="generarPolizaRemanente(this)" type="button"
                 class="btn btn-success shadow border-1 mt-3 mt-md-0">
                 Visualizar póliza del remanente
             </button>

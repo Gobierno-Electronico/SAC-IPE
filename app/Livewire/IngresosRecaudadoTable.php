@@ -387,26 +387,26 @@ class IngresosRecaudadoTable extends Tabla
                         }
                     }
                     if(number_format($total, 2) > 0){
-                    // se creal la poliza con los importes sumados
-                    Poliza::create([
-                        'area' => $polizaInicial['area'],
-                        'tipo_poliza' => 'IAUX',
-                        'numero_poliza' =>  $this->numeroPolizaRemanente,
-                        'fecha' => $movimiento['fechaAfectacion'],
-                        'cuenta' => $polizaInicial['cuenta'],
-                        'concepto' => $polizaInicial['concepto'],
-                        'total' => $total,
-                        'mes' => $polizaInicial['mes'],
-                        'descripcion' => $polizaInicial['descripcion'],
-                        'evento' => $this->numeroEvento,
-                        'tipo_interaccion' => $polizaInicial['tipo_interaccion'],
-                        'validado' => false,
-                        'estatus_evento' => false,
-                        'categoria' => 'INGRESOS DEVENGADO REMANENTE RECAUDADO',
-                        'created_at' => $fecha,
-                        'updated_at' => $fecha
-                    ]);
-                }
+                        // se creal la poliza con los importes sumados
+                        Poliza::create([
+                            'area' => $polizaInicial['area'],
+                            'tipo_poliza' => 'IAUX',
+                            'numero_poliza' =>  $this->numeroPolizaRemanente,
+                            'fecha' => $movimiento['fechaAfectacion'],
+                            'cuenta' => $polizaInicial['cuenta'],
+                            'concepto' => $polizaInicial['concepto'],
+                            'total' => $total,
+                            'mes' => $polizaInicial['mes'],
+                            'descripcion' => $polizaInicial['descripcion'],
+                            'evento' => $this->numeroEvento,
+                            'tipo_interaccion' => $polizaInicial['tipo_interaccion'],
+                            'validado' => false,
+                            'estatus_evento' => false,
+                            'categoria' => 'INGRESOS DEVENGADO REMANENTE RECAUDADO',
+                            'created_at' => $fecha,
+                            'updated_at' => $fecha
+                        ]);
+                    }
                 }
             } else {
                 $this->numeroPolizaRemanente = 0;
