@@ -51,7 +51,7 @@ class EgresosCapitulo2y3ComprometidoForm extends Component
             ->whereIn('interaccion_cuenta_conceptos.concepto_id', [])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
             ->orderBy('cuentas.Codigo_cuenta')->get();
 
-            return view('livewire.egresos.egresos-capitulo4-comprometido-form', ['cuentas' => $cuentas]);
+            return view('livewire.egresos.egresos-capitulo2y3-comprometido-form', ['cuentas' => $cuentas]);
         }catch(\Throwable $th){
             Log::error('Ocurrió un error al cargar cuentas en comprometido del capítulo 2 y 3: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000); 
@@ -64,7 +64,7 @@ class EgresosCapitulo2y3ComprometidoForm extends Component
             $this->importe = floatval(str_replace(['$', ','], "", $this->importe));
             $this->importe = ($this->importe > 0)  ? $this->importe : "";
             $this->validate();
-            
+
         }catch (\Illuminate\Validation\ValidationException $e) {
             $this->dispatch('mostrarMensaje', mensaje: $e->getMessage(), tipo: 'warning', tiempo: 3000);
         }catch (\Throwable $th) {
