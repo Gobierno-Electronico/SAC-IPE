@@ -353,7 +353,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" href="{{route('capitulo4Devengado')}}" method="GET" onclick="mostrarCargando()">
+                                                <a class="dropdown-item" href="{{route('capitulo2y3Devengado')}}" method="GET" onclick="mostrarCargando()">
                                                     Devengado
                                                 </a>
                                             </li>
@@ -363,7 +363,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" href="{{route('capitulo4Pagado')}}" method="GET" onclick="mostrarCargando()">
+                                                <a class="dropdown-item" href="{{route('capitulo2y3Pagado')}}" method="GET" onclick="mostrarCargando()">
                                                     Pagado
                                                 </a>
                                             </li>

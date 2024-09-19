@@ -21,7 +21,7 @@
                 </div>
             </div>
         </div>
-        <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+        <livewire:egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
         tipoMovimiento="PolizaEgresosPagadoCapitulo5" urlFinalizar="/capitulo5-pagado" tipoPoliza="E"
         categoriaModulo='EGRESOS PAGADO CAPITULO 5' />
     @else

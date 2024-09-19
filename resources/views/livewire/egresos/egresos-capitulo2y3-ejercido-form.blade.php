@@ -24,7 +24,7 @@
 
             </div>
         </div>
-        <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+        <livewire:egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
             tipoMovimiento="PolizaEgresosEjercidoCapitulo2y3" urlFinalizar="/capitulo2y3-ejercido" tipoPoliza="E"
             categoriaModulo='EGRESOS EJERCIDO CAPITULO 2 y 3' />
     @else
