@@ -40,8 +40,13 @@ class EgresosCapitulo5PagadoForm extends Component
     #[Validate('required', message: 'Monto del evento requerido')]
     public $montoDelEvento = "";
 
-    #[Validate('required', message: 'Pago de retenciones requerido')]
-    public $pagoRetenciones = "";
+    #[Validate('required', message: 'Selector de pago de retenciones requerido')]
+    public $selectorPagoRetenciones = "";
+
+    #[Validate('required', message: 'Cuenta de retenciones requerida')]
+    public $cuentaDeRetenciones = "";
+
+    public $cuentasRetenciones = [];
 
     public function render() 
     {
