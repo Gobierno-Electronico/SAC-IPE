@@ -12,6 +12,26 @@ class EgresosController extends Controller
         $this->middleware('auth');
     }
 
+    public function capitulo2y3Comprometido()
+    {
+        return view('egresos.egresos-capitulo2y3-comprometido');
+    }
+
+    public function capitulo2y3Devengado()
+    {
+        return view('egresos.egresos-capitulo2y3-devengado');
+    }
+
+    public function capitulo2y3Ejercido()
+    {
+        return view('egresos.egresos-capitulo2y3-ejercido');
+    }
+
+    public function capitulo2y3Pagado()
+    {
+        return view('egresos.egresos-capitulo2y3-pagado');
+    }
+
     public function capitulo4Comprometido()
     {
         return view('egresos.egresos-capitulo4-comprometido');

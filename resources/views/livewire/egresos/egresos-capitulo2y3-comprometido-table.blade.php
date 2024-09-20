@@ -51,6 +51,7 @@
         </div>
     </div>
 </div>
+
 <script>
     window.addEventListener('cambioTotal', event => {
         let parametros = event.__livewire.params
@@ -60,10 +61,10 @@
 
     window.addEventListener('llenarFormulario', event => {
         let parametros = event.__livewire.params
-        console.log(parametros);
-        $('#inputPTTOEjercido').val(parametros.presupuesto);
+        $('#inputPTTOEjecutar').val(parametros.presupuesto);
         $('#inputImporte').val(parametros.importe);
         formatearImporte({id: 'inputImporte'})
-        formatearImporte({id: 'inputPTTOEjecutado'})
+        formatearImporte({id: 'inputPTTOEjecutar'})
     });
+
 </script>

@@ -347,7 +347,26 @@
                                         <a class="dropdown-item dropdown-toggle" href=""
                                             data-bs-toggle="dropdown">Capítulo 2000 y 3000 Materiales y servicios</a>
                                         <ul class="dropdown-menu">
-                
+                                            <li>
+                                                <a class="dropdown-item" href="{{route('capitulo2y3Comprometido')}}" method="GET" onclick="mostrarCargando()">
+                                                    Comprometido
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{route('capitulo2y3Devengado')}}" method="GET" onclick="mostrarCargando()">
+                                                    Devengado
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{route('capitulo2y3Ejercido')}}" method="GET" onclick="mostrarCargando()">
+                                                    Ejercido
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{route('capitulo2y3Pagado')}}" method="GET" onclick="mostrarCargando()">
+                                                    Pagado
+                                                </a>
+                                            </li>
                                         </ul>
                                     </li>
 

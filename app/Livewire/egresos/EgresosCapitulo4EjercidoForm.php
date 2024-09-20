@@ -74,10 +74,10 @@ class EgresosCapitulo4EjercidoForm extends Component
 
     public function cambioEvento(){
         try {
+            $this->limpiar();
             $this->montoDelEvento = DB::select('EXEC ImporteTotalCapitulo4Ejercido @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             $this->dispatch('formato_importe', id: 'inputMontoEvento', amount: ($this->montoDelEvento > 0) ? $this->montoDelEvento : '');
             $this->dispatch('mostrarMensaje', mensaje: 'Monto del evento cargado', tipo: 'success', tiempo: 1500);
-            $this->cambiarCuentaSeleccionada = false;
             $this->llenarCuentasPresupuestalCargo();
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar el evento en ejercido: ' . $th->getMessage());
