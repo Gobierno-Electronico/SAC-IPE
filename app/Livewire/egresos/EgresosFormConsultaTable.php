@@ -106,6 +106,34 @@ class EgresosFormConsultaTable extends Tabla
             }
 
             switch($this->categoriaModulo){
+                case "EGRESOS DEVENGADO CAPITULO 1":
+                    Poliza::where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 1')
+                    ->update(['estatus_evento' => true]);
+                    break;
+                case "EGRESOS EJERCIDO CAPITULO 1":
+                    Poliza::where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 1')
+                    ->update(['estatus_evento' => true]);
+                    break;
+                case "EGRESOS PAGADO CAPITULO 1":
+                    Poliza::where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 1')
+                    ->update(['estatus_evento' => true]);
+                    break;
+                    
+                    
+                case "EGRESOS DEVENGADO CAPITULO 2 y 3":
+                    Poliza::where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 2 y 3')
+                    ->update(['estatus_evento' => true]);
+                    break;
+                case "EGRESOS EJERCIDO CAPITULO 2 y 3":
+                    Poliza::where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 2 y 3')
+                    ->update(['estatus_evento' => true]);
+                    break;
+                case "EGRESOS PAGADO CAPITULO 2 y 3":
+                    Poliza::where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 2 y 3')
+                    ->update(['estatus_evento' => true]);
+                    break;
+
+
                 case "EGRESOS DEVENGADO CAPITULO 4":
                     Poliza::where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 4')
                     ->update(['estatus_evento' => true]);
@@ -118,7 +146,34 @@ class EgresosFormConsultaTable extends Tabla
                     Poliza::where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 4')
                     ->update(['estatus_evento' => true]);
                     break;
-                    
+
+
+                case "EGRESOS DEVENGADO CAPITULO 5":
+                    Poliza::where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 5')
+                    ->update(['estatus_evento' => true]);
+                    break;
+                case "EGRESOS EJERCIDO CAPITULO 5":
+                    Poliza::where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 5')
+                    ->update(['estatus_evento' => true]);
+                    break;
+                case "EGRESOS PAGADO CAPITULO 5":
+                    Poliza::where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 5')
+                    ->update(['estatus_evento' => true]);
+                    break;
+
+
+                case "EGRESOS DEVENGADO CAPITULO 7":
+                    Poliza::where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 7')
+                    ->update(['estatus_evento' => true]);
+                    break;
+                case "EGRESOS EJERCIDO CAPITULO 7":
+                    Poliza::where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 7')
+                    ->update(['estatus_evento' => true]);
+                    break;
+                case "EGRESOS PAGADO CAPITULO 7":
+                    Poliza::where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 7')
+                    ->update(['estatus_evento' => true]);
+                    break;
             }
             // PresupuestoInicial::where('anio', '=', $this->selectedYear)->where('categoria', '=', 'INGRESOS')->where('tipo', '=', 'P')->delete();
             $this->validado = true;
