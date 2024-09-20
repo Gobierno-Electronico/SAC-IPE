@@ -379,7 +379,6 @@ class IngresosRecaudadoTable extends Tabla
                             $total = $total - $polizaRecaudado['total'];
                             
                             if(number_format($total, 2) < 0){
-                                dd($total);
                                 DB::rollBack();
                                 $this->dispatch('mostrarMensaje', mensaje: 'Se excedió el monto $' .number_format($polizaInicial['total'], 2). ' de la cuenta de ' . $polizaInicial['concepto']. ' con IVA', tipo: 'error', tiempo: 3000);
                                 return;

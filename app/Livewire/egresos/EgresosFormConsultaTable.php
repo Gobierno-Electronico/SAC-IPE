@@ -104,6 +104,22 @@ class EgresosFormConsultaTable extends Tabla
                 ->where('categoria', '=', $this->categoriaRemanente)
                 ->where('validado','=', false)->delete();
             }
+
+            switch($this->categoriaModulo){
+                case "EGRESOS DEVENGADO CAPITULO 4":
+                    Poliza::where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 4')
+                    ->update(['estatus_evento' => true]);
+                    break;
+                case "EGRESOS EJERCIDO CAPITULO 4":
+                    Poliza::where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 4')
+                    ->update(['estatus_evento' => true]);
+                    break;
+                case "EGRESOS PAGADO CAPITULO 4":
+                    Poliza::where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 4')
+                    ->update(['estatus_evento' => true]);
+                    break;
+                    
+            }
             // PresupuestoInicial::where('anio', '=', $this->selectedYear)->where('categoria', '=', 'INGRESOS')->where('tipo', '=', 'P')->delete();
             $this->validado = true;
             // $this->dispatch('mostrarMensaje', mensaje: 'Se borró el movimiento de Reclasificación/Recalendarización', tipo: 'success', tiempo: 3000);
@@ -129,7 +145,7 @@ class EgresosFormConsultaTable extends Tabla
                 ->update(["validado" => true]);
             if ($this->numeroPolizaRemanente > 0) {
                 Poliza::searchByYear('fecha', Carbon::now()->year)
-                ->where('tipo_poliza', '=','IAUX') //CHECAR
+                ->where('tipo_poliza', '=','EAUX') //CHECAR
                 ->where('evento', '=', $this->numeroEvento)
                 ->where('categoria', '=', $this->categoriaRemanente)
                 ->update(["validado" => true]);

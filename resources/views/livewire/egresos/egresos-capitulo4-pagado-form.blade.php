@@ -99,7 +99,7 @@
                     @endforeach
                 </select>
 
-                <label for="selectCuenta" class="form-label mt-3">Retenciones</label>
+                <label for="selectCuenta" class="form-label mt-3">Cuenta contable</label>
                 <select name="selectRetenciones" id="selectRetenciones" class="form-select" wire:model="cuentaDeRetenciones">
                     <option value="" disabled>Seleccionar cuenta de retención</option>
                     @foreach ($cuentasRetenciones as $retencion)
