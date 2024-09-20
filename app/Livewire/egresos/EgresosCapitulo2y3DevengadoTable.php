@@ -7,8 +7,15 @@ use App\Clases\Column;
 use Livewire\Attributes\On;
 use App\Livewire\Tabla;
 use Illuminate\Database\Eloquent\Builder;
+use App\Http\Controllers\BitacoraController;
+use App\Models\Poliza;
+use Carbon\Carbon;
+use App\Models\InteraccionCuentaCuenta;
+use App\Models\InteraccionCuentaConcepto;
+use Log;
+use DB;
 
-class EgresosCapitulo5DevengadoTable extends Tabla
+class EgresosCapitulo2y3DevengadoTable extends Tabla
 {
     public $cacheData = [];
     public $dataCompleta = [];
@@ -17,7 +24,7 @@ class EgresosCapitulo5DevengadoTable extends Tabla
     
     public function render()
     {
-        return view('livewire.egresos.egresos-capitulo5-devengado-table');
+        return view('livewire.egresos.egresos-capitulo2y3-devengado-table');
     }
 
     public function query(): Builder
@@ -50,14 +57,15 @@ class EgresosCapitulo5DevengadoTable extends Tabla
     {
 
     }
-    
+
     public function delete($value)
     {
-        
+
     }
 
     public function changeState($value)
     {
 
     }
+
 }

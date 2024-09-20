@@ -71,6 +71,7 @@ class IngresosRecaudadoTable extends Tabla
                         'importe' => $registro['importe']
                     ];
                     unset($this->dataCompleta[$key]);
+                    $this->dataCompleta = array_values($this->dataCompleta );
                     $this->dispatch('llenar-formulario', $datosRegistro);
                     break;
                 }
@@ -79,6 +80,7 @@ class IngresosRecaudadoTable extends Tabla
             foreach ($this->cacheData as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->cacheData[$key]);
+                    $this->cacheData = array_values($this->cacheData);
                     break;
                 }
             }
@@ -100,6 +102,7 @@ class IngresosRecaudadoTable extends Tabla
             foreach ($this->cacheData as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->cacheData[$key]);
+                    $this->cacheData = array_values($this->cacheData);
                     break;
                 }
             }
@@ -107,6 +110,7 @@ class IngresosRecaudadoTable extends Tabla
             foreach ($this->dataCompleta as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->dataCompleta[$key]);
+                    $this->dataCompleta = array_values($this->dataCompleta );
                     break;
                 }
             }
@@ -379,7 +383,6 @@ class IngresosRecaudadoTable extends Tabla
                             $total = $total - $polizaRecaudado['total'];
                             
                             if(number_format($total, 2) < 0){
-                                dd($total);
                                 DB::rollBack();
                                 $this->dispatch('mostrarMensaje', mensaje: 'Se excedió el monto $' .number_format($polizaInicial['total'], 2). ' de la cuenta de ' . $polizaInicial['concepto']. ' con IVA', tipo: 'error', tiempo: 3000);
                                 return;

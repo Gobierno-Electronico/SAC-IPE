@@ -66,6 +66,7 @@ class CobroEspecieTable extends Tabla
                         'importe' => $registro['importe']
                     ];
                     unset($this->dataCompleta[$key]);
+                    $this->dataCompleta = array_values($this->dataCompleta );
                     $this->dispatch('llenar-formulario', $datosRegistro);
                     break;
                 }
@@ -74,6 +75,7 @@ class CobroEspecieTable extends Tabla
             foreach ($this->cacheData as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->cacheData[$key]);
+                    $this->cacheData = array_values($this->cacheData);
                     break;
                 }
             }
@@ -93,6 +95,7 @@ class CobroEspecieTable extends Tabla
             foreach ($this->cacheData as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->cacheData[$key]);
+                    $this->cacheData = array_values($this->cacheData);
                     break;
                 }
             }
@@ -100,6 +103,7 @@ class CobroEspecieTable extends Tabla
             foreach ($this->dataCompleta as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->dataCompleta[$key]);
+                    $this->dataCompleta = array_values($this->dataCompleta );
                     break;
                 }
             }

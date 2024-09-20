@@ -5,10 +5,23 @@ namespace App\Livewire\egresos;
 use Livewire\Component;
 use Livewire\Attributes\Validate;
 use Livewire\Attributes\On;
+use App\Models\Cuenta;
+use App\Models\Poliza;
+use App\Models\InteraccionCuentaCuenta;
+use App\Models\InteraccionCuentaConcepto;
+use App\Models\CodigoDepartamento;
+use Illuminate\Support\Collection;
+use Log;
+use DB;
+use Carbon\Carbon;
 
-class EgresosCapitulo5PagadoForm extends Component
+
+class EgresosCapitulo2y3PagadoForm extends Component
 {
     public $consultarRegistro = false;
+    public $numeroPoliza;
+    public $numeroPolizaRemanente;
+    public $total;
 
     #[Validate('required', message: 'Área solicitante requerida')]
     public $selectCodigoArea = "";
@@ -29,7 +42,7 @@ class EgresosCapitulo5PagadoForm extends Component
     public $partidaPresupuestal = "";
 
     #[Validate('required', message: 'Método de pago requerido')]
-    public $metodoPago = "";
+    public $cuentaBanco = "";
 
     #[Validate('required', message: 'Mes requerido')]
     public $mes = "";
@@ -46,31 +59,25 @@ class EgresosCapitulo5PagadoForm extends Component
     #[Validate('required', message: 'Cuenta de retenciones requerida')]
     public $cuentaDeRetenciones = "";
 
+    public $partidasPresupuestales = [];
+    public $cuentasBanco = [];
     public $cuentasRetenciones = [];
 
-    public function render() 
+    public function render()
     {
-        $cuentas = ['prueba1', 'prueba2'];
-        $eventos = ['pruebaEvento1', 'pruebaEvento2'];
-        return view('livewire.egresos.egresos-capitulo5-pagado-form', ['cuentas' => $cuentas], ['eventos' => $eventos]);
-    }
+        try {
+            $eventos = Poliza::select('evento', 'descripcion')
+                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->where('tipo_poliza', '=', 'E')
+                ->where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 2 y 3')
+                ->where('estatus_evento', '=', true)
+                ->distinct()
+                ->pluck('descripcion', 'evento');
 
-    public function cambioEvento(){
-
-    }
-
-    public function agregarRegistro()
-    {
-        try{
-            $this->validate();
-        }catch (\Illuminate\Validation\ValidationException $e) {
-            $this->dispatch('mostrarMensaje', mensaje: $e->getMessage(), tipo: 'warning', tiempo: 3000);
+            return view('livewire.egresos.egresos-capitulo2y3-pagado-form', ['eventos' => $eventos]);
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al cargar eventos en Pagado del capítulo 2 y 3: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
-
-    public function finalizarRegistro()
-    {
-        
-    }
-
 }

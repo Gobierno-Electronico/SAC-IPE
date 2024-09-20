@@ -201,6 +201,9 @@ class EgresosCapitulo4DevengadoForm extends Component
             $this->limpiar();
         }catch (\Illuminate\Validation\ValidationException $e) {
             $this->dispatch('mostrarMensaje', mensaje: $e->getMessage(), tipo: 'warning', tiempo: 3000);
+        }catch (\Throwable $th) {
+            Log::error('Ocurrió un error al registrar en devengado del capítulo 4: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 

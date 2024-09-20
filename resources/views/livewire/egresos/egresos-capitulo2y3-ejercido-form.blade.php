@@ -24,9 +24,9 @@
 
             </div>
         </div>
-        <livewire:egresos.egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaEgresosEjercidoCapitulo4" urlFinalizar="/capitulo4-ejercido" tipoPoliza="E"
-            categoriaModulo='EGRESOS EJERCIDO CAPITULO 4' />
+        <livewire:egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+            tipoMovimiento="PolizaEgresosEjercidoCapitulo2y3" urlFinalizar="/capitulo2y3-ejercido" tipoPoliza="E"
+            categoriaModulo='EGRESOS EJERCIDO CAPITULO 2 y 3' />
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
@@ -114,7 +114,7 @@
             </div>
 
             <div class="col">
-                <livewire:egresos.egresos-capitulo4-ejercido-table />
+                <livewire:egresos.egresos-capitulo2y3-ejercido-table />
             </div> 
 
             <div class="row mt-4">

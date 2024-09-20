@@ -135,6 +135,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
                     ];
 
                     unset($this->dataCompleta[$key]);
+                    $this->dataCompleta = array_values($this->dataCompleta );
                     $this->dispatch('llenar-formulario', $datosRegistro);
                     break;
                 }
@@ -143,6 +144,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
             foreach ($this->cacheData as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->cacheData[$key]);
+                    $this->cacheData = array_values($this->cacheData);
                     break;
                 }
             }
@@ -163,6 +165,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
             foreach ($this->cacheData as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->cacheData[$key]);
+                    $this->cacheData = array_values($this->cacheData);
                     break;
                 }
             }
@@ -170,6 +173,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
             foreach ($this->dataCompleta as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->dataCompleta[$key]);
+                    $this->dataCompleta = array_values($this->dataCompleta );
                     break;
                 }
             }
@@ -218,6 +222,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
             $this->dispatch('mostrarMensaje', mensaje: 'Tabla sin registros', tipo: 'error', tiempo: 3000);
             return;
         }
+        Log::info($this->dataCompleta);
 
         try {
             $numerosPolizas = Poliza::select('numero_poliza')
@@ -343,7 +348,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
                         // Si la clave no existe, agregar el nuevo depósito al resultado
                         $resultado[$clave] = [
                             'area' => $polizaImporte->area,
-                            'tipo_poliza' => 'IAUX',
+                            'tipo_poliza' => 'EAUX',
                             'numero_poliza' =>  $this->numeroPolizaRemanente,
                             'fecha' => $movimiento['fechaAfectacion'],
                             'cuenta' => $polizaImporte->cuenta,
@@ -373,7 +378,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
                     }
                         Poliza::create([
                             'area' => $polizaInicial['area'],
-                            'tipo_poliza' => 'IAUX',
+                            'tipo_poliza' => 'EAUX',
                             'numero_poliza' =>  $this->numeroPolizaRemanente,
                             'fecha' => $movimiento['fechaAfectacion'],
                             'cuenta' => $polizaInicial['cuenta'],

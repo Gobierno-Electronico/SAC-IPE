@@ -18,13 +18,10 @@
                                 disabled>
                         </div>
                     </div>
-
-
                 </div>
-
             </div>
         </div>
-        <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+        <livewire:egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
         tipoMovimiento="PolizaEgresosPagadoCapitulo5" urlFinalizar="/capitulo5-pagado" tipoPoliza="E"
         categoriaModulo='EGRESOS PAGADO CAPITULO 5' />
     @else
@@ -123,16 +120,27 @@
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control"
                     onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model="importe">
 
-                <label for="pagoRetenciones"class="form-label mt-3">Pago de retenciones</label><br>
+                <label for="selectorPagoRetenciones"class="form-label mt-3">Pago de retenciones</label><br>
                 <label>
-                    <input type="radio" name="pagoRetenciones" wire:model="pagoRetenciones" value="SI">
+                    <input type="radio" name="selectorPagoRetenciones" wire:model.live="selectorPagoRetenciones" value="SI">
                     Sí
                 </label>
                 &nbsp;&nbsp;&nbsp;
                 <label>
-                    <input type="radio" name="pagoRetenciones" wire:model="pagoRetenciones" value="NO">
+                    <input type="radio" name="selectorPagoRetenciones" wire:model.live="selectorPagoRetenciones" value="NO">
                     No
                 </label><br>
+
+                @if ($selectorPagoRetenciones == 'SI')
+                    <label for="selectCuenta" class="form-label mt-3">Retenciones</label>
+                    <select name="selectRetenciones" id="selectRetenciones" class="form-select" wire:model="cuentaDeRetenciones">
+                        <option value="" disabled>Seleccionar cuenta de retención</option>
+                        @foreach ($cuentasRetenciones as $retencion)
+                            <option value="{{ $retencion->cuenta_id }}"> 
+                                {{ $retencion->Codigo_cuenta . '  ' . $retencion->Descripcion_cuenta }}</option>
+                        @endforeach
+                    </select>
+                @endif
             </div>
 
             <div class="col">
