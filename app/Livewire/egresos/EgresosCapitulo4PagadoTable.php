@@ -120,7 +120,6 @@ class EgresosCapitulo4PagadoTable extends Tabla
     public function edit($id)
     {
         try {
-            Log::info($this->dataCompleta);
             $this->recalcularDisponibilidad($id);
             foreach ($this->dataCompleta as $key => $registro) {
                 if ($registro['id'] == $id) {
@@ -137,7 +136,6 @@ class EgresosCapitulo4PagadoTable extends Tabla
 
                     unset($this->dataCompleta[$key]);
                     $this->dataCompleta = array_values($this->dataCompleta );
-                    Log::info($this->dataCompleta);
                     $this->dispatch('llenar-formulario', $datosRegistro);
                     break;
                 }

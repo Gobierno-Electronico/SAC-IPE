@@ -67,6 +67,7 @@ class DepositosBancosTable extends Tabla
                     ];
     
                     unset($this->cacheData[$key]);
+                    $this->cacheData = array_values($this->cacheData);
                     $this->dispatch('llenar-formulario', $datosRegistro);
                     break;
                 }
@@ -75,6 +76,7 @@ class DepositosBancosTable extends Tabla
             foreach ($this->dataCompleta as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->dataCompleta[$key]);
+                    $this->dataCompleta = array_values($this->dataCompleta );
                     break;
                 }
             }
@@ -95,6 +97,7 @@ class DepositosBancosTable extends Tabla
             foreach ($this->cacheData as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->cacheData[$key]);
+                    $this->cacheData = array_values($this->cacheData);
                     break;
                 }
             }
@@ -102,6 +105,7 @@ class DepositosBancosTable extends Tabla
             foreach ($this->dataCompleta as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->dataCompleta[$key]);
+                    $this->dataCompleta = array_values($this->dataCompleta );
                     break;
                 }
             }
