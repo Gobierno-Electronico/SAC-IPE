@@ -159,6 +159,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
                         'importe' => $registro['importe'],
                         'cuentaRetenciones' => $registro['cuentaRetencionesId'],
                         'pttoEjercido' => $registro['pttoEjercido'],
+                        'montoContable' => $registro['montoContable']
                     ];
 
                     unset($this->dataCompleta[$key]);

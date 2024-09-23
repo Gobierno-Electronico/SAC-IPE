@@ -153,27 +153,6 @@
 </div>
 
 <script>
-    
-    window.addEventListener('mostrar_monto_contable', event => {
-        console.log('mostrar')
-        mostrarMontoContable()
-    })
-
-    window.addEventListener('ocultar_monto_contable', event => {
-        ocultarMontoContable()
-    })
-    
-    function mostrarMontoContable() {
-        console.log('mostrar 2')
-        const label = document.getElementById('labelMontoContable').classList.remove('d-none');
-        document.getElementById('inputMontoContable').classList.remove('d-none');
-        console.log(label)
-    }
-
-    function ocultarMontoContable(){
-        document.getElementById('labelMontoContable').classList.add('d-none');
-        document.getElementById('inputMontoContable').classList.add('d-none');
-    }
 
     window.addEventListener('formato_importe', event => {
         let params = event.__livewire.params

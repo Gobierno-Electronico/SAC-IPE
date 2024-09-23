@@ -66,8 +66,10 @@
             $('#inputImporte').val(parametros.importe);
             $("#selectCuenta").val(parametros.cuentaBanco);
             $("#selectRetenciones").val(parametros.cuentaRetenciones);
+            $("#inputMontoContable").val(parametros.montoContable);
             formatearImporte({id: 'inputImporte'})
-            formatearImporte({id: 'inputPTTOEjecutado'})
+            formatearImporte({id: 'inputPTTOEjercido'})
+            formatearImporte({id: 'inputMontoContable'})
         }, 10);
     });
 </script>

@@ -1293,3 +1293,45 @@
     'montoContable' => 0,
   ),
 )  
+[2024-09-23 13:32:48] local.INFO: 692  
+[2024-09-23 13:33:03] local.INFO: 10780  
+[2024-09-23 13:37:59] local.INFO: 692  
+[2024-09-23 13:38:14] local.INFO: 10780  
+[2024-09-23 13:40:29] local.INFO: 692  
+[2024-09-23 13:40:41] local.INFO: 10780  
+[2024-09-23 13:42:00] local.INFO: 692  
+[2024-09-23 13:42:16] local.INFO: 10780  
+[2024-09-23 13:42:28] local.INFO: 692  
+[2024-09-23 13:42:37] local.INFO: 10780  
+[2024-09-23 13:43:54] local.INFO: 692  
+[2024-09-23 13:44:11] local.INFO: 10780  
+[2024-09-23 13:44:22] local.INFO: 10780  
+[2024-09-23 13:45:06] local.INFO: 692  
+[2024-09-23 13:46:07] local.INFO: 692  
+[2024-09-23 13:46:09] local.INFO: array (
+  0 => 
+  array (
+    'id' => 1,
+    'codigoArea' => '12',
+    'observaciones' => 'prueba remanente',
+    'fechaAfectacion' => '2024-09-06',
+    'evento' => '9',
+    'areaResponsableId' => '24',
+    'codigoAreaResponsable' => '1.5.02',
+    'descripcionAreaResponsable' => 'DEPARTAMENTO DE VIGENCIA DE DERECHOS',
+    'partidaId' => '5960',
+    'codigoPartida' => '8.2.7.5.2.5.1.01.01',
+    'descripcionPartida' => 'Pensiones con Recursos Propios (Pagado)',
+    'cuentaBancoId' => '29',
+    'codigoCuentaBanco' => '1.1.1.2.01.03',
+    'descripcionCuentaBanco' => 'Banamex 7013-4395018',
+    'cuentaRetencionesId' => '692',
+    'codigoCuentaRetenciones' => '2.1.1.5.05.01',
+    'descripcionCuentaRetenciones' => 'Pensiones con Recursos Propios',
+    'mes' => 'Septiembre',
+    'importe' => 220000100,
+    'montoEvento' => '578654219.0000000000',
+    'pttoEjercido' => 330000000,
+    'montoContable' => 300000000,
+  ),
+)  

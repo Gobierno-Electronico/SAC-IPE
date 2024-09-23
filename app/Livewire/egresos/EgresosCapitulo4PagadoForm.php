@@ -298,8 +298,9 @@ class EgresosCapitulo4PagadoForm extends Component
         $this->importe = $datosRegistro['importe'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->PPTOEjercido = $datosRegistro['pttoEjercido'];
+        $this->montoContable = $datosRegistro['montoContable'];
 
-        $this->dispatch('llenarFormulario', presupuesto: $this->PPTOEjercido, importe: $this->importe, cuentaBanco: $this->cuentaBanco, cuentaRetenciones: $this->cuentaDeRetenciones);
+        $this->dispatch('llenarFormulario', presupuesto: $this->PPTOEjercido, importe: $this->importe, cuentaBanco: $this->cuentaBanco, cuentaRetenciones: $this->cuentaDeRetenciones, montoContable:$this->montoContable);
     }
 
     #[On('consultar-registro')]
