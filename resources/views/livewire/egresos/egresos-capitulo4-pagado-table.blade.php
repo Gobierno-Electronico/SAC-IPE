@@ -56,14 +56,18 @@
         let parametros = event.__livewire.params
         $('#total').val(parametros.total);
         formatearImporte({id: 'total'})
-    });
+    }); 
 
     window.addEventListener('llenarFormulario', event => {
-        let parametros = event.__livewire.params
-        console.log(parametros);
-        $('#inputPTTOEjercido').val(parametros.presupuesto);
-        $('#inputImporte').val(parametros.importe);
-        formatearImporte({id: 'inputImporte'})
-        formatearImporte({id: 'inputPTTOEjecutado'})
+        setTimeout(() => {
+            let parametros = event.__livewire.params
+            console.log(parametros.cuentaRetenciones);
+            $('#inputPTTOEjercido').val(parametros.presupuesto);
+            $('#inputImporte').val(parametros.importe);
+            $("#selectCuenta").val(parametros.cuentaBanco);
+            $("#selectRetenciones").val(parametros.cuentaRetenciones);
+            formatearImporte({id: 'inputImporte'})
+            formatearImporte({id: 'inputPTTOEjecutado'})
+        }, 10);
     });
 </script>

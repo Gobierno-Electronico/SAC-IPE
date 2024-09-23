@@ -129,7 +129,6 @@ class EgresosCapitulo4PagadoTable extends Tabla
                         'cuentaBanco' => $registro['cuentaBancoId'],
                         'mes' => $registro['mes'],
                         'importe' => $registro['importe'],
-                        'pttoEjercido' => $registro['pttoEjercido'],
                         'cuentaRetenciones' => $registro['cuentaRetencionesId'],
                         'pttoEjercido' => $registro['pttoEjercido'],
                     ];
