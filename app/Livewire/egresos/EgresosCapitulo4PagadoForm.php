@@ -56,6 +56,7 @@ class EgresosCapitulo4PagadoForm extends Component
 
     public $PPTOEjercido = 0;
 
+    public $montoContable = 0;
 
     public $partidasPresupuestales = [];
     public $cambiarPartidaPresupuestalSeleccionada = true;
@@ -65,7 +66,6 @@ class EgresosCapitulo4PagadoForm extends Component
 
     public $cuentasRetenciones = [];
     public $cambiarCuentaRetencionesSeleccionada = true;
-
 
     public function render()
     {
@@ -136,7 +136,7 @@ class EgresosCapitulo4PagadoForm extends Component
             $cuentasDevengadasAux = $cuentasDevengadasAux->unique('Codigo_cuenta');
             $this->partidasPresupuestales = $cuentasDevengadasAux;
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al cargar el evento en Devengado del capítulo 4: ' . $th->getMessage());
+            Log::error('Ocurrió un error al cargar el evento en pagado del capítulo 4: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -200,13 +200,31 @@ class EgresosCapitulo4PagadoForm extends Component
 
 
             $solvencia = DB::select('EXEC SolvenciaEjercidosCapitulo4 @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?', array($departamento->Codigo_completo, $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $this->mes, $this->numeroEvento))[0]->Total;
+
+            $identificadorPartidaPresupuestalSeleccionada = Cuenta::where('id', $this->partidaPresupuestal)->value('identificador');
+            if($identificadorPartidaPresupuestalSeleccionada == 'CG-5745'){ //esta comparacion se hace porque ese identificador pertenece a pensiones con recursos propios, esta cuenta es la unica cuenta contable que puede tener retenciones
+                $this->cargarMontoContable();
+            }else{
+                $this->montoContable=0;
+            }
             $this->PPTOEjercido = ($solvencia > 0) ? floatval($solvencia) : 0;
             $this->dispatch('formato_importe', id: 'inputPTTOEjercido', amount: "{$this->PPTOEjercido}");
             $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto ejercido cargado', tipo: 'success', tiempo: 1500);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al cargar presupuesto en devengado del capítulo 4: ' . $th->getMessage());
+            Log::error('Ocurrió un error al cargar presupuesto en pagado del capítulo 4: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar presupuesto, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
+    }
+
+    public function cargarMontoContable(){
+        if (!$this->partidaPresupuestal || !$this->mes || !$this->selectCodigoAreaResponsable) return;
+        $anioActual = Carbon::now()->year;
+        $codigoDepartamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
+        $codigoCuentaContableSeleccionada = Cuenta::where('id', $this->cuentaDeRetenciones)->value('Codigo_cuenta');
+        $solvenciaContable = DB::select('EXEC SolvenciaDevengadoCuentaContableCapitulo4 @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?', array ($codigoDepartamento->Codigo_completo, $codigoCuentaContableSeleccionada, $anioActual, $this->mes, $this->numeroEvento))[0]->Total;
+        $this->montoContable = ($solvenciaContable > 0) ? floatval($solvenciaContable) : 0;
+        $this->dispatch('formato_importe', id: 'inputMontoContable', amount: "{$this->montoContable}");
+        $this->dispatch('mostrarMensaje', mensaje: 'Monto contable cargado', tipo: 'success', tiempo: 1500);
     }
 
     public function agregarRegistro()
@@ -242,9 +260,9 @@ class EgresosCapitulo4PagadoForm extends Component
                 'mes' => $this->mes,
                 'importe' => $this->importe,
                 'montoEvento' => $this->montoDelEvento,
-                'pttoEjercido' => $this->PPTOEjercido
+                'pttoEjercido' => $this->PPTOEjercido,
+                'montoContable' => $this->montoContable
             ];
-
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
         } catch (\Illuminate\Validation\ValidationException $e) {

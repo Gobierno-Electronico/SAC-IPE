@@ -100,7 +100,7 @@
                 </select>
 
                 <label for="selectCuenta" class="form-label mt-3">Cuenta contable</label>
-                <select name="selectRetenciones" id="selectRetenciones" class="form-select" wire:model="cuentaDeRetenciones">
+                <select name="selectRetenciones" id="selectRetenciones" class="form-select" wire:model="cuentaDeRetenciones" wire:change="cargarMontoContable">
                     <option value="" disabled>Seleccionar cuenta de retención</option>
                     @foreach ($cuentasRetenciones as $retencion)
                         <option value="{{ $retencion->cuenta_id }}"> 
@@ -126,6 +126,11 @@
                 <label for="inputPTTOEjercido" class="form-label mt-3">Presupuesto ejercido</label>
                 <input type="text" name="inputPTTOEjercido" id="inputPTTOEjercido" class="form-control" disabled>
 
+                @if($partidaPresupuestal == '5960')
+                    <label for="inputMontoContable" id="labelMontoContable" class="form-label mt-3">Monto contable</label>
+                    <input type="text" id="inputMontoContable" name="inputMontoContable" class="form-control" disabled>
+                @endif
+
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control"
                     onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model="importe">
@@ -148,6 +153,28 @@
 </div>
 
 <script>
+    
+    window.addEventListener('mostrar_monto_contable', event => {
+        console.log('mostrar')
+        mostrarMontoContable()
+    })
+
+    window.addEventListener('ocultar_monto_contable', event => {
+        ocultarMontoContable()
+    })
+    
+    function mostrarMontoContable() {
+        console.log('mostrar 2')
+        const label = document.getElementById('labelMontoContable').classList.remove('d-none');
+        document.getElementById('inputMontoContable').classList.remove('d-none');
+        console.log(label)
+    }
+
+    function ocultarMontoContable(){
+        document.getElementById('labelMontoContable').classList.add('d-none');
+        document.getElementById('inputMontoContable').classList.add('d-none');
+    }
+
     window.addEventListener('formato_importe', event => {
         let params = event.__livewire.params
         formatearImporte({
