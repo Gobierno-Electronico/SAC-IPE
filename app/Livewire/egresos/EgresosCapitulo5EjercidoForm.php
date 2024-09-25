@@ -99,7 +99,7 @@ class EgresosCapitulo5EjercidoForm extends Component
                 ->get();
 
             $cuentasEjercidas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-                ->whereIn('interaccion_cuenta_conceptos.concepto_id', [])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
+                ->whereIn('interaccion_cuenta_conceptos.concepto_id', [73, 74, 75])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
                 ->orderBy('cuentas.Codigo_cuenta')->get();
                 
             $cuentasAuxiliar = new Collection();
@@ -132,7 +132,7 @@ class EgresosCapitulo5EjercidoForm extends Component
             if (!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
             $anioActual = Carbon::now()->year;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
-            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [])->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
+            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [73, 74, 75])->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
             $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')
             ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->where('Descripcion_cuenta', 'LIKE', '%(Devengado)%')->first();
             
