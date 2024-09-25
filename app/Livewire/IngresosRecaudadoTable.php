@@ -280,7 +280,7 @@ class IngresosRecaudadoTable extends Tabla
                     $contadorDuplas = 0;
                     $sumaAbonos = 0;
                     $hayIva = false;
-                }
+                } 
             }
 
             $anioActual = Carbon::now()->year;

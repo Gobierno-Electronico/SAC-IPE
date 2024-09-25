@@ -71,3 +71,156 @@
 [2024-09-24 11:44:33] local.INFO: 827.5862068966  
 [2024-09-24 11:44:33] local.INFO: 6000.0000000001  
 [2024-09-24 11:44:33] local.INFO: devengado: 6000.0000000001  
+[2024-09-25 07:59:15] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
+[stacktrace]
+#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
+#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
+#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
+#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
+#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
+#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#11 {main}
+"} 
+[2024-09-25 07:59:18] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
+[stacktrace]
+#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
+#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
+#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
+#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
+#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
+#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#11 {main}
+"} 
+[2024-09-25 07:59:21] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
+[stacktrace]
+#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
+#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
+#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
+#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
+#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
+#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#11 {main}
+"} 
+[2024-09-25 14:26:23] local.INFO: 692  
+[2024-09-25 14:26:48] local.INFO: 11149  
+[2024-09-25 14:28:07] local.INFO: 10780  
+[2024-09-25 14:28:21] local.INFO: array (
+  0 => 
+  array (
+    'id' => 1,
+    'codigoArea' => '16',
+    'observaciones' => 'Pagado',
+    'fechaAfectacion' => '2024-09-25',
+    'evento' => '16',
+    'areaResponsableId' => '24',
+    'codigoAreaResponsable' => '1.5.02',
+    'descripcionAreaResponsable' => 'DEPARTAMENTO DE VIGENCIA DE DERECHOS',
+    'partidaId' => '5960',
+    'codigoPartida' => '8.2.7.5.2.5.1.01.01',
+    'descripcionPartida' => 'Pensiones con Recursos Propios (Pagado)',
+    'cuentaBancoId' => '34',
+    'codigoCuentaBanco' => '1.1.1.2.02.03',
+    'descripcionCuentaBanco' => 'BBVA Bancomer 444106237',
+    'cuentaRetencionesId' => '692',
+    'codigoCuentaRetenciones' => '2.1.1.5.05.01',
+    'descripcionCuentaRetenciones' => 'Pensiones con Recursos Propios',
+    'mes' => 'Febrero',
+    'importe' => 150000000,
+    'montoEvento' => '558000000.0000000000',
+    'pttoEjercido' => 300000000,
+    'montoContable' => 150000000,
+  ),
+  1 => 
+  array (
+    'id' => 2,
+    'codigoArea' => '16',
+    'observaciones' => 'Pagado',
+    'fechaAfectacion' => '2024-09-25',
+    'evento' => '16',
+    'areaResponsableId' => '24',
+    'codigoAreaResponsable' => '1.5.02',
+    'descripcionAreaResponsable' => 'DEPARTAMENTO DE VIGENCIA DE DERECHOS',
+    'partidaId' => '5960',
+    'codigoPartida' => '8.2.7.5.2.5.1.01.01',
+    'descripcionPartida' => 'Pensiones con Recursos Propios (Pagado)',
+    'cuentaBancoId' => '34',
+    'codigoCuentaBanco' => '1.1.1.2.02.03',
+    'descripcionCuentaBanco' => 'BBVA Bancomer 444106237',
+    'cuentaRetencionesId' => '11149',
+    'codigoCuentaRetenciones' => '2.1.1.7.01.08',
+    'descripcionCuentaRetenciones' => 'ISR Retención Pensiones y Jubilaciones',
+    'mes' => 'Febrero',
+    'importe' => 150000000,
+    'montoEvento' => '558000000.0000000000',
+    'pttoEjercido' => 300000000,
+    'montoContable' => 150000000,
+  ),
+  2 => 
+  array (
+    'id' => 3,
+    'codigoArea' => '16',
+    'observaciones' => 'Pagado',
+    'fechaAfectacion' => '2024-09-25',
+    'evento' => '16',
+    'areaResponsableId' => '24',
+    'codigoAreaResponsable' => '1.5.02',
+    'descripcionAreaResponsable' => 'DEPARTAMENTO DE VIGENCIA DE DERECHOS',
+    'partidaId' => '10881',
+    'codigoPartida' => '8.2.7.5.2.5.1.01.02',
+    'descripcionPartida' => 'Pensiones con Subsidios Federal (Pagado)',
+    'cuentaBancoId' => '46',
+    'codigoCuentaBanco' => '1.1.1.2.05.03',
+    'descripcionCuentaBanco' => 'Santander 65500723186',
+    'cuentaRetencionesId' => '10780',
+    'codigoCuentaRetenciones' => '2.1.1.5.05.02',
+    'descripcionCuentaRetenciones' => 'Pensiones con Subsidios Federal ',
+    'mes' => 'Febrero',
+    'importe' => 250000000,
+    'montoEvento' => '558000000.0000000000',
+    'pttoEjercido' => 258000000,
+    'montoContable' => 0,
+  ),
+)  
+[2024-09-25 14:30:29] local.INFO: 10780  
+[2024-09-25 14:30:34] local.INFO: array (
+  0 => 
+  array (
+    'id' => 1,
+    'codigoArea' => '16',
+    'observaciones' => 'Pagado',
+    'fechaAfectacion' => '2024-09-25',
+    'evento' => '16',
+    'areaResponsableId' => '24',
+    'codigoAreaResponsable' => '1.5.02',
+    'descripcionAreaResponsable' => 'DEPARTAMENTO DE VIGENCIA DE DERECHOS',
+    'partidaId' => '10881',
+    'codigoPartida' => '8.2.7.5.2.5.1.01.02',
+    'descripcionPartida' => 'Pensiones con Subsidios Federal (Pagado)',
+    'cuentaBancoId' => '29',
+    'codigoCuentaBanco' => '1.1.1.2.01.03',
+    'descripcionCuentaBanco' => 'Banamex 7013-4395018',
+    'cuentaRetencionesId' => '10780',
+    'codigoCuentaRetenciones' => '2.1.1.5.05.02',
+    'descripcionCuentaRetenciones' => 'Pensiones con Subsidios Federal ',
+    'mes' => 'Febrero',
+    'importe' => 8000000,
+    'montoEvento' => '8000000.0000000000',
+    'pttoEjercido' => 8000000,
+    'montoContable' => 8000000,
+  ),
+)  
