@@ -28,14 +28,17 @@ class EgresosCapitulo5DevengadoForm extends Component
     #[Validate('required', message: 'Partida presupuestal requerida')]
     public $partidaPresupuestal = "";
 
-    #[Validate('required', message: 'Cuenta contable requerida')]
-    public $cuentaContable = "";
+    #[Validate('required', message: 'Retención requerida')]
+    public $cuentaRetencion = "";
 
     #[Validate('required', message: 'Mes requerido')]
     public $mes = "";
 
     #[Validate('required', message: 'Importe requerido')]
     public $importe = "";
+
+    #[Validate('required', message: 'Selector de pago de retenciones requerido')]
+    public $selectorPagoRetenciones = "";
 
     #[Validate('required', message: 'Monto del evento requerido')]
     public $montoDelEvento = "";
