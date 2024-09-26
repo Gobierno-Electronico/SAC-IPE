@@ -80,8 +80,7 @@
                 </select>
 
                 <label for="selectPartidaPresupuestal" class="form-label mt-3">Partida presupuestal</label>
-                <select name="selectPartidaPresupuestal" id="selectPartidaPresupuestal" class="form-select"
-                    wire:model="partidaPresupuestal" wire:change="llenarCuentasContables">
+                <select name="selectPartidaPresupuestal" id="selectPartidaPresupuestal" class="form-select" wire:model="partidaPresupuestal" wire:change="cargarPresupuestoComprometido">
                     <option value="" selected disabled>Seleccionar partida presupuestal</option>
                     @foreach ($partidasPresupuestales as $partida)
                         <option value="{{ $partida->cuenta_id }}">
@@ -115,7 +114,7 @@
 
                 <label for="selectorPagoRetenciones"class="form-label mt-3">Pago de retenciones</label><br>
                 <label>
-                    <input type="radio" name="selectorPagoRetenciones" wire:model.live="selectorPagoRetenciones"
+                    <input type="radio" name="selectorPagoRetenciones" wire:model.live="selectorPagoRetenciones" wire:change="llenarCuentasContableAbono"
                         value="SI">
                     Sí
                 </label>
@@ -128,9 +127,9 @@
 
                 @if ($selectorPagoRetenciones == 'SI')
                     <label for="selectCuenta" class="form-label mt-3">Retenciones</label>
-                    <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuentaContable">
+                    <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuentaContableAbono">
                         <option value="" selected disabled>Seleccionar cuenta</option>
-                        @foreach ($cuentasContables as $cuenta)
+                        @foreach ($cuentasContableAbono as $cuenta)
                             <option value="{{ $cuenta->cuenta_id }}">
                                 {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}
                             </option>
@@ -148,7 +147,7 @@
                     <button class="btn btn-success" wire:click="agregarRegistro">Agregar registro</button>
                 </div>
                 <div class="col text-end">
-                    <button class="btn btn-success" wire:click="finalizarRegistros">Finalizar registros</button>
+                    <button class="btn btn-success" wire:click="finalizarRegistro">Finalizar registros</button>
                 </div>
             </div>
         </div>
