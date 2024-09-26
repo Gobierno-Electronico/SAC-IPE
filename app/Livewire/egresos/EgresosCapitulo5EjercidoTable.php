@@ -7,6 +7,13 @@ use App\Clases\Column;
 use Livewire\Attributes\On;
 use App\Livewire\Tabla;
 use Illuminate\Database\Eloquent\Builder;
+use App\Http\Controllers\BitacoraController;
+use App\Models\Poliza;
+use Carbon\Carbon;
+use App\Models\InteraccionCuentaCuenta;
+use App\Models\InteraccionCuentaConcepto;
+use Log;
+use DB;
 
 class EgresosCapitulo5EjercidoTable extends Tabla
 {

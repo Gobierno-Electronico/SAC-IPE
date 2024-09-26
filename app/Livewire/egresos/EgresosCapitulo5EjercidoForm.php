@@ -9,6 +9,7 @@ use App\Models\Cuenta;
 use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
 use App\Models\Poliza;
+use App\Models\CodigoDepartamento;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use DB;
@@ -17,8 +18,6 @@ use Log;
 
 class EgresosCapitulo5EjercidoForm extends Component
 {
-    public $consultarRegistro = false;
-
     #[Validate('required', message: 'Área solicitante requerida')]
     public $selectCodigoArea = "";
 
@@ -45,6 +44,10 @@ class EgresosCapitulo5EjercidoForm extends Component
 
     #[Validate('required', message: 'Monto del evento requerido')]
     public $montoDelEvento = "";
+
+    public $consultarRegistro = false;
+    public $numeroPoliza;
+    public $total;
 
     public $cuentas = [];
     public $cambiarCuentaSeleccionada = true;
