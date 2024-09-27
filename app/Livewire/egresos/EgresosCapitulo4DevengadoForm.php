@@ -112,8 +112,8 @@ class EgresosCapitulo4DevengadoForm extends Component
             $cuentasDevengadasAux = $cuentasDevengadasAux->unique('Codigo_cuenta');
             $this->partidasPresupuestales = $cuentasDevengadasAux;
         }catch (\Throwable $th) {
-            Log::error('Ocurrió un error al cargar el evento en Devengado del capítulo 4: ' . $th->getMessage());
-            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+            Log::error('Ocurrió un error al cargar partidas presupuestales en Devengado del capítulo 4: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las partidas presupuestales, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 

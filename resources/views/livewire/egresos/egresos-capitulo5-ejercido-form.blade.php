@@ -24,7 +24,7 @@
 
             </div>
         </div>
-         <livewire:egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+         <livewire:egresos.egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
             tipoMovimiento="PolizaEgresosEjercidoCapitulo5" urlFinalizar="/capitulo5-ejercido" tipoPoliza="E"
             categoriaModulo='EGRESOS EJERCIDO CAPITULO 5' />
     @else
@@ -85,7 +85,7 @@
                 <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta" wire:change="cargarPresupuestoDevengado">
                     <option value="" disabled>Seleccionar cuenta</option>
                     @foreach ($cuentas as $cuenta)
-                        <option value="{{ $$cuenta->cuenta_id }}"> 
+                        <option value="{{ $cuenta->cuenta_id }}"> 
                             {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta  }}</option>
                     @endforeach
                 </select>

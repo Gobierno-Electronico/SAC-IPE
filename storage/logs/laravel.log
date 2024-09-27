@@ -71,246 +71,527 @@
 [2024-09-24 11:44:33] local.INFO: 827.5862068966  
 [2024-09-24 11:44:33] local.INFO: 6000.0000000001  
 [2024-09-24 11:44:33] local.INFO: devengado: 6000.0000000001  
-[2024-09-25 07:59:15] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
+[2024-09-26 13:04:53] local.ERROR: Undefined variable ${"id":5327,"Codigo_cuenta":"8.2.6.1.2.4.1.01.01","Descripcion_cuenta":"Muebles de Oficina y Estanter\u00eda (Ejercido)","Cuenta_registro":"1","Nivel":"9","Cuenta_padre_ID":"8.2.6.1.2.4.1.01","Estado":"1","Naturaleza":"DEUDORA","identificador":"CG-4642","created_at":"2024-09-25T21:50:23.097000Z","updated_at":"2024-09-25T21:50:23.097000Z","concepto_id":"74","cuenta_id":"4741","clasificador_de_concepto_id":"14","tipo_interaccion":"Presupuestal - Cargo"} {"view":{"view":"C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\resources\\views\\livewire\\egresos\\egresos-capitulo5-ejercido-form.blade.php","data":[]},"userId":57,"exception":"[object] (Spatie\\LaravelIgnition\\Exceptions\\ViewException(code: 0): Undefined variable ${\"id\":5327,\"Codigo_cuenta\":\"8.2.6.1.2.4.1.01.01\",\"Descripcion_cuenta\":\"Muebles de Oficina y Estanter\\u00eda (Ejercido)\",\"Cuenta_registro\":\"1\",\"Nivel\":\"9\",\"Cuenta_padre_ID\":\"8.2.6.1.2.4.1.01\",\"Estado\":\"1\",\"Naturaleza\":\"DEUDORA\",\"identificador\":\"CG-4642\",\"created_at\":\"2024-09-25T21:50:23.097000Z\",\"updated_at\":\"2024-09-25T21:50:23.097000Z\",\"concepto_id\":\"74\",\"cuenta_id\":\"4741\",\"clasificador_de_concepto_id\":\"14\",\"tipo_interaccion\":\"Presupuestal - Cargo\"} at C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\resources\\views\\livewire\\egresos\\egresos-capitulo5-ejercido-form.blade.php:88)
 [stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#11 {main}
+#0 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(256): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined varia...', 'C:\\\\Users\\\\Dmijan...', 104)
+#1 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\resources\\views\\livewire\\egresos\\egresos-capitulo5-ejercido-form.blade.php(88): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined varia...', 'C:\\\\Users\\\\Dmijan...', 104)
+#2 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine.php(37): include('C:\\\\Users\\\\Dmijan...')
+#3 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine.php(38): App\\Livewire\\egresos\\EgresosCapitulo5EjercidoForm->Livewire\\Mechanisms\\ExtendBlade\\{closure}()
+#4 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Engines\\CompilerEngine.php(73): Livewire\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine->evaluatePath('C:\\\\Users\\\\Dmijan...', Array)
+#5 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine.php(16): Illuminate\\View\\Engines\\CompilerEngine->get('C:\\\\Users\\\\Dmijan...', Array)
+#6 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(208): Livewire\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine->get('C:\\\\Users\\\\Dmijan...', Array)
+#7 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(191): Illuminate\\View\\View->getContents()
+#8 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(160): Illuminate\\View\\View->renderContents()
+#9 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(240): Illuminate\\View\\View->render(Object(Closure))
+#10 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(284): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->Livewire\\Mechanisms\\HandleComponents\\{closure}()
+#11 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(232): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->trackInRenderStack(Object(App\\Livewire\\egresos\\EgresosCapitulo5EjercidoForm), Object(Closure))
+#12 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(103): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->render(Object(App\\Livewire\\egresos\\EgresosCapitulo5EjercidoForm))
+#13 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\LivewireManager.php(96): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->update(Array, Array, Array)
+#14 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleRequests\\HandleRequests.php(89): Livewire\\LivewireManager->update(Array, Array, Array)
+#15 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php(46): Livewire\\Mechanisms\\HandleRequests\\HandleRequests->handleUpdate()
+#16 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(260): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(Livewire\\Mechanisms\\HandleRequests\\HandleRequests), 'handleUpdate')
+#17 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(206): Illuminate\\Routing\\Route->runController()
+#18 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(806): Illuminate\\Routing\\Route->run()
+#19 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#20 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\app\\Http\\Middleware\\ResetPassword.php(23): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#21 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): App\\Http\\Middleware\\ResetPassword->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#22 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#23 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#24 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken.php(88): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#25 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#26 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Middleware\\ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#27 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#28 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#29 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#30 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#31 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#32 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#33 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\EncryptCookies.php(75): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#34 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#35 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#36 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(805): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#37 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#38 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(748): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#39 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#40 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#41 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#42 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Features\\SupportDisablingBackButtonCache\\DisableBackButtonCacheMiddleware.php(19): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#43 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Livewire\\Features\\SupportDisablingBackButtonCache\\DisableBackButtonCacheMiddleware->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#44 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#45 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#46 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(47): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#47 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#48 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#49 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#50 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(110): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#51 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#52 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#53 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#54 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#55 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#56 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#57 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#58 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#59 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\public\\index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#60 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('C:\\\\Users\\\\Dmijan...')
+#61 {main}
+
+[previous exception] [object] (ErrorException(code: 0): Undefined variable ${\"id\":5327,\"Codigo_cuenta\":\"8.2.6.1.2.4.1.01.01\",\"Descripcion_cuenta\":\"Muebles de Oficina y Estanter\\u00eda (Ejercido)\",\"Cuenta_registro\":\"1\",\"Nivel\":\"9\",\"Cuenta_padre_ID\":\"8.2.6.1.2.4.1.01\",\"Estado\":\"1\",\"Naturaleza\":\"DEUDORA\",\"identificador\":\"CG-4642\",\"created_at\":\"2024-09-25T21:50:23.097000Z\",\"updated_at\":\"2024-09-25T21:50:23.097000Z\",\"concepto_id\":\"74\",\"cuenta_id\":\"4741\",\"clasificador_de_concepto_id\":\"14\",\"tipo_interaccion\":\"Presupuestal - Cargo\"} at C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\storage\\framework\\views\\fd34140825f5068804c1d66cdf68abd9.php:104)
+[stacktrace]
+#0 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(256): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined varia...', 'C:\\\\Users\\\\Dmijan...', 104)
+#1 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\storage\\framework\\views\\fd34140825f5068804c1d66cdf68abd9.php(104): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined varia...', 'C:\\\\Users\\\\Dmijan...', 104)
+#2 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine.php(37): include('C:\\\\Users\\\\Dmijan...')
+#3 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine.php(38): App\\Livewire\\egresos\\EgresosCapitulo5EjercidoForm->Livewire\\Mechanisms\\ExtendBlade\\{closure}()
+#4 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Engines\\CompilerEngine.php(73): Livewire\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine->evaluatePath('C:\\\\Users\\\\Dmijan...', Array)
+#5 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine.php(16): Illuminate\\View\\Engines\\CompilerEngine->get('C:\\\\Users\\\\Dmijan...', Array)
+#6 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(208): Livewire\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine->get('C:\\\\Users\\\\Dmijan...', Array)
+#7 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(191): Illuminate\\View\\View->getContents()
+#8 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(160): Illuminate\\View\\View->renderContents()
+#9 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(240): Illuminate\\View\\View->render(Object(Closure))
+#10 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(284): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->Livewire\\Mechanisms\\HandleComponents\\{closure}()
+#11 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(232): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->trackInRenderStack(Object(App\\Livewire\\egresos\\EgresosCapitulo5EjercidoForm), Object(Closure))
+#12 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(103): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->render(Object(App\\Livewire\\egresos\\EgresosCapitulo5EjercidoForm))
+#13 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\LivewireManager.php(96): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->update(Array, Array, Array)
+#14 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleRequests\\HandleRequests.php(89): Livewire\\LivewireManager->update(Array, Array, Array)
+#15 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php(46): Livewire\\Mechanisms\\HandleRequests\\HandleRequests->handleUpdate()
+#16 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(260): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(Livewire\\Mechanisms\\HandleRequests\\HandleRequests), 'handleUpdate')
+#17 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(206): Illuminate\\Routing\\Route->runController()
+#18 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(806): Illuminate\\Routing\\Route->run()
+#19 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#20 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\app\\Http\\Middleware\\ResetPassword.php(23): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#21 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): App\\Http\\Middleware\\ResetPassword->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#22 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#23 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#24 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken.php(88): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#25 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#26 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Middleware\\ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#27 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#28 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#29 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#30 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#31 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#32 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#33 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\EncryptCookies.php(75): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#34 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#35 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#36 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(805): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#37 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#38 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(748): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#39 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#40 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#41 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#42 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Features\\SupportDisablingBackButtonCache\\DisableBackButtonCacheMiddleware.php(19): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#43 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Livewire\\Features\\SupportDisablingBackButtonCache\\DisableBackButtonCacheMiddleware->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#44 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#45 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#46 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(47): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#47 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#48 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#49 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#50 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(110): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#51 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#52 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#53 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#54 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#55 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#56 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#57 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#58 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#59 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\public\\index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#60 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('C:\\\\Users\\\\Dmijan...')
+#61 {main}
 "} 
-[2024-09-25 07:59:18] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
+[2024-09-26 13:16:27] local.ERROR: Undefined variable ${"id":5327,"Codigo_cuenta":"8.2.6.1.2.4.1.01.01","Descripcion_cuenta":"Muebles de Oficina y Estanter\u00eda (Ejercido)","Cuenta_registro":"1","Nivel":"9","Cuenta_padre_ID":"8.2.6.1.2.4.1.01","Estado":"1","Naturaleza":"DEUDORA","identificador":"CG-4642","created_at":"2024-09-25T21:50:23.097000Z","updated_at":"2024-09-25T21:50:23.097000Z","concepto_id":"74","cuenta_id":"4741","clasificador_de_concepto_id":"14","tipo_interaccion":"Presupuestal - Cargo"} {"view":{"view":"C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\resources\\views\\livewire\\egresos\\egresos-capitulo5-ejercido-form.blade.php","data":[]},"userId":57,"exception":"[object] (Spatie\\LaravelIgnition\\Exceptions\\ViewException(code: 0): Undefined variable ${\"id\":5327,\"Codigo_cuenta\":\"8.2.6.1.2.4.1.01.01\",\"Descripcion_cuenta\":\"Muebles de Oficina y Estanter\\u00eda (Ejercido)\",\"Cuenta_registro\":\"1\",\"Nivel\":\"9\",\"Cuenta_padre_ID\":\"8.2.6.1.2.4.1.01\",\"Estado\":\"1\",\"Naturaleza\":\"DEUDORA\",\"identificador\":\"CG-4642\",\"created_at\":\"2024-09-25T21:50:23.097000Z\",\"updated_at\":\"2024-09-25T21:50:23.097000Z\",\"concepto_id\":\"74\",\"cuenta_id\":\"4741\",\"clasificador_de_concepto_id\":\"14\",\"tipo_interaccion\":\"Presupuestal - Cargo\"} at C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\resources\\views\\livewire\\egresos\\egresos-capitulo5-ejercido-form.blade.php:88)
 [stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#11 {main}
+#0 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(256): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined varia...', 'C:\\\\Users\\\\Dmijan...', 104)
+#1 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\resources\\views\\livewire\\egresos\\egresos-capitulo5-ejercido-form.blade.php(88): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined varia...', 'C:\\\\Users\\\\Dmijan...', 104)
+#2 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine.php(37): include('C:\\\\Users\\\\Dmijan...')
+#3 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine.php(38): App\\Livewire\\egresos\\EgresosCapitulo5EjercidoForm->Livewire\\Mechanisms\\ExtendBlade\\{closure}()
+#4 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Engines\\CompilerEngine.php(73): Livewire\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine->evaluatePath('C:\\\\Users\\\\Dmijan...', Array)
+#5 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine.php(16): Illuminate\\View\\Engines\\CompilerEngine->get('C:\\\\Users\\\\Dmijan...', Array)
+#6 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(208): Livewire\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine->get('C:\\\\Users\\\\Dmijan...', Array)
+#7 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(191): Illuminate\\View\\View->getContents()
+#8 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(160): Illuminate\\View\\View->renderContents()
+#9 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(240): Illuminate\\View\\View->render(Object(Closure))
+#10 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(284): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->Livewire\\Mechanisms\\HandleComponents\\{closure}()
+#11 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(232): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->trackInRenderStack(Object(App\\Livewire\\egresos\\EgresosCapitulo5EjercidoForm), Object(Closure))
+#12 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(103): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->render(Object(App\\Livewire\\egresos\\EgresosCapitulo5EjercidoForm))
+#13 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\LivewireManager.php(96): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->update(Array, Array, Array)
+#14 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleRequests\\HandleRequests.php(89): Livewire\\LivewireManager->update(Array, Array, Array)
+#15 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php(46): Livewire\\Mechanisms\\HandleRequests\\HandleRequests->handleUpdate()
+#16 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(260): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(Livewire\\Mechanisms\\HandleRequests\\HandleRequests), 'handleUpdate')
+#17 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(206): Illuminate\\Routing\\Route->runController()
+#18 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(806): Illuminate\\Routing\\Route->run()
+#19 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#20 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\app\\Http\\Middleware\\ResetPassword.php(23): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#21 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): App\\Http\\Middleware\\ResetPassword->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#22 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#23 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#24 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken.php(88): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#25 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#26 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Middleware\\ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#27 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#28 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#29 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#30 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#31 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#32 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#33 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\EncryptCookies.php(75): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#34 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#35 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#36 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(805): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#37 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#38 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(748): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#39 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#40 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#41 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#42 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Features\\SupportDisablingBackButtonCache\\DisableBackButtonCacheMiddleware.php(19): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#43 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Livewire\\Features\\SupportDisablingBackButtonCache\\DisableBackButtonCacheMiddleware->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#44 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#45 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#46 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(47): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#47 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#48 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#49 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#50 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(110): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#51 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#52 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#53 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#54 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#55 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#56 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#57 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#58 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#59 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\public\\index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#60 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('C:\\\\Users\\\\Dmijan...')
+#61 {main}
+
+[previous exception] [object] (ErrorException(code: 0): Undefined variable ${\"id\":5327,\"Codigo_cuenta\":\"8.2.6.1.2.4.1.01.01\",\"Descripcion_cuenta\":\"Muebles de Oficina y Estanter\\u00eda (Ejercido)\",\"Cuenta_registro\":\"1\",\"Nivel\":\"9\",\"Cuenta_padre_ID\":\"8.2.6.1.2.4.1.01\",\"Estado\":\"1\",\"Naturaleza\":\"DEUDORA\",\"identificador\":\"CG-4642\",\"created_at\":\"2024-09-25T21:50:23.097000Z\",\"updated_at\":\"2024-09-25T21:50:23.097000Z\",\"concepto_id\":\"74\",\"cuenta_id\":\"4741\",\"clasificador_de_concepto_id\":\"14\",\"tipo_interaccion\":\"Presupuestal - Cargo\"} at C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\storage\\framework\\views\\fd34140825f5068804c1d66cdf68abd9.php:104)
+[stacktrace]
+#0 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(256): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined varia...', 'C:\\\\Users\\\\Dmijan...', 104)
+#1 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\storage\\framework\\views\\fd34140825f5068804c1d66cdf68abd9.php(104): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined varia...', 'C:\\\\Users\\\\Dmijan...', 104)
+#2 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine.php(37): include('C:\\\\Users\\\\Dmijan...')
+#3 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine.php(38): App\\Livewire\\egresos\\EgresosCapitulo5EjercidoForm->Livewire\\Mechanisms\\ExtendBlade\\{closure}()
+#4 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Engines\\CompilerEngine.php(73): Livewire\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine->evaluatePath('C:\\\\Users\\\\Dmijan...', Array)
+#5 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine.php(16): Illuminate\\View\\Engines\\CompilerEngine->get('C:\\\\Users\\\\Dmijan...', Array)
+#6 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(208): Livewire\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine->get('C:\\\\Users\\\\Dmijan...', Array)
+#7 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(191): Illuminate\\View\\View->getContents()
+#8 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(160): Illuminate\\View\\View->renderContents()
+#9 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(240): Illuminate\\View\\View->render(Object(Closure))
+#10 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(284): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->Livewire\\Mechanisms\\HandleComponents\\{closure}()
+#11 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(232): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->trackInRenderStack(Object(App\\Livewire\\egresos\\EgresosCapitulo5EjercidoForm), Object(Closure))
+#12 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(103): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->render(Object(App\\Livewire\\egresos\\EgresosCapitulo5EjercidoForm))
+#13 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\LivewireManager.php(96): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->update(Array, Array, Array)
+#14 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleRequests\\HandleRequests.php(89): Livewire\\LivewireManager->update(Array, Array, Array)
+#15 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php(46): Livewire\\Mechanisms\\HandleRequests\\HandleRequests->handleUpdate()
+#16 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(260): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(Livewire\\Mechanisms\\HandleRequests\\HandleRequests), 'handleUpdate')
+#17 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(206): Illuminate\\Routing\\Route->runController()
+#18 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(806): Illuminate\\Routing\\Route->run()
+#19 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#20 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\app\\Http\\Middleware\\ResetPassword.php(23): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#21 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): App\\Http\\Middleware\\ResetPassword->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#22 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#23 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#24 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken.php(88): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#25 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#26 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Middleware\\ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#27 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#28 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#29 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#30 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#31 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#32 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#33 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\EncryptCookies.php(75): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#34 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#35 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#36 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(805): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#37 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#38 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(748): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#39 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#40 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#41 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#42 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Features\\SupportDisablingBackButtonCache\\DisableBackButtonCacheMiddleware.php(19): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#43 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Livewire\\Features\\SupportDisablingBackButtonCache\\DisableBackButtonCacheMiddleware->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#44 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#45 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#46 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(47): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#47 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#48 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#49 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#50 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(110): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#51 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#52 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#53 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#54 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#55 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#56 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#57 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#58 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#59 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\public\\index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#60 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('C:\\\\Users\\\\Dmijan...')
+#61 {main}
 "} 
-[2024-09-25 07:59:21] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
+[2024-09-26 13:17:11] local.ERROR: Ocurrió un error al cargar presupuesto en ejercido del capítulo 5: Class "App\Livewire\egresos\CodigoDepartamento" not found  
+[2024-09-26 13:21:35] local.ERROR: Class "App\Livewire\egresos\DB" not found {"userId":57,"exception":"[object] (Error(code: 0): Class \"App\\Livewire\\egresos\\DB\" not found at C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\app\\Livewire\\egresos\\EgresosCapitulo5EjercidoTable.php:296)
 [stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#11 {main}
+#0 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): App\\Livewire\\egresos\\EgresosCapitulo5EjercidoTable->finalizarRegistros()
+#1 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#2 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#3 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#4 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Wrapped.php(23): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array)
+#5 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Features\\SupportEvents\\SupportEvents.php(29): Livewire\\Wrapped->__call('finalizarRegist...', Array)
+#6 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\ComponentHook.php(41): Livewire\\Features\\SupportEvents\\SupportEvents->call('finalizarRegist...', Array, Object(Closure))
+#7 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\ComponentHookRegistry.php(110): Livewire\\ComponentHook->callCall('__dispatch', Array, Object(Closure))
+#8 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\ComponentHookRegistry.php(65): Livewire\\ComponentHookRegistry::Livewire\\{closure}('__dispatch', Array, Object(Closure))
+#9 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\EventBus.php(60): Livewire\\ComponentHookRegistry::Livewire\\{closure}(Object(App\\Livewire\\egresos\\EgresosCapitulo5EjercidoTable), '__dispatch', Array, Object(Livewire\\Mechanisms\\HandleComponents\\ComponentContext), Object(Closure))
+#10 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\helpers.php(100): Livewire\\EventBus->trigger('call', Object(App\\Livewire\\egresos\\EgresosCapitulo5EjercidoTable), '__dispatch', Array, Object(Livewire\\Mechanisms\\HandleComponents\\ComponentContext), Object(Closure))
+#11 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(447): Livewire\\trigger('call', Object(App\\Livewire\\egresos\\EgresosCapitulo5EjercidoTable), '__dispatch', Array, Object(Livewire\\Mechanisms\\HandleComponents\\ComponentContext), Object(Closure))
+#12 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(100): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->callMethods(Object(App\\Livewire\\egresos\\EgresosCapitulo5EjercidoTable), Array, Object(Livewire\\Mechanisms\\HandleComponents\\ComponentContext))
+#13 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\LivewireManager.php(96): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->update(Array, Array, Array)
+#14 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleRequests\\HandleRequests.php(89): Livewire\\LivewireManager->update(Array, Array, Array)
+#15 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php(46): Livewire\\Mechanisms\\HandleRequests\\HandleRequests->handleUpdate()
+#16 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(260): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(Livewire\\Mechanisms\\HandleRequests\\HandleRequests), 'handleUpdate')
+#17 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(206): Illuminate\\Routing\\Route->runController()
+#18 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(806): Illuminate\\Routing\\Route->run()
+#19 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#20 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\app\\Http\\Middleware\\ResetPassword.php(23): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#21 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): App\\Http\\Middleware\\ResetPassword->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#22 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#23 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#24 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken.php(88): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#25 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#26 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Middleware\\ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#27 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#28 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#29 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#30 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#31 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#32 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#33 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\EncryptCookies.php(75): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#34 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#35 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#36 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(805): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#37 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#38 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(748): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#39 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#40 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#41 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#42 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Features\\SupportDisablingBackButtonCache\\DisableBackButtonCacheMiddleware.php(19): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#43 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Livewire\\Features\\SupportDisablingBackButtonCache\\DisableBackButtonCacheMiddleware->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#44 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#45 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#46 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(47): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#47 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#48 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#49 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#50 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(110): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#51 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#52 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#53 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#54 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#55 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#56 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#57 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#58 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#59 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\public\\index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#60 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('C:\\\\Users\\\\Dmijan...')
+#61 {main}
 "} 
-[2024-09-25 14:26:23] local.INFO: 692  
-[2024-09-25 14:26:48] local.INFO: 11149  
-[2024-09-25 14:28:07] local.INFO: 10780  
-[2024-09-25 14:28:21] local.INFO: array (
-  0 => 
-  array (
-    'id' => 1,
-    'codigoArea' => '16',
-    'observaciones' => 'Pagado',
-    'fechaAfectacion' => '2024-09-25',
-    'evento' => '16',
-    'areaResponsableId' => '24',
-    'codigoAreaResponsable' => '1.5.02',
-    'descripcionAreaResponsable' => 'DEPARTAMENTO DE VIGENCIA DE DERECHOS',
-    'partidaId' => '5960',
-    'codigoPartida' => '8.2.7.5.2.5.1.01.01',
-    'descripcionPartida' => 'Pensiones con Recursos Propios (Pagado)',
-    'cuentaBancoId' => '34',
-    'codigoCuentaBanco' => '1.1.1.2.02.03',
-    'descripcionCuentaBanco' => 'BBVA Bancomer 444106237',
-    'cuentaRetencionesId' => '692',
-    'codigoCuentaRetenciones' => '2.1.1.5.05.01',
-    'descripcionCuentaRetenciones' => 'Pensiones con Recursos Propios',
-    'mes' => 'Febrero',
-    'importe' => 150000000,
-    'montoEvento' => '558000000.0000000000',
-    'pttoEjercido' => 300000000,
-    'montoContable' => 150000000,
-  ),
-  1 => 
-  array (
-    'id' => 2,
-    'codigoArea' => '16',
-    'observaciones' => 'Pagado',
-    'fechaAfectacion' => '2024-09-25',
-    'evento' => '16',
-    'areaResponsableId' => '24',
-    'codigoAreaResponsable' => '1.5.02',
-    'descripcionAreaResponsable' => 'DEPARTAMENTO DE VIGENCIA DE DERECHOS',
-    'partidaId' => '5960',
-    'codigoPartida' => '8.2.7.5.2.5.1.01.01',
-    'descripcionPartida' => 'Pensiones con Recursos Propios (Pagado)',
-    'cuentaBancoId' => '34',
-    'codigoCuentaBanco' => '1.1.1.2.02.03',
-    'descripcionCuentaBanco' => 'BBVA Bancomer 444106237',
-    'cuentaRetencionesId' => '11149',
-    'codigoCuentaRetenciones' => '2.1.1.7.01.08',
-    'descripcionCuentaRetenciones' => 'ISR Retención Pensiones y Jubilaciones',
-    'mes' => 'Febrero',
-    'importe' => 150000000,
-    'montoEvento' => '558000000.0000000000',
-    'pttoEjercido' => 300000000,
-    'montoContable' => 150000000,
-  ),
-  2 => 
-  array (
-    'id' => 3,
-    'codigoArea' => '16',
-    'observaciones' => 'Pagado',
-    'fechaAfectacion' => '2024-09-25',
-    'evento' => '16',
-    'areaResponsableId' => '24',
-    'codigoAreaResponsable' => '1.5.02',
-    'descripcionAreaResponsable' => 'DEPARTAMENTO DE VIGENCIA DE DERECHOS',
-    'partidaId' => '10881',
-    'codigoPartida' => '8.2.7.5.2.5.1.01.02',
-    'descripcionPartida' => 'Pensiones con Subsidios Federal (Pagado)',
-    'cuentaBancoId' => '46',
-    'codigoCuentaBanco' => '1.1.1.2.05.03',
-    'descripcionCuentaBanco' => 'Santander 65500723186',
-    'cuentaRetencionesId' => '10780',
-    'codigoCuentaRetenciones' => '2.1.1.5.05.02',
-    'descripcionCuentaRetenciones' => 'Pensiones con Subsidios Federal ',
-    'mes' => 'Febrero',
-    'importe' => 250000000,
-    'montoEvento' => '558000000.0000000000',
-    'pttoEjercido' => 258000000,
-    'montoContable' => 0,
-  ),
-)  
-[2024-09-25 14:30:29] local.INFO: 10780  
-[2024-09-25 14:30:34] local.INFO: array (
-  0 => 
-  array (
-    'id' => 1,
-    'codigoArea' => '16',
-    'observaciones' => 'Pagado',
-    'fechaAfectacion' => '2024-09-25',
-    'evento' => '16',
-    'areaResponsableId' => '24',
-    'codigoAreaResponsable' => '1.5.02',
-    'descripcionAreaResponsable' => 'DEPARTAMENTO DE VIGENCIA DE DERECHOS',
-    'partidaId' => '10881',
-    'codigoPartida' => '8.2.7.5.2.5.1.01.02',
-    'descripcionPartida' => 'Pensiones con Subsidios Federal (Pagado)',
-    'cuentaBancoId' => '29',
-    'codigoCuentaBanco' => '1.1.1.2.01.03',
-    'descripcionCuentaBanco' => 'Banamex 7013-4395018',
-    'cuentaRetencionesId' => '10780',
-    'codigoCuentaRetenciones' => '2.1.1.5.05.02',
-    'descripcionCuentaRetenciones' => 'Pensiones con Subsidios Federal ',
-    'mes' => 'Febrero',
-    'importe' => 8000000,
-    'montoEvento' => '8000000.0000000000',
-    'pttoEjercido' => 8000000,
-    'montoContable' => 8000000,
-  ),
-)  
-[2024-09-26 08:06:37] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
+[2024-09-26 13:22:27] local.ERROR: Undefined variable $total {"view":{"view":"C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\resources\\views\\livewire\\egresos\\egresos-capitulo5-ejercido-form.blade.php","data":[]},"userId":57,"exception":"[object] (Spatie\\LaravelIgnition\\Exceptions\\ViewException(code: 0): Undefined variable $total at C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\resources\\views\\livewire\\egresos\\egresos-capitulo5-ejercido-form.blade.php:17)
 [stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#11 {main}
+#0 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(256): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined varia...', 'C:\\\\Users\\\\Dmijan...', 17)
+#1 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\resources\\views\\livewire\\egresos\\egresos-capitulo5-ejercido-form.blade.php(17): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined varia...', 'C:\\\\Users\\\\Dmijan...', 17)
+#2 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine.php(37): include('C:\\\\Users\\\\Dmijan...')
+#3 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine.php(38): App\\Livewire\\egresos\\EgresosCapitulo5EjercidoForm->Livewire\\Mechanisms\\ExtendBlade\\{closure}()
+#4 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Engines\\CompilerEngine.php(73): Livewire\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine->evaluatePath('C:\\\\Users\\\\Dmijan...', Array)
+#5 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine.php(16): Illuminate\\View\\Engines\\CompilerEngine->get('C:\\\\Users\\\\Dmijan...', Array)
+#6 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(208): Livewire\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine->get('C:\\\\Users\\\\Dmijan...', Array)
+#7 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(191): Illuminate\\View\\View->getContents()
+#8 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(160): Illuminate\\View\\View->renderContents()
+#9 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(240): Illuminate\\View\\View->render(Object(Closure))
+#10 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(284): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->Livewire\\Mechanisms\\HandleComponents\\{closure}()
+#11 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(232): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->trackInRenderStack(Object(App\\Livewire\\egresos\\EgresosCapitulo5EjercidoForm), Object(Closure))
+#12 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(103): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->render(Object(App\\Livewire\\egresos\\EgresosCapitulo5EjercidoForm))
+#13 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\LivewireManager.php(96): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->update(Array, Array, Array)
+#14 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleRequests\\HandleRequests.php(89): Livewire\\LivewireManager->update(Array, Array, Array)
+#15 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php(46): Livewire\\Mechanisms\\HandleRequests\\HandleRequests->handleUpdate()
+#16 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(260): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(Livewire\\Mechanisms\\HandleRequests\\HandleRequests), 'handleUpdate')
+#17 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(206): Illuminate\\Routing\\Route->runController()
+#18 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(806): Illuminate\\Routing\\Route->run()
+#19 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#20 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\app\\Http\\Middleware\\ResetPassword.php(23): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#21 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): App\\Http\\Middleware\\ResetPassword->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#22 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#23 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#24 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken.php(88): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#25 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#26 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Middleware\\ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#27 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#28 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#29 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#30 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#31 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#32 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#33 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\EncryptCookies.php(75): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#34 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#35 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#36 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(805): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#37 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#38 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(748): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#39 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#40 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#41 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#42 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Features\\SupportDisablingBackButtonCache\\DisableBackButtonCacheMiddleware.php(19): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#43 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Livewire\\Features\\SupportDisablingBackButtonCache\\DisableBackButtonCacheMiddleware->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#44 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#45 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#46 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(47): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#47 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#48 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#49 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#50 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(110): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#51 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#52 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#53 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#54 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#55 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#56 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#57 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#58 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#59 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\public\\index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#60 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('C:\\\\Users\\\\Dmijan...')
+#61 {main}
+
+[previous exception] [object] (ErrorException(code: 0): Undefined variable $total at C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\storage\\framework\\views\\fd34140825f5068804c1d66cdf68abd9.php:17)
+[stacktrace]
+#0 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(256): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined varia...', 'C:\\\\Users\\\\Dmijan...', 17)
+#1 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\storage\\framework\\views\\fd34140825f5068804c1d66cdf68abd9.php(17): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined varia...', 'C:\\\\Users\\\\Dmijan...', 17)
+#2 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine.php(37): include('C:\\\\Users\\\\Dmijan...')
+#3 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine.php(38): App\\Livewire\\egresos\\EgresosCapitulo5EjercidoForm->Livewire\\Mechanisms\\ExtendBlade\\{closure}()
+#4 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Engines\\CompilerEngine.php(73): Livewire\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine->evaluatePath('C:\\\\Users\\\\Dmijan...', Array)
+#5 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine.php(16): Illuminate\\View\\Engines\\CompilerEngine->get('C:\\\\Users\\\\Dmijan...', Array)
+#6 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(208): Livewire\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine->get('C:\\\\Users\\\\Dmijan...', Array)
+#7 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(191): Illuminate\\View\\View->getContents()
+#8 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(160): Illuminate\\View\\View->renderContents()
+#9 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(240): Illuminate\\View\\View->render(Object(Closure))
+#10 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(284): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->Livewire\\Mechanisms\\HandleComponents\\{closure}()
+#11 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(232): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->trackInRenderStack(Object(App\\Livewire\\egresos\\EgresosCapitulo5EjercidoForm), Object(Closure))
+#12 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(103): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->render(Object(App\\Livewire\\egresos\\EgresosCapitulo5EjercidoForm))
+#13 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\LivewireManager.php(96): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->update(Array, Array, Array)
+#14 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleRequests\\HandleRequests.php(89): Livewire\\LivewireManager->update(Array, Array, Array)
+#15 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php(46): Livewire\\Mechanisms\\HandleRequests\\HandleRequests->handleUpdate()
+#16 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(260): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(Livewire\\Mechanisms\\HandleRequests\\HandleRequests), 'handleUpdate')
+#17 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(206): Illuminate\\Routing\\Route->runController()
+#18 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(806): Illuminate\\Routing\\Route->run()
+#19 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#20 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\app\\Http\\Middleware\\ResetPassword.php(23): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#21 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): App\\Http\\Middleware\\ResetPassword->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#22 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#23 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#24 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken.php(88): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#25 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#26 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Middleware\\ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#27 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#28 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#29 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#30 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#31 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#32 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#33 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\EncryptCookies.php(75): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#34 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#35 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#36 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(805): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#37 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#38 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(748): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#39 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#40 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#41 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#42 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Features\\SupportDisablingBackButtonCache\\DisableBackButtonCacheMiddleware.php(19): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#43 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Livewire\\Features\\SupportDisablingBackButtonCache\\DisableBackButtonCacheMiddleware->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#44 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#45 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#46 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(47): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#47 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#48 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#49 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#50 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(110): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#51 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#52 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#53 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#54 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#55 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#56 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#57 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#58 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#59 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\public\\index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#60 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('C:\\\\Users\\\\Dmijan...')
+#61 {main}
 "} 
-[2024-09-26 08:06:42] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
+[2024-09-26 13:23:02] local.ERROR: Unable to find component: [egresos-form-consulta-table] {"userId":57,"exception":"[object] (Livewire\\Exceptions\\ComponentNotFoundException(code: 0): Unable to find component: [egresos-form-consulta-table] at C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\ComponentRegistry.php:116)
 [stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#11 {main}
-"} 
-[2024-09-26 08:06:45] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
-[stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#11 {main}
-"} 
-[2024-09-27 08:18:53] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
-[stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#11 {main}
-"} 
-[2024-09-27 08:18:58] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
-[stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#11 {main}
-"} 
-[2024-09-27 08:19:04] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
-[stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#11 {main}
+#0 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\ComponentRegistry.php(25): Livewire\\Mechanisms\\ComponentRegistry->getNameAndClass('egresos-form-co...')
+#1 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\LivewireManager.php(57): Livewire\\Mechanisms\\ComponentRegistry->new('egresos-form-co...', NULL)
+#2 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(42): Livewire\\LivewireManager->new('egresos-form-co...')
+#3 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\LivewireManager.php(72): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->mount('egresos-form-co...', Array, 'lw-839614990-0')
+#4 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\storage\\framework\\views\\fd34140825f5068804c1d66cdf68abd9.php(33): Livewire\\LivewireManager->mount('egresos-form-co...', Array, 'lw-839614990-0', Array, Array)
+#5 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine.php(37): include('C:\\\\Users\\\\Dmijan...')
+#6 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine.php(38): App\\Livewire\\egresos\\EgresosCapitulo5EjercidoForm->Livewire\\Mechanisms\\ExtendBlade\\{closure}()
+#7 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Engines\\CompilerEngine.php(73): Livewire\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine->evaluatePath('C:\\\\Users\\\\Dmijan...', Array)
+#8 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine.php(16): Illuminate\\View\\Engines\\CompilerEngine->get('C:\\\\Users\\\\Dmijan...', Array)
+#9 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(208): Livewire\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine->get('C:\\\\Users\\\\Dmijan...', Array)
+#10 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(191): Illuminate\\View\\View->getContents()
+#11 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(160): Illuminate\\View\\View->renderContents()
+#12 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(240): Illuminate\\View\\View->render(Object(Closure))
+#13 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(284): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->Livewire\\Mechanisms\\HandleComponents\\{closure}()
+#14 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(232): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->trackInRenderStack(Object(App\\Livewire\\egresos\\EgresosCapitulo5EjercidoForm), Object(Closure))
+#15 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleComponents\\HandleComponents.php(103): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->render(Object(App\\Livewire\\egresos\\EgresosCapitulo5EjercidoForm))
+#16 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\LivewireManager.php(96): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->update(Array, Array, Array)
+#17 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Mechanisms\\HandleRequests\\HandleRequests.php(89): Livewire\\LivewireManager->update(Array, Array, Array)
+#18 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php(46): Livewire\\Mechanisms\\HandleRequests\\HandleRequests->handleUpdate()
+#19 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(260): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(Livewire\\Mechanisms\\HandleRequests\\HandleRequests), 'handleUpdate')
+#20 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(206): Illuminate\\Routing\\Route->runController()
+#21 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(806): Illuminate\\Routing\\Route->run()
+#22 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#23 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\app\\Http\\Middleware\\ResetPassword.php(23): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#24 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): App\\Http\\Middleware\\ResetPassword->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#25 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#26 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#27 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken.php(88): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#28 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#29 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Middleware\\ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#30 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#31 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#32 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#33 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#34 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#35 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#36 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\EncryptCookies.php(75): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#37 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#38 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#39 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(805): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#40 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#41 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(748): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#42 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#43 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#44 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#45 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Features\\SupportDisablingBackButtonCache\\DisableBackButtonCacheMiddleware.php(19): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#46 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Livewire\\Features\\SupportDisablingBackButtonCache\\DisableBackButtonCacheMiddleware->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#47 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#48 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#49 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(47): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#50 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#51 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#52 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#53 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(110): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#54 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#55 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#56 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#57 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#58 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#59 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#60 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#61 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#62 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\public\\index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#63 C:\\Users\\Dmijangos\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('C:\\\\Users\\\\Dmijan...')
+#64 {main}
 "} 
