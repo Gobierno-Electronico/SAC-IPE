@@ -22,6 +22,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
     public $perPage = 6;
     public $total = 0;
     public $totalDisponible = 0;
+    public $totalDisponibleContable = 0;
     public $numeroEvento;
     public $numeroPolizaRemanente;
 
@@ -65,7 +66,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
                 return;
             }
 
-            if ($this->verificarPresupuesto($registro)) {
+            if ($this->verificarPresupuesto($registro) && $this->verificarMontoContable($registro)) {
                 $nuevoRegistro = [
                     'id' => 0,
                     'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
@@ -110,8 +111,35 @@ class EgresosCapitulo4PagadoTable extends Tabla
             $this->totalDisponible = $solvencia - $totalImportes - $registro['importe'];
         }
 
+
         if ($this->totalDisponible < 0) {
             $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto ejercido insuficiente', tipo: 'warning', tiempo: 3000);
+            return false;
+        }
+        return true;
+    }
+
+    public function verificarMontoContable($registro){
+        if($registro['montoContable'] == 0){
+            return true;
+        }
+        $solvenciaContable = $registro['montoContable'];
+        $this->totalDisponibleContable = $solvenciaContable - $registro['importe'];
+        $totalImportes = 0;
+        
+        foreach ($this->cacheData as $movimiento) {
+            if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['cuentaRetenciones'], $registro['codigoCuentaRetenciones']) && $movimiento['mes'] == $registro['mes']) {
+                $totalImportes += $movimiento['importe'];
+            }
+        }
+
+        if ($totalImportes > 0) {
+            $this->totalDisponibleContable = $solvenciaContable - $totalImportes - $registro['importe'];
+        }
+        
+
+        if ($this->totalDisponibleContable < 0) {
+            $this->dispatch('mostrarMensaje', mensaje: 'Monto contable insuficiente', tipo: 'warning', tiempo: 3000);
             return false;
         }
         return true;
@@ -129,9 +157,9 @@ class EgresosCapitulo4PagadoTable extends Tabla
                         'cuentaBanco' => $registro['cuentaBancoId'],
                         'mes' => $registro['mes'],
                         'importe' => $registro['importe'],
-                        'pttoEjercido' => $registro['pttoEjercido'],
                         'cuentaRetenciones' => $registro['cuentaRetencionesId'],
                         'pttoEjercido' => $registro['pttoEjercido'],
+                        'montoContable' => $registro['montoContable']
                     ];
 
                     unset($this->dataCompleta[$key]);
@@ -319,7 +347,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
             }
 
             $numerosPolizas = Poliza::select('numero_poliza')
-                ->where('tipo_poliza', '=', 'IAUX')
+                ->where('tipo_poliza', '=', 'EAUX')
                 ->whereYear('fecha', '=', Carbon::now()->year)
                 ->distinct()
                 ->orderBy('numero_poliza')

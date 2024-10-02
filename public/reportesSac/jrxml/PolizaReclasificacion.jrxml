@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
+<!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PolizaReclasificacion" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="55a8c4bf-9344-4264-a6b2-ecc8cd2fda35">
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -87,7 +87,7 @@
 				<textElement textAlignment="Center">
 					<font fontName="Times New Roman" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[POLIZA DE DIARIO]]></text>
+				<text><![CDATA[PÓLIZA DE DIARIO]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="687" y="0" width="50" height="20" uuid="8c206f97-bf18-47f6-93df-85b27a0f630d">
@@ -446,7 +446,7 @@
 					<font fontName="Times New Roman" size="6"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["L.A. ANAYUTH ORORIO LOPEZ"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["L.A.E. ANAYUTH OSORIO LÓPEZ"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="5" y="30" width="40" height="15" uuid="45523d6a-d0bd-45e3-b0d6-22a1b6072ed0">
@@ -532,7 +532,7 @@
 					<font fontName="Times New Roman" size="6"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["C.P. ANIBAL ANDRADE DIAZ"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["C.P. ANÍBAL ANDRADE DÍAZ"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="271" y="70" width="273" height="15" uuid="b0cd2b88-2324-4f66-8b92-644c93387ac8">

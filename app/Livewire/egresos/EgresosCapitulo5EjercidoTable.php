@@ -7,6 +7,13 @@ use App\Clases\Column;
 use Livewire\Attributes\On;
 use App\Livewire\Tabla;
 use Illuminate\Database\Eloquent\Builder;
+use App\Http\Controllers\BitacoraController;
+use App\Models\Poliza;
+use Carbon\Carbon;
+use App\Models\InteraccionCuentaCuenta;
+use App\Models\InteraccionCuentaConcepto;
+use Log;
+use DB;
 
 class EgresosCapitulo5EjercidoTable extends Tabla
 {
@@ -233,7 +240,7 @@ class EgresosCapitulo5EjercidoTable extends Tabla
 
             foreach ($this->dataCompleta as $movimiento) {
                 $movimiento['importe'] = doubleval($movimiento['importe']);
-                $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaId'])->whereIn('concepto_id', [])
+                $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaId'])->whereIn('concepto_id', [73, 74, 75])
                     ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
 
                 $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)

@@ -99,7 +99,7 @@
             </div>
 
             <div class="col">
-                <livewire:egresos.egresos-capitulo4-comprometido-table />
+                <livewire:egresos.egresos-capitulo5-comprometido-table />
             </div> 
 
             <div class="row mt-4">

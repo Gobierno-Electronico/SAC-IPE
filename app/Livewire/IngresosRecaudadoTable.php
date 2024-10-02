@@ -71,12 +71,12 @@ class IngresosRecaudadoTable extends Tabla
                         'importe' => $registro['importe']
                     ];
                     unset($this->dataCompleta[$key]);
-                    $this->dataCompleta = array_values($this->dataCompleta );
+                    $this->dataCompleta = array_values($this->dataCompleta);
                     $this->dispatch('llenar-formulario', $datosRegistro);
                     break;
                 }
             }
-    
+
             foreach ($this->cacheData as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->cacheData[$key]);
@@ -89,7 +89,7 @@ class IngresosRecaudadoTable extends Tabla
             $this->total = $totalActualizado;
             $this->dispatch('cambioTotal', total: $totalActualizado);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al editar en recaudado: '. $th->getMessage());
+            Log::error('Ocurrió un error al editar en recaudado: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al editar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -106,11 +106,11 @@ class IngresosRecaudadoTable extends Tabla
                     break;
                 }
             }
-    
+
             foreach ($this->dataCompleta as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->dataCompleta[$key]);
-                    $this->dataCompleta = array_values($this->dataCompleta );
+                    $this->dataCompleta = array_values($this->dataCompleta);
                     break;
                 }
             }
@@ -119,7 +119,7 @@ class IngresosRecaudadoTable extends Tabla
             $this->total = $totalActualizado;
             $this->dispatch('cambioTotal', total: $totalActualizado);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al eliminar en recaudado: '. $th->getMessage());
+            Log::error('Ocurrió un error al eliminar en recaudado: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al eliminar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -139,12 +139,12 @@ class IngresosRecaudadoTable extends Tabla
         }
 
         $totalImportes = 0;
-        foreach($this->cacheData as $key => $movimiento) {
-            if($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuenta']) && $movimiento['mes'] == $datosSeleccionado['mes'] && $movimiento['evento'] == $datosSeleccionado['evento']) {
-                if($totalImportes == 0){
+        foreach ($this->cacheData as $key => $movimiento) {
+            if ($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuenta']) && $movimiento['mes'] == $datosSeleccionado['mes'] && $movimiento['evento'] == $datosSeleccionado['evento']) {
+                if ($totalImportes == 0) {
                     $movimiento['disponibilidad'] = $movimiento['ppto'] - $movimiento['importe'];
                     $totalImportes += $movimiento['importe'];
-                }else{
+                } else {
                     $movimiento['disponibilidad'] = $movimiento['ppto'] - $totalImportes - $movimiento['importe'];
                     $totalImportes += $movimiento['importe'];
                 }
@@ -153,9 +153,7 @@ class IngresosRecaudadoTable extends Tabla
         }
     }
 
-    public function changeState($value)
-    {
-    }
+    public function changeState($value) {}
 
     #[On('agregar-registro')]
     public function agregarRegistro($registro)
@@ -171,32 +169,32 @@ class IngresosRecaudadoTable extends Tabla
                 ->whereIn('concepto_id', [19, 20, 21, 35, 39])
                 ->where('tipo_interaccion', '=', 'Presupuestal - Abono')
                 ->first();
-    
+
             $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
                 ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')
                 ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
                 ->where('Descripcion_cuenta', 'LIKE', '%(Devengado)%')
                 ->first();
-    
+
             $solvencia = DB::select('EXEC DevengadoCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?', array($registro['codigoAreaResponsable'], $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $registro['mes'], $registro['evento']));
-            
+
             $totalDisponible = $solvencia[0]->TotalDevengado - $registro['importe'];
             $totalImportes = 0;
             foreach ($this->cacheData as $movimiento) {
-                if(str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoCuenta']) && $movimiento['mes'] == $registro['mes'] && $movimiento['evento'] == $registro['evento']) {
+                if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoCuenta']) && $movimiento['mes'] == $registro['mes'] && $movimiento['evento'] == $registro['evento']) {
                     $totalImportes += $movimiento['importe'];
                 }
             }
-    
-            if($totalImportes > 0){
+
+            if ($totalImportes > 0) {
                 $totalDisponible = $solvencia[0]->TotalDevengado - $totalImportes - $registro['importe'];
             }
-    
-            if($totalDisponible < 0){
+
+            if ($totalDisponible < 0) {
                 $this->dispatch('mostrarMensaje', mensaje: 'Monto devengado insuficiente', tipo: 'error', tiempo: 3000);
                 return;
             }
-    
+
             $nuevoRegistro = [
                 'id' => 0,
                 'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
@@ -209,7 +207,7 @@ class IngresosRecaudadoTable extends Tabla
                 'importe' => $registro['importe'],
                 'disponibilidad' => $totalDisponible,
             ];
-    
+
             array_push($this->cacheData, $nuevoRegistro);
             array_push($this->dataCompleta, $registro);
             $this->total = 0;
@@ -220,7 +218,7 @@ class IngresosRecaudadoTable extends Tabla
             }
             $this->dispatch('cambioTotal', total: $this->total);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al agregar registro en recaudado: '. $th->getMessage());
+            Log::error('Ocurrió un error al agregar registro en recaudado: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -246,16 +244,53 @@ class IngresosRecaudadoTable extends Tabla
             $this->numeroPoliza = (int)end($numerosPolizas) + 1;
 
             $this->numeroEvento = $this->dataCompleta[0]['evento'];
-            $polizasInicialesIngresosDevengado = Poliza::where('tipo_poliza', '=', 'I')->where('categoria', '=', 'INGRESOS DEVENGADO')
-                ->where('evento', '=', $this->numeroEvento)->get();
+            $polizasInicialesIngresosDevengado = Poliza::where('tipo_poliza', '=', 'I')
+                ->where('categoria', '=', 'INGRESOS DEVENGADO')
+                ->where('evento', '=', $this->numeroEvento)
+                ->orderBy('id', 'desc')
+                ->get();
+            $sumaAbonos = 0;
+            $contadorDuplas = 0;
+            $hayIva = false;
+            foreach ($polizasInicialesIngresosDevengado as $devengado) {
+                if ($devengado->tipo_interaccion == 'Contable - Abono') {
+
+                    if (str_contains($devengado->concepto, 'IVA')) {
+                        $hayIva = true;
+                    }
+                    if ($hayIva) {
+                        $contadorDuplas++;
+                        $sumaAbonos += $devengado->total;
+                        Log::info($sumaAbonos);
+                    }
+                }
+                if ($hayIva) {
+                    if ($devengado->tipo_interaccion == 'Contable - Abono' && !str_contains($devengado->concepto, 'IVA')) {
+                        $devengado->total = $sumaAbonos;
+                        Log::info('devengado: ' . $devengado->total);
+                    }
+                }
+                if ($devengado->tipo_interaccion == 'Contable - Abono' && str_contains($devengado->concepto, 'IVA')) {
+                    $polizasInicialesIngresosDevengado = $polizasInicialesIngresosDevengado->reject(function ($devengado) {
+                        return $devengado->tipo_interaccion == 'Contable - Abono' && str_contains($devengado->concepto, 'IVA');
+                    });
+                }
+
+                if ($contadorDuplas == 2) {
+                    $contadorDuplas = 0;
+                    $sumaAbonos = 0;
+                    $hayIva = false;
+                }
+            }
+
             $anioActual = Carbon::now()->year;
             $fecha = Carbon::now('America/Mexico_City');
             $fecha->year($anioActual);
             $bitacora = new BitacoraController();
-            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un ingreso recaudado con evento: '.$this->numeroEvento, request());
+            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un ingreso recaudado con evento: ' . $this->numeroEvento, request());
 
             DB::beginTransaction();
-    
+
 
             foreach ($this->dataCompleta as $movimiento) {
                 $movimiento['importe'] = doubleval($movimiento['importe']);
@@ -339,9 +374,9 @@ class IngresosRecaudadoTable extends Tabla
             $this->numeroPolizaRemanente = (int)end($numerosPolizas) + 1;
 
             $polizaRecaudadoRecaudado = Poliza::where('tipo_poliza', '=', 'I')
-                ->where(function($query){
+                ->where(function ($query) {
                     $query->where('categoria', '=', 'INGRESOS RECAUDADO')
-                    ->orwhere('categoria', '=', 'INGRESOS COBRO ESPECIE');
+                        ->orwhere('categoria', '=', 'INGRESOS COBRO ESPECIE');
                 })
                 ->where('evento', '=', $this->numeroEvento)->where('concepto', 'LIKE', '%(Recaudado)%')->get();
             $totalRemanente = DB::select('EXEC ImporteTotalRecaudado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
@@ -381,35 +416,28 @@ class IngresosRecaudadoTable extends Tabla
 
                         if (str_contains($polizaInicial['concepto'], rtrim($conceptoGeneral[0])) !== false && $conceptoGeneral[1] == 'Recaudado)') {
                             $total = $total - $polizaRecaudado['total'];
-                            
-                            if(number_format($total, 2) < 0){
-                                DB::rollBack();
-                                $this->dispatch('mostrarMensaje', mensaje: 'Se excedió el monto $' .number_format($polizaInicial['total'], 2). ' de la cuenta de ' . $polizaInicial['concepto']. ' con IVA', tipo: 'error', tiempo: 3000);
-                                return;
-                            }
                         }
                     }
-                    if(number_format($total, 2) > 0){
-                        // se creal la poliza con los importes sumados
-                        Poliza::create([
-                            'area' => $polizaInicial['area'],
-                            'tipo_poliza' => 'IAUX',
-                            'numero_poliza' =>  $this->numeroPolizaRemanente,
-                            'fecha' => $movimiento['fechaAfectacion'],
-                            'cuenta' => $polizaInicial['cuenta'],
-                            'concepto' => $polizaInicial['concepto'],
-                            'total' => $total,
-                            'mes' => $polizaInicial['mes'],
-                            'descripcion' => $polizaInicial['descripcion'],
-                            'evento' => $this->numeroEvento,
-                            'tipo_interaccion' => $polizaInicial['tipo_interaccion'],
-                            'validado' => false,
-                            'estatus_evento' => false,
-                            'categoria' => 'INGRESOS DEVENGADO REMANENTE RECAUDADO',
-                            'created_at' => $fecha,
-                            'updated_at' => $fecha
-                        ]);
-                    }
+                    
+                    Poliza::create([
+                        'area' => $polizaInicial['area'],
+                        'tipo_poliza' => 'IAUX',
+                        'numero_poliza' =>  $this->numeroPolizaRemanente,
+                        'fecha' => $movimiento['fechaAfectacion'],
+                        'cuenta' => $polizaInicial['cuenta'],
+                        'concepto' => $polizaInicial['concepto'],
+                        'total' => $total,
+                        'mes' => $polizaInicial['mes'],
+                        'descripcion' => $polizaInicial['descripcion'],
+                        'evento' => $this->numeroEvento,
+                        'tipo_interaccion' => $polizaInicial['tipo_interaccion'],
+                        'validado' => false,
+                        'estatus_evento' => false,
+                        'categoria' => 'INGRESOS DEVENGADO REMANENTE RECAUDADO',
+                        'created_at' => $fecha,
+                        'updated_at' => $fecha
+                    ]);
+                   
                 }
             } else {
                 $this->numeroPolizaRemanente = 0;

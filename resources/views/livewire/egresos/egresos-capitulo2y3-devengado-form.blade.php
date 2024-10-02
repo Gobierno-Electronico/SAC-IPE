@@ -127,7 +127,7 @@
                 </label><br>
 
                 @if ($selectorPagoRetenciones == 'SI')
-                    <label for="selectCuenta" class="form-label mt-3">Cuenta contable</label>
+                    <label for="selectCuenta" class="form-label mt-3">Retenciones</label>
                     <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuentaContable">
                         <option value="" selected disabled>Seleccionar cuenta</option>
                         @foreach ($cuentasContables as $cuenta)

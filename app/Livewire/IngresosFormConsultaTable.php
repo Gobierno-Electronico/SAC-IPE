@@ -103,6 +103,24 @@ class IngresosFormConsultaTable extends Tabla
                 ->where('categoria', '=', $this->categoriaRemanente)
                 ->where('validado','=', false)->delete();
             }
+
+            switch($this->categoriaModulo){
+                case 'INGRESOS DEVENGADO PREVIAMENTE RECAUDADO':
+                    Poliza::where('categoria', '=', 'INGRESOS POR CLASIFICAR')
+                            ->update(['estatus_evento' => true]);
+                    break;
+
+                case 'INGRESOS RECAUDADO':
+                    Poliza::where('categoria', '=', 'INGRESOS DEVENGADO')
+                            ->update(['estatus_evento' => true]);
+                    break;
+                
+                case 'INGRESOS COBRO ESPECIE':
+                    Poliza::where('categoria', '=', 'INGRESOS DEVENGADO')
+                            ->update(['estatus_evento' => true]);
+                    break;
+            }
+
             // PresupuestoInicial::where('anio', '=', $this->selectedYear)->where('categoria', '=', 'INGRESOS')->where('tipo', '=', 'P')->delete();
             $this->validado = true;
             // $this->dispatch('mostrarMensaje', mensaje: 'Se borró el movimiento de Reclasificación/Recalendarización', tipo: 'success', tiempo: 3000);

@@ -30,7 +30,7 @@ class GuiaContabilizadoraController extends Controller
     public function crearGuiaContabilizadora(Request $request)
     {
         // return response()->json('Método desactivado');
-        $path = public_path('Guia/4000-Pagado-CuentasCuentasSeguidas - copia.xlsx');
+        $path = public_path('Guia/5000-Devengado-CuentasConceptos.xlsx'); // cambiar el número del capítulo cuando se carguen las relaciones
 
         // Validar que el archivo pueda ser analizado correctamente.
         if ($xlsx = SimpleXLSX::parse($path)) {
@@ -83,7 +83,7 @@ class GuiaContabilizadoraController extends Controller
                         $relacionesCuentaCapitulo[] = CuentaCapitulo::create([
                             'cuenta_id' => $cuenta->id,
                             'cuenta' => $cuenta->Codigo_cuenta,
-                            'capitulo' => '4000'
+                            'capitulo' => '5000'
                         ]);                    
                     }
                  
@@ -244,7 +244,7 @@ class GuiaContabilizadoraController extends Controller
     public function relacionarCuentasCuentasSeguidas(Request $request)
     {
         // return response()->json('Método desactivado');
-        $path = public_path('CuentasCuentas/4000-Pagado-CuentasCuentasSeguidas - copia.xlsx');
+        $path = public_path('CuentasCuentas/5000-Devengado-CuentasCuentasSeguidas.xlsx');
 
         // Validar que el archivo pueda ser analizado correctamente.
         if ($xlsx = SimpleXLSX::parse($path)) {
