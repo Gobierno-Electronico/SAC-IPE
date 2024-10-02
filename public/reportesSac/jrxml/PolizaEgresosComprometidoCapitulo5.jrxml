@@ -563,7 +563,7 @@
 					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["C.P. ANIBAL ANDRADE DÍAZ"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["C.P. ANÍBAL ANDRADE DÍAZ"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="271" y="70" width="269" height="15" uuid="b0cd2b88-2324-4f66-8b92-644c93387ac8">

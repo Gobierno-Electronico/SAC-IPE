@@ -75,8 +75,11 @@ class EgresosCapitulo5DevengadoForm extends Component
             $this->cambiarPartidaPresupuestalSeleccionada = false;
             $this->llenarPartidasPresupuestales();
 
+
             $this->cambiarCuentaContableSeleccionada = false;
+
             $this->llenarCuentasContableAbono();
+
             return view('livewire.egresos.egresos-capitulo5-devengado-form', ['eventos' => $eventos]);
         }catch(\Throwable $th){
             Log::error('Ocurrió un error al cargar eventos en Devengado del capítulo 5: ' . $th->getMessage());
@@ -90,7 +93,7 @@ class EgresosCapitulo5DevengadoForm extends Component
             $this->montoDelEvento = DB::select('EXEC ImporteTotalCapitulo5Devengado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             $this->dispatch('formato_importe', id: 'inputMontoEvento', amount: ($this->montoDelEvento > 0) ? $this->montoDelEvento : '');
             $this->dispatch('mostrarMensaje', mensaje: 'Monto del evento cargado', tipo: 'success', tiempo: 1500);
-
+            Log::info('evento');
             $this->llenarPartidasPresupuestales();
         }catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar el evento en Devengado del capítulo 5: ' . $th->getMessage());
@@ -100,6 +103,9 @@ class EgresosCapitulo5DevengadoForm extends Component
 
     public function llenarPartidasPresupuestales()
     {
+        if(!$this->numeroEvento){
+            return;
+        }
         if ($this->cambiarPartidaPresupuestalSeleccionada) {
             $this->partidaPresupuestal = "";
         }
@@ -135,6 +141,8 @@ class EgresosCapitulo5DevengadoForm extends Component
 
     public function cargarPresupuestoComprometido()
     {
+        Log::info('carga');
+
         if (!$this->partidaPresupuestal || !$this->mes || !$this->selectCodigoAreaResponsable) return;
         
         try{
