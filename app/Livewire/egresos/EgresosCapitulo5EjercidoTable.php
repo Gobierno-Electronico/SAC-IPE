@@ -22,6 +22,7 @@ class EgresosCapitulo5EjercidoTable extends Tabla
     public $perPage = 6;
     public $total = 0;
     public $totalDisponible = 0;
+    public $numeroPolizaRemanente;
     public $numeroEvento;
     
     public function render()
@@ -290,15 +291,103 @@ class EgresosCapitulo5EjercidoTable extends Tabla
                 }
 
                 Poliza::insert($polizas);
-                DB::commit();
+
             }
-            $importeTotalEvento = DB::select('EXEC ImporteTotalCapitulo4Ejercido @evento = ?', [$this->numeroEvento]);
+            
+            $numerosPolizas = Poliza::select('numero_poliza')
+                ->where('tipo_poliza', '=', 'EAUX')
+                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->distinct()
+                ->orderBy('numero_poliza')
+                ->pluck('numero_poliza')
+                ->toArray();
+            sort($numerosPolizas);
+            $this->numeroPolizaRemanente = (int)end($numerosPolizas) + 1;
+
+            $polizasInicialesEgresosDevengado = Poliza::where('tipo_poliza', '=', 'E')
+                ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 5')
+                ->where('evento', '=', $this->numeroEvento)
+                ->where(function ($query) {
+                    $query->where('concepto', 'LIKE', '%(Devengado)%')
+                        ->orwhere('concepto', 'LIKE', '%(Comprometido)%');
+                })
+                ->get();
+
+            $polizasInicialesEgresosEjercido = Poliza::where('tipo_poliza', '=', 'E')
+                ->where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 5')
+                ->where('evento', '=', $this->numeroEvento)
+                ->where('concepto', 'LIKE', '%(Ejercido)%')
+                ->get();
+            
+            $totalRemanente = DB::select('EXEC ImporteTotalCapitulo5Ejercido @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
+            if ($totalRemanente > 0) {
+                foreach ($polizasInicialesEgresosDevengado as $polizaImporte) {
+                    $clave = $polizaImporte['cuenta'] . '-' . $polizaImporte['concepto'];
+                    if (isset($resultado[$clave])) {
+                        $resultado[$clave]['total'] += $polizaImporte['total'];
+                    } else {
+                        // Si la clave no existe, agregar el nuevo depósito al resultado
+                        $resultado[$clave] = [
+                            'area' => $polizaImporte['area'],
+                            'tipo_poliza' => 'EAUX',
+                            'numero_poliza' =>  $this->numeroPolizaRemanente,
+                            'fecha' => $movimiento['fechaAfectacion'],
+                            'cuenta' => $polizaImporte['cuenta'],
+                            'concepto' => $polizaImporte['concepto'],
+                            'total' => $polizaImporte['total'],
+                            'mes' => $polizaImporte['mes'],
+                            'descripcion' => $polizaImporte['descripcion'],
+                            'evento' => $this->numeroEvento,
+                            'tipo_interaccion' => $polizaImporte['tipo_interaccion'],
+                            'validado' => false,
+                            'estatus_evento' => false,
+                            'categoria' => 'EGRESOS DEVENGADO CAPITULO 5 REMANENTE EJERCIDO',
+                            'created_at' => $fecha,
+                            'updated_at' => $fecha
+                        ];
+                    }
+                }
+
+                foreach ($resultado as $polizaInicial) {
+                    $total = $polizaInicial['total'];
+                    foreach ($polizasInicialesEgresosEjercido as $polizaEjercido) {
+                        $conceptoGeneral = explode('(', $polizaEjercido->concepto);
+
+                        if (str_contains($polizaInicial['concepto'], rtrim($conceptoGeneral[0])) !== false && $conceptoGeneral[1] == 'Ejercido)') {
+                            $total = $total - $polizaEjercido['total'];
+                        }
+                    }
+                    Poliza::create([
+                        'area' => $polizaInicial['area'],
+                        'tipo_poliza' => 'EAUX',
+                        'numero_poliza' =>  $this->numeroPolizaRemanente,
+                        'fecha' => $movimiento['fechaAfectacion'],
+                        'cuenta' => $polizaInicial['cuenta'],
+                        'concepto' => $polizaInicial['concepto'],
+                        'total' => $total,
+                        'mes' => $polizaInicial['mes'],
+                        'descripcion' => $polizaInicial['descripcion'],
+                        'evento' => $this->numeroEvento,
+                        'tipo_interaccion' => $polizaInicial['tipo_interaccion'],
+                        'validado' => false,
+                        'estatus_evento' => false,
+                        'categoria' => 'EGRESOS DEVENGADO CAPITULO 5 REMANENTE EJERCIDO',
+                        'created_at' => $fecha,
+                        'updated_at' => $fecha
+                    ]);
+                }
+            } else {
+                $this->numeroPolizaRemanente = 0;
+            }
+
+            $importeTotalEvento = DB::select('EXEC ImporteTotalCapitulo5Ejercido @evento = ?', [$this->numeroEvento]);
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
                 Poliza::where('evento', '=', $this->numeroEvento)
                     ->whereIn('categoria', ['EGRESOS DEVENGADO CAPITULO 5'])
                     ->update(['estatus_evento' => false]);
             }
-            $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
+            DB::commit();
+            $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente);
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error('Ocurrió un error al finalizarRegistro en ejercido del capítulo 5: ' . $th->getMessage());

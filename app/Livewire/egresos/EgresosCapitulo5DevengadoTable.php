@@ -23,6 +23,7 @@ class EgresosCapitulo5DevengadoTable extends Tabla
     public $total = 0;
     public $totalDisponible = 0;
     public $numeroEvento;
+    public $numeroPolizaRemanente;
 
     public function render()
     {
@@ -128,7 +129,8 @@ class EgresosCapitulo5DevengadoTable extends Tabla
                         'cuentaContable' => $registro['cuentaContableId'],
                         'mes' => $registro['mes'],
                         'importe' => $registro['importe'],
-                        'pttoComprometido' => $registro['pttoComprometido']
+                        'pttoComprometido' => $registro['pttoComprometido'], 
+                        'selectorPagoRetenciones' => $registro['selectorPagoRetenciones'],
                     ];
                     
                     unset($this->dataCompleta[$key]);
@@ -308,6 +310,88 @@ class EgresosCapitulo5DevengadoTable extends Tabla
 
                 Poliza::insert($polizas);
             }
+            
+            $numerosPolizas = Poliza::select('numero_poliza')
+            ->where('tipo_poliza', '=', 'EAUX')
+            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->distinct()
+            ->orderBy('numero_poliza')
+            ->pluck('numero_poliza')
+            ->toArray();
+            sort($numerosPolizas);
+            $this->numeroPolizaRemanente = (int)end($numerosPolizas) + 1;
+
+            $polizasInicialesEgresosComprometido = Poliza::where('tipo_poliza', '=', 'E')
+                ->where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 5')
+                ->where('evento', '=', $this->numeroEvento)
+                ->get();
+
+            $polizasInicialesEgresosDevengado = Poliza::where('tipo_poliza', '=', 'E')
+                ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 5')
+                ->where('evento', '=', $this->numeroEvento)
+                ->where('concepto', 'LIKE', '%(Devengado)%')
+                ->get();
+
+            $totalRemanente = DB::select('EXEC ImporteTotalCapitulo5Devengado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
+            if ($totalRemanente > 0) {
+                foreach ($polizasInicialesEgresosComprometido as $polizaImporte) {
+                    $clave = $polizaImporte->cuenta . '-' . $polizaImporte->concepto;
+                    if (isset($resultado[$clave])) {
+                        $resultado[$clave]['total'] += $polizaImporte['total'];
+                    } else {
+                        // Si la clave no existe, agregar el nuevo depósito al resultado
+                        $resultado[$clave] = [
+                            'area' => $polizaImporte->area,
+                            'tipo_poliza' => 'EAUX',
+                            'numero_poliza' =>  $this->numeroPolizaRemanente,
+                            'fecha' => $movimiento['fechaAfectacion'],
+                            'cuenta' => $polizaImporte->cuenta,
+                            'concepto' => $polizaImporte->concepto,
+                            'total' => $polizaImporte['total'],
+                            'mes' => $polizaImporte->mes,
+                            'descripcion' => $polizaImporte->descripcion,
+                            'evento' => $this->numeroEvento,
+                            'tipo_interaccion' => $polizaImporte->tipo_interaccion,
+                            'validado' => false,
+                            'estatus_evento' => false,
+                            'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 5 REMANENTE DEVENGADO',
+                            'created_at' => $fecha,
+                            'updated_at' => $fecha
+                        ];
+                    }
+                }
+
+                foreach ($resultado as $polizaInicial) {
+                    $total = $polizaInicial['total'];
+                    foreach ($polizasInicialesEgresosDevengado as $polizaDevengado) {
+                        $conceptoGeneral = explode('(', $polizaDevengado->concepto);
+
+                        if (str_contains($polizaInicial['concepto'], rtrim($conceptoGeneral[0])) !== false && $conceptoGeneral[1] == 'Devengado)') {
+                            $total = $total - $polizaDevengado['total'];
+                        }
+                    }
+                    Poliza::create([
+                        'area' => $polizaInicial['area'],
+                        'tipo_poliza' => 'EAUX',
+                        'numero_poliza' =>  $this->numeroPolizaRemanente,
+                        'fecha' => $movimiento['fechaAfectacion'],
+                        'cuenta' => $polizaInicial['cuenta'],
+                        'concepto' => $polizaInicial['concepto'],
+                        'total' => $total,
+                        'mes' => $polizaInicial['mes'],
+                        'descripcion' => $polizaInicial['descripcion'],
+                        'evento' => $this->numeroEvento,
+                        'tipo_interaccion' => $polizaInicial['tipo_interaccion'],
+                        'validado' => false,
+                        'estatus_evento' => false,
+                        'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 5 REMANENTE DEVENGADO',
+                        'created_at' => $fecha,
+                        'updated_at' => $fecha
+                    ]);
+                }
+            } else {
+                $this->numeroPolizaRemanente = 0;
+            }
             $importeTotalEvento = DB::select('EXEC ImporteTotalCapitulo5Devengado @evento = ?', [$this->numeroEvento]);
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
                 Poliza::where('evento', '=', $this->numeroEvento)
@@ -315,7 +399,7 @@ class EgresosCapitulo5DevengadoTable extends Tabla
                     ->update(['estatus_evento' => false]);
             }
             DB::commit();
-            $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
+            $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente);
         }catch (\Throwable $th) {
             DB::rollBack();
             Log::error('Ocurrió un error al finalizarRegistro en devengado del capítulo 5: '. $th->getMessage());
