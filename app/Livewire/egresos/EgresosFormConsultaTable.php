@@ -99,7 +99,7 @@ class EgresosFormConsultaTable extends Tabla
                 ->where('validado','=', false)->delete();
             if ($this->numeroPolizaRemanente && $this->numeroPolizaRemanente > 0) {
                 Poliza::searchByYear('fecha', Carbon::now()->year)
-                ->where('tipo_poliza', '=', 'IAUX') //CORREGIR
+                ->where('tipo_poliza', '=', 'EAUX') //CORREGIR
                 ->where('evento', '=', $this->numeroEvento)
                 ->where('categoria', '=', $this->categoriaRemanente)
                 ->where('validado','=', false)->delete();

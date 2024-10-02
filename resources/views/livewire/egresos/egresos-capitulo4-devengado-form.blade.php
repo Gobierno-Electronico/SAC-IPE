@@ -22,8 +22,8 @@
             </div>
         </div>
         <livewire:egresos.egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaEgresosDevengadoCapitulo4" urlFinalizar="/capitulo4-devengado" tipoPoliza="E"
-            categoriaModulo='EGRESOS DEVENGADO CAPITULO 4' />
+            tipoMovimiento="PolizaEgresosDevengadoCapitulo4" urlFinalizar="/capitulo4-devengado" :$numeroPolizaRemanente tipoPoliza="E"
+            categoriaModulo='EGRESOS DEVENGADO CAPITULO 4' categoriaRemanente='EGRESOS COMPROMETIDO CAPITULO 4 REMANENTE DEVENGADO'/>
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
