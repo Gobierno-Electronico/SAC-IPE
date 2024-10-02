@@ -121,6 +121,7 @@ class EgresosCapitulo5DevengadoForm extends Component
             ->whereIn('interaccion_cuenta_conceptos.concepto_id', [69, 70, 71])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
             ->orderBy('cuentas.Codigo_cuenta')->get();
 
+
             $cuentasDevengadasAux = new Collection();
             foreach($cuentasDevengadas as $devengada){
                 foreach($cuentasComprometidas as $comprometida){
@@ -130,9 +131,8 @@ class EgresosCapitulo5DevengadoForm extends Component
                     }
                 }
             }
-
             $cuentasDevengadasAux = $cuentasDevengadasAux->unique('Codigo_cuenta');
-            $this->partidasPresupuestales = $cuentasDevengadasAux;
+            $this->partidasPresupuestales = $cuentasDevengadasAux->toArray();
         }catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar partidas presupuestales en Devengado del capítulo 5: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las partidas presupuestales, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
