@@ -250,7 +250,6 @@ class EgresosCapitulo4PagadoTable extends Tabla
             $this->dispatch('mostrarMensaje', mensaje: 'Tabla sin registros', tipo: 'error', tiempo: 3000);
             return;
         }
-        Log::info($this->dataCompleta);
 
         try {
             $numerosPolizas = Poliza::select('numero_poliza')

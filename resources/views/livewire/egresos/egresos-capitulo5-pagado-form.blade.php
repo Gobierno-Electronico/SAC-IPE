@@ -21,9 +21,9 @@
                 </div>
             </div>
         </div>
-        <livewire:egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaEgresosPagadoCapitulo5" urlFinalizar="/capitulo5-pagado" tipoPoliza="E"
-            categoriaModulo='EGRESOS PAGADO CAPITULO 5' />
+        <livewire:egresos.egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+            tipoMovimiento="PolizaEgresosPagadoCapitulo5" urlFinalizar="/capitulo5-pagado" :$numeroPolizaRemanente tipoPoliza="E"
+            categoriaModulo='EGRESOS PAGADO CAPITULO 5' categoriaRemanente='EGRESOS EJERCIDO CAPITULO 5 REMANENTE PAGADO'/>
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
@@ -66,7 +66,7 @@
 
                 <label for="selectAreaResponsable" class="form-label mt-3">Área responsable</label>
                 <select name="selectAreaResponsable" id="selectAreaResponsable" class="form-select"
-                    wire:model="selectCodigoAreaResponsable">
+                    wire:model="selectCodigoAreaResponsable" wire:change="cargarPresupuestoEjercido">
                     <option value="" @if ($this->selectCodigoAreaResponsable == '') selected @endif disabled>
                         Seleccionar un área
                     </option>
@@ -80,12 +80,11 @@
                 </select>
 
                 <label for="selectPartidaPresupuestal" class="form-label mt-3">Partida presupuestal</label>
-                <select name="selectPartidaPresupuestal" id="selectPartidaPresupuestal" class="form-select"
-                    wire:model="partidaPresupuestal">
+                <select name="selectPartidaPresupuestal" id="selectPartidaPresupuestal" class="form-select" wire:model="partidaPresupuestal" wire:change="llenarCuentasBanco">
                     <option value="" selected disabled>Seleccionar partida presupuestal</option>
                     @foreach ($partidasPresupuestales as $partida)
-                        <option value="{{ $partida->cuenta_id }}"> <!-- $cuenta->cuenta_id -->
-                            {{$partida->Codigo_cuenta . '  ' . $partida->Descripcion_cuenta}}</option>
+                        <option value="{{ $partida['cuenta_id'] }}"> 
+                            {{$partida['Codigo_cuenta'] . '  ' . $partida['Descripcion_cuenta']}}</option>
                     @endforeach
                 </select>
 
@@ -93,14 +92,14 @@
                 <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuentaBanco">
                     <option value="" disabled>Seleccionar cuenta</option>
                     @foreach ($cuentasBanco as $cuenta)
-                        <option value="{{ $cuenta->cuenta_id }}"> <!-- $cuenta->cuenta_id -->
+                        <option value="{{ $cuenta->cuenta_id }}">
                             {{$cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
                     @endforeach
                 </select>
 
                 <label for="selectRetenciones" class="form-label mt-3">Cuenta contable</label>
                 <select name="selectRetenciones" id="selectRetenciones" class="form-select"
-                    wire:model="cuentaDeRetenciones">
+                    wire:model="cuentaDeRetenciones" wire:change="cargarMontoContable">
                     <option value="" disabled>Seleccionar cuenta de retención</option>
                     @foreach ($cuentasRetenciones as $retencion)
                         <option value="{{ $retencion->cuenta_id }}">
@@ -109,7 +108,7 @@
                 </select>
 
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
-                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes">
+                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes" wire:change="cargarPresupuestoEjercido">
                     <option value="" selected disabled>Seleccionar mes...</option>
                     @foreach (range(1, 12) as $mes)
                         @php
