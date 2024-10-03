@@ -181,10 +181,9 @@ class EgresosCapitulo5PagadoForm extends Component
 
 
             $solvencia = DB::select('EXEC SolvenciaEjercidosCapitulo5 @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?', array($departamento->Codigo_completo, $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $this->mes, $this->numeroEvento))[0]->Total;
-            if($this->cuentaDeRetenciones != ""){
+            if ($this->cuentaDeRetenciones != "") {
                 $this->cargarMontoContable();
-                // dd("No vacío");
-            }else{
+            } else {
                 $this->montoContable = 0;
                 return;
             }
@@ -216,12 +215,17 @@ class EgresosCapitulo5PagadoForm extends Component
         }
     }
 
-    public function cargarMontoContable(){
+    public function cargarMontoContable()
+    {
         if (!$this->partidaPresupuestal || !$this->mes || !$this->selectCodigoAreaResponsable) return;
         $anioActual = Carbon::now()->year;
         $codigoDepartamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
         $codigoCuentaContableSeleccionada = Cuenta::where('id', $this->cuentaDeRetenciones)->value('Codigo_cuenta');
-        $solvenciaContable = DB::select('EXEC SolvenciaDevengadoCuentaContableCapitulo5 @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?', array ($codigoDepartamento->Codigo_completo, $codigoCuentaContableSeleccionada, $anioActual, $this->mes, $this->numeroEvento))[0]->Total;
+        $partidaPagadoSeleccionada = Cuenta::find($this->partidaPresupuestal);
+        $conceptoGeneralPartidaPagado = explode('(', $partidaPagadoSeleccionada->Descripcion_cuenta);
+        // dd($conceptoGeneralPartidaPagado[0]);
+        $partidaDevengado = Cuenta::where('Descripcion_cuenta', 'LIKE', '%' . $conceptoGeneralPartidaPagado[0] . '(Devengado)' . '%')->get();
+        $solvenciaContable = DB::select('EXEC SolvenciaDevengadoCuentaContableCapitulo5 @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?, @partidaPagado = ?, @partidaDevengado = ?', array($codigoDepartamento->Codigo_completo, $codigoCuentaContableSeleccionada, $anioActual, $this->mes, $this->numeroEvento, $partidaPagadoSeleccionada->Codigo_cuenta, $partidaDevengado[0]['Codigo_cuenta']))[0]->Total;
         $this->montoContable = ($solvenciaContable > 0) ? floatval($solvenciaContable) : 0;
         $this->dispatch('formato_importe', id: 'inputMontoContable', amount: "{$this->montoContable}");
         $this->dispatch('mostrarMensaje', mensaje: 'Monto contable cargado', tipo: 'success', tiempo: 1500);
@@ -254,7 +258,7 @@ class EgresosCapitulo5PagadoForm extends Component
                 'codigoCuentaBanco' => $cuentaBancoSeleccionada->Codigo_cuenta,
                 'descripcionCuentaBanco' => $cuentaBancoSeleccionada->Descripcion_cuenta,
                 'cuentaRetencionesId' => $this->cuentaDeRetenciones,
-                'codigoCuentaRetenciones' => $cuentaRetencionesSeleccionada->Codigo_cuenta,           
+                'codigoCuentaRetenciones' => $cuentaRetencionesSeleccionada->Codigo_cuenta,
                 'descripcionCuentaRetenciones' => $cuentaRetencionesSeleccionada->Descripcion_cuenta,
                 'mes' => $this->mes,
                 'importe' => $this->importe,
@@ -289,7 +293,7 @@ class EgresosCapitulo5PagadoForm extends Component
     public function llenarFormulario($datosRegistro)
     {
 
-        $this->partidaPresupuestal = $datosRegistro['partida']; 
+        $this->partidaPresupuestal = $datosRegistro['partida'];
         $this->cuentaBanco = $datosRegistro['cuentaBanco'];
         $this->cuentaDeRetenciones = $datosRegistro['cuentaRetenciones'];
         $this->mes = $datosRegistro['mes'];
@@ -298,7 +302,7 @@ class EgresosCapitulo5PagadoForm extends Component
         $this->PPTOEjercido = $datosRegistro['pttoEjercido'];
         $this->montoContable = $datosRegistro['montoContable'];
 
-        $this->dispatch('llenarFormulario', presupuesto: $this->PPTOEjercido, importe: $this->importe, cuentaBanco: $this->cuentaBanco, cuentaRetenciones: $this->cuentaDeRetenciones, montoContable:$this->montoContable);
+        $this->dispatch('llenarFormulario', presupuesto: $this->PPTOEjercido, importe: $this->importe, cuentaBanco: $this->cuentaBanco, cuentaRetenciones: $this->cuentaDeRetenciones, montoContable: $this->montoContable);
     }
 
     #[On('consultar-registro')]
