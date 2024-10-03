@@ -206,7 +206,7 @@ class EgresosCapitulo4PagadoForm extends Component
 
             // Si solo hay una cuenta, seleccionarla automáticamente
             if (count($this->cuentasRetenciones) === 1) {
-                $this->cuentaDeRetenciones = $this->cuentasRetenciones;
+                $this->cuentaDeRetenciones = $this->cuentasRetenciones[0]['id'];
             }
 
                 
@@ -267,6 +267,7 @@ class EgresosCapitulo4PagadoForm extends Component
             $partida = Cuenta::find($this->partidaPresupuestal);
             $cuentaBancoSeleccionada = Cuenta::find($this->cuentaBanco);
             $cuentaRetencionesSeleccionada = Cuenta::find($this->cuentaDeRetenciones);
+            // dd($cuentaRetencionesSeleccionada);
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $registro = [
                 'id' => 0,
