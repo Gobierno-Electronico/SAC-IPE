@@ -229,8 +229,6 @@ class EgresosCapitulo4PagadoForm extends Component
 
     public function agregarRegistro()
     {
-        Log::info($this->cuentaDeRetenciones);
-
         try {
             $this->importe = floatval(str_replace(['$', ','], "", $this->importe));
             $this->importe = ($this->importe > 0)  ? $this->importe : "";
