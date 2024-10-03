@@ -22,8 +22,8 @@
             </div>
         </div>
         <livewire:egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-        tipoMovimiento="PolizaEgresosPagadoCapitulo5" urlFinalizar="/capitulo5-pagado" tipoPoliza="E"
-        categoriaModulo='EGRESOS PAGADO CAPITULO 5' />
+            tipoMovimiento="PolizaEgresosPagadoCapitulo5" urlFinalizar="/capitulo5-pagado" tipoPoliza="E"
+            categoriaModulo='EGRESOS PAGADO CAPITULO 5' />
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
@@ -57,9 +57,9 @@
                     <option value="" disabled>
                         Seleccionar un evento
                     </option>
-                    @foreach ($eventos as $evento /* => $descripcion */)
+                    @foreach ($eventos as $evento => $descripcion )
                         <option value="{{ $evento }}">
-                            {{ $evento }} {{-- {{ $evento }} - {{$descripcion}} --}}
+                           {{ $evento }} - {{$descripcion}}
                         </option>
                     @endforeach
                 </select>
@@ -83,18 +83,28 @@
                 <select name="selectPartidaPresupuestal" id="selectPartidaPresupuestal" class="form-select"
                     wire:model="partidaPresupuestal">
                     <option value="" selected disabled>Seleccionar partida presupuestal</option>
-                    @foreach ($cuentas as $cuenta)
-                        <option value="{{ $cuenta }}"> <!-- $cuenta->cuenta_id -->
-                            {{ $cuenta /* $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta */ }}</option>
+                    @foreach ($partidasPresupuestales as $partida)
+                        <option value="{{ $partida->cuenta_id }}"> <!-- $cuenta->cuenta_id -->
+                            {{$partida->Codigo_cuenta . '  ' . $partida->Descripcion_cuenta}}</option>
                     @endforeach
                 </select>
 
-                <label for="selectCuenta" class="form-label mt-3">Método de pago</label>
-                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="metodoPago">
+                <label for="selectCuenta" class="form-label mt-3">Banco</label>
+                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuentaBanco">
                     <option value="" disabled>Seleccionar cuenta</option>
-                    @foreach ($cuentas as $cuenta)
-                        <option value="{{ $cuenta }}"> <!-- $cuenta->cuenta_id -->
-                            {{ $cuenta /* $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta */ }}</option>
+                    @foreach ($cuentasBanco as $cuenta)
+                        <option value="{{ $cuenta->cuenta_id }}"> <!-- $cuenta->cuenta_id -->
+                            {{$cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
+                    @endforeach
+                </select>
+
+                <label for="selectRetenciones" class="form-label mt-3">Cuenta contable</label>
+                <select name="selectRetenciones" id="selectRetenciones" class="form-select"
+                    wire:model="cuentaDeRetenciones">
+                    <option value="" disabled>Seleccionar cuenta de retención</option>
+                    @foreach ($cuentasRetenciones as $retencion)
+                        <option value="{{ $retencion->cuenta_id }}">
+                            {{ $retencion->Codigo_cuenta . '  ' . $retencion->Descripcion_cuenta }}</option>
                     @endforeach
                 </select>
 
@@ -116,31 +126,13 @@
                 <label for="inputPTTOEjercido" class="form-label mt-3">Presupuesto ejercido</label>
                 <input type="text" name="inputPTTOEjercido" id="inputPTTOEjercido" class="form-control" disabled>
 
+                <label for="inputMontoContable" class="form-label mt-3">Monto contable</label>
+                <input type="text" name="inputMontoContable" id="inputMontoContable" class="form-control" disabled>
+
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control"
                     onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model="importe">
 
-                <label for="selectorPagoRetenciones"class="form-label mt-3">Pago de retenciones</label><br>
-                <label>
-                    <input type="radio" name="selectorPagoRetenciones" wire:model.live="selectorPagoRetenciones" value="SI">
-                    Sí
-                </label>
-                &nbsp;&nbsp;&nbsp;
-                <label>
-                    <input type="radio" name="selectorPagoRetenciones" wire:model.live="selectorPagoRetenciones" value="NO">
-                    No
-                </label><br>
-
-                @if ($selectorPagoRetenciones == 'SI')
-                    <label for="selectCuenta" class="form-label mt-3">Retenciones</label>
-                    <select name="selectRetenciones" id="selectRetenciones" class="form-select" wire:model="cuentaDeRetenciones">
-                        <option value="" disabled>Seleccionar cuenta de retención</option>
-                        @foreach ($cuentasRetenciones as $retencion)
-                            <option value="{{ $retencion->cuenta_id }}"> 
-                                {{ $retencion->Codigo_cuenta . '  ' . $retencion->Descripcion_cuenta }}</option>
-                        @endforeach
-                    </select>
-                @endif
             </div>
 
             <div class="col">
