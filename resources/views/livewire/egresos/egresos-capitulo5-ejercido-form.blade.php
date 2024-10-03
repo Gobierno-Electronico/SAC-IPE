@@ -24,9 +24,9 @@
 
             </div>
         </div>
-         <livewire:egresos.egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+         <livewire:egresos.egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total :$numeroPolizaRemanente
             tipoMovimiento="PolizaEgresosEjercidoCapitulo5" urlFinalizar="/capitulo5-ejercido" tipoPoliza="E"
-            categoriaModulo='EGRESOS EJERCIDO CAPITULO 5' />
+            categoriaModulo='EGRESOS EJERCIDO CAPITULO 5' categoriaRemanente='EGRESOS DEVENGADO CAPITULO 5 REMANENTE EJERCIDO'/>
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
@@ -48,7 +48,7 @@
             wire:model="observaciones">
 
         <label for="inputFechaAfectacion" class="form-label mt-3">Fecha de afectación</label>
-        <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control"
+        <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control" max="{{ now()->toDateString() }}"
             wire:model="fechaAfectacion">
 
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
