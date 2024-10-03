@@ -100,7 +100,7 @@ class EgresosCapitulo4PagadoForm extends Component
             $this->dispatch('mostrarMensaje', mensaje: 'Monto del evento cargado', tipo: 'success', tiempo: 1500);
             $this->llenarPartidasPresupuestales();
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al cargar el evento en Devengado del capítulo 4: ' . $th->getMessage());
+            Log::error('Ocurrió un error al cargar el evento en Pagado del capítulo 4: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }

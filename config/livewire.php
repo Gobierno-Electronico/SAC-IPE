@@ -115,6 +115,8 @@ return [
 
     'inject_assets' => true,
 
+    'asset_url' =>null,
+
     /*
     |---------------------------------------------------------------------------
     | Navigate (SPA mode)

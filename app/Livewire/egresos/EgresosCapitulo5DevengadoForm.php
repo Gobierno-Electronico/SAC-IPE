@@ -53,6 +53,7 @@ class EgresosCapitulo5DevengadoForm extends Component
 
     public $consultarRegistro = false;
     public $numeroPoliza;
+    public $numeroPolizaRemanente;
     public $total;
 
     public $partidasPresupuestales = [];
@@ -121,6 +122,7 @@ class EgresosCapitulo5DevengadoForm extends Component
             ->whereIn('interaccion_cuenta_conceptos.concepto_id', [69, 70, 71])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
             ->orderBy('cuentas.Codigo_cuenta')->get();
 
+
             $cuentasDevengadasAux = new Collection();
             foreach($cuentasDevengadas as $devengada){
                 foreach($cuentasComprometidas as $comprometida){
@@ -130,9 +132,8 @@ class EgresosCapitulo5DevengadoForm extends Component
                     }
                 }
             }
-
             $cuentasDevengadasAux = $cuentasDevengadasAux->unique('Codigo_cuenta');
-            $this->partidasPresupuestales = $cuentasDevengadasAux;
+            $this->partidasPresupuestales = $cuentasDevengadasAux->toArray();
         }catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar partidas presupuestales en Devengado del capítulo 5: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las partidas presupuestales, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
@@ -172,8 +173,6 @@ class EgresosCapitulo5DevengadoForm extends Component
 
         try{
             $this->cambiarCuentaContableSeleccionada = true;
-            /* $descripcionPartida = Cuenta::select('Descripcion_cuenta')->where('id', '=', $this->partidaPresupuestal)->get();
-            $conceptoGeneralPartida = rtrim(explode('(', $descripcionPartida[0]->Descripcion_cuenta)[0]); */
 
             $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('interaccion_cuenta_conceptos.concepto_id', [69, 70, 71])
             ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
@@ -183,7 +182,6 @@ class EgresosCapitulo5DevengadoForm extends Component
                         ->where('tipo_interaccion', '=', 'Contable - Abono');
                 })
                 ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-               // ->where('cuentas.Descripcion_cuenta', 'not like', '%' . $conceptoGeneralPartida . '%')
                 ->get(); 
         }catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar las cuentas contables en devengado capítulo 5000: ' . $th->getMessage());
@@ -213,7 +211,6 @@ class EgresosCapitulo5DevengadoForm extends Component
     public function agregarRegistro()
     {
         try{
-            //EN CASO DE ELIMINAR EL SELECTOR ESTOS DOS CONDICIONES SE ELIMINAN AL IGUAL QUE EL METODO ASIGNAR CUENTA CONTABLE ABONO
             if($this->selectorPagoRetenciones == 'SI' && $this->cuentaContableAbono == ""){
                 $this->dispatch('mostrarMensaje', mensaje: 'Retención requerida', tipo: 'warning', tiempo: 3000);
                 return;
@@ -250,7 +247,8 @@ class EgresosCapitulo5DevengadoForm extends Component
                 'mes' => $this->mes,
                 'importe' => $this->importe,
                 'montoEvento' => $this->montoDelEvento,
-                'pttoComprometido' => $this->PTTOComprometido
+                'pttoComprometido' => $this->PTTOComprometido,
+                'selectorPagoRetenciones' => $this->selectorPagoRetenciones,
             ];
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
@@ -286,15 +284,17 @@ class EgresosCapitulo5DevengadoForm extends Component
         $this->importe = $datosRegistro['importe'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->PTTOComprometido = $datosRegistro['pttoComprometido'];
+        $this->selectorPagoRetenciones = $datosRegistro['selectorPagoRetenciones'];
         $this->dispatch('llenarFormulario', presupuesto: $this->PTTOComprometido, importe: $this->importe);
     }
 
     #[On('consultar-registro')]
-    public function consultarRegistros($numeroEvento, $numeroPoliza, $total)
+    public function consultarRegistros($numeroEvento, $numeroPoliza, $total, $numeroPolizaRemanente)
     {
         $this->consultarRegistro = true;
         $this->numeroEvento = $numeroEvento;
         $this->numeroPoliza = $numeroPoliza;
+        $this->numeroPolizaRemanente = $numeroPolizaRemanente;
         $this->total = $total;
     }
 
