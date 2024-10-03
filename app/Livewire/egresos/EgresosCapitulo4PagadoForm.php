@@ -174,6 +174,13 @@ class EgresosCapitulo4PagadoForm extends Component
             if ($this->cambiarCuentaRetencionesSeleccionada) {
                 $this->cuentaDeRetenciones = "";
             }
+
+            $cuentasEjercidas = Poliza::where('evento', '=', $this->numeroEvento)
+                ->where('tipo_poliza', '=', 'E')
+                ->where('tipo_interaccion', '=', 'Contable - Abono')
+                ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 4')
+                ->get();
+
             $this->cambiarCuentaRetencionesSeleccionada = true;
             $this->cuentasRetenciones = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $idInteraccionCuentaConcepto)
                 ->join('interaccion_cuenta_conceptos', function ($join) {
@@ -181,6 +188,23 @@ class EgresosCapitulo4PagadoForm extends Component
                         ->where('tipo_interaccion', '=', 'Contable - Cargo');
                 })
                 ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get();
+
+
+            $cuentasDevengadasAux = new Collection();
+            foreach ($this->cuentasRetenciones as $pagada) {
+                foreach ($cuentasEjercidas as $ejercida) {
+                    $conceptoComprometida = explode('(', $ejercida->concepto);
+                    if (str_contains($pagada->Descripcion_cuenta, $conceptoComprometida[0])) {
+                        $cuentasDevengadasAux->push($pagada);
+                    }
+                }
+            }
+
+            $cuentasDevengadasAux = $cuentasDevengadasAux->unique('Codigo_cuenta');
+            $this->cuentasRetenciones = $cuentasDevengadasAux->toArray();
+
+
+                
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar las cuentas de retenciones en pagado capítulo 4000: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas de retenciones, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);

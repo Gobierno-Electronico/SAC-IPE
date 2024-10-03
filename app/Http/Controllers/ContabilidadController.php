@@ -72,6 +72,8 @@ class ContabilidadController extends Controller
                     if (count($encabezados) != count($datos_fila)) {
                         dd($encabezados, $datos_fila);
                     }
+                    $rows[] = array_combine(array_map('trim', array_filter($encabezados)), array_map('trim', array_map($reemplazarCaracterEspecial, $datos_fila)));
+
                     $fila = array_combine(
                         array_map('trim', array_filter($encabezados)),
                         array_map('trim', array_map($reemplazarCaracterEspecial, $datos_fila))
@@ -110,8 +112,8 @@ class ContabilidadController extends Controller
                     if (empty($fila['Cargo']) && empty($fila['Abono'])) {
                         $errores[] = "Al menos una de las columnas 'Cargo' o 'Abono' debe estar llena en la fila $numero_fila.";
                     }
-                    // Agregar la fila procesada al array de filas válidas
-                    $rows[] = $fila;
+                    // Si la fila es válida, agregarla al array de filas válidas
+
                 }
 
 
