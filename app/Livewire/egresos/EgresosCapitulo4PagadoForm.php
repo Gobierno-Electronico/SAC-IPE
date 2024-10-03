@@ -135,6 +135,7 @@ class EgresosCapitulo4PagadoForm extends Component
 
             $cuentasDevengadasAux = $cuentasDevengadasAux->unique('Codigo_cuenta');
             $this->partidasPresupuestales = $cuentasDevengadasAux;
+            
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar el evento en pagado del capítulo 4: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
@@ -203,6 +204,10 @@ class EgresosCapitulo4PagadoForm extends Component
             $cuentasDevengadasAux = $cuentasDevengadasAux->unique('Codigo_cuenta');
             $this->cuentasRetenciones = $cuentasDevengadasAux->toArray();
 
+            // Si solo hay una cuenta, seleccionarla automáticamente
+            if (count($this->cuentasRetenciones) === 1) {
+                $this->cuentaDeRetenciones = $this->cuentasRetenciones;
+            }
 
                 
         } catch (\Throwable $th) {
