@@ -15,7 +15,7 @@ class Poliza extends Model
         'numero_poliza',
         'fecha',
         'cuenta',
-        'cuentaPagoDevengadoPrevRecaudado',
+        'cuentaRelacionada',
         'concepto',
         'total',
         'descripcion',
