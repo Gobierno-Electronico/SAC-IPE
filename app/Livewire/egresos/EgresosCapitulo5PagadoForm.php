@@ -202,6 +202,20 @@ class EgresosCapitulo5PagadoForm extends Component
             if ($this->cambiarCuentaRetencionesSeleccionada) {
                 $this->cuentaDeRetenciones = "";
             }
+            $partidaPresupuestalSeleccionada = Cuenta::find($this->partidaPresupuestal);
+            $conceptoGeneralPartidaSeleccionada = explode('(', $partidaPresupuestalSeleccionada->Descripcion_cuenta);
+        // dd($conceptoGeneralPartidaPagado[0]);
+        $partidaDevengado = Cuenta::where('Descripcion_cuenta', 'LIKE', '%' . $conceptoGeneralPartidaSeleccionada[0] . '(Devengado)' . '%')->get();
+
+
+
+            $cuentasDevengadas = Poliza::where('evento', '=', $this->numeroEvento)
+                ->where('tipo_poliza', '=', 'E')
+                ->where('tipo_interaccion', '=', 'Contable - Abono')
+                ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 5')
+                ->where('cuentaRelacionada', '=', $partidaDevengado[0]['Codigo_cuenta'])
+                ->get();
+
             $this->cambiarCuentaRetencionesSeleccionada = true;
             $this->cuentasRetenciones = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $idInteraccionCuentaConcepto)
                 ->join('interaccion_cuenta_conceptos', function ($join) {
@@ -209,6 +223,31 @@ class EgresosCapitulo5PagadoForm extends Component
                         ->where('tipo_interaccion', '=', 'Contable - Cargo');
                 })
                 ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get();
+
+                // dd($cuentasDevengadas);
+
+
+                $cuentasDevengadasAux = new Collection();
+                foreach ($this->cuentasRetenciones as $pagada) {
+                    foreach ($cuentasDevengadas as $devengada) {
+                        $conceptoComprometida = explode('(', $devengada->concepto);
+                        if (str_contains($pagada->Descripcion_cuenta, $conceptoComprometida[0])) {
+                            $cuentasDevengadasAux->push($pagada);
+                        }
+                    }
+                }
+    
+                $cuentasDevengadasAux = $cuentasDevengadasAux->unique('Codigo_cuenta');
+                $this->cuentasRetenciones = $cuentasDevengadasAux->toArray();
+    
+                // Si solo hay una cuenta, seleccionarla automáticamente
+                if (count($this->cuentasRetenciones) === 1) {
+                    $this->cuentaDeRetenciones = $this->cuentasRetenciones[0]['id'];
+                }
+
+
+
+
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar las cuentas de retenciones en pagado capítulo 5000: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas de retenciones, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
