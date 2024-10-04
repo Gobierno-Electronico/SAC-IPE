@@ -45,3 +45,7 @@
 #10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
 #11 {main}
 "} 
+[2024-10-04 08:18:46] local.ERROR: Cannot redeclare App\Livewire\egresos\EgresosCapitulo5PagadoTable::edit() {"userId":3,"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare App\\Livewire\\egresos\\EgresosCapitulo5PagadoTable::edit() at C:\\xampp\\htdocs\\SAC-IPE\\app\\Livewire\\egresos\\EgresosCapitulo5PagadoTable.php:452)
+[stacktrace]
+#0 {main}
+"} 

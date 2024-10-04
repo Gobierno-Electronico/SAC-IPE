@@ -288,6 +288,7 @@ class EgresosCapitulo5PagadoForm extends Component
         $this->cuentaDeRetenciones = "";
         $this->importe = "";
         $this->mes = "";
+        $this->montoContable = 0;
         $this->dispatch('limpiar');
     }
 

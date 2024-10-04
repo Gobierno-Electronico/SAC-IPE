@@ -191,5 +191,6 @@
 
     function limpiar() {
         $('#inputPTTOEjercido').val('');
+        $('#inputMontoContable').val('');
     }
 </script>
