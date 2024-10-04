@@ -102,8 +102,8 @@
                     wire:model="cuentaDeRetenciones" wire:change="cargarMontoContable">
                     <option value="" disabled>Seleccionar cuenta de retención</option>
                     @foreach ($cuentasRetenciones as $retencion)
-                        <option value="{{ $retencion->cuenta_id }}">
-                            {{ $retencion->Codigo_cuenta . '  ' . $retencion->Descripcion_cuenta }}</option>
+                        <option value="{{ $retencion['cuenta_id'] }}"> 
+                            {{ $retencion['Codigo_cuenta'] . '  ' . $retencion['Descripcion_cuenta'] }}</option>
                     @endforeach
                 </select>
 
