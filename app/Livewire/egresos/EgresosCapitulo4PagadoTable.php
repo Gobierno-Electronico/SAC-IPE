@@ -354,6 +354,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
                 ->toArray();
             sort($numerosPolizas);
             $this->numeroPolizaRemanente = (int)end($numerosPolizas) + 1;
+
             $polizasInicialesEgresosEjercido = Poliza::where('tipo_poliza', '=', 'E')
                                                     ->where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 4')
                                                     ->where('evento', '=', $this->numeroEvento)
@@ -364,6 +365,8 @@ class EgresosCapitulo4PagadoTable extends Tabla
                                                     ->where('evento', '=', $this->numeroEvento)
                                                     ->where('concepto', 'LIKE', '%(Pagado)%')
                                                     ->get();
+
+            
 
             $totalRemanente = DB::select('EXEC ImporteTotalCapitulo4Pagado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             if ($totalRemanente > 0) {
@@ -393,6 +396,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
                         ];
                     }
                 }
+
 
                 foreach ($resultado as $polizaInicial) { 
                     $total = $polizaInicial['total'];
