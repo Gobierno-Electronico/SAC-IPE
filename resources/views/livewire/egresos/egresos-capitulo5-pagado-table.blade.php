@@ -51,3 +51,25 @@
         </div>
     </div>
 </div>
+<script>
+    window.addEventListener('cambioTotal', event => {
+        let parametros = event.__livewire.params
+        $('#total').val(parametros.total);
+        formatearImporte({id: 'total'})
+    }); 
+
+    window.addEventListener('llenarFormulario', event => {
+        setTimeout(() => {
+            let parametros = event.__livewire.params
+            console.log(parametros.cuentaRetenciones);
+            $('#inputPTTOEjercido').val(parametros.presupuesto);
+            $('#inputImporte').val(parametros.importe);
+            $("#selectCuenta").val(parametros.cuentaBanco);
+            $("#selectRetenciones").val(parametros.cuentaRetenciones);
+            $("#inputMontoContable").val(parametros.montoContable);
+            formatearImporte({id: 'inputImporte'})
+            formatearImporte({id: 'inputPTTOEjercido'})
+            formatearImporte({id: 'inputMontoContable'})
+        }, 10);
+    });
+</script>

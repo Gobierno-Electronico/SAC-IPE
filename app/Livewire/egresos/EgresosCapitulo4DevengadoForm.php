@@ -138,6 +138,10 @@ class EgresosCapitulo4DevengadoForm extends Component
                         ->where('tipo_interaccion', '=', 'Contable - Abono');
                 })
                 ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get(); 
+
+            if (count($this->cuentasContables) === 1) {
+                $this->cuentaContable = $this->cuentasContables[0]['id'];
+            }
         }catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar las cuentas contables en devengado capítulo 4000: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas contables, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);

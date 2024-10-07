@@ -132,7 +132,7 @@ class EgresosCapitulo5PagadoTable extends Tabla
         $totalImportes = 0;
         
         foreach ($this->cacheData as $movimiento) {
-            if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['cuentaRetenciones'], $registro['codigoCuentaRetenciones']) && $movimiento['mes'] == $registro['mes']) {
+            if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['cuentaRetenciones'], $registro['codigoCuentaRetenciones']) && $movimiento['mes'] == $registro['mes'] && str_contains($movimiento['partida'], $registro['codigoPartida'])) {
                 $totalImportes += $movimiento['importe'];
             }
         }
@@ -147,6 +147,104 @@ class EgresosCapitulo5PagadoTable extends Tabla
             return false;
         }
         return true;
+    }
+
+    public function edit($id)
+    {
+        try {
+            $this->recalcularDisponibilidad($id);
+            foreach ($this->dataCompleta as $key => $registro) {
+                if ($registro['id'] == $id) {
+                    $datosRegistro = [
+                        'area' => $registro['areaResponsableId'],
+                        'partida' => $registro['partidaId'],
+                        'cuentaBanco' => $registro['cuentaBancoId'],
+                        'mes' => $registro['mes'],
+                        'importe' => $registro['importe'],
+                        'cuentaRetenciones' => $registro['cuentaRetencionesId'],
+                        'pttoEjercido' => $registro['pttoEjercido'],
+                        'montoContable' => $registro['montoContable']
+                    ];
+
+                    unset($this->dataCompleta[$key]);
+                    $this->dataCompleta = array_values($this->dataCompleta );
+                    $this->dispatch('llenar-formulario', $datosRegistro);
+                    break;
+                }
+            }
+
+            foreach ($this->cacheData as $key => $registro) {
+                if ($registro['id'] == $id) {
+                    unset($this->cacheData[$key]);
+                    $this->cacheData = array_values($this->cacheData);
+                    break;
+                }
+            }
+
+            $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
+            $this->total = $totalActualizado;
+            $this->dispatch('cambioTotal', total: $totalActualizado);
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al editar en pagado del capítulo 4: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al editar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            $this->recalcularDisponibilidad($id);
+            foreach ($this->cacheData as $key => $registro) {
+                if ($registro['id'] == $id) {
+                    unset($this->cacheData[$key]);
+                    $this->cacheData = array_values($this->cacheData);
+                    break;
+                }
+            }
+
+            foreach ($this->dataCompleta as $key => $registro) {
+                if ($registro['id'] == $id) {
+                    unset($this->dataCompleta[$key]);
+                    $this->dataCompleta = array_values($this->dataCompleta );
+                    break;
+                }
+            }
+
+            $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
+            $this->total = $totalActualizado;
+            $this->dispatch('cambioTotal', total: $totalActualizado);
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al eliminar en pagado del capítulo 4: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al editar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
+    }
+
+    public function recalcularDisponibilidad($id)
+    {
+        $datosSeleccionado = [];
+        foreach ($this->dataCompleta as $key => $registro) {
+            if ($registro['id'] == $id) {
+                $datosSeleccionado = [
+                    'codigoArea' => $registro['codigoAreaResponsable'],
+                    'codigoCuentaPartida' => $registro['codigoPartida'],
+                    'mes' => $registro['mes']
+                ];
+            }
+        }
+
+        $totalImportes = 0;
+        foreach ($this->cacheData as $key => $movimiento) {
+            if ($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuentaPartida']) && $movimiento['mes'] == $datosSeleccionado['mes']) {
+                if ($totalImportes == 0) {
+                    $movimiento['disponibilidad'] = $movimiento['pttoEjercido'] - $movimiento['importe'];
+                    $totalImportes += $movimiento['importe'];
+                } else {
+                    $movimiento['disponibilidad'] = $movimiento['pttoEjercido'] - $totalImportes - $movimiento['importe'];
+                    $totalImportes += $movimiento['importe'];
+                }
+                $this->cacheData[$key] = $movimiento;
+            }
+        }
     }
 
     #[On('finalizar-registros')]
@@ -348,12 +446,6 @@ class EgresosCapitulo5PagadoTable extends Tabla
             Log::error('Ocurrió un error al finalizarRegistro en pagado del capítulo 5: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
-    }
-
-
-    public function edit($value)
-    {
-
     }
 
     public function changeState($value)
