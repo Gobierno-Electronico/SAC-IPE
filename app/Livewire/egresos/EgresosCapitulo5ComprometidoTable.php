@@ -77,6 +77,7 @@ class EgresosCapitulo5ComprometidoTable extends Tabla
                     $this->dataCompleta[$key]['id'] = $key + 1;
                     $this->total += $registro['importe'];
                 }
+                $this->dispatch('limpiar');
                 $this->dispatch('cambioTotal', total: $this->total);
             }
         }catch (\Throwable $th) {

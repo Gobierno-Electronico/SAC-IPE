@@ -106,7 +106,7 @@ class EgresosCapitulo5ComprometidoForm extends Component
             ];
 
             $this->dispatch('agregar-registro', registro: $registro);
-            $this->limpiar(); 
+           // $this->limpiar(); 
         }catch (\Illuminate\Validation\ValidationException $e) {
             $this->dispatch('mostrarMensaje', mensaje: $e->getMessage(), tipo: 'warning', tiempo: 3000);
         }catch (\Throwable $th) {
@@ -119,7 +119,7 @@ class EgresosCapitulo5ComprometidoForm extends Component
     {
         $this->dispatch('finalizar-registros');
     }
-
+    #[On('limpiar')]
     public function limpiar()
     {
         $this->cuenta = "";

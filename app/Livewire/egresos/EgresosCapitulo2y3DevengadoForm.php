@@ -74,6 +74,12 @@ class EgresosCapitulo2y3DevengadoForm extends Component
                 ->distinct()
                 ->pluck('descripcion', 'evento');
 
+                $this->cambiarPartidaPresupuestalSeleccionada = false;
+                $this->llenarPartidasPresupuestales();
+    
+    
+                $this->cambiarCuentaContableSeleccionada = false;
+                $this->llenarCuentasContableAbono();
             return view('livewire.egresos.egresos-capitulo2y3-devengado-form', ['eventos' => $eventos]);
         }catch(\Throwable $th){
             Log::error('Ocurrió un error al cargar eventos en Devengado del capítulo 2 y 3: ' . $th->getMessage());
