@@ -132,7 +132,7 @@ class EgresosCapitulo5PagadoTable extends Tabla
         $totalImportes = 0;
         
         foreach ($this->cacheData as $movimiento) {
-            if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['cuentaRetenciones'], $registro['codigoCuentaRetenciones']) && $movimiento['mes'] == $registro['mes']) {
+            if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['cuentaRetenciones'], $registro['codigoCuentaRetenciones']) && $movimiento['mes'] == $registro['mes'] && str_contains($movimiento['partida'], $registro['codigoPartida'])) {
                 $totalImportes += $movimiento['importe'];
             }
         }
@@ -447,7 +447,7 @@ class EgresosCapitulo5PagadoTable extends Tabla
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
-    
+
     public function changeState($value)
     {
 
