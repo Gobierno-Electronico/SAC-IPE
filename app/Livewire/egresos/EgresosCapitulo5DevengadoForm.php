@@ -142,7 +142,6 @@ class EgresosCapitulo5DevengadoForm extends Component
 
     public function cargarPresupuestoComprometido()
     {
-        Log::info('carga');
 
         if (!$this->partidaPresupuestal || !$this->mes || !$this->selectCodigoAreaResponsable) return;
         
@@ -191,21 +190,26 @@ class EgresosCapitulo5DevengadoForm extends Component
 
     public function asignarCuentaContableAbono()
     {
-        $descripcionPartida = Cuenta::select('Descripcion_cuenta')->where('id', '=', $this->partidaPresupuestal)->get();
-        $conceptoGeneralPartida = rtrim(explode('(', $descripcionPartida[0]->Descripcion_cuenta)[0]);
-                
-        $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('interaccion_cuenta_conceptos.concepto_id', [69, 70, 71])
-        ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
-        $cuentasContables = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
-            ->join('interaccion_cuenta_conceptos', function ($join) {
-                $join->on('interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
-                    ->where('tipo_interaccion', '=', 'Contable - Abono');
-            })
-            ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-            ->where('cuentas.Descripcion_cuenta', 'like', '%' . $conceptoGeneralPartida . '%')
-            ->get(); 
-        
-        $this->cuentaContableAbono = $cuentasContables[0]->cuenta_id;
+        try{
+            $descripcionPartida = Cuenta::select('Descripcion_cuenta')->where('id', '=', $this->partidaPresupuestal)->get();
+            $conceptoGeneralPartida = rtrim(explode('(', $descripcionPartida[0]->Descripcion_cuenta)[0]);
+                    
+            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('interaccion_cuenta_conceptos.concepto_id', [69, 70, 71])
+            ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
+            $cuentasContables = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
+                ->join('interaccion_cuenta_conceptos', function ($join) {
+                    $join->on('interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+                        ->where('tipo_interaccion', '=', 'Contable - Abono');
+                })
+                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+                ->where('cuentas.Descripcion_cuenta', 'like', '%' . $conceptoGeneralPartida . '%')
+                ->get(); 
+            
+            $this->cuentaContableAbono = $cuentasContables[0]->cuenta_id;
+        }catch(\Throwable $th) {
+            Log::error('Ocurrió un error al asignar cuenta contable en devengado capítulo 5000: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al asignar cuenta contable, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
     }
 
     public function agregarRegistro()

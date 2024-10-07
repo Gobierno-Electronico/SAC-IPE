@@ -21,9 +21,10 @@
                 </div>
             </div>
         </div>
-        <livewire:egresos.egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+        <livewire:egresos.egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total :$numeroPolizaRemanente
             tipoMovimiento="PolizaEgresosDevengadoCapitulo2y3" urlFinalizar="/capitulo2y3-devengado" tipoPoliza="E"
-            categoriaModulo='EGRESOS DEVENGADO CAPITULO 2 y 3' />
+            categoriaModulo='EGRESOS DEVENGADO CAPITULO 2 y 3' 
+            categoriaRemanente='EGRESOS COMPROMETIDO CAPITULO 2 y 3 REMANENTE DEVENGADO' />
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
@@ -45,8 +46,8 @@
             wire:model="observaciones">
 
         <label for="inputFechaAfectacion" class="form-label mt-3">Fecha de afectación</label>
-        <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control" max="{{ now()->toDateString() }}"
-            wire:model="fechaAfectacion">
+        <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control"
+            max="{{ now()->toDateString() }}" wire:model="fechaAfectacion">
 
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
         <div class="row">
@@ -81,11 +82,11 @@
 
                 <label for="selectPartidaPresupuestal" class="form-label mt-3">Partida presupuestal</label>
                 <select name="selectPartidaPresupuestal" id="selectPartidaPresupuestal" class="form-select"
-                    wire:model="partidaPresupuestal" wire:change="llenarCuentasContables">
+                    wire:model="partidaPresupuestal" wire:change="cargarPresupuestoComprometido">
                     <option value="" selected disabled>Seleccionar partida presupuestal</option>
                     @foreach ($partidasPresupuestales as $partida)
-                        <option value="{{ $partida->cuenta_id }}">
-                            {{ $partida->Codigo_cuenta . '  ' . $partida->Descripcion_cuenta }}</option>
+                        <option value="{{ $partida['cuenta_id'] }}">
+                            {{ $partida['Codigo_cuenta'] . '  ' . $partida['Descripcion_cuenta'] }}</option>
                     @endforeach
                 </select>
 
@@ -109,10 +110,6 @@
                 <input type="text" name="inputPTTOComprometido" id="inputPTTOComprometido" class="form-control"
                     disabled>
 
-                <label for="inputImporte" class="form-label mt-3">Importe</label>
-                <input type="text" name="inputImporte" id="inputImporte" class="form-control"
-                    onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model="importe">
-
                 <label for="selectorPagoRetenciones"class="form-label mt-3">Pago de retenciones</label><br>
                 <label>
                     <input type="radio" name="selectorPagoRetenciones" wire:model.live="selectorPagoRetenciones"
@@ -130,13 +127,18 @@
                     <label for="selectCuenta" class="form-label mt-3">Retenciones</label>
                     <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuentaContable">
                         <option value="" selected disabled>Seleccionar cuenta</option>
-                        @foreach ($cuentasContables as $cuenta)
+                        @foreach ($cuentasContableAbono as $cuenta)
                             <option value="{{ $cuenta->cuenta_id }}">
                                 {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}
                             </option>
                         @endforeach
                     </select>
                 @endif
+
+                <label for="inputImporte" class="form-label mt-3">Importe</label>
+                <input type="text" name="inputImporte" id="inputImporte" class="form-control"
+                    onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model="importe">
+
             </div>
 
             <div class="col">
