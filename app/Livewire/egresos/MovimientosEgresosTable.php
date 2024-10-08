@@ -1,0 +1,151 @@
+<?php
+
+namespace App\Livewire\egresos;
+
+
+use App\Clases\Column;
+use App\Models\Poliza;
+use App\Livewire\Tabla;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
+use DB;
+use Log;
+
+class MovimientosEgresosTable extends Tabla
+{
+
+    public $perPage = 10;
+
+    public $sortBy = '';
+
+    public $searchBy = ['evento', 'fechaAfectacion', 'fechaRegistro', 'descripcion', 'capitulo'];
+
+    public $data = [];
+
+    public $selectedChapter = '';
+
+    public $consultarRegistro = false;
+
+    public $numeroEvento;
+    public $numeroPoliza;
+    public $total;
+    public $descripcion;
+    public $tipoMovimiento;
+    public $numeroPolizaRemanente;
+    public $categoriaModulo;
+    public $categoriaRemanente;
+
+
+    public function render()
+    {
+        return view('livewire.egresos.movimientos-egresos-table');
+    }
+
+    public function query(): Builder
+    {
+        return Poliza::query();
+    }
+
+    public function data()
+    {
+        $contador = 0;
+        $this->data = array_map(function ($entrada) use (&$contador) {
+            $entrada =  (array) $entrada;
+            $entrada['total'] = '$' . number_format($entrada['total'], 2, '.', ',');
+            $entrada['id'] = $contador++;
+            return $entrada;
+        }, DB::select('EXEC dbo.ConsultaMovimientosEgresos'));
+        $collection = collect($this->data);
+        if ($this->sortBy !== '') {
+            if ($this->sortDirection == "asc") {
+                $collection = $collection->sortBy($this->sortBy);
+            } else {
+                $collection = $collection->sortByDesc($this->sortBy);
+            }
+        }
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $filtered = $collection->filter(function ($value, $key) {
+            $contains = false;
+
+            if (!$this->searchTerm) return true;
+            foreach ($this->searchBy as $data => $term) {
+                // Verifica si $term existe en $value (array)
+                if (isset($value[$term]) && str_contains(strtolower($value[$term]), strtolower($this->searchTerm))) {
+                    $contains = true;
+                    continue;
+                }
+            }
+
+            return $contains;
+        });
+
+        $currentItems = array_slice($filtered->toArray(), $this->perPage * ($currentPage - 1), $this->perPage);
+        return new LengthAwarePaginator($currentItems, count($filtered), $this->perPage, $currentPage);
+    }
+
+    public function columns(): array
+    {
+        return [
+            Column::make('evento', 'Evento'),
+            Column::make('numero_poliza', 'Número de Póliza'),
+            Column::make('descripcion', 'Descripción'),
+            Column::make('momentoContable', 'Momento contable'),
+            Column::make('capitulo', 'Capítulo'),
+            Column::make('fechaAfectacion', 'Fecha de afectación'),
+            Column::make('fechaRegistro', 'Fecha de registro'),
+            Column::make('total', 'Monto del evento'),
+            Column::make('id', 'Acciones')->component('columns.accionVerMovimiento'),
+
+        ];
+    }
+
+    public function verMovimiento($value)
+    {
+
+        $this->numeroEvento = $this->data[$value]['evento'];
+        $this->numeroPoliza = $this->data[$value]['numero_poliza'];
+        $this->total = $this->data[$value]['total'];
+        $this->descripcion = $this->data[$value]['descripcion'];
+        $this->categoriaModulo = $this->data[$value]['categoria'];
+        $this->tipoMovimiento = 'PolizaEgresos' . ucfirst(strtolower($this->data[$value]['momentoContable'])) . 'Capitulo' . $this->data[$value]['capitulo'];
+        $this->numeroPolizaRemanente = Poliza::where('evento', $this->numeroEvento)
+            ->where('tipo_poliza', 'EAUX')
+            ->max('numero_poliza');
+
+        if($this->numeroPolizaRemanente == NULL){
+            $this->numeroPolizaRemanente = 0;
+        }
+
+        switch($this->data[$value]['momentoContable']){
+            case "DEVENGADO":
+                $this->categoriaRemanente = 'EGRESOS COMPROMETIDO CAPITULO '. $this->data[$value]['capitulo'] . ' REMANENTE DEVENGADO';
+                break;
+            case "EJERCIDO":
+                $this->categoriaRemanente = 'EGRESOS DEVENGADO CAPITULO '. $this->data[$value]['capitulo'] . ' REMANENTE EJERCIDO';
+                break;
+            case "PAGADO":
+                $this->categoriaRemanente = 'EGRESOS EJERCIDO CAPITULO '. $this->data[$value]['capitulo'] . ' REMANENTE PAGADO';
+                break;
+            default:
+                $this->categoriaRemanente = 'SIN REMANENTE';
+                $this->numeroPolizaRemanente = 0;
+                break;
+        }
+
+        $this->consultarRegistro = true;
+
+    }
+
+    public function search()
+    {
+        // $this->resetPage();
+    }
+
+
+    public function edit($value)
+    {
+        // return view('bitacoras.lista');
+    }
+
+    public function changeState($value) {}
+}
