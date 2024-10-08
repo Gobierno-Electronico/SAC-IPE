@@ -39,8 +39,21 @@ class EgresosFormConsultaTable extends Tabla
 
     public function render()
     {
+        try{
+            $poliza = Poliza::where('numero_poliza', '=', $this->numeroPoliza)
+            ->where('evento', '=', $this->numeroEvento)->first();
 
-        return view('livewire.egresos.egresos-form-consulta-table');
+            if($poliza['validado'] == 1){ 
+                $this->validado = true;
+                $this->init();
+            } 
+
+            return view('livewire.egresos.egresos-form-consulta-table');
+        }catch (\Throwable $th) {
+            DB::rollBack();
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al verificar validación de poliza '. $this->categoriaModulo, tipo: 'error', tiempo: 3000);
+        }
+
     }
 
     public function init()
@@ -94,12 +107,13 @@ class EgresosFormConsultaTable extends Tabla
                 return;
             Poliza::searchByYear('fecha', Carbon::now()->year)
                 ->where('tipo_poliza', '=', $this->tipoPoliza)
+                ->where('numero_poliza', '=', $this->numeroPoliza)
                 ->where('evento', '=', $this->numeroEvento)
                 ->where('categoria', '=', $this->categoriaModulo)
                 ->where('validado','=', false)->delete();
             if ($this->numeroPolizaRemanente && $this->numeroPolizaRemanente > 0) {
                 Poliza::searchByYear('fecha', Carbon::now()->year)
-                ->where('tipo_poliza', '=', 'EAUX') //CORREGIR
+                ->where('tipo_poliza', '=', 'EAUX') 
                 ->where('evento', '=', $this->numeroEvento)
                 ->where('categoria', '=', $this->categoriaRemanente)
                 ->where('validado','=', false)->delete();
@@ -242,11 +256,21 @@ class EgresosFormConsultaTable extends Tabla
 
     public function finalizar($tipo)
     {
-        $bitacora = new BitacoraController();
-        $bitacora->bitacora('finalizar', 'concluyó o intentó concluir el ' . $tipo . ' con evento : ' . $this->numeroEvento, request());
-        $this->dispatch('mostrarMensaje', mensaje: 'Se realizó el registro del ingreso de '. $this->categoriaModulo .' con éxito', tipo: 'success', tiempo: 5000);
-        $this->numeroEvento = 0;
-        $this->numeroPoliza = 0;
-        return redirect($this->urlFinalizar)->with(['message' => 'Se realizó el registro del ingreso de '. $this->categoriaModulo .' con éxito', 'message_type' => 'success']);
+        if(!$this->validado){   
+            $bitacora = new BitacoraController();
+            $bitacora->bitacora('finalizar', 'concluyó o intentó concluir el ' . $tipo . ' con evento : ' . $this->numeroEvento, request());
+            $this->dispatch('mostrarMensaje', mensaje: 'Se realizó el registro del ingreso de '. $this->categoriaModulo .' con éxito', tipo: 'success', tiempo: 5000);
+            $this->numeroEvento = 0;
+            $this->numeroPoliza = 0;
+            return redirect($this->urlFinalizar)->with(['message' => 'Se realizó el registro del ingreso de '. $this->categoriaModulo .' con éxito', 'message_type' => 'success']);
+        }else{
+            $this->regresar();
+        }
     }
+
+    public function regresar()
+    {
+        return redirect($this->urlFinalizar);
+    }
+
 }
