@@ -2,6 +2,8 @@
 
 namespace App\Livewire\egresos;
 
+use App\Models\Cuenta;
+
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Clases\Column;
 use Livewire\Attributes\On;
@@ -119,14 +121,15 @@ class EgresosCapitulo4PagadoTable extends Tabla
         return true;
     }
 
-    public function verificarMontoContable($registro){
-        if($registro['montoContable'] == 0){
+    public function verificarMontoContable($registro)
+    {
+        if ($registro['montoContable'] == 0) {
             return true;
         }
         $solvenciaContable = $registro['montoContable'];
         $this->totalDisponibleContable = $solvenciaContable - $registro['importe'];
         $totalImportes = 0;
-        
+
         foreach ($this->cacheData as $movimiento) {
             if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['cuentaRetenciones'], $registro['codigoCuentaRetenciones']) && $movimiento['mes'] == $registro['mes']) {
                 $totalImportes += $movimiento['importe'];
@@ -136,7 +139,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
         if ($totalImportes > 0) {
             $this->totalDisponibleContable = $solvenciaContable - $totalImportes - $registro['importe'];
         }
-        
+
 
         if ($this->totalDisponibleContable < 0) {
             $this->dispatch('mostrarMensaje', mensaje: 'Monto contable insuficiente', tipo: 'warning', tiempo: 3000);
@@ -163,7 +166,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
                     ];
 
                     unset($this->dataCompleta[$key]);
-                    $this->dataCompleta = array_values($this->dataCompleta );
+                    $this->dataCompleta = array_values($this->dataCompleta);
                     $this->dispatch('llenar-formulario', $datosRegistro);
                     break;
                 }
@@ -201,7 +204,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
             foreach ($this->dataCompleta as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->dataCompleta[$key]);
-                    $this->dataCompleta = array_values($this->dataCompleta );
+                    $this->dataCompleta = array_values($this->dataCompleta);
                     break;
                 }
             }
@@ -356,20 +359,100 @@ class EgresosCapitulo4PagadoTable extends Tabla
             $this->numeroPolizaRemanente = (int)end($numerosPolizas) + 1;
 
             $polizasInicialesEgresosEjercido = Poliza::where('tipo_poliza', '=', 'E')
-                                                    ->where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 4')
-                                                    ->where('evento', '=', $this->numeroEvento)
-                                                    ->get();
+                ->where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 4')
+                ->where('evento', '=', $this->numeroEvento)
+                ->get();
 
             $polizasInicialesEgresosPagado = Poliza::where('tipo_poliza', '=', 'E')
-                                                    ->where('categoria', '=', 'EGRESOS PAGADO CAPITULO 4')
-                                                    ->where('evento', '=', $this->numeroEvento)
-                                                    ->where('concepto', 'LIKE', '%(Pagado)%')
-                                                    ->get();
+                ->where('categoria', '=', 'EGRESOS PAGADO CAPITULO 4')
+                ->where('evento', '=', $this->numeroEvento)
+                ->where('concepto', 'LIKE', '%(Pagado)%')
+                ->get();
 
-            
+            $polizasDevengado = Poliza::where('tipo_poliza', '=', 'E')
+                ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 4')
+                ->where('evento', '=', $this->numeroEvento)
+                ->where('tipo_interaccion', '=', 'Contable - Abono')
+                ->get();
+
+
+            $polizasPagadoContableCargo =  Poliza::where('tipo_poliza', '=', 'E')
+                ->where('categoria', '=', 'EGRESOS PAGADO CAPITULO 4')
+                ->where('evento', '=', $this->numeroEvento)
+                ->where('tipo_interaccion', '=', 'Contable - Cargo')
+                ->get();
+
+
+
 
             $totalRemanente = DB::select('EXEC ImporteTotalCapitulo4Pagado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             if ($totalRemanente > 0) {
+
+
+
+                $remanentesContables = [];
+                foreach ($polizasDevengado as $index => $devengado) {
+                    $devengado->matchEncontrado = 0;
+                    $conceptoCuentaDevengada = Poliza::where('cuentaRelacionada', '=', $devengado->cuentaRelacionada)->value('concepto');
+                    $conceptoGeneralCuentaDevengada = explode('(', $conceptoCuentaDevengada);
+                    $codigoCuentaPagada = Cuenta::where('Descripcion_cuenta', 'LIKE', '%' . $conceptoGeneralCuentaDevengada[0] . '(Pagado)' . '%')->value('Codigo_cuenta');
+                    foreach ($polizasPagadoContableCargo as $index => $pagado) {
+                        if ($pagado->cuentaRelacionada == $codigoCuentaPagada && $devengado->concepto == $pagado->concepto) {
+                            $totalRemanente = $devengado->total - $pagado->total;
+                            $devengado->total = $totalRemanente;
+                            $pagado->total = $totalRemanente;
+                            $devengado->matchEncontrado = 1;
+
+                            array_push($remanentesContables, $devengado->toArray());
+                            array_push($remanentesContables, $pagado->toArray());
+
+                            $polizasPagadoContableCargo->forget($index);
+                        } 
+                    }
+                    if($devengado->matchEncontrado == 1){
+                        $polizasDevengado->forget($index);
+
+                    }
+                }
+                foreach ($polizasDevengado as $devengado) {
+                    if ($devengado->matchEncontrado == 0) {
+                        array_push($remanentesContables, $devengado->toArray());
+                        $devengado->tipo_interaccion = 'Contable - Cargo';
+                        array_push($remanentesContables, $devengado->toArray());
+                    }
+                }
+                // dd($remanentesContables);
+
+
+
+
+                foreach ($remanentesContables as $remanente) {
+                    Poliza::create([
+                        'area' => $remanente['area'],
+                        'tipo_poliza' => 'EAUX',
+                        'numero_poliza' =>  $this->numeroPolizaRemanente,
+                        'fecha' => $movimiento['fechaAfectacion'],
+                        'cuenta' => $remanente['cuenta'],
+                        'concepto' => $remanente['concepto'],
+                        'total' => $remanente['total'],
+                        'mes' => $remanente['mes'],
+                        'descripcion' => $remanente['descripcion'],
+                        'evento' => $this->numeroEvento,
+                        'tipo_interaccion' => $remanente['tipo_interaccion'],
+                        'validado' => false,
+                        'estatus_evento' => false,
+                        'categoria' => 'EGRESOS EJERCIDO CAPITULO 4 REMANENTE PAGADO',
+                        'created_at' => $fecha,
+                        'updated_at' => $fecha
+                    ]);
+                }
+
+
+
+
+
+
+
                 foreach ($polizasInicialesEgresosEjercido as $polizaImporte) {
                     $clave = $polizaImporte->cuenta . '-' . $polizaImporte->concepto;
                     if (isset($resultado[$clave])) {
@@ -398,37 +481,38 @@ class EgresosCapitulo4PagadoTable extends Tabla
                 }
 
 
-                foreach ($resultado as $polizaInicial) { 
+                foreach ($resultado as $polizaInicial) {
                     $total = $polizaInicial['total'];
-                    foreach ($polizasInicialesEgresosPagado as $polizaPagado) {   
+                    foreach ($polizasInicialesEgresosPagado as $polizaPagado) {
                         $conceptoGeneral = explode('(', $polizaPagado->concepto);
 
                         if (str_contains($polizaInicial['concepto'], rtrim($conceptoGeneral[0])) !== false && $conceptoGeneral[1] == 'Pagado)') {
                             $total = $total - $polizaPagado['total'];
                         }
                     }
-                        Poliza::create([
-                            'area' => $polizaInicial['area'],
-                            'tipo_poliza' => 'EAUX',
-                            'numero_poliza' =>  $this->numeroPolizaRemanente,
-                            'fecha' => $movimiento['fechaAfectacion'],
-                            'cuenta' => $polizaInicial['cuenta'],
-                            'concepto' => $polizaInicial['concepto'],
-                            'total' => $total,
-                            'mes' => $polizaInicial['mes'],
-                            'descripcion' => $polizaInicial['descripcion'],
-                            'evento' => $this->numeroEvento,
-                            'tipo_interaccion' => $polizaInicial['tipo_interaccion'],
-                            'validado' => false,
-                            'estatus_evento' => false,
-                            'categoria' => 'EGRESOS EJERCIDO CAPITULO 4 REMANENTE PAGADO',
-                            'created_at' => $fecha,
-                            'updated_at' => $fecha
-                        ]);
+                    Poliza::create([
+                        'area' => $polizaInicial['area'],
+                        'tipo_poliza' => 'EAUX',
+                        'numero_poliza' =>  $this->numeroPolizaRemanente,
+                        'fecha' => $movimiento['fechaAfectacion'],
+                        'cuenta' => $polizaInicial['cuenta'],
+                        'concepto' => $polizaInicial['concepto'],
+                        'total' => $total,
+                        'mes' => $polizaInicial['mes'],
+                        'descripcion' => $polizaInicial['descripcion'],
+                        'evento' => $this->numeroEvento,
+                        'tipo_interaccion' => $polizaInicial['tipo_interaccion'],
+                        'validado' => false,
+                        'estatus_evento' => false,
+                        'categoria' => 'EGRESOS EJERCIDO CAPITULO 4 REMANENTE PAGADO',
+                        'created_at' => $fecha,
+                        'updated_at' => $fecha
+                    ]);
                 }
             } else {
                 $this->numeroPolizaRemanente = 0;
             }
+
 
             $importeTotalEvento = DB::select('EXEC ImporteTotalCapitulo4Pagado @evento = ?', [$this->numeroEvento]);
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
@@ -446,6 +530,6 @@ class EgresosCapitulo4PagadoTable extends Tabla
         }
     }
 
-    
+
     public function changeState($value) {}
 }

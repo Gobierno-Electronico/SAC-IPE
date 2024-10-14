@@ -80,7 +80,7 @@ class EgresosFormConsultaTable extends Tabla
             ->where('tipo_poliza', '=', $this->tipoPoliza)
             ->where('numero_poliza', '=', $this->numeroPoliza)
             ->where('evento', '=', $this->numeroEvento)
-            ->search($this->searchBy, $this->searchTerm)
+            ->search($this->searchBy, $this->searchTerm) 
             ->paginate($this->perPage);
         return $datos;
     }
