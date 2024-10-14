@@ -388,7 +388,8 @@ class EgresosCapitulo5PagadoTable extends Tabla
 
 
                 $remanentesContables = [];
-                foreach ($polizasDevengado as $devengado) {
+                foreach ($polizasDevengado as $index => $devengado) {
+                    $devengado->matchEncontrado = 0;
                     $conceptoCuentaDevengada = Poliza::where('cuentaRelacionada', '=', $devengado->cuentaRelacionada)->value('concepto');
                     $conceptoGeneralCuentaDevengada = explode('(', $conceptoCuentaDevengada);
                     $codigoCuentaPagada = Cuenta::where('Descripcion_cuenta', 'LIKE', '%' . $conceptoGeneralCuentaDevengada[0] . '(Pagado)' . '%')->value('Codigo_cuenta');
@@ -397,14 +398,17 @@ class EgresosCapitulo5PagadoTable extends Tabla
                             $totalRemanente = $devengado->total - $pagado->total;
                             $devengado->total = $totalRemanente;
                             $pagado->total = $totalRemanente;
+                            $devengado->matchEncontrado = 1;
+
                             array_push($remanentesContables, $devengado->toArray());
                             array_push($remanentesContables, $pagado->toArray());
 
                             $polizasPagadoContableCargo->forget($index);
-                            $devengado->matchEncontrado = 1;
-                        } else {
-                            $devengado->matchEncontrado = 0;
-                        }
+                        } 
+                    }
+                    if($devengado->matchEncontrado == 1){
+                        $polizasDevengado->forget($index);
+
                     }
                 }
                 foreach ($polizasDevengado as $devengado) {
@@ -414,7 +418,6 @@ class EgresosCapitulo5PagadoTable extends Tabla
                         array_push($remanentesContables, $devengado->toArray());
                     }
                 }
-
                 foreach ($remanentesContables as $remanente) {
                     Poliza::create([
                         'area' => $remanente['area'],
