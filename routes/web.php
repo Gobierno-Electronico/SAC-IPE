@@ -135,6 +135,7 @@ Route::get("/capitulo5-comprometido", [EgresosController::class, 'capitulo5Compr
 Route::get("/capitulo5-devengado", [EgresosController::class, 'capitulo5Devengado'])->name('capitulo5Devengado')->middleware('role:Administrador');
 Route::get("/capitulo5-ejercido", [EgresosController::class, 'capitulo5Ejercido'])->name('capitulo5Ejercido')->middleware('role:Administrador');
 Route::get("/capitulo5-pagado", [EgresosController::class, 'capitulo5Pagado'])->name('capitulo5Pagado')->middleware('role:Administrador');
+Route::get("/movimientos-egresos", [EgresosController::class, 'consultarMovimientos'])->name('movimientosEgresos')->middleware('role:Administrador');
 
 //ruta de prueba
 Route::get("/bancos", [IngresosController::class, 'bancos'])->name('bancos')->middleware('role:Administrador');

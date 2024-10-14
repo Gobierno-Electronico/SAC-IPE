@@ -1,96 +1,428 @@
-[2024-10-03 15:10:55] local.ERROR: Ocurrió un error al cargar presupuesto ejercido en pagado del capítulo 5000: Property [Codigo_cuenta] does not exist on this collection instance.  
-[2024-10-03 15:12:27] local.ERROR: Ocurrió un error al cargar presupuesto ejercido en pagado del capítulo 5000: Property [Codigo_cuenta] does not exist on this collection instance.  
-[2024-10-04 08:00:33] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
-[stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#11 {main}
-"} 
-[2024-10-04 08:00:36] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
-[stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#11 {main}
-"} 
-[2024-10-04 08:00:39] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
-[stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#11 {main}
-"} 
-[2024-10-04 08:18:46] local.ERROR: Cannot redeclare App\Livewire\egresos\EgresosCapitulo5PagadoTable::edit() {"userId":3,"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare App\\Livewire\\egresos\\EgresosCapitulo5PagadoTable::edit() at C:\\xampp\\htdocs\\SAC-IPE\\app\\Livewire\\egresos\\EgresosCapitulo5PagadoTable.php:452)
-[stacktrace]
-#0 {main}
-"} 
-[2024-10-07 08:13:14] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
-[stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#11 {main}
-"} 
-[2024-10-07 08:13:18] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
-[stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#11 {main}
-"} 
-[2024-10-07 08:13:22] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
-[stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#11 {main}
-"} 
+[2024-10-14 10:14:47] local.INFO: array (
+  0 => 
+  array (
+    'id' => 1183352,
+    'area' => '1.4.04',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '41',
+    'fecha' => '2024-10-14 00:00:00.000',
+    'cuenta' => '2.1.1.2.03.14',
+    'cuentaRelacionada' => '8.2.5.1.2.4.1.01.01',
+    'concepto' => 'Muebles de Oficina y Estantería',
+    'total' => 10000.0,
+    'tipo_interaccion' => 'Contable - Abono',
+    'mes' => 'Octubre',
+    'descripcion' => 'prueba remanente',
+    'evento' => '29',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 5',
+    'validado' => '1',
+    'estatus_evento' => '0',
+    'created_at' => '2024-10-14T15:33:46.040000Z',
+    'updated_at' => '2024-10-14T15:34:25.100000Z',
+  ),
+  1 => 
+  array (
+    'id' => 1183552,
+    'area' => '1.4.04',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '43',
+    'fecha' => '2024-10-14 00:00:00.000',
+    'cuenta' => '2.1.1.2.03.14',
+    'cuentaRelacionada' => '8.2.7.1.2.4.1.01.01',
+    'concepto' => 'Muebles de Oficina y Estantería',
+    'total' => 10000.0,
+    'tipo_interaccion' => 'Contable - Cargo',
+    'mes' => 'Octubre',
+    'descripcion' => 'prueba remanente',
+    'evento' => '29',
+    'categoria' => 'EGRESOS PAGADO CAPITULO 5',
+    'validado' => '0',
+    'estatus_evento' => '1',
+    'created_at' => '2024-10-14T16:14:47.653000Z',
+    'updated_at' => '2024-10-14T16:14:47.653000Z',
+  ),
+)  
+[2024-10-14 10:14:47] local.INFO: array (
+  0 => 
+  array (
+    'id' => 1183352,
+    'area' => '1.4.04',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '41',
+    'fecha' => '2024-10-14 00:00:00.000',
+    'cuenta' => '2.1.1.2.03.14',
+    'cuentaRelacionada' => '8.2.5.1.2.4.1.01.01',
+    'concepto' => 'Muebles de Oficina y Estantería',
+    'total' => 10000.0,
+    'tipo_interaccion' => 'Contable - Abono',
+    'mes' => 'Octubre',
+    'descripcion' => 'prueba remanente',
+    'evento' => '29',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 5',
+    'validado' => '1',
+    'estatus_evento' => '0',
+    'created_at' => '2024-10-14T15:33:46.040000Z',
+    'updated_at' => '2024-10-14T15:34:25.100000Z',
+  ),
+  1 => 
+  array (
+    'id' => 1183552,
+    'area' => '1.4.04',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '43',
+    'fecha' => '2024-10-14 00:00:00.000',
+    'cuenta' => '2.1.1.2.03.14',
+    'cuentaRelacionada' => '8.2.7.1.2.4.1.01.01',
+    'concepto' => 'Muebles de Oficina y Estantería',
+    'total' => 10000.0,
+    'tipo_interaccion' => 'Contable - Cargo',
+    'mes' => 'Octubre',
+    'descripcion' => 'prueba remanente',
+    'evento' => '29',
+    'categoria' => 'EGRESOS PAGADO CAPITULO 5',
+    'validado' => '0',
+    'estatus_evento' => '1',
+    'created_at' => '2024-10-14T16:14:47.653000Z',
+    'updated_at' => '2024-10-14T16:14:47.653000Z',
+  ),
+  2 => 
+  array (
+    'id' => 1183356,
+    'area' => '1.4.04',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '41',
+    'fecha' => '2024-10-14 00:00:00.000',
+    'cuenta' => '2.1.1.7.01.03',
+    'cuentaRelacionada' => '8.2.5.1.2.4.1.01.01',
+    'concepto' => 'ISR 1.25% sobre RESICO',
+    'total' => '10000.0000000000',
+    'tipo_interaccion' => 'Contable - Abono',
+    'mes' => 'Octubre',
+    'descripcion' => 'prueba remanente',
+    'evento' => '29',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 5',
+    'validado' => '1',
+    'estatus_evento' => '0',
+    'created_at' => '2024-10-14T15:33:46.040000Z',
+    'updated_at' => '2024-10-14T15:34:25.100000Z',
+  ),
+  3 => 
+  array (
+    'id' => 1183356,
+    'area' => '1.4.04',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '41',
+    'fecha' => '2024-10-14 00:00:00.000',
+    'cuenta' => '2.1.1.7.01.03',
+    'cuentaRelacionada' => '8.2.5.1.2.4.1.01.01',
+    'concepto' => 'ISR 1.25% sobre RESICO',
+    'total' => '10000.0000000000',
+    'tipo_interaccion' => 'Contable - Cargo',
+    'mes' => 'Octubre',
+    'descripcion' => 'prueba remanente',
+    'evento' => '29',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 5',
+    'validado' => '1',
+    'estatus_evento' => '0',
+    'created_at' => '2024-10-14T15:33:46.040000Z',
+    'updated_at' => '2024-10-14T15:34:25.100000Z',
+  ),
+)  
+[2024-10-14 10:14:47] local.INFO: array (
+  0 => 
+  array (
+    'id' => 1183352,
+    'area' => '1.4.04',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '41',
+    'fecha' => '2024-10-14 00:00:00.000',
+    'cuenta' => '2.1.1.2.03.14',
+    'cuentaRelacionada' => '8.2.5.1.2.4.1.01.01',
+    'concepto' => 'Muebles de Oficina y Estantería',
+    'total' => 10000.0,
+    'tipo_interaccion' => 'Contable - Abono',
+    'mes' => 'Octubre',
+    'descripcion' => 'prueba remanente',
+    'evento' => '29',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 5',
+    'validado' => '1',
+    'estatus_evento' => '0',
+    'created_at' => '2024-10-14T15:33:46.040000Z',
+    'updated_at' => '2024-10-14T15:34:25.100000Z',
+  ),
+  1 => 
+  array (
+    'id' => 1183552,
+    'area' => '1.4.04',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '43',
+    'fecha' => '2024-10-14 00:00:00.000',
+    'cuenta' => '2.1.1.2.03.14',
+    'cuentaRelacionada' => '8.2.7.1.2.4.1.01.01',
+    'concepto' => 'Muebles de Oficina y Estantería',
+    'total' => 10000.0,
+    'tipo_interaccion' => 'Contable - Cargo',
+    'mes' => 'Octubre',
+    'descripcion' => 'prueba remanente',
+    'evento' => '29',
+    'categoria' => 'EGRESOS PAGADO CAPITULO 5',
+    'validado' => '0',
+    'estatus_evento' => '1',
+    'created_at' => '2024-10-14T16:14:47.653000Z',
+    'updated_at' => '2024-10-14T16:14:47.653000Z',
+  ),
+  2 => 
+  array (
+    'id' => 1183356,
+    'area' => '1.4.04',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '41',
+    'fecha' => '2024-10-14 00:00:00.000',
+    'cuenta' => '2.1.1.7.01.03',
+    'cuentaRelacionada' => '8.2.5.1.2.4.1.01.01',
+    'concepto' => 'ISR 1.25% sobre RESICO',
+    'total' => '10000.0000000000',
+    'tipo_interaccion' => 'Contable - Abono',
+    'mes' => 'Octubre',
+    'descripcion' => 'prueba remanente',
+    'evento' => '29',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 5',
+    'validado' => '1',
+    'estatus_evento' => '0',
+    'created_at' => '2024-10-14T15:33:46.040000Z',
+    'updated_at' => '2024-10-14T15:34:25.100000Z',
+  ),
+  3 => 
+  array (
+    'id' => 1183356,
+    'area' => '1.4.04',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '41',
+    'fecha' => '2024-10-14 00:00:00.000',
+    'cuenta' => '2.1.1.7.01.03',
+    'cuentaRelacionada' => '8.2.5.1.2.4.1.01.01',
+    'concepto' => 'ISR 1.25% sobre RESICO',
+    'total' => '10000.0000000000',
+    'tipo_interaccion' => 'Contable - Cargo',
+    'mes' => 'Octubre',
+    'descripcion' => 'prueba remanente',
+    'evento' => '29',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 5',
+    'validado' => '1',
+    'estatus_evento' => '0',
+    'created_at' => '2024-10-14T15:33:46.040000Z',
+    'updated_at' => '2024-10-14T15:34:25.100000Z',
+  ),
+  4 => 
+  array (
+    'id' => 1183360,
+    'area' => '1.4.04',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '41',
+    'fecha' => '2024-10-14 00:00:00.000',
+    'cuenta' => '2.1.1.7.01.05',
+    'cuentaRelacionada' => '8.2.5.1.2.4.1.01.01',
+    'concepto' => 'ISR 10% sobre Arrendamiento',
+    'total' => '5000.0000000000',
+    'tipo_interaccion' => 'Contable - Abono',
+    'mes' => 'Octubre',
+    'descripcion' => 'prueba remanente',
+    'evento' => '29',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 5',
+    'validado' => '1',
+    'estatus_evento' => '0',
+    'created_at' => '2024-10-14T15:33:46.040000Z',
+    'updated_at' => '2024-10-14T15:34:25.100000Z',
+  ),
+  5 => 
+  array (
+    'id' => 1183360,
+    'area' => '1.4.04',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '41',
+    'fecha' => '2024-10-14 00:00:00.000',
+    'cuenta' => '2.1.1.7.01.05',
+    'cuentaRelacionada' => '8.2.5.1.2.4.1.01.01',
+    'concepto' => 'ISR 10% sobre Arrendamiento',
+    'total' => '5000.0000000000',
+    'tipo_interaccion' => 'Contable - Cargo',
+    'mes' => 'Octubre',
+    'descripcion' => 'prueba remanente',
+    'evento' => '29',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 5',
+    'validado' => '1',
+    'estatus_evento' => '0',
+    'created_at' => '2024-10-14T15:33:46.040000Z',
+    'updated_at' => '2024-10-14T15:34:25.100000Z',
+  ),
+)  
+[2024-10-14 10:14:48] local.INFO: array (
+  0 => 
+  array (
+    'id' => 1183352,
+    'area' => '1.4.04',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '41',
+    'fecha' => '2024-10-14 00:00:00.000',
+    'cuenta' => '2.1.1.2.03.14',
+    'cuentaRelacionada' => '8.2.5.1.2.4.1.01.01',
+    'concepto' => 'Muebles de Oficina y Estantería',
+    'total' => 10000.0,
+    'tipo_interaccion' => 'Contable - Abono',
+    'mes' => 'Octubre',
+    'descripcion' => 'prueba remanente',
+    'evento' => '29',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 5',
+    'validado' => '1',
+    'estatus_evento' => '0',
+    'created_at' => '2024-10-14T15:33:46.040000Z',
+    'updated_at' => '2024-10-14T15:34:25.100000Z',
+  ),
+  1 => 
+  array (
+    'id' => 1183552,
+    'area' => '1.4.04',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '43',
+    'fecha' => '2024-10-14 00:00:00.000',
+    'cuenta' => '2.1.1.2.03.14',
+    'cuentaRelacionada' => '8.2.7.1.2.4.1.01.01',
+    'concepto' => 'Muebles de Oficina y Estantería',
+    'total' => 10000.0,
+    'tipo_interaccion' => 'Contable - Cargo',
+    'mes' => 'Octubre',
+    'descripcion' => 'prueba remanente',
+    'evento' => '29',
+    'categoria' => 'EGRESOS PAGADO CAPITULO 5',
+    'validado' => '0',
+    'estatus_evento' => '1',
+    'created_at' => '2024-10-14T16:14:47.653000Z',
+    'updated_at' => '2024-10-14T16:14:47.653000Z',
+  ),
+  2 => 
+  array (
+    'id' => 1183356,
+    'area' => '1.4.04',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '41',
+    'fecha' => '2024-10-14 00:00:00.000',
+    'cuenta' => '2.1.1.7.01.03',
+    'cuentaRelacionada' => '8.2.5.1.2.4.1.01.01',
+    'concepto' => 'ISR 1.25% sobre RESICO',
+    'total' => '10000.0000000000',
+    'tipo_interaccion' => 'Contable - Abono',
+    'mes' => 'Octubre',
+    'descripcion' => 'prueba remanente',
+    'evento' => '29',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 5',
+    'validado' => '1',
+    'estatus_evento' => '0',
+    'created_at' => '2024-10-14T15:33:46.040000Z',
+    'updated_at' => '2024-10-14T15:34:25.100000Z',
+  ),
+  3 => 
+  array (
+    'id' => 1183356,
+    'area' => '1.4.04',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '41',
+    'fecha' => '2024-10-14 00:00:00.000',
+    'cuenta' => '2.1.1.7.01.03',
+    'cuentaRelacionada' => '8.2.5.1.2.4.1.01.01',
+    'concepto' => 'ISR 1.25% sobre RESICO',
+    'total' => '10000.0000000000',
+    'tipo_interaccion' => 'Contable - Cargo',
+    'mes' => 'Octubre',
+    'descripcion' => 'prueba remanente',
+    'evento' => '29',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 5',
+    'validado' => '1',
+    'estatus_evento' => '0',
+    'created_at' => '2024-10-14T15:33:46.040000Z',
+    'updated_at' => '2024-10-14T15:34:25.100000Z',
+  ),
+  4 => 
+  array (
+    'id' => 1183360,
+    'area' => '1.4.04',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '41',
+    'fecha' => '2024-10-14 00:00:00.000',
+    'cuenta' => '2.1.1.7.01.05',
+    'cuentaRelacionada' => '8.2.5.1.2.4.1.01.01',
+    'concepto' => 'ISR 10% sobre Arrendamiento',
+    'total' => '5000.0000000000',
+    'tipo_interaccion' => 'Contable - Abono',
+    'mes' => 'Octubre',
+    'descripcion' => 'prueba remanente',
+    'evento' => '29',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 5',
+    'validado' => '1',
+    'estatus_evento' => '0',
+    'created_at' => '2024-10-14T15:33:46.040000Z',
+    'updated_at' => '2024-10-14T15:34:25.100000Z',
+  ),
+  5 => 
+  array (
+    'id' => 1183360,
+    'area' => '1.4.04',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '41',
+    'fecha' => '2024-10-14 00:00:00.000',
+    'cuenta' => '2.1.1.7.01.05',
+    'cuentaRelacionada' => '8.2.5.1.2.4.1.01.01',
+    'concepto' => 'ISR 10% sobre Arrendamiento',
+    'total' => '5000.0000000000',
+    'tipo_interaccion' => 'Contable - Cargo',
+    'mes' => 'Octubre',
+    'descripcion' => 'prueba remanente',
+    'evento' => '29',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 5',
+    'validado' => '1',
+    'estatus_evento' => '0',
+    'created_at' => '2024-10-14T15:33:46.040000Z',
+    'updated_at' => '2024-10-14T15:34:25.100000Z',
+  ),
+  6 => 
+  array (
+    'id' => 1183364,
+    'area' => '1.4.04',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '41',
+    'fecha' => '2024-10-14 00:00:00.000',
+    'cuenta' => '2.1.1.7.01.07',
+    'cuentaRelacionada' => '8.2.5.1.2.4.1.01.01',
+    'concepto' => 'IVA Retenido 4%',
+    'total' => '5000.0000000000',
+    'tipo_interaccion' => 'Contable - Abono',
+    'mes' => 'Octubre',
+    'descripcion' => 'prueba remanente',
+    'evento' => '29',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 5',
+    'validado' => '1',
+    'estatus_evento' => '0',
+    'created_at' => '2024-10-14T15:33:46.040000Z',
+    'updated_at' => '2024-10-14T15:34:25.100000Z',
+  ),
+  7 => 
+  array (
+    'id' => 1183364,
+    'area' => '1.4.04',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '41',
+    'fecha' => '2024-10-14 00:00:00.000',
+    'cuenta' => '2.1.1.7.01.07',
+    'cuentaRelacionada' => '8.2.5.1.2.4.1.01.01',
+    'concepto' => 'IVA Retenido 4%',
+    'total' => '5000.0000000000',
+    'tipo_interaccion' => 'Contable - Cargo',
+    'mes' => 'Octubre',
+    'descripcion' => 'prueba remanente',
+    'evento' => '29',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 5',
+    'validado' => '1',
+    'estatus_evento' => '0',
+    'created_at' => '2024-10-14T15:33:46.040000Z',
+    'updated_at' => '2024-10-14T15:34:25.100000Z',
+  ),
+)  

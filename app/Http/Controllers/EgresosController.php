@@ -72,4 +72,8 @@ class EgresosController extends Controller
     {
         return view('egresos.egresos-capitulo5-pagado');
     }
+
+    public function consultarMovimientos(){
+        return view ('egresos.movimientos-egresos');
+    }
 }
