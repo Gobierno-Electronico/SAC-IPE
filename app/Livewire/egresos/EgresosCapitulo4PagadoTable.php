@@ -391,7 +391,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
 
 
                 $remanentesContables = [];
-                foreach ($polizasDevengado as $index => $devengado) {
+                foreach ($polizasDevengado as $devengado) {
                     $devengado->matchEncontrado = 0;
                     $conceptoCuentaDevengada = Poliza::where('cuentaRelacionada', '=', $devengado->cuentaRelacionada)->value('concepto');
                     $conceptoGeneralCuentaDevengada = explode('(', $conceptoCuentaDevengada);
@@ -408,10 +408,6 @@ class EgresosCapitulo4PagadoTable extends Tabla
 
                             $polizasPagadoContableCargo->forget($index);
                         } 
-                    }
-                    if($devengado->matchEncontrado == 1){
-                        $polizasDevengado->forget($index);
-
                     }
                 }
                 foreach ($polizasDevengado as $devengado) {
