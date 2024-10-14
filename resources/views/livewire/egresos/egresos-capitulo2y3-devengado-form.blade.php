@@ -103,6 +103,13 @@
                     @endforeach
                 </select>
 
+                <label for="selectTipoRegistro" class="form-label mt-3">Tipo de registro</label>
+                <select name="selectTipoRegistro" id="selectTipoRegistro" class="form-select" wire:model="tipoRegistro">
+                    <option value="" disabled selected>Seleccionar tipo de registro</option>
+                    <option value="Gasto">Gasto</option>
+                    <option value="Almacen">Almacén</option>
+                </select>
+
                 <label for="inputMontoEvento" class="form-label mt-3">Monto del evento</label>
                 <input type="text" name="inputMontoEvento" id="inputMontoEvento" class="form-control" disabled>
 
@@ -125,7 +132,7 @@
 
                 @if ($selectorPagoRetenciones == 'SI')
                     <label for="selectCuenta" class="form-label mt-3">Retenciones</label>
-                    <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuentaContable">
+                    <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuentaContableAbono">
                         <option value="" selected disabled>Seleccionar cuenta</option>
                         @foreach ($cuentasContableAbono as $cuenta)
                             <option value="{{ $cuenta->cuenta_id }}">

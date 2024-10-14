@@ -44,6 +44,9 @@ class EgresosCapitulo2y3DevengadoForm extends Component
     #[Validate('required', message: 'Mes requerido')]
     public $mes = "";
 
+    #[Validate('required', message: 'Tipo de registro requerido')]
+    public $tipoRegistro = "";
+
     #[Validate('required', message: 'Importe requerido')]
     public $importe = "";
 
@@ -119,7 +122,7 @@ class EgresosCapitulo2y3DevengadoForm extends Component
             ->get();
 
             $cuentasDevengadas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
+            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [87, 89])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
             ->orderBy('cuentas.Codigo_cuenta')->get();
 
 
@@ -127,7 +130,8 @@ class EgresosCapitulo2y3DevengadoForm extends Component
             foreach($cuentasDevengadas as $devengada){
                 foreach($cuentasComprometidas as $comprometida){
                     $conceptoComprometida = explode('(', $comprometida->concepto);
-                    if(str_contains($devengada->Descripcion_cuenta, $conceptoComprometida[0])){
+                    $conceptoDevengado = explode('(', $devengada->Descripcion_cuenta);
+                    if($conceptoComprometida[0] == $conceptoDevengado[0]){
                         $cuentasDevengadasAux->push($devengada);
                     }
                 }
@@ -148,7 +152,7 @@ class EgresosCapitulo2y3DevengadoForm extends Component
         try{
             $anioActual = Carbon::now()->year;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
-            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('interaccion_cuenta_conceptos.concepto_id', [])->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
+            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('interaccion_cuenta_conceptos.concepto_id', [87, 89])->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
             $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')
             ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->where('Descripcion_cuenta', 'LIKE', '%(Comprometido)%')->first();
 
@@ -173,7 +177,7 @@ class EgresosCapitulo2y3DevengadoForm extends Component
         try{
             $this->cambiarCuentaContableSeleccionada = true;
 
-            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('interaccion_cuenta_conceptos.concepto_id', [])
+            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('interaccion_cuenta_conceptos.concepto_id', [87, 89])
             ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
             $this->cuentasContableAbono = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
                 ->join('interaccion_cuenta_conceptos', function ($join) {
@@ -194,7 +198,7 @@ class EgresosCapitulo2y3DevengadoForm extends Component
             $descripcionPartida = Cuenta::select('Descripcion_cuenta')->where('id', '=', $this->partidaPresupuestal)->get();
             $conceptoGeneralPartida = rtrim(explode('(', $descripcionPartida[0]->Descripcion_cuenta)[0]);
                     
-            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('interaccion_cuenta_conceptos.concepto_id', [])
+            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('interaccion_cuenta_conceptos.concepto_id', [87, 89])
             ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
             $cuentasContables = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
                 ->join('interaccion_cuenta_conceptos', function ($join) {
@@ -252,6 +256,7 @@ class EgresosCapitulo2y3DevengadoForm extends Component
                 'montoEvento' => $this->montoDelEvento,
                 'pttoComprometido' => $this->PTTOComprometido,
                 'selectorPagoRetenciones' => $this->selectorPagoRetenciones,
+                'tipoRegistro' => $this->tipoRegistro
             ];
 
             $this->dispatch('agregar-registro', registro: $registro);
@@ -264,7 +269,7 @@ class EgresosCapitulo2y3DevengadoForm extends Component
         }
     }
 
-    public function finalizarRegistro()
+    public function finalizarRegistros()
     {
         $this->dispatch('finalizar-registros');
     }
@@ -276,6 +281,7 @@ class EgresosCapitulo2y3DevengadoForm extends Component
         $this->mes = "";
         $this->selectorPagoRetenciones = "";
         $this->cuentaContableAbono = "";
+        $this->tipoRegistro = "";
         $this->dispatch('limpiar');
     }
 
@@ -289,6 +295,7 @@ class EgresosCapitulo2y3DevengadoForm extends Component
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->PTTOComprometido = $datosRegistro['pttoComprometido'];
         $this->selectorPagoRetenciones = $datosRegistro['selectorPagoRetenciones'];
+        $this->tipoRegistro = $datosRegistro['tipoRegistro'];
         $this->dispatch('llenarFormulario', presupuesto: $this->PTTOComprometido, importe: $this->importe);
     }
 

@@ -241,7 +241,7 @@ class EgresosCapitulo2y3EjercidoTable extends Tabla
 
             foreach ($this->dataCompleta as $movimiento) {
                 $movimiento['importe'] = doubleval($movimiento['importe']);
-                $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaId'])->whereIn('concepto_id', [])
+                $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaId'])->whereIn('concepto_id', [90, 91])
                     ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
 
                 $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)

@@ -131,6 +131,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                         'importe' => $registro['importe'],
                         'pttoComprometido' => $registro['pttoComprometido'], 
                         'selectorPagoRetenciones' => $registro['selectorPagoRetenciones'],
+                        'tipoRegistro' => $registro['tipoRegistro'],
                     ];
                     
                     unset($this->dataCompleta[$key]);
@@ -246,7 +247,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
             foreach ($this->dataCompleta as $movimiento)
             {
                 $movimiento['importe'] = doubleval($movimiento['importe']);
-                $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['partidaId'])->whereIn('concepto_id', [])
+                $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['partidaId'])->whereIn('concepto_id', [87, 89])
                 ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
 
                 $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
@@ -260,7 +261,17 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                             $interaccionCuentaCuentasFiltradas[] = $cuenta; 
                             continue; 
                         }
-                    } else {
+                    }else if(count($interaccionCuentaCuentas) > 7)
+                        if($cuenta['tipo_interaccion'] == 'Contable - Cargo'){
+                        $numeroInicialCuenta = explode('.', $cuenta['Codigo_cuenta']);
+                        if($movimiento['tipoRegistro'] == 'Almacen' && $numeroInicialCuenta[0] < 5){
+                            $interaccionCuentaCuentasFiltradas[] = $cuenta; 
+                            continue; 
+                        }else if($movimiento['tipoRegistro'] == 'Gasto' && $numeroInicialCuenta[0] >= 5){
+                            $interaccionCuentaCuentasFiltradas[] = $cuenta; 
+                            continue; 
+                        }
+                    }else {
                         $interaccionCuentaCuentasFiltradas[] = $cuenta;
                     }
                 }

@@ -48,7 +48,7 @@ class EgresosCapitulo2y3ComprometidoForm extends Component
     {
         try{
             $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
+            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [85, 86])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
             ->orderBy('cuentas.Codigo_cuenta')->get();
 
             return view('livewire.egresos.egresos-capitulo2y3-comprometido-form', ['cuentas' => $cuentas]);
@@ -65,7 +65,7 @@ class EgresosCapitulo2y3ComprometidoForm extends Component
 
             $anioActual = Carbon::now()->year;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
-            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [])->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
+            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [85, 86])->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
             $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')
             ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->where('Descripcion_cuenta', 'LIKE', '%(Por ejercer)%')->first();
 

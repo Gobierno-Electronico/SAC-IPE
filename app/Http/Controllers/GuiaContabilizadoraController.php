@@ -30,7 +30,7 @@ class GuiaContabilizadoraController extends Controller
     public function crearGuiaContabilizadora(Request $request)
     {
         // return response()->json('Método desactivado');
-        $path = public_path('Guia/2000y3000-Comprometido-CuentasConceptos.xlsx'); // cambiar el número del capítulo cuando se carguen las relaciones
+        $path = public_path('Guia/2000y3000-Devengado-CuentasConceptos3.xlsx'); // cambiar el número del capítulo cuando se carguen las relaciones
 
         // Validar que el archivo pueda ser analizado correctamente.
         if ($xlsx = SimpleXLSX::parse($path)) {
@@ -131,7 +131,7 @@ class GuiaContabilizadoraController extends Controller
     public function relacionarCuentasCuentas(Request $request)
     {
         // return response()->json('Método desactivado');
-        $path = public_path('CuentasCuentas/2000y3000-Comprometido-CuentasCuentas.xlsx');
+        $path = public_path('CuentasCuentas/2000y3000-Devengado-CuentasCuentas3.xlsx');
 
         // Validar que el archivo pueda ser analizado correctamente.
         if ($xlsx = SimpleXLSX::parse($path)) {
