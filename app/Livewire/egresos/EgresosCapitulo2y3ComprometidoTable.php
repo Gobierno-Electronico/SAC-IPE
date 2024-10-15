@@ -263,7 +263,7 @@ class EgresosCapitulo2y3ComprometidoTable extends Tabla
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
                         'estatus_evento' => true,
-                        'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 2 y 3',
+                        'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 2y3',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]
@@ -284,7 +284,7 @@ class EgresosCapitulo2y3ComprometidoTable extends Tabla
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
                         'estatus_evento' => true,
-                        'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 2 y 3',
+                        'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 2y3',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);
