@@ -24,7 +24,7 @@
 
             </div>
         </div>
-        <livewire:egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total :$numeroPolizaRemanente
+        <livewire:egresos.egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total :$numeroPolizaRemanente
             tipoMovimiento="PolizaEgresosEjercidoCapitulo2y3" urlFinalizar="/capitulo2y3-ejercido" tipoPoliza="E"
             categoriaModulo='EGRESOS EJERCIDO CAPITULO 2 y 3' categoriaRemanente='EGRESOS DEVENGADO CAPITULO 5 REMANENTE EJERCIDO'/>
     @else
@@ -84,9 +84,9 @@
                 <label for="selectCuenta" class="form-label mt-3">Cuenta</label>
                 <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta" wire:change="cargarPresupuestoDevengado">
                     <option value="" disabled>Seleccionar cuenta</option>
-                    @foreach ($cuentas as $partida)
-                    <option value="{{ $partida->cuenta_id }}">
-                        {{ $partida->Codigo_cuenta . '  ' . $partida->Descripcion_cuenta }}</option>
+                    @foreach ($cuentas as $cuenta)
+                        <option value="{{ $cuenta['cuenta_id'] }}">
+                            {{ $cuenta['Codigo_cuenta'] . '  ' . $cuenta['Descripcion_cuenta'] }}</option>
                     @endforeach
                 </select>
 

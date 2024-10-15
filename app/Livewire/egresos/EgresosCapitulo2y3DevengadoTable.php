@@ -49,6 +49,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
             Column::make('partida', 'Partida'),
             Column::make('cuentaContable', 'Cuenta contable'),
             Column::make('mes', 'Mes'),
+            Column::make('tipoRegistro', 'Registro'),
             Column::make('movimiento', 'Movimiento'),
             Column::make('pttoComprometido', 'PPTO Comprometido')->component('columns.importe'),
             Column::make('importe', 'Importe')->component('columns.importe'),
@@ -73,6 +74,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                     'partida' => $registro['codigoPartida'] . ' ' . $registro['descripcionPartida'],
                     'cuentaContable' => $registro['codigoCuentaContable'] . ' ' . $registro['descripcionCuentaContable'],
                     'mes' => $registro['mes'],
+                    'tipoRegistro' => $registro['tipoRegistro'],
                     'movimiento' => 'DEVENGADO', 
                     'pttoComprometido' => $registro['pttoComprometido'],
                     'importe' => $registro['importe'],
@@ -261,15 +263,18 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                             $interaccionCuentaCuentasFiltradas[] = $cuenta; 
                             continue; 
                         }
-                    }else if(count($interaccionCuentaCuentas) > 7)
-                        if($cuenta['tipo_interaccion'] == 'Contable - Cargo'){
-                        $numeroInicialCuenta = explode('.', $cuenta['Codigo_cuenta']);
-                        if($movimiento['tipoRegistro'] == 'Almacen' && $numeroInicialCuenta[0] < 5){
-                            $interaccionCuentaCuentasFiltradas[] = $cuenta; 
-                            continue; 
-                        }else if($movimiento['tipoRegistro'] == 'Gasto' && $numeroInicialCuenta[0] >= 5){
-                            $interaccionCuentaCuentasFiltradas[] = $cuenta; 
-                            continue; 
+                    }else if($cuenta['tipo_interaccion'] == 'Contable - Cargo'){
+                        if(count($interaccionCuentaCuentas) > 7){
+                            $numeroInicialCuenta = explode('.', $cuenta['Codigo_cuenta']);
+                            if($movimiento['tipoRegistro'] == 'Almacen' && $numeroInicialCuenta[0] < 5){
+                                $interaccionCuentaCuentasFiltradas[] = $cuenta; 
+                                continue; 
+                            }else if($movimiento['tipoRegistro'] == 'Gasto' && $numeroInicialCuenta[0] >= 5){
+                                $interaccionCuentaCuentasFiltradas[] = $cuenta; 
+                                continue; 
+                            }
+                        }else{
+                            $interaccionCuentaCuentasFiltradas[] = $cuenta;
                         }
                     }else {
                         $interaccionCuentaCuentasFiltradas[] = $cuenta;

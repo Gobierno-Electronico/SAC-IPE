@@ -117,7 +117,7 @@ class EgresosCapitulo2y3EjercidoForm extends Component
                     }
                 }
             }
-            $this->cuentas = $cuentasAuxiliar;    
+            $this->cuentas = $cuentasAuxiliar->toArray();;    
         }catch (\Throwable $th) {
             Log::error('Ocurrió un error al llenar las cuentas en Ejercido del capítulo 2 y 3: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
