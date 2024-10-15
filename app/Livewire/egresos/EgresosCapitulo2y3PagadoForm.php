@@ -14,8 +14,6 @@ use Illuminate\Support\Collection;
 use Log;
 use DB;
 use Carbon\Carbon;
-
-
 class EgresosCapitulo2y3PagadoForm extends Component
 {
     public $consultarRegistro = false;
@@ -62,6 +60,11 @@ class EgresosCapitulo2y3PagadoForm extends Component
     public $partidasPresupuestales = [];
     public $cuentasBanco = [];
     public $cuentasRetenciones = [];
+    public $PPTOEjercido;
+    public $montoContable = 0;
+    public $cambiarPartidaPresupuestalSeleccionada = false;
+    public $cambiarCuentaBancoSeleccionada = false;
+    public $cambiarCuentaRetencionesSeleccionada = false;
 
     public function render()
     {
@@ -74,10 +77,79 @@ class EgresosCapitulo2y3PagadoForm extends Component
                 ->distinct()
                 ->pluck('descripcion', 'evento');
 
+            $this->cambiarPartidaPresupuestalSeleccionada = false;
+            $this->llenarPartidasPresupuestales();
+            $this->cambiarCuentaBancoSeleccionada = false;
+            $this->llenarCuentasBanco();
+            $this->cambiarCuentaRetencionesSeleccionada = false;
+
             return view('livewire.egresos.egresos-capitulo2y3-pagado-form', ['eventos' => $eventos]);
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar eventos en Pagado del capítulo 2 y 3: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
+
+    public function cambioEvento()
+    {
+        try {
+            $this->limpiar();
+            $this->montoDelEvento = DB::select('EXEC ImporteTotalCapitulo2y3Pagado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
+            $this->dispatch('formato_importe', id: 'inputMontoEvento', amount: ($this->montoDelEvento > 0) ? $this->montoDelEvento : '');
+            $this->dispatch('mostrarMensaje', mensaje: 'Monto del evento cargado', tipo: 'success', tiempo: 1500);
+            $this->llenarPartidasPresupuestales();
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al cargar el evento en Pagado del capítulo 2000 y 3000: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
+    }
+
+    public function llenarPartidasPresupuestales()
+    {
+        try {
+            if ($this->cambiarPartidaPresupuestalSeleccionada) {
+                $this->partidaPresupuestal = "";
+            }
+
+            $this->cambiarPartidaPresupuestalSeleccionada = true;
+
+            $cuentasEjercidas = Poliza::where('evento', '=', $this->numeroEvento)
+                ->where('tipo_poliza', '=', 'E')
+                ->where('concepto', 'LIKE', '%Ejercido%')
+                ->get();
+
+            $cuentasPagadas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+                ->whereIn('interaccion_cuenta_conceptos.concepto_id', [89, 87])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
+                ->orderBy('cuentas.Codigo_cuenta')->get();
+
+            $cuentasDevengadasAux = new Collection();
+            foreach ($cuentasPagadas as $pagada) {
+                foreach ($cuentasEjercidas as $ejercida) {
+                    $conceptoComprometida = explode('(', $ejercida->concepto);
+                    if (str_contains($pagada->Descripcion_cuenta, $conceptoComprometida[0])) {
+                        $cuentasDevengadasAux->push($pagada);
+                    }
+                }
+            }
+
+            $cuentasDevengadasAux = $cuentasDevengadasAux->unique('Codigo_cuenta');
+            $this->partidasPresupuestales = $cuentasDevengadasAux->toArray();
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al llenar partidas presupuestales en pagado del capítulo 2000 y 3000: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
