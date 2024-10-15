@@ -69,7 +69,7 @@ class EgresosCapitulo2y3PagadoForm extends Component
             $eventos = Poliza::select('evento', 'descripcion')
                 ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where('tipo_poliza', '=', 'E')
-                ->where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 2 y 3')
+                ->where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 2y3')
                 ->where('estatus_evento', '=', true)
                 ->distinct()
                 ->pluck('descripcion', 'evento');

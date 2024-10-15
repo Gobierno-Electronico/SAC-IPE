@@ -23,7 +23,7 @@
         </div>
         <livewire:egresos.egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
             tipoMovimiento="PolizaEgresosComprometidoCapitulo2y3" urlFinalizar="/capitulo2y3-comprometido" tipoPoliza="E"
-            categoriaModulo='EGRESOS COMPROMETIDO CAPITULO 2 y 3' />
+            categoriaModulo='EGRESOS COMPROMETIDO CAPITULO 2y3' />
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"

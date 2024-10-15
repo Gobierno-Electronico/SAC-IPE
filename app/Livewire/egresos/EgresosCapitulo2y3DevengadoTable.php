@@ -298,7 +298,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
                         'estatus_evento' => true,
-                        'categoria' => 'EGRESOS DEVENGADO CAPITULO 2 y 3',
+                        'categoria' => 'EGRESOS DEVENGADO CAPITULO 2y3',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]
@@ -320,7 +320,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
                         'estatus_evento' => true,
-                        'categoria' => 'EGRESOS DEVENGADO CAPITULO 2 y 3',
+                        'categoria' => 'EGRESOS DEVENGADO CAPITULO 2y3',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);
@@ -340,12 +340,12 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
             $this->numeroPolizaRemanente = (int)end($numerosPolizas) + 1;
 
             $polizasInicialesEgresosComprometido = Poliza::where('tipo_poliza', '=', 'E')
-            ->where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 2 y 3')
+            ->where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 2y3')
             ->where('evento', '=', $this->numeroEvento)
             ->get();
 
             $polizasInicialesEgresosDevengado = Poliza::where('tipo_poliza', '=', 'E')
-            ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 2 y 3')
+            ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 2y3')
             ->where('evento', '=', $this->numeroEvento)
             ->where('concepto', 'LIKE', '%(Devengado)%')
             ->get();
@@ -371,7 +371,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                             'tipo_interaccion' => $polizaImporte->tipo_interaccion,
                             'validado' => false,
                             'estatus_evento' => false,
-                            'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 2 y 3 REMANENTE DEVENGADO',
+                            'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 2y3 REMANENTE DEVENGADO',
                             'created_at' => $fecha,
                             'updated_at' => $fecha
                         ];
@@ -401,7 +401,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                         'tipo_interaccion' => $polizaInicial['tipo_interaccion'],
                         'validado' => false,
                         'estatus_evento' => false,
-                        'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 2 y 3 REMANENTE DEVENGADO',
+                        'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 2y3 REMANENTE DEVENGADO',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);
@@ -412,7 +412,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
             $importeTotalEvento = DB::select('EXEC ImporteTotalCapitulo2y3Devengado @evento = ?', [$this->numeroEvento]);
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
                 Poliza::where('evento', '=', $this->numeroEvento)
-                    ->whereIn('categoria', ['EGRESOS COMPROMETIDO CAPITULO 2 y 3'])
+                    ->whereIn('categoria', ['EGRESOS COMPROMETIDO CAPITULO 2y3'])
                     ->update(['estatus_evento' => false]);
             }
             DB::commit();
