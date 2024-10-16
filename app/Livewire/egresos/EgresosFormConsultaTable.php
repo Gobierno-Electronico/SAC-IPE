@@ -41,6 +41,7 @@ class EgresosFormConsultaTable extends Tabla
     {
         try{
             $poliza = Poliza::where('numero_poliza', '=', $this->numeroPoliza)
+            ->where('tipo_poliza', '=', $this->tipoPoliza)
             ->where('evento', '=', $this->numeroEvento)->first();
 
             if($poliza['validado'] == 1){ 

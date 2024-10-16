@@ -462,12 +462,27 @@
                                     /* Cambia esto al color que desees */
                                 }
                             </style>
-
                             <li class="nav-item dropdown">
-                                <a id="navbarMovimientos" class="nav-link" href="/movimientos-egresos" onclick="mostrarCargando()"
-                                    role="button">
-                                    {{ __('Movimientos') }}</a>
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" role="button"
+                                    data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
+                                    aria-expanded="false" v-pre>
+                                    {{ __('Movimientos') }}
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="dropend">
+                                        <a href="{{ route('movimientosEgresos') }}" method="GET"
+                                            class="dropdown-item " onclick="mostrarCargando()">Egresos</a>
+                                    </li>
+
+                                    <li class="dropend">
+                                        <a href="{{ route('movimientosIngresos') }}" method="GET"
+                                            class="dropdown-item" onclick="mostrarCargando()">Ingresos</a>
+                                    </li>
+                                </ul>
                             </li>
+
+
+
 
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"

@@ -121,6 +121,8 @@ Route::get("/autorizacion-reintegro", [IngresosController::class, 'autorizacionR
 Route::get("/pago-reintegro", [IngresosController::class, 'pagoReintegro'])->name('pagoReintegro')->middleware('role:Administrador');
 Route::get("/cobro-especie", [IngresosController::class, 'cobroEspecie'])->name('cobroEspecie')->middleware('role:Administrador');
 Route::get("/devolucion-especie", [IngresosController::class, 'devolucionEspecie'])->name('devolucionEspecie')->middleware('role:Administrador');
+Route::get("/movimientos-ingresos", [IngresosController::class, 'consultarMovimientos'])->name('movimientosIngresos')->middleware('role:Administrador');
+
 
 //Egresos
 Route::get("/capitulo2y3-comprometido", [EgresosController::class, 'capitulo2y3Comprometido'])->name('capitulo2y3Comprometido')->middleware('role:Administrador');
