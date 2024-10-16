@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\egresos;
+namespace App\Livewire;
 
 
 use App\Clases\Column;
@@ -11,7 +11,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use DB;
 use Log;
 
-class MovimientosEgresosTable extends Tabla
+class MovimientosIngresosTable extends Tabla
 {
 
     public $perPage = 10;
@@ -21,8 +21,6 @@ class MovimientosEgresosTable extends Tabla
     public $searchBy = ['evento', 'fechaAfectacion', 'fechaRegistro', 'descripcion', 'momentoContable'];
 
     public $data = [];
-
-    public $selectedChapter = '';
 
     public $consultarRegistro = false;
 
@@ -38,7 +36,7 @@ class MovimientosEgresosTable extends Tabla
 
     public function render()
     {
-        return view('livewire.egresos.movimientos-egresos-table');
+        return view('livewire.movimientos-ingresos-table');
     }
 
     public function query(): Builder
@@ -54,7 +52,8 @@ class MovimientosEgresosTable extends Tabla
             $entrada['total'] = '$' . number_format($entrada['total'], 2, '.', ',');
             $entrada['id'] = $contador++;
             return $entrada;
-        }, DB::select('EXEC dbo.ConsultaMovimientosEgresos'));
+        }, DB::select('EXEC dbo.ConsultaMovimientosIngresos'));
+
         $collection = collect($this->data);
         if ($this->sortBy !== '') {
             if ($this->sortDirection == "asc") {
@@ -90,7 +89,6 @@ class MovimientosEgresosTable extends Tabla
             Column::make('numero_poliza', 'Número de Póliza'),
             Column::make('descripcion', 'Descripción'),
             Column::make('momentoContable', 'Momento contable'),
-            Column::make('capitulo', 'Capítulo'),
             Column::make('fechaAfectacion', 'Fecha de afectación'),
             Column::make('fechaRegistro', 'Fecha de registro'),
             Column::make('total', 'Monto del evento'),
@@ -107,16 +105,18 @@ class MovimientosEgresosTable extends Tabla
         $this->total = $this->data[$value]['total'];
         $this->descripcion = $this->data[$value]['descripcion'];
         $this->categoriaModulo = $this->data[$value]['categoria'];
-        $this->tipoMovimiento = 'PolizaEgresos' . ucfirst(strtolower($this->data[$value]['momentoContable'])) . 'Capitulo' . $this->data[$value]['capitulo'];
+        $this->tipoMovimiento = 'PolizaIngresos' . str_replace(' ', '', ucwords(strtolower($this->data[$value]['momentoContable'])));
+
+        //extraemos el número de póliza de remanente que corresponde al registro del número de póliza que ya tenemos
         $numeroPoliza = $this->numeroPoliza;
         $this->numeroPolizaRemanente = DB::table('polizas')
-        ->where('tipo_poliza', 'EAUX')
+        ->where('tipo_poliza', 'IAUX')
         ->where('evento', '=', $this->numeroEvento)
         ->where('id', '>', function($query) use ($numeroPoliza) {
             $query->select('id')
                   ->from('polizas')
                   ->where('numero_poliza', $numeroPoliza)
-                  ->where('tipo_poliza', 'E')
+                  ->where('tipo_poliza', 'I')
                   ->limit(1);
         })
         ->orderBy('id', 'asc')
@@ -129,14 +129,14 @@ class MovimientosEgresosTable extends Tabla
         }
 
         switch($this->data[$value]['momentoContable']){
-            case "DEVENGADO":
-                $this->categoriaRemanente = 'EGRESOS COMPROMETIDO CAPITULO '. $this->data[$value]['capitulo'] . ' REMANENTE DEVENGADO';
+            case "RECAUDADO":
+                $this->categoriaRemanente = 'INGRESOS DEVENGADO REMANENTE RECAUDADO';
                 break;
-            case "EJERCIDO":
-                $this->categoriaRemanente = 'EGRESOS DEVENGADO CAPITULO '. $this->data[$value]['capitulo'] . ' REMANENTE EJERCIDO';
+            case "COBRO ESPECIE":
+                $this->categoriaRemanente = 'INGRESOS DEVENGADO REMANENTE COBRO ESPECIE';
                 break;
-            case "PAGADO":
-                $this->categoriaRemanente = 'EGRESOS EJERCIDO CAPITULO '. $this->data[$value]['capitulo'] . ' REMANENTE PAGADO';
+            case "DEVENGADO PREVIAMENTE RECAUDADO":
+                $this->categoriaRemanente = 'INGRESOS POR CLASIFICAR REMANENTE DEVENGADO PREVIAMENTE RECAUDADO';
                 break;
             default:
                 $this->categoriaRemanente = 'SIN REMANENTE';
