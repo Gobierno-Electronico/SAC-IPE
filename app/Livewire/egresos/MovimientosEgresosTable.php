@@ -150,13 +150,11 @@ class MovimientosEgresosTable extends Tabla
 
     public function search()
     {
-        // $this->resetPage();
     }
 
 
     public function edit($value)
     {
-        // return view('bitacoras.lista');
     }
 
     public function changeState($value) {}
