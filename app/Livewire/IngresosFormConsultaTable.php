@@ -38,6 +38,13 @@ class IngresosFormConsultaTable extends Tabla
 
     public function render()
     {
+        $poliza = Poliza::where('numero_poliza', '=', $this->numeroPoliza)
+            ->where('tipo_poliza', '=', $this->tipoPoliza)
+            ->where('evento', '=', $this->numeroEvento)->first();
+            if($poliza['validado'] == 1){ 
+                $this->validado = true;
+                $this->init();
+            } 
 
         return view('livewire.ingresos-form-consulta-table');
     }
@@ -94,6 +101,7 @@ class IngresosFormConsultaTable extends Tabla
             Poliza::searchByYear('fecha', Carbon::now()->year)
                 ->where('tipo_poliza', '=', $this->tipoPoliza)
                 ->where('evento', '=', $this->numeroEvento)
+                ->where('numero_poliza', '=', $this->numeroPoliza)
                 ->where('categoria', '=', $this->categoriaModulo)
                 ->where('validado', '=', false)->delete();
             if ($this->numeroPolizaRemanente && $this->numeroPolizaRemanente > 0) {
@@ -101,6 +109,7 @@ class IngresosFormConsultaTable extends Tabla
                     ->where('tipo_poliza', '=', 'IAUX')
                     ->where('evento', '=', $this->numeroEvento)
                     ->where('categoria', '=', $this->categoriaRemanente)
+                    ->where('numero_poliza', '=', $this->numeroPolizaRemanente)
                     ->where('validado', '=', false)->delete();
             }
 
@@ -146,12 +155,14 @@ class IngresosFormConsultaTable extends Tabla
                 ->where('tipo_poliza', '=', $this->tipoPoliza)
                 ->where('evento', '=', $this->numeroEvento)
                 ->where('categoria', '=', $this->categoriaModulo)
+                ->where('numero_poliza', '=', $this->numeroPoliza)
                 ->update(["validado" => true]);
             if ($this->numeroPolizaRemanente > 0) {
                 Poliza::searchByYear('fecha', Carbon::now()->year)
                     ->where('tipo_poliza', '=', 'IAUX')
                     ->where('evento', '=', $this->numeroEvento)
                     ->where('categoria', '=', $this->categoriaRemanente)
+                    ->where('numero_poliza', '=', $this->numeroPolizaRemanente)
                     ->update(["validado" => true]);
             }
             // PresupuestoInicial::where('anio', '=', $this->selectedYear)->where('categoria', '=', 'INGRESOS')->where('tipo', '=', 'P')->update(["validado" => true]);
@@ -172,11 +183,20 @@ class IngresosFormConsultaTable extends Tabla
 
     public function finalizar($tipo)
     {
-        $bitacora = new BitacoraController();
-        $bitacora->bitacora('finalizar', 'concluyó o intentó concluir el ' . $tipo . ' con evento : ' . $this->numeroEvento, request());
-        $this->dispatch('mostrarMensaje', mensaje: 'Se realizó el registro del ingreso de ' . $this->categoriaModulo . ' con éxito', tipo: 'success', tiempo: 5000);
-        $this->numeroEvento = 0;
-        $this->numeroPoliza = 0;
-        return redirect($this->urlFinalizar)->with(['message' => 'Se realizó el registro del ingreso de ' . $this->categoriaModulo . ' con éxito', 'message_type' => 'success']);
+        if(!$this->validado){
+            $bitacora = new BitacoraController();
+            $bitacora->bitacora('finalizar', 'concluyó o intentó concluir el ' . $tipo . ' con evento : ' . $this->numeroEvento, request());
+            $this->dispatch('mostrarMensaje', mensaje: 'Se realizó el registro del ingreso de ' . $this->categoriaModulo . ' con éxito', tipo: 'success', tiempo: 5000);
+            $this->numeroEvento = 0;
+            $this->numeroPoliza = 0;
+            return redirect($this->urlFinalizar)->with(['message' => 'Se realizó el registro del ingreso de ' . $this->categoriaModulo . ' con éxito', 'message_type' => 'success']);
+        }else{
+            return redirect($this->urlFinalizar);
+        }
+    }
+
+    public function regresar()
+    {
+        return redirect($this->urlFinalizar);
     }
 }
