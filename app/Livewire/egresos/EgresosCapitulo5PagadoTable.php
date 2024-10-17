@@ -184,7 +184,7 @@ class EgresosCapitulo5PagadoTable extends Tabla
             $this->total = $totalActualizado;
             $this->dispatch('cambioTotal', total: $totalActualizado);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al editar en pagado del capítulo 4: ' . $th->getMessage());
+            Log::error('Ocurrió un error al editar en pagado del capítulo 5: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al editar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -213,7 +213,7 @@ class EgresosCapitulo5PagadoTable extends Tabla
             $this->total = $totalActualizado;
             $this->dispatch('cambioTotal', total: $totalActualizado);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al eliminar en pagado del capítulo 4: ' . $th->getMessage());
+            Log::error('Ocurrió un error al eliminar en pagado del capítulo 5: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al editar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -498,7 +498,7 @@ class EgresosCapitulo5PagadoTable extends Tabla
             $importeTotalEvento = DB::select('EXEC ImporteTotalCapitulo5Pagado @evento = ?', [$this->numeroEvento]);
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
                 Poliza::where('evento', '=', $this->numeroEvento)
-                    ->whereIn('categoria', ['EGRESOS EJERCIDO CAPITULO 5', 'EGRESOS PAGADO CAPITULO 4'])
+                    ->whereIn('categoria', ['EGRESOS EJERCIDO CAPITULO 5', 'EGRESOS PAGADO CAPITULO 5'])
                     ->update(['estatus_evento' => 0]);
             }
             DB::commit();

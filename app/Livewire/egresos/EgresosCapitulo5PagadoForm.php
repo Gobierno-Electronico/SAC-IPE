@@ -249,7 +249,6 @@ class EgresosCapitulo5PagadoForm extends Component
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas de retenciones, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
-
     public function cargarMontoContable()
     {
         if (!$this->partidaPresupuestal || !$this->mes || !$this->selectCodigoAreaResponsable) return;
@@ -262,7 +261,7 @@ class EgresosCapitulo5PagadoForm extends Component
         $conceptoGeneralPartidaPagado = explode('(', $partidaPagadoSeleccionada->Descripcion_cuenta);
         $partidaDevengado = Cuenta::where('Descripcion_cuenta', 'LIKE', '%' . $conceptoGeneralPartidaPagado[0] . '(Devengado)' . '%')->get();
         $solvenciaContable = DB::select('EXEC SolvenciaDevengadoCuentaContableCapitulo5 @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?, @partidaPagado = ?, @partidaDevengado = ?', array($codigoDepartamento->Codigo_completo, $codigoCuentaContableSeleccionada, $anioActual, $this->mes, $this->numeroEvento, $partidaPagadoSeleccionada->Codigo_cuenta, $partidaDevengado[0]['Codigo_cuenta']))[0]->Total;
-        
+
         $this->montoContable = ($solvenciaContable > 0) ? floatval($solvenciaContable) : 0;
         $this->dispatch('formato_importe', id: 'inputMontoContable', amount: "{$this->montoContable}");
         $this->dispatch('mostrarMensaje', mensaje: 'Monto contable cargado', tipo: 'success', tiempo: 1500);
