@@ -65,183 +65,192 @@
                                         {{ __('Bitácora') }}</a>
                                 </li>
                             @endtecnico
-                            <li class="nav-item dropdown">
-                                <a id="navbarCuentas" class="nav-link" href="/cuentas" onclick="mostrarCargando()"
-                                    role="button">
-                                    {{ __('Cuentas') }}</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                    data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
-                                    aria-expanded="false" v-pre>
-                                    {{ __('Presupuesto') }}
-                                </a>
+                            @can('acceso-cuentas')
+                                <li class="nav-item dropdown">
+                                    <a id="navbarCuentas" class="nav-link" href="/cuentas" onclick="mostrarCargando()"
+                                        role="button">
+                                        {{ __('Cuentas') }}</a>
+                                </li>
+                            @endcan
+                            @can('acceso-presupuesto')
+                                <li class="nav-item dropdown">
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                        data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
+                                        aria-expanded="false" v-pre>
+                                        {{ __('Presupuesto') }}
+                                    </a>
 
-                                <ul class="dropdown-menu">
-                                    <li class="dropend">
-                                        <a href="#" class="dropdown-item dropdown-toggle"
-                                            data-bs-toggle="dropdown">Cargar Presupuesto</a>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" id="" onclick="mostrarCargando()"
-                                                    href="{{ route('presupuestoInicialIngresos') }}" method="GET">
-                                                    {{ __('Ingresos') }}
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" id="" onclick="mostrarCargando()"
-                                                    href="{{ route('presupuestoInicialEgresos') }}" method="GET">
-                                                    {{ __('Egresos') }}
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="dropend">
-                                        <a href="#" class="dropdown-item dropdown-toggle"
-                                            data-bs-toggle="dropdown">Consultar Presupuesto</a>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" id="" onclick="mostrarCargando()"
-                                                    href="{{ route('consultaPresupuestoIngresos') }}" method="GET">
-                                                    {{ __('Ingresos') }}
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" id="" onclick="mostrarCargando()"
-                                                    href="{{ route('consultaPresupuestoEgresos') }}" method="GET">
-                                                    {{ __('Egresos') }}
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="dropend">
-                                        <a href="#" class="dropdown-item dropdown-toggle"
-                                            data-bs-toggle="dropdown">Consultas</a>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" id="" onclick="mostrarCargando()"
-                                                    href="{{ route('tiposPresupuesto') }}" method="GET">
-                                                    {{ __('Tipos de presupuesto') }}
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" id="" onclick="mostrarCargando()"
-                                                    wire:navigate.hover
-                                                    href="{{ route('consultaAmpliacionesReducciones') }}" method="GET">
-                                                    {{ __('Ampliaciones/Reducciones') }}
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="dropend">
-                                        <a href="#" class="dropdown-item dropdown-toggle"
-                                            data-bs-toggle="dropdown">Afectaciones ingresos</a>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" id="" onclick="mostrarCargando()"
-                                                    href="{{ route('ampliacionIngresos') }}" method="GET">
-                                                    {{ __('Ampliación') }}
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" id="" onclick="mostrarCargando()"
-                                                    href="{{ route('reduccionIngresos') }}" method="GET">
-                                                    {{ __('Reducción') }}
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="dropend">
-                                        <a href="#" class="dropdown-item dropdown-toggle"
-                                            data-bs-toggle="dropdown">Afectaciones egresos</a>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" id="" onclick="mostrarCargando()"
-                                                    href="{{ route('ampliacionEgresos') }}" method="GET">
-                                                    {{ __('Ampliación') }}
-                                                </a>
+                                    <ul class="dropdown-menu">
+                                        <li class="dropend">
+                                            <a href="#" class="dropdown-item dropdown-toggle"
+                                                data-bs-toggle="dropdown">Cargar Presupuesto</a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                        href="{{ route('presupuestoInicialIngresos') }}" method="GET">
+                                                        {{ __('Ingresos') }}
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                        href="{{ route('presupuestoInicialEgresos') }}" method="GET">
+                                                        {{ __('Egresos') }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="dropend">
+                                            <a href="#" class="dropdown-item dropdown-toggle"
+                                                data-bs-toggle="dropdown">Consultar Presupuesto</a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                        href="{{ route('consultaPresupuestoIngresos') }}" method="GET">
+                                                        {{ __('Ingresos') }}
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                        href="{{ route('consultaPresupuestoEgresos') }}" method="GET">
+                                                        {{ __('Egresos') }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="dropend">
+                                            <a href="#" class="dropdown-item dropdown-toggle"
+                                                data-bs-toggle="dropdown">Consultas</a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                        href="{{ route('tiposPresupuesto') }}" method="GET">
+                                                        {{ __('Tipos de presupuesto') }}
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                        wire:navigate.hover
+                                                        href="{{ route('consultaAmpliacionesReducciones') }}" method="GET">
+                                                        {{ __('Ampliaciones/Reducciones') }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="dropend">
+                                            <a href="#" class="dropdown-item dropdown-toggle"
+                                                data-bs-toggle="dropdown">Afectaciones ingresos</a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                        href="{{ route('ampliacionIngresos') }}" method="GET">
+                                                        {{ __('Ampliación') }}
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                        href="{{ route('reduccionIngresos') }}" method="GET">
+                                                        {{ __('Reducción') }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="dropend">
+                                            <a href="#" class="dropdown-item dropdown-toggle"
+                                                data-bs-toggle="dropdown">Afectaciones egresos</a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                        href="{{ route('ampliacionEgresos') }}" method="GET">
+                                                        {{ __('Ampliación') }}
+                                                    </a>
 
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" id="" onclick="mostrarCargando()"
-                                                    href="{{ route('reduccionEgresos') }}" method="GET">
-                                                    {{ __('Reducción') }}
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" id="" onclick="mostrarCargando()"
-                                            href="{{ route('recalendarizacion') }}" method="GET">
-                                            {{ __('Reclasificación/Recalendarización') }}
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                        href="{{ route('reduccionEgresos') }}" method="GET">
+                                                        {{ __('Reducción') }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                href="{{ route('recalendarizacion') }}" method="GET">
+                                                {{ __('Reclasificación/Recalendarización') }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            @endcan
 
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                    data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
-                                    aria-expanded="false" v-pre>
-                                    {{ __('Contabilidad') }}
-                                </a>
+                            @canany(['acceso-contabilidad-reportes', 'acceso-contabilidad-consultar-carga'])
+                                <li class="nav-item dropdown">
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                        data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
+                                        aria-expanded="false" v-pre>
+                                        {{ __('Contabilidad') }}
+                                    </a>
 
-                                <ul class="dropdown-menu">
-
-                                    <li class="dropend">
-                                        <a href="#" class="dropdown-item dropdown-toggle"
-                                            data-bs-toggle="dropdown">Reportes</a>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" id="" onclick="mostrarCargando()"
-                                                    href="{{ route('balanzaArmonizada') }}" method="GET">
-                                                    {{ __('Balanza armonizada') }}
-                                                </a>
+                                    <ul class="dropdown-menu">
+                                        @can('acceso-contabilidad-reportes')
+                                            <li class="dropend">
+                                                <a href="#" class="dropdown-item dropdown-toggle"
+                                                    data-bs-toggle="dropdown">Reportes</a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                            href="{{ route('balanzaArmonizada') }}" method="GET">
+                                                            {{ __('Balanza armonizada') }}
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                            href="{{ route('libroMayor') }}" method="GET">
+                                                            {{ __('Libro mayor') }}
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                            href="{{ route('libroDiario') }}" method="GET">
+                                                            {{ __('Libro diario') }}
+                                                        </a>
+                                                    </li>
+                                                </ul>
                                             </li>
-                                            <li>
-                                                <a class="dropdown-item" id="" onclick="mostrarCargando()"
-                                                    href="{{ route('libroMayor') }}" method="GET">
-                                                    {{ __('Libro mayor') }}
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" id="" onclick="mostrarCargando()"
-                                                    href="{{ route('libroDiario') }}" method="GET">
-                                                    {{ __('Libro diario') }}
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
+                                        @endcan
 
-                                    <li class="dropend">
-                                        <a href="#" class="dropdown-item dropdown-toggle"
-                                            data-bs-toggle="dropdown">Consultar</a>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" id="" onclick="mostrarCargando()"
-                                                    href="{{ route('consultaPolizaInicial') }}" method="GET">
-                                                    {{ __('Póliza inicial') }}
-                                                </a>
+                                        @can('acceso-contabilidad-consultar-carga')
+                                            <li class="dropend">
+                                                <a href="#" class="dropdown-item dropdown-toggle"
+                                                    data-bs-toggle="dropdown">Consultar</a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                            href="{{ route('consultaPolizaInicial') }}" method="GET">
+                                                            {{ __('Póliza inicial') }}
+                                                        </a>
+                                                    </li>
+                                                </ul>
                                             </li>
-                                        </ul>
-                                    </li>
+                                        @endcan
 
-                                    <li class="dropend">
-                                        <a href="#" class="dropdown-item dropdown-toggle"
-                                            data-bs-toggle="dropdown">Carga</a>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" id="" onclick="mostrarCargando()"
-                                                    href="{{ route('polizaInicial') }}" method="GET">
-                                                    {{ __('Póliza inicial') }}
-                                                </a>
+                                        @can('acceso-contabilidad-consultar-carga')
+                                            <li class="dropend">
+                                                <a href="#" class="dropdown-item dropdown-toggle"
+                                                    data-bs-toggle="dropdown">Carga</a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                            href="{{ route('polizaInicial') }}" method="GET">
+                                                            {{ __('Póliza inicial') }}
+                                                        </a>
+                                                    </li>
+                                                </ul>
                                             </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-
-
-                            </li>
+                                        @endcan
+                                    </ul>
+                                </li>
+                            @endcanany
 
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" role="button"
