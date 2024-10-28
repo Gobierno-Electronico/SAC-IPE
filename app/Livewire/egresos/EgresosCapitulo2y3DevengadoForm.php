@@ -44,7 +44,6 @@ class EgresosCapitulo2y3DevengadoForm extends Component
     #[Validate('required', message: 'Mes requerido')]
     public $mes = "";
 
-    #[Validate('required', message: 'Tipo de registro requerido')]
     public $tipoRegistro = "";
 
     #[Validate('required', message: 'Importe requerido')]
@@ -65,6 +64,8 @@ class EgresosCapitulo2y3DevengadoForm extends Component
     
     public $cuentasContableAbono = [];
     public $cambiarCuentaContableSeleccionada = true;
+
+    public $habilitarSelectorTipoRegistro = false;
 
     public function render() 
     {
@@ -142,6 +143,25 @@ class EgresosCapitulo2y3DevengadoForm extends Component
             Log::error('Ocurrió un error al cargar partidas presupuestales en Devengado del capítulo 2 y 3: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las partidas presupuestales, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
+    }
+
+    public function verificarCantidadRelaciones()
+    {
+        $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('concepto_id', [87, 89])
+        ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
+
+        $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
+        ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+        ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
+
+        if(count($interaccionCuentaCuentas) > 7)
+        {
+            $this->habilitarSelectorTipoRegistro = true;
+        }else{
+            $this->habilitarSelectorTipoRegistro = false;
+        }
+
+        $this->cargarPresupuestoComprometido();
     }
 
     public function cargarPresupuestoComprometido()
@@ -226,6 +246,11 @@ class EgresosCapitulo2y3DevengadoForm extends Component
 
             if($this->selectorPagoRetenciones == 'NO'){
                 $this->asignarCuentaContableAbono();
+            }
+
+            if($this->habilitarSelectorTipoRegistro == true && $this->tipoRegistro == ""){
+                $this->dispatch('mostrarMensaje', mensaje: 'Tipo de registro requerido', tipo: 'warning', tiempo: 3000);
+                return;
             }
 
             $this->importe = floatval(str_replace(['$', ','], "", $this->importe));
