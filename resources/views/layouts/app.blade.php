@@ -29,6 +29,14 @@
 <body>
     <div id="app">
 
+        @if (!$hayPresupuestoCompleto || !$haySaldosIniciales)
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    mostrarMensajeAperturaSistema();
+                });
+            </script>
+        @endif
+
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <img class="img-fluid logo_encabezado" src="{{ asset('imagenes/ipe_logo.png') }}" alt="veracruz logo">
@@ -185,11 +193,19 @@
 
                             @canany(['acceso-contabilidad-reportes', 'acceso-contabilidad-consultar-carga'])
                                 <li class="nav-item dropdown">
-                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                        data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
-                                        aria-expanded="false" v-pre>
-                                        {{ __('Contabilidad') }}
-                                    </a>
+                                    @if ($hayPresupuestoCompleto)
+                                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#"
+                                            role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                            aria-haspopup="true" aria-expanded="false" v-pre>
+                                            {{ __('Contabilidad') }}
+                                        </a>
+                                    @else
+                                        <a id="navbarDropdown" class="nav-link dropdown-toggle disabled" href="#"
+                                            role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                            aria-haspopup="true" aria-expanded="false" v-pre disabled>
+                                            {{ __('Contabilidad') }}
+                                        </a>
+                                    @endif
 
                                     <ul class="dropdown-menu">
                                         @can('acceso-contabilidad-reportes')
@@ -253,11 +269,19 @@
                             @endcanany
 
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" role="button"
-                                    data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
-                                    aria-expanded="false" v-pre>
-                                    {{ __('Ingresos') }}
-                                </a>
+                                @if ($haySaldosIniciales)
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" role="button"
+                                        data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
+                                        aria-expanded="false" v-pre>
+                                        {{ __('Ingresos') }}
+                                    </a>
+                                @else
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle disabled" role="button"
+                                        data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
+                                        aria-expanded="false" v-pre disabled>
+                                        {{ __('Ingresos') }}
+                                    </a>
+                                @endif
 
                                 <ul class="dropdown-menu">
 
@@ -340,11 +364,19 @@
                             </li>
 
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                    data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
-                                    aria-expanded="false" v-pre>
-                                    {{ __('Egresos') }}
-                                </a>
+                                @if ($haySaldosIniciales)
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#"
+                                        role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                        aria-haspopup="true" aria-expanded="false" v-pre>
+                                        {{ __('Egresos') }}
+                                    </a>
+                                @else
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle disabled" href="#"
+                                        role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                        aria-haspopup="true" aria-expanded="false" v-pre disabled>
+                                        {{ __('Egresos') }}
+                                    </a>
+                                @endif
 
                                 <ul class="dropdown-menu dropstart">
                                     <li class="dropend">
@@ -472,11 +504,19 @@
                                 }
                             </style>
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" role="button"
-                                    data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
-                                    aria-expanded="false" v-pre>
-                                    {{ __('Movimientos') }}
-                                </a>
+                                @if ($haySaldosIniciales)
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" role="button"
+                                        data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
+                                        aria-expanded="false" v-pre>
+                                        {{ __('Movimientos') }}
+                                    </a>
+                                @else
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle disabled" role="button"
+                                        data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
+                                        aria-expanded="false" v-pre disabled>
+                                        {{ __('Movimientos') }}
+                                    </a>
+                                @endif
                                 <ul class="dropdown-menu">
                                     <li class="dropend">
                                         <a href="{{ route('movimientosEgresos') }}" method="GET"
@@ -545,6 +585,18 @@
 
     function esconderCargando() {
         $('#loadingScreen').prop('hidden', true);
+    }
+
+    function mostrarMensajeAperturaSistema() {
+        toastr.options = {
+            "closeButton": true,  
+            "progressBar": true,  
+            "positionClass": "toast-top-right",
+            "timeOut": "4000",
+        }
+
+        toastr.error('Para iniciar el registro de movimientos primero cargue el presupuesto y los saldos iniciales',
+            'ATENCIÓN');
     }
 </script>
 

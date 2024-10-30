@@ -189,6 +189,7 @@ class PresupuestoController extends Controller
 
                     // Agregar la fila procesada al array de filas válidas
                 }
+                
 
                 // Si hay errores, devolverlos y abortar la operación
                 if (!empty($errores)) {
@@ -615,6 +616,7 @@ class PresupuestoController extends Controller
 
                 // Si hay errores, devolverlos y abortar la operación
                 if (!empty($errores)) {
+                    Log::error($errores);
                     session()->flash('message', implode('<br>', $errores));
                     session()->flash('message_type', 'error');
                     return back();
