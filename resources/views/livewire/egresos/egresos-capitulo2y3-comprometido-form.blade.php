@@ -21,7 +21,7 @@
                 </div>
             </div>
         </div>
-        <livewire:egresos.egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+        <livewire:egresos.egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total :$numeroPolizaRemanente
             tipoMovimiento="PolizaEgresosComprometidoCapitulo2y3" urlFinalizar="/capitulo2y3-comprometido" tipoPoliza="E"
             categoriaModulo='EGRESOS COMPROMETIDO CAPITULO 2y3' />
     @else
