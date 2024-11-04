@@ -99,6 +99,15 @@ class EgresosFormConsultaTable extends Tabla
             ];
     }
 
+    public function liberarRemanente(){
+        $cuentasComprometidas = Poliza::where('evento', '=', $this->numeroEvento)
+            ->where('tipo_poliza', '=', 'E')
+            ->where('concepto', 'LIKE', '%'.'(Comprometido)'.'%')
+            ->get();
+        dd($cuentasComprometidas);
+
+    }
+
     public function borrar()
     {
         try {
@@ -112,12 +121,14 @@ class EgresosFormConsultaTable extends Tabla
                 ->where('numero_poliza', '=', $this->numeroPoliza)
                 ->where('evento', '=', $this->numeroEvento)
                 ->where('categoria', '=', $this->categoriaModulo)
+                ->where('numero_poliza', '=', $this->numeroPoliza)
                 ->where('validado','=', false)->delete();
             if ($this->numeroPolizaRemanente && $this->numeroPolizaRemanente > 0) {
                 Poliza::searchByYear('fecha', Carbon::now()->year)
                 ->where('tipo_poliza', '=', 'EAUX') 
                 ->where('evento', '=', $this->numeroEvento)
                 ->where('categoria', '=', $this->categoriaRemanente)
+                ->where('numero_poliza', '=', $this->numeroPolizaRemanente)
                 ->where('validado','=', false)->delete();
             }
 
@@ -228,12 +239,14 @@ class EgresosFormConsultaTable extends Tabla
                 ->where('tipo_poliza', '=', $this->tipoPoliza)
                 ->where('evento', '=', $this->numeroEvento)
                 ->where('categoria', '=', $this->categoriaModulo)
+                ->where('numero_poliza', '=', $this->numeroPoliza)
                 ->update(["validado" => true]);
             if ($this->numeroPolizaRemanente > 0) {
                 Poliza::searchByYear('fecha', Carbon::now()->year)
                 ->where('tipo_poliza', '=','EAUX') //CHECAR
                 ->where('evento', '=', $this->numeroEvento)
                 ->where('categoria', '=', $this->categoriaRemanente)
+                ->where('numero_poliza', '=', $this->numeroPolizaRemanente)
                 ->update(["validado" => true]);
             }
             // PresupuestoInicial::where('anio', '=', $this->selectedYear)->where('categoria', '=', 'INGRESOS')->where('tipo', '=', 'P')->update(["validado" => true]);

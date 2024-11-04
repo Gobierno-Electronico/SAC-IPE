@@ -10,6 +10,11 @@
         Una vez que se borren deberá realizar el proceso nuevamente.
     </x-modal>
 
+    <x-modal value="liberarRemanente" mensajeBoton="Confirmar" accion="liberarRemanente()" titulo="Confirmar acción">
+        ¿Está seguro(a) que desea liberar remanente?
+        Una vez que se libere el recurso volverá al presupuesto inicial
+    </x-modal>
+
 
     <div wire:loading.delay.long>
         <div
@@ -85,14 +90,14 @@
     <button id="botonHora" value='{{ $hora }}' hidden></button>
     <button id="botonNumeroPoliza" value='{{ $numeroPoliza }}' hidden></button>
     <button id="botonEvento" value='{{ $numeroEvento }}' hidden></button>
-    <button id="botonMovimiento" value="{{$tipoMovimiento}}" hidden></button>
-    <button id="botonRemanente" value="{{ $categoriaRemanente}}" hidden></button>
+    <button id="botonMovimiento" value="{{ $tipoMovimiento }}" hidden></button>
+    <button id="botonRemanente" value="{{ $categoriaRemanente }}" hidden></button>
 
     <div class="mt-4">
 
     </div>
     <div class="mt-4 d-flex gap-3 justify-content-between">
-        @if(!$validado)
+        @if (!$validado)
             <div>
                 <button id="botonRegresar" wire:click="regresar" type="button"
                     class="btn btn-success shadow border-1 mt-3 mt-md-0">
@@ -105,6 +110,12 @@
         <div class="d-flex gap-3">
 
             @if (!$validado)
+
+                @if (str_contains($categoriaModulo, 'DEVENGADO'))
+                    <button class="btn btn-warning shadow border-1 mt-3 mt-md-0" id="liberarRemanente" type="button"
+                        data-bs-toggle="modal" data-bs-target="#confirmModalliberarRemanente">Liberar remanente</button>
+                @endif
+
                 <button id="botonPoliza" onclick="generarPoliza(this)" type="button"
                     class="btn btn-success shadow border-1 mt-3 mt-md-0">
                     Visualizar póliza
@@ -115,7 +126,7 @@
                         Visualizar póliza del remanente
                     </button>
                 @endif
-                
+
                 <button @if ($validado) disabled @endif
                     class="btn btn-success shadow border-1 mt-3 mt-md-0"id="validarIngreso" data-bs-toggle="modal"
                     data-bs-target="#confirmModalvalidarIngreso" wire:init="init()">Validar póliza</button>
@@ -130,12 +141,12 @@
                     Visualizar póliza
                 </button>
                 @if ($numeroPolizaRemanente > 0)
-                <button id="botonGenerarPolizaRemanente" onclick="generarPolizaRemanente(this)" type="button"
-                    class="btn btn-success shadow border-1 mt-3 mt-md-0">
-                    Visualizar póliza del remanente
-                </button>
-            @endif
-    
+                    <button id="botonGenerarPolizaRemanente" onclick="generarPolizaRemanente(this)" type="button"
+                        class="btn btn-success shadow border-1 mt-3 mt-md-0">
+                        Visualizar póliza del remanente
+                    </button>
+                @endif
+
                 <button class="btn btn-success shadow border-1 mt-3 mt-md-0"id="validarIngreso"
                     wire:click="finalizar('ingreso por clasificar')">Finalizar</button>
             @endif
