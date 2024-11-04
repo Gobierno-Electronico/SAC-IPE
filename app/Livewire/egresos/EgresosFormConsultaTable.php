@@ -40,6 +40,7 @@ class EgresosFormConsultaTable extends Tabla
     public function render()
     {
         try{
+            $this->resetPage();
             $poliza = Poliza::where('numero_poliza', '=', $this->numeroPoliza)
             ->where('tipo_poliza', '=', $this->tipoPoliza)
             ->where('evento', '=', $this->numeroEvento)->first();
