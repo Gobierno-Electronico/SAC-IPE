@@ -141,7 +141,7 @@
             <div class="row mt-4">
                 <div class="col">
                     <button class="btn btn-success" wire:click="agregarRegistro">Agregar registro</button>
-                </div>
+                </div>|
                 <div class="col text-end">
                     <button class="btn btn-success" wire:click="finalizarRegistros">Finalizar registros</button>
                 </div>
