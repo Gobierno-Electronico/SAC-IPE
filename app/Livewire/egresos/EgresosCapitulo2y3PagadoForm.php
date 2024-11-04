@@ -178,7 +178,6 @@ class EgresosCapitulo2y3PagadoForm extends Component
 
 
             $solvencia = DB::select('EXEC SolvenciaEjercidosCapitulo2y3 @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?', array($departamento->Codigo_completo, $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $this->mes, $this->numeroEvento))[0]->Total;
-// dd($solvencia);
             if ($this->cuentaDeRetenciones != "") {
                 $this->cargarMontoContable();
             } else {
@@ -202,7 +201,6 @@ class EgresosCapitulo2y3PagadoForm extends Component
             }
             $partidaPresupuestalSeleccionada = Cuenta::find($this->partidaPresupuestal);
             $conceptoGeneralPartidaSeleccionada = explode('(', $partidaPresupuestalSeleccionada->Descripcion_cuenta);
-            // dd($conceptoGeneralPartidaPagado[0]);
             $partidaDevengado = Cuenta::where('Descripcion_cuenta', 'LIKE', '%' . $conceptoGeneralPartidaSeleccionada[0] . '(Devengado)' . '%')->get();
 
 
@@ -221,8 +219,6 @@ class EgresosCapitulo2y3PagadoForm extends Component
                         ->where('tipo_interaccion', '=', 'Contable - Cargo');
                 })
                 ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get();
-
-            // dd($cuentasDevengadas);
 
 
             $cuentasDevengadasAux = new Collection();
