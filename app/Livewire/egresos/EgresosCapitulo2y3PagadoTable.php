@@ -48,9 +48,13 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
         return [
             Column::make('area', 'Area'),
             Column::make('partida', 'Partida'),
+            Column::make('cuentaBanco', 'Cuenta contable'),
+            Column::make('cuentaRetenciones', 'Cuenta de retenciones'),
             Column::make('mes', 'Mes'),
             Column::make('movimiento', 'Movimiento'),
-            Column::make('importe', 'Cargo')->component('columns.importe'),
+            Column::make('pttoEjercido', 'PPTO Ejercido')->component('columns.importe'),
+            Column::make('importe', 'Importe')->component('columns.importe'),
+            Column::make('disponibilidad', 'Disponibilidad')->component('columns.importe'),
             Column::make('id', 'Acciones')->component('columns.accionesIngresos')
         ];
     }
