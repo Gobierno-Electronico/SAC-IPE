@@ -66,14 +66,15 @@
                     @endforeach
                 </select>
 
-                <label for="selectCuenta" class="form-label mt-3">Cuenta</label>
+                <label for="selectCuenta" class="form-label mt-3" >Cuenta</label>
                 <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta" wire:change="cambioPresupuesto">
                     <option value="" disabled>Seleccionar cuenta</option>
-                    @foreach ($cuentas as $cuenta)
-                        <option value="{{ $cuenta->cuenta_id }}"> 
+                    @foreach ($cuentas->sortBy('Descripcion_cuenta') as $cuenta)
+                    <option value="{{ $cuenta->cuenta_id }}"> 
                             {{  $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
                     @endforeach
                 </select>
+
 
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
                 <select name="selectMes" id="selectMes" class="form-select" wire:model="mes" wire:change="cambioPresupuesto">
@@ -112,6 +113,8 @@
 </div>
 
 <script>
+
+
     window.addEventListener('formato_importe', event => {
         let params = event.__livewire.params
         formatearImporte({
@@ -153,4 +156,6 @@
     function limpiar() {
         $('#inputPTTOEjecutar').val('');
     }
+
 </script>
+
