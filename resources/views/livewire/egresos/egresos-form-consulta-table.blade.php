@@ -129,14 +129,14 @@
 
                     @if (str_contains($categoriaModulo, 'DEVENGADO'))
                         <button class="btn btn-warning shadow border-1 mt-3 mt-md-0" id="liberarRemanente"
-                            type="button" data-bs-toggle="modal" data-bs-target="#confirmModalliberarRemanente">Liberar
+                            type="button" data-bs-toggle="modal" data-bs-target="#confirmModalliberarRemanente">Validar y liberar
                             remanente</button>
                     @endif
                 @endif
 
                 <button @if ($validado) disabled @endif
                     class="btn btn-success shadow border-1 mt-3 mt-md-0"id="validarIngreso" data-bs-toggle="modal"
-                    data-bs-target="#confirmModalvalidarIngreso" wire:init="init()">Validar póliza</button>
+                    data-bs-target="#confirmModalvalidarIngreso" wire:init="init()">Validar y conservar remanente</button>
                 <button @if ($validado) disabled @endif id="borrarIngreso" type="button"
                     class="btn btn-danger shadow border-1 mt-3 mt-md-0" data-bs-toggle="modal"
                     data-bs-target="#confirmModalborrarIngreso">
