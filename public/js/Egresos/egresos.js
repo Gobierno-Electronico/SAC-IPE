@@ -48,7 +48,7 @@ function generarPoliza(btn) {
 
 function generarPolizaRemanente(btn, liberado) {
     var estatusRemanente = "REMANENTE NO LIBERADO";
-    if(liberado = true){
+    if(liberado == true){
         estatusRemanente = "REMANENTE LIBERADO"
     }
     let url;
