@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Movimientos')
+@section('title', 'Movimientos de egresos')
 
 @section('content')
     <script src="{{ asset('js/Egresos/egresos.js') }}"></script>

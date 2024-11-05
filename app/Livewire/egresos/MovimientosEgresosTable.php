@@ -94,6 +94,7 @@ class MovimientosEgresosTable extends Tabla
             Column::make('fechaAfectacion', 'Fecha de afectación'),
             Column::make('fechaRegistro', 'Fecha de registro'),
             Column::make('total', 'Monto del evento'),
+            Column::make('estatus_evento', 'Estado del evento')->component('columns.estado'),
             Column::make('id', 'Acciones')->component('columns.accionVerMovimiento'),
 
         ];
