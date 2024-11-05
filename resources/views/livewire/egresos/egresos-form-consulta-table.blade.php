@@ -12,7 +12,12 @@
 
     <x-modal value="liberarRemanente" mensajeBoton="Confirmar" accion="liberarRemanente()" titulo="Confirmar acción">
         ¿Está seguro(a) que desea liberar remanente?
-        Una vez que se libere el recurso volverá al presupuesto inicial
+        Una vez que se libere el recurso volverá al presupuesto inicial.
+        <div class="mt-4">
+            <label for="motivoLiberacion" class="block text-sm font-medium text-gray-700">Motivo de liberación</label>
+            <input type="text" id="motivoLiberacion" class="form-control mt-1 block w-full"
+                wire:model="motivoLiberacion">
+        </div>
     </x-modal>
 
 
@@ -93,6 +98,7 @@
     <button id="botonMovimiento" value="{{ $tipoMovimiento }}" hidden></button>
     <button id="botonRemanente" value="{{ $categoriaRemanente }}" hidden></button>
 
+
     <div class="mt-4">
 
     </div>
@@ -111,11 +117,6 @@
 
             @if (!$validado)
 
-                @if (str_contains($categoriaModulo, 'DEVENGADO'))
-                    <button class="btn btn-warning shadow border-1 mt-3 mt-md-0" id="liberarRemanente" type="button"
-                        data-bs-toggle="modal" data-bs-target="#confirmModalliberarRemanente">Liberar remanente</button>
-                @endif
-
                 <button id="botonPoliza" onclick="generarPoliza(this)" type="button"
                     class="btn btn-success shadow border-1 mt-3 mt-md-0">
                     Visualizar póliza
@@ -125,6 +126,12 @@
                         class="btn btn-success shadow border-1 mt-3 mt-md-0">
                         Visualizar póliza del remanente
                     </button>
+
+                    @if (str_contains($categoriaModulo, 'DEVENGADO'))
+                        <button class="btn btn-warning shadow border-1 mt-3 mt-md-0" id="liberarRemanente"
+                            type="button" data-bs-toggle="modal" data-bs-target="#confirmModalliberarRemanente">Liberar
+                            remanente</button>
+                    @endif
                 @endif
 
                 <button @if ($validado) disabled @endif
@@ -136,12 +143,18 @@
                     Borrar movimiento
                 </button>
             @else
+                @if ($liberado)
+                    <button id="botonGenerarPolizaRemanenteLiberado"
+                        class="btn btn-success shadow border-1 mt-3 mt-md-0" id="remanenteLiberado" type="button"
+                        onclick="generarPolizaRemanenteLiberado(this)">Visualizar póliza de liberación</button>
+                @endif
                 <button id="botonPoliza" onclick="generarPoliza(this)" type="button"
                     class="btn btn-success shadow border-1 mt-3 mt-md-0">
                     Visualizar póliza
                 </button>
                 @if ($numeroPolizaRemanente > 0)
-                    <button id="botonGenerarPolizaRemanente" onclick="generarPolizaRemanente(this)" type="button"
+                    <button id="botonGenerarPolizaRemanente"
+                        onclick="generarPolizaRemanente(this,  @json($liberado))" type="button"
                         class="btn btn-success shadow border-1 mt-3 mt-md-0">
                         Visualizar póliza del remanente
                     </button>
