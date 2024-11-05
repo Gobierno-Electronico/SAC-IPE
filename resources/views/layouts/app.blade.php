@@ -508,7 +508,7 @@
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" role="button"
                                         data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
                                         aria-expanded="false" v-pre>
-                                        {{ __('Movimientos') }}
+                                        {{ __('Consultar movimientos') }}
                                     </a>
                                 @else
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle disabled" role="button"
@@ -526,6 +526,11 @@
                                     <li class="dropend">
                                         <a href="{{ route('movimientosIngresos') }}" method="GET"
                                             class="dropdown-item" onclick="mostrarCargando()">Ingresos</a>
+                                    </li>
+
+                                    <li class="dropend">
+                                        <a href="#" method="GET"
+                                            class="dropdown-item" onclick="mostrarCargando()">Liberaciones</a>
                                     </li>
                                 </ul>
                             </li>
