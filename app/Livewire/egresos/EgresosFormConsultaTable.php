@@ -219,18 +219,18 @@ class EgresosFormConsultaTable extends Tabla
                     break;
 
 
-                case "EGRESOS DEVENGADO CAPITULO 2 y 3":
-                    Poliza::where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 2 y 3')
+                case "EGRESOS DEVENGADO CAPITULO 2y3":
+                    Poliza::where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 2y3')
                         ->where('evento', '=', $this->numeroEvento)
                         ->update(['estatus_evento' => true]);
                     break;
-                case "EGRESOS EJERCIDO CAPITULO 2 y 3":
-                    Poliza::where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 2 y 3')
+                case "EGRESOS EJERCIDO CAPITULO 2y3":
+                    Poliza::where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 2y3')
                         ->where('evento', '=', $this->numeroEvento)
                         ->update(['estatus_evento' => true]);
                     break;
-                case "EGRESOS PAGADO CAPITULO 2 y 3":
-                    Poliza::where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 2 y 3')
+                case "EGRESOS PAGADO CAPITULO 2y3":
+                    Poliza::where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 2y3')
                         ->where('evento', '=', $this->numeroEvento)
                         ->update(['estatus_evento' => true]);
                     break;
