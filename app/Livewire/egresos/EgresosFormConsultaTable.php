@@ -132,6 +132,7 @@ class EgresosFormConsultaTable extends Tabla
                 ->get();
     
             $polizasLiberacionRemanente = collect();
+
             foreach($cuentasComprometidas as $comprometida){
                 foreach($cuentasRemanente as $remanente){
                     if($comprometida->cuenta == $remanente->cuenta){
@@ -148,8 +149,9 @@ class EgresosFormConsultaTable extends Tabla
                             $remanenteLiberado->tipo_interaccion = 'Presupuestal - Cargo';
                         }
                         $remanenteLiberado->descripcion = $this->motivoLiberacion;
-                        $remanenteLiberado->categoria = 'LIBERACION EGRESOS COMPROMETIDO CAPITULO 2y3 REMANENTE DEVENGADO';
-                        
+                        $separacionConceptosCategoria = explode(' ', $this->categoriaModulo);
+                        $numeroCapitulo = end($separacionConceptosCategoria);
+                        $remanenteLiberado->categoria = 'LIBERACION EGRESOS COMPROMETIDO CAPITULO ' . $numeroCapitulo . ' REMANENTE DEVENGADO';
                         $polizasLiberacionRemanente->push($remanenteLiberado);
                     }
                 }
