@@ -42,7 +42,7 @@
                     wire:model.live="searchTerm">
                 <div>
                     <select name="selectCapitulos" id="selectCapitulos" class="form-select" wire:model="capituloSeleccionado" wire:change="actualizarFiltros">
-                        <option value="" selected>Seleccionar capítulo...</option>
+                        <option value="" selected>Filtrar capítulo...</option>
                         <option value="1">Capítulo 1000</option>
                         <option value="2y3">Capítulo 2000</option>
                         <option value="2y3">Capítulo 3000</option>
