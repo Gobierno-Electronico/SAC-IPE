@@ -41,16 +41,27 @@
                 <input type="text" class="input_busqueda rounded-1 shadow-sm border-0 w-25 me-3" placeholder='Buscar...'
                     wire:model.live="searchTerm">
                 <div>
-                    <select name="selectCapitulos" id="selectCapitulos" class="form-select">
-                        <option value="" disabled selected>Seleccionar capítulo...</option>
+                    <select name="selectCapitulos" id="selectCapitulos" class="form-select" wire:model="capituloSeleccionado" wire:change="actualizarFiltros">
+                        <option value="" selected>Seleccionar capítulo...</option>
                         <option value="1">Capítulo 1000</option>
-                        <option value="2">Capítulo 2000</option>
-                        <option value="3">Capítulo 3000</option>
+                        <option value="2y3">Capítulo 2000</option>
+                        <option value="2y3">Capítulo 3000</option>
                         <option value="4">Capítulo 4000</option>
                         <option value="5">Capítulo 5000</option>
                         <option value="7">Capítulo 7000</option>
 
                     </select>
+                </div>
+                <div class="ms-3">
+                    <select name="selectEventos" id="selectEventos" class="form-select" wire:model="eventoSeleccionado" wire:change="actualizarFiltros">
+                        <option value="" selected>Filtrar evento...</option>
+                        @foreach ($eventos as $evento => $descripcion)
+                            <option value="{{ $evento }}">
+                                {{ $evento }} - {{ $descripcion }}
+                            </option>
+                        @endforeach
+                    </select>
+                    
                 </div>
             </div>
         </div>

@@ -8,6 +8,7 @@ use App\Models\Poliza;
 use App\Livewire\Tabla;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Carbon;
 use DB;
 use Log;
 
@@ -33,15 +34,26 @@ class MovimientosIngresosTable extends Tabla
     public $categoriaModulo;
     public $categoriaRemanente;
 
+    public $eventoSeleccionado;
+
 
     public function render()
     {
-        return view('livewire.movimientos-ingresos-table');
+        $eventos = Poliza::select('evento', 'descripcion')
+        ->whereYear('fecha', '=', Carbon::now()->year)
+        ->where('tipo_poliza', '=', 'I')
+        ->distinct()
+        ->pluck('descripcion', 'evento');
+        return view('livewire.movimientos-ingresos-table', ['eventos' => $eventos]);
     }
 
     public function query(): Builder
     {
         return Poliza::query();
+    }
+
+    public function actualizarEvento(){
+        $this->eventoSeleccionado = $this->eventoSeleccionado;
     }
 
     public function data()
@@ -55,6 +67,9 @@ class MovimientosIngresosTable extends Tabla
         }, DB::select('EXEC dbo.ConsultaMovimientosIngresos'));
 
         $collection = collect($this->data);
+        if ($this->eventoSeleccionado) {
+            $collection = $collection->where('evento', $this->eventoSeleccionado);
+        }
         if ($this->sortBy !== '') {
             if ($this->sortDirection == "asc") {
                 $collection = $collection->sortBy($this->sortBy);
@@ -92,7 +107,7 @@ class MovimientosIngresosTable extends Tabla
             Column::make('fechaAfectacion', 'Fecha de afectación'),
             Column::make('fechaRegistro', 'Fecha de registro'),
             Column::make('total', 'Monto del evento'),
-            Column::make('estatus_evento', 'Estado del evento')->component('columns.estado'),
+            Column::make('estatus_evento', 'Estado del momento contable')->component('columns.estado'),
             Column::make('id', 'Acciones')->component('columns.accionVerMovimiento'),
 
         ];

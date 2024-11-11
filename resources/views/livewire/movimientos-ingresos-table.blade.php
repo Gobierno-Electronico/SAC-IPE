@@ -1,32 +1,30 @@
 <div>
     @if ($consultarRegistro)
-    <div>
-        <h4>Resumen de movimientos de egresos</h4>
+        <div>
+            <h4>Resumen de movimientos de egresos</h4>
 
-        <div class="row mt-4">
-            <div class="row mb-3">
-                <div class="d-flex flex-row gap-3 mb-3">
-                    <div class="w-100">
-                        <label for="inputObservaciones"
-                            class="col-md-12 col-form-label">{{ __('Observación') }}</label>
-                        <input value="{{ $descripcion }}" id="inputObservacionesConsulta" type="text"
-                            class="form-control w-100" name="inputObservaciones" disabled>
-                    </div>
-                    <div>
-                        <label for="inputObservaciones" class="col-md-12 col-form-label">{{ __('Total') }}</label>
-                        <input value="{{ $total }}" type="text" class="form-control" name="inputAumentado"
-                            disabled>
+            <div class="row mt-4">
+                <div class="row mb-3">
+                    <div class="d-flex flex-row gap-3 mb-3">
+                        <div class="w-100">
+                            <label for="inputObservaciones"
+                                class="col-md-12 col-form-label">{{ __('Observación') }}</label>
+                            <input value="{{ $descripcion }}" id="inputObservacionesConsulta" type="text"
+                                class="form-control w-100" name="inputObservaciones" disabled>
+                        </div>
+                        <div>
+                            <label for="inputObservaciones" class="col-md-12 col-form-label">{{ __('Total') }}</label>
+                            <input value="{{ $total }}" type="text" class="form-control" name="inputAumentado"
+                                disabled>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-        :$tipoMovimiento urlFinalizar="/movimientos-ingresos" :$numeroPolizaRemanente tipoPoliza="I"
-        :$categoriaModulo :$categoriaRemanente/>
-
+        <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total :$tipoMovimiento
+            urlFinalizar="/movimientos-ingresos" :$numeroPolizaRemanente tipoPoliza="I" :$categoriaModulo
+            :$categoriaRemanente />
     @else
-
         <div wire:loading>
             <div
                 style='display: flex; justify-content: center; align-items: center; background-color: black; position: fixed; top: 0px; left: 0px; z-index: 9999; width: 100%; height: 100%; opacity: .75'>
@@ -38,8 +36,18 @@
         </div>
         <div class="pb-4 pt-3 h-auto">
             <div class="d-flex flex-row">
-                <input type="text" class="input_busqueda rounded-1 shadow-sm border-0 w-25 me-3" placeholder='Buscar...'
-                    wire:model.live="searchTerm">
+                <input type="text" class="input_busqueda rounded-1 shadow-sm border-0 w-25 me-3"
+                    placeholder='Buscar...' wire:model.live="searchTerm">
+                <div>
+                    <select name="selectEvento" id="selectEvento" class="form-select" wire:model="eventoSeleccionado" wire:change="actualizarEvento">
+                        <option value="">Filtrar evento...</option>
+                        @foreach ($eventos as $evento => $descripcion)
+                        <option value="{{ $evento }}">
+                            {{ $evento }} - {{ $descripcion }}
+                        </option>
+                    @endforeach
+                    </select>
+                </div>
             </div>
         </div>
 
@@ -53,7 +61,8 @@
                                 @foreach ($this->columns() as $column)
                                     <th wire:click="sort('{{ $column->key }}')">
                                         <div class="py-2 px-3 d-flex align-items-center">
-                                            <a class=" text-black text-decoration-none" href="#"> {{ $column->label }}
+                                            <a class=" text-black text-decoration-none" href="#">
+                                                {{ $column->label }}
                                             </a>
                                             @if ($sortBy === $column->key)
                                                 @if ($sortDirection === 'asc')

@@ -8,6 +8,7 @@ use App\Models\Poliza;
 use App\Livewire\Tabla;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Carbon;
 use DB;
 use Log;
 
@@ -22,7 +23,7 @@ class MovimientosEgresosTable extends Tabla
 
     public $data = [];
 
-    public $selectedChapter = '';
+    public $capituloSeleccionado = '';
 
     public $consultarRegistro = false;
 
@@ -35,15 +36,27 @@ class MovimientosEgresosTable extends Tabla
     public $categoriaModulo;
     public $categoriaRemanente;
 
+    public $eventoSeleccionado;
 
     public function render()
     {
-        return view('livewire.egresos.movimientos-egresos-table');
+        $eventos = Poliza::select('evento', 'descripcion')
+            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->where('tipo_poliza', '=', 'E')
+            ->distinct()
+            ->pluck('descripcion', 'evento');
+        return view('livewire.egresos.movimientos-egresos-table', ['eventos' => $eventos]);
     }
 
     public function query(): Builder
     {
         return Poliza::query();
+    }
+
+    public function actualizarFiltros()
+    {
+        $this->eventoSeleccionado = $this->eventoSeleccionado;
+        $this->capituloSeleccionado = $this->capituloSeleccionado;
     }
 
     public function data()
@@ -56,6 +69,12 @@ class MovimientosEgresosTable extends Tabla
             return $entrada;
         }, DB::select('EXEC dbo.ConsultaMovimientosEgresos'));
         $collection = collect($this->data);
+        if ($this->eventoSeleccionado) {
+            $collection = $collection->where('evento', $this->eventoSeleccionado);
+        }
+        if($this->capituloSeleccionado){
+            $collection = $collection->where('capitulo', $this->capituloSeleccionado);
+        }
         if ($this->sortBy !== '') {
             if ($this->sortDirection == "asc") {
                 $collection = $collection->sortBy($this->sortBy);
@@ -94,7 +113,7 @@ class MovimientosEgresosTable extends Tabla
             Column::make('fechaAfectacion', 'Fecha de afectación'),
             Column::make('fechaRegistro', 'Fecha de registro'),
             Column::make('total', 'Monto del evento'),
-            Column::make('estatus_evento', 'Estado del evento')->component('columns.estado'),
+            Column::make('estatus_evento', 'Estado del momento contable')->component('columns.estado'),
             Column::make('id', 'Acciones')->component('columns.accionVerMovimiento'),
 
         ];
@@ -111,33 +130,33 @@ class MovimientosEgresosTable extends Tabla
         $this->tipoMovimiento = 'PolizaEgresos' . ucfirst(strtolower($this->data[$value]['momentoContable'])) . 'Capitulo' . $this->data[$value]['capitulo'];
         $numeroPoliza = $this->numeroPoliza;
         $this->numeroPolizaRemanente = DB::table('polizas')
-        ->where('tipo_poliza', 'EAUX')
-        ->where('evento', '=', $this->numeroEvento)
-        ->where('id', '>', function($query) use ($numeroPoliza) {
-            $query->select('id')
-                  ->from('polizas')
-                  ->where('numero_poliza', $numeroPoliza)
-                  ->where('tipo_poliza', 'E')
-                  ->limit(1);
-        })
-        ->orderBy('id', 'asc')
-        ->pluck('numero_poliza')
-        ->first();
+            ->where('tipo_poliza', 'EAUX')
+            ->where('evento', '=', $this->numeroEvento)
+            ->where('id', '>', function ($query) use ($numeroPoliza) {
+                $query->select('id')
+                    ->from('polizas')
+                    ->where('numero_poliza', $numeroPoliza)
+                    ->where('tipo_poliza', 'E')
+                    ->limit(1);
+            })
+            ->orderBy('id', 'asc')
+            ->pluck('numero_poliza')
+            ->first();
 
 
-        if($this->numeroPolizaRemanente == NULL){
+        if ($this->numeroPolizaRemanente == NULL) {
             $this->numeroPolizaRemanente = 0;
         }
 
-        switch($this->data[$value]['momentoContable']){
+        switch ($this->data[$value]['momentoContable']) {
             case "DEVENGADO":
-                $this->categoriaRemanente = 'EGRESOS COMPROMETIDO CAPITULO '. $this->data[$value]['capitulo'] . ' REMANENTE DEVENGADO';
+                $this->categoriaRemanente = 'EGRESOS COMPROMETIDO CAPITULO ' . $this->data[$value]['capitulo'] . ' REMANENTE DEVENGADO';
                 break;
             case "EJERCIDO":
-                $this->categoriaRemanente = 'EGRESOS DEVENGADO CAPITULO '. $this->data[$value]['capitulo'] . ' REMANENTE EJERCIDO';
+                $this->categoriaRemanente = 'EGRESOS DEVENGADO CAPITULO ' . $this->data[$value]['capitulo'] . ' REMANENTE EJERCIDO';
                 break;
             case "PAGADO":
-                $this->categoriaRemanente = 'EGRESOS EJERCIDO CAPITULO '. $this->data[$value]['capitulo'] . ' REMANENTE PAGADO';
+                $this->categoriaRemanente = 'EGRESOS EJERCIDO CAPITULO ' . $this->data[$value]['capitulo'] . ' REMANENTE PAGADO';
                 break;
             default:
                 $this->categoriaRemanente = 'SIN REMANENTE';
@@ -146,17 +165,12 @@ class MovimientosEgresosTable extends Tabla
         }
 
         $this->consultarRegistro = true;
-
     }
 
-    public function search()
-    {
-    }
+    public function search() {}
 
 
-    public function edit($value)
-    {
-    }
+    public function edit($value) {}
 
     public function changeState($value) {}
 }

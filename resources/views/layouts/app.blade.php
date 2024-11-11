@@ -527,15 +527,8 @@
                                         <a href="{{ route('movimientosIngresos') }}" method="GET"
                                             class="dropdown-item" onclick="mostrarCargando()">Ingresos</a>
                                     </li>
-
-                                    <li class="dropend">
-                                        <a href="#" method="GET"
-                                            class="dropdown-item" onclick="mostrarCargando()">Liberaciones</a>
-                                    </li>
                                 </ul>
                             </li>
-
-
 
 
                             <li class="nav-item dropdown">
