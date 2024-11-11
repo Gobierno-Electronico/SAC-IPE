@@ -49,7 +49,7 @@ class EgresosCapitulo2y3ComprometidoForm extends Component
         try{
             $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
             ->whereIn('interaccion_cuenta_conceptos.concepto_id', [85, 86])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
-            ->orderBy('cuentas.Codigo_cuenta')->get();
+            ->orderBy('cuentas.Descripcion_cuenta')->get();
 
             return view('livewire.egresos.egresos-capitulo2y3-comprometido-form', ['cuentas' => $cuentas]);
         }catch(\Throwable $th){
