@@ -117,28 +117,28 @@ class EgresosCapitulo2y3DevengadoForm extends Component
         $this->cambiarPartidaPresupuestalSeleccionada = true;
 
         try{
-            $cuentasComprometidas = Poliza::where('evento', '=', $this->numeroEvento)
-            ->where('tipo_poliza', '=', 'E')
-            ->where('concepto', 'LIKE', '%Comprometido%')
+            $cuentasComprometidas = Poliza::join('cuentas', 'cuentas.Codigo_cuenta', '=', 'polizas.cuenta')
+            ->where('polizas.evento', '=', $this->numeroEvento)
+            ->where('polizas.tipo_poliza', '=', 'E')
+            ->where('polizas.concepto', 'LIKE', '%Comprometido%')
             ->get();
 
-            $cuentasDevengadas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [87, 89])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
-            ->orderBy('cuentas.Codigo_cuenta')->get();
+            foreach($cuentasComprometidas as $comprometida){
+                $interaccionCuentaConceptoComprometido = InteraccionCuentaConcepto::where('cuenta_id', '=', $comprometida->id)->whereIn('concepto_id', [87, 89])
+                ->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
 
+                $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_2', '=', $interaccionCuentaConceptoComprometido->id)
+                ->first();
+                
+                $interaccionCuentaDevengada = InteraccionCuentaConcepto::where('id', '=', $interaccionCuentaCuenta->id_interaccion_concepto_cuenta_1)
+                ->whereIn('concepto_id', [87, 89])->where('tipo_interaccion', '=', 'Presupuestal - Cargo')
+                ->first();
 
-            $cuentasDevengadasAux = new Collection();
-            foreach($cuentasDevengadas as $devengada){
-                foreach($cuentasComprometidas as $comprometida){
-                    $conceptoComprometida = explode('(', $comprometida->concepto);
-                    $conceptoDevengado = explode('(', $devengada->Descripcion_cuenta);
-                    if($conceptoComprometida[0] == $conceptoDevengado[0]){
-                        $cuentasDevengadasAux->push($devengada);
-                    }
-                }
+                $cuentaDevengada = Cuenta::where('id', '=', $interaccionCuentaDevengada->cuenta_id)->first();
+                array_push($this->partidasPresupuestales, $cuentaDevengada);
             }
-            $cuentasDevengadasAux = $cuentasDevengadasAux->unique('Codigo_cuenta');
-            $this->partidasPresupuestales = $cuentasDevengadasAux->toArray();
+
+            $this->partidasPresupuestales = array_unique($this->partidasPresupuestales);
         }catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar partidas presupuestales en Devengado del capítulo 2 y 3: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las partidas presupuestales, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
