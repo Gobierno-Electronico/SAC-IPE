@@ -378,7 +378,7 @@
                                     </a>
                                 @endif
 
-                                <ul class="dropdown-menu dropstart">
+                                <ul class="dropdown-menu">
                                     <li class="dropend">
                                         <a class="dropdown-item dropdown-toggle" href=""
                                             data-bs-toggle="dropdown">Capítulo 1000 Servicios personales</a>
@@ -479,18 +479,85 @@
                                             </li>
                                         </ul>
                                     </li>
+                                </ul>
 
+
+                            </li>
+
+                            <li class="nav-item dropdown">          
+                                @if ($haySaldosIniciales)
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                        data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
+                                        aria-expanded="false" v-pre>
+                                        {{ __('Préstamos') }}
+                                    </a>
+                                @else
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle disabled" href="#"
+                                        role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                        aria-haspopup="true" aria-expanded="false" v-pre disabled>
+                                        {{ __('Préstamos') }}
+                                    </a>
+                                @endif
+
+                                <ul class="dropdown-menu">
                                     <li class="dropend">
                                         <a class="dropdown-item dropdown-toggle" href=""
-                                            data-bs-toggle="dropdown">Capítulo 7000 Préstamos</a>
+                                            data-bs-toggle="dropdown">Otorgamiento (Compromiso-Devengado)</a>
                                         <ul class="dropdown-menu">
-
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('capitulo2y3Comprometido') }}"
+                                                    method="GET" onclick="mostrarCargando()">
+                                                    Préstamos Iniciales
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('capitulo2y3Devengado') }}"
+                                                    method="GET" onclick="mostrarCargando()">
+                                                    Préstamos con Renovación
+                                                </a>
+                                            </li>
                                         </ul>
                                     </li>
 
+                                    <li class="dropend">
+                                        <a class="dropdown-item dropdown-toggle" href=""
+                                            data-bs-toggle="dropdown">Otorgamiento (Ejercido-Pagado-Recaudado)</a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('capitulo2y3Comprometido') }}"
+                                                    method="GET" onclick="mostrarCargando()">
+                                                    Préstamos Iniciales
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('capitulo2y3Devengado') }}"
+                                                    method="GET" onclick="mostrarCargando()">
+                                                    Préstamos con Renovación
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
 
-                                </ul>
-
+                                    <li class="dropend">
+                                        <a class="dropdown-item dropdown-toggle" href=""
+                                            data-bs-toggle="dropdown">Recuperación (Recaudado)</a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('capitulo2y3Comprometido') }}"
+                                                    method="GET" onclick="mostrarCargando()">
+                                                    Préstamos Iniciales
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('capitulo2y3Devengado') }}"
+                                                    method="GET" onclick="mostrarCargando()">
+                                                    Préstamos con Renovación
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                        
+                                </ul>    
 
                             </li>
 
@@ -587,8 +654,8 @@
 
     function mostrarMensajeAperturaSistema() {
         toastr.options = {
-            "closeButton": true,  
-            "progressBar": true,  
+            "closeButton": true,
+            "progressBar": true,
             "positionClass": "toast-top-right",
             "timeOut": "4000",
         }
