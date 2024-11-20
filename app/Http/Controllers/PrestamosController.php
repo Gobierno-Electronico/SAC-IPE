@@ -20,6 +20,6 @@ class PrestamosController extends Controller
     }
 
     public function capitulo7RecaudadoPrestamosIniciales(){
-        return view("");
+        return view("prestamos.prestamos-recuperacion-recaudado-prestamosIniciales");
     }
 }

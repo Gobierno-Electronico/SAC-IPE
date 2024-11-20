@@ -9,7 +9,7 @@
                 <div class="card-body bg-white p-5">
                     <h2>Recuperación (Recaudado)</h2>
                     <h4>Ingreso recaudado</h4>
-                    <livewire:prestamos.prestamos-recuperacion-recaudado-form/>
+                    <livewire:prestamos.prestamos-recuperacion-recaudado-prestamosIniciales-form/>
                 </div>
             </div>
         </div>
