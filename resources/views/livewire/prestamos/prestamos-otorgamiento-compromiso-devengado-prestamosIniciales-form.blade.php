@@ -28,16 +28,16 @@
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
             wire:model="selectCodigoArea">
-            <option value="" @if ($this->selectCodigoArea == '') selected @endif disabled>
-                Seleccionar un área
-            </option>
             @foreach (\App\Models\CodigoDepartamento::all() as $departamento)
                 @if (strlen($departamento->Codigo_completo) >= 5)
-                    <option value="{{ $departamento->id }}" @if ($this->selectCodigoArea == $departamento->id) selected @endif>
-                        {{ $departamento->Codigo_completo . ' ' . $departamento->Nombre }}
-                    </option>
+                    @if ($departamento->Codigo_completo == "1.5.04")
+                        <option value="{{ $departamento->id }}" selected>
+                            {{ $departamento->Codigo_completo . ' ' . $departamento->Nombre }}
+                        </option>
+                    @endif
                 @endif
             @endforeach
+
         </select>
 
         <label for="inputObservacion" class="form-label mt-3">Observación</label>
