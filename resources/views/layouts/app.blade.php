@@ -505,7 +505,7 @@
                                             data-bs-toggle="dropdown">Otorgamiento (Compromiso-Devengado)</a>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <a class="dropdown-item" href="{{ route('capitulo2y3Comprometido') }}"
+                                                <a class="dropdown-item" href="{{ route('capitulo7CompromisoDevengadoPrestamosIniciales') }}"
                                                     method="GET" onclick="mostrarCargando()">
                                                     Préstamos Iniciales
                                                 </a>
@@ -524,7 +524,7 @@
                                             data-bs-toggle="dropdown">Otorgamiento (Ejercido-Pagado-Recaudado)</a>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <a class="dropdown-item" href="{{ route('capitulo2y3Comprometido') }}"
+                                                <a class="dropdown-item" href="{{ route('capitulo7EjercidoPagadoRecaudadoPrestamosIniciales') }}"
                                                     method="GET" onclick="mostrarCargando()">
                                                     Préstamos Iniciales
                                                 </a>
@@ -543,7 +543,7 @@
                                             data-bs-toggle="dropdown">Recuperación (Recaudado)</a>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <a class="dropdown-item" href="{{ route('capitulo2y3Comprometido') }}"
+                                                <a class="dropdown-item" href="{{ route('capitulo7RecaudadoPrestamosIniciales') }}"
                                                     method="GET" onclick="mostrarCargando()">
                                                     Préstamos Iniciales
                                                 </a>

@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\AfectacionesLiquidasController;
 use App\Http\Controllers\CuentasController;
 use App\Http\Controllers\GuiaContabilizadoraController;
 use App\Http\Controllers\PresupuestoController;
+use App\Http\Controllers\PrestamosController;
 use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\BitacoraController;
 use App\Http\Controllers\ReportesController;
@@ -138,6 +138,11 @@ Route::get("/capitulo5-devengado", [EgresosController::class, 'capitulo5Devengad
 Route::get("/capitulo5-ejercido", [EgresosController::class, 'capitulo5Ejercido'])->name('capitulo5Ejercido')->middleware('role:Administrador');
 Route::get("/capitulo5-pagado", [EgresosController::class, 'capitulo5Pagado'])->name('capitulo5Pagado')->middleware('role:Administrador');
 Route::get("/movimientos-egresos", [EgresosController::class, 'consultarMovimientos'])->name('movimientosEgresos')->middleware('role:Administrador');
+
+//Prestamos
+Route::get("/capitulo7-otorgamiento-compromiso-devengado-prestamosIniciales", [PrestamosController::class, 'capitulo7CompromisoDevengadoPrestamosIniciales'])->name('capitulo7CompromisoDevengadoPrestamosIniciales')->middleware('role:Administrador');
+Route::get("/capitulo7-otorgamiento-ejercido-pagado-recaudado-prestamosIniciales", [PrestamosController::class, 'capitulo7EjercidoPagadoRecaudadoPrestamosIniciales'])->name('capitulo7EjercidoPagadoRecaudadoPrestamosIniciales')->middleware('role:Administrador');
+Route::get("/capitulo7-recuperacion-recaudado-prestamosIniciales", [PrestamosController::class, 'capitulo7RecaudadoPrestamosIniciales'])->name('capitulo7RecaudadoPrestamosIniciales')->middleware('role:Administrador');
 
 //ruta de prueba
 Route::get("/bancos", [IngresosController::class, 'bancos'])->name('bancos')->middleware('role:Administrador');
