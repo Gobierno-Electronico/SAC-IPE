@@ -16,7 +16,7 @@ class PrestamosController extends Controller
     }
 
     public function capitulo7EjercidoPagadoRecaudadoPrestamosIniciales(){
-        return view("");
+        return view("prestamos.prestamos-otorgamiento-ejercido-pagado-recaudado-prestamosIniciales");
     }
 
     public function capitulo7RecaudadoPrestamosIniciales(){
