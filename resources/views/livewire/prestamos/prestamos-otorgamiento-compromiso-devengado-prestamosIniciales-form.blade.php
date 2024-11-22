@@ -67,10 +67,10 @@
                 <label for="selectCuenta" class="form-label mt-3" >Cuenta</label>
                 <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta" wire:change="">
                     <option value="" disabled>Seleccionar cuenta</option>
-                   {{--  @foreach ($cuentas as $cuenta)
+                    @foreach ($cuentas as $cuenta)
                     <option value="{{ $cuenta->cuenta_id }}"> 
                             {{  $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
-                    @endforeach --}}
+                    @endforeach
                 </select>
 
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
@@ -108,3 +108,50 @@
         
     @endif
 </div>
+
+<script>
+
+
+    window.addEventListener('formato_importe', event => {
+        let params = event.__livewire.params
+        formatearImporte({
+            id: params.id
+        }, params.amount)
+    })
+
+    window.addEventListener('limpiar', event => {
+        limpiar()
+    })
+
+    function keyPress(e, obj) {
+        let isCurrency = $('#' + obj.id).val().search(/[$]/)
+        let texto = $('#' + obj.id).val().replace(/[^0-9.]/g, '');
+        let isDecimal = texto.search(/[.]/)
+        let amount = parseFloat(texto);
+        if (!isNaN(amount) && isDecimal < 0 || isCurrency == 0) {
+            $('#' + obj.id).val(amount.toLocaleString());
+        }
+    }
+
+    function formatearImporte(obj, amount = '') {
+        amount = (amount) ? amount : $('#' + obj.id).val().replace(/[^0-9.]/g, '');
+        amount = parseFloat(amount);
+        if (!isNaN(amount)) {
+            var formattedAmount = amount.toLocaleString('es-MX', {
+                style: 'currency',
+                currency: 'MXN',
+                minimumFractionDigits: 2,
+            });
+            $('#' + obj.id).val(formattedAmount);
+            console.log("Ejecuta: " + obj);
+        } else {
+            toastr.warning('Ingrese valores numéricos en el campo de importe');
+            $('#' + obj.id).val('');
+        }
+    }
+
+    function limpiar() {
+        $('#inputPTTOEjecutar').val('');
+    }
+
+</script>
