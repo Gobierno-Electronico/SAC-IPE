@@ -43,21 +43,21 @@
             </div>
             {{ $this->data()->links() }}
         </div>
-        <div class="d-flex justify-content-end">
+        {{-- <div class="d-flex justify-content-end">
             <div>
                 <label for="total">Total</label>
                 <input type="text" name="total" id="total" class="form-control" disabled wire:model.live="total">
             </div>
-        </div>
+        </div> --}}
     </div>
 </div>
 
 <script>
-    window.addEventListener('cambioTotal', event => {
+   /*  window.addEventListener('cambioTotal', event => {
         let parametros = event.__livewire.params
         $('#total').val(parametros.total);
         formatearImporte({id: 'total'})
-    });
+    }); */
 
     window.addEventListener('llenarFormulario', event => {
         let parametros = event.__livewire.params
