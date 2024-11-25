@@ -15,11 +15,23 @@ class PrestamosController extends Controller
         return view("prestamos.prestamos-otorgamiento-compromiso-devengado-prestamosIniciales");
     }
 
+    public function capitulo7CompromisoDevengadoPrestamosRenovacion(){
+        return view("prestamos.prestamos-otorgamiento-compromiso-devengado-prestamosRenovacion");
+    }
+
     public function capitulo7EjercidoPagadoRecaudadoPrestamosIniciales(){
         return view("prestamos.prestamos-otorgamiento-ejercido-pagado-recaudado-prestamosIniciales");
     }
 
+    public function capitulo7EjercidoPagadoRecaudadoPrestamosRenovacion(){
+        return view("prestamos.prestamos-otorgamiento-ejercido-pagado-recaudado-prestamosRenovacion");
+    }
+
     public function capitulo7RecaudadoPrestamosIniciales(){
         return view("prestamos.prestamos-recuperacion-recaudado-prestamosIniciales");
+    }
+
+    public function capitulo7RecaudadoPrestamosRenovacion(){
+        return view("prestamos.prestamos-recuperacion-recaudado-prestamosRenovacion");
     }
 }

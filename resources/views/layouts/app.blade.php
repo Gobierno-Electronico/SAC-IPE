@@ -511,7 +511,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" href="{{ route('capitulo2y3Devengado') }}"
+                                                <a class="dropdown-item" href="{{ route('capitulo7CompromisoDevengadoPrestamosRenovacion') }}"
                                                     method="GET" onclick="mostrarCargando()">
                                                     Préstamos con Renovación
                                                 </a>
@@ -530,7 +530,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" href="{{ route('capitulo2y3Devengado') }}"
+                                                <a class="dropdown-item" href="{{ route('capitulo7EjercidoPagadoRecaudadoPrestamosRenovacion') }}"
                                                     method="GET" onclick="mostrarCargando()">
                                                     Préstamos con Renovación
                                                 </a>
@@ -549,7 +549,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" href="{{ route('capitulo2y3Devengado') }}"
+                                                <a class="dropdown-item" href="{{ route('capitulo7RecaudadoPrestamosRenovacion') }}"
                                                     method="GET" onclick="mostrarCargando()">
                                                     Préstamos con Renovación
                                                 </a>

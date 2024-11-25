@@ -7,7 +7,7 @@
         <div class="col-md-12">
             <div class="card shadow border-0">
                 <div class="card-body bg-white p-5">
-                    <h2>Otorgamiento (Ejercido-Pagado-Recaudado)</h2>
+                    <h2>Otorgamiento préstamos iniciales (Ejercido-Pagado-Recaudado)</h2>
                     <h4>Ingreso recaudado y Egreso ejercido - pagado</h4>
                     <livewire:prestamos.prestamos-otorgamiento-ejercido-pagado-recaudado-prestamosIniciales-form/>
                 </div>
