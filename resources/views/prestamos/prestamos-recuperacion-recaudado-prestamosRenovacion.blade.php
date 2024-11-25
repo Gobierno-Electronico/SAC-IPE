@@ -7,9 +7,9 @@
         <div class="col-md-12">
             <div class="card shadow border-0">
                 <div class="card-body bg-white p-5">
-                    <h2>Recuperación préstamos iniciales (Recaudado)</h2>
+                    <h2>Recuperación préstamos con renovación (Recaudado)</h2>
                     <h4>Ingreso recaudado</h4>
-                    <livewire:prestamos.prestamos-recuperacion-recaudado-prestamosIniciales-form/>
+                    <livewire:prestamos.prestamos-recuperacion-recaudado-prestamosRenovacion-form/>
                 </div>
             </div>
         </div>
