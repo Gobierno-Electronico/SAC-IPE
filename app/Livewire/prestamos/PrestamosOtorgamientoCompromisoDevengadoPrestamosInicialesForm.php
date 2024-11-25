@@ -39,8 +39,12 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesForm extends Com
     #[Validate('required', message: 'Importe requerido')]
     public $importe = "";
 
+    #[Validate('required', message: 'Importe abono requerido')]
+    public $importeAbono = "";
+
     public $PTTOEjecutar = 0;
     public $consultarRegistro = false;
+    public $numeroEvento;
     public $numeroPoliza;
     public $total;
     
@@ -91,9 +95,19 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesForm extends Com
         try{
             $this->importe = floatval(str_replace(['$', ','], "", $this->importe));
             $this->importe = ($this->importe > 0)  ? $this->importe : "";
+
+            $this->importeAbono = floatval(str_replace(['$', ','], "", $this->importeAbono));
+            $this->importeAbono = ($this->importeAbono > 0)  ? $this->importeAbono : "";
             $this->validate();
 
+            if($this->importeAbono >= $this->importe)
+            {
+                $this->dispatch('mostrarMensaje', mensaje: 'El importe abono no puede ser mayor o igual al importe cargo', tipo: 'warning', tiempo: 3000);
+                return;
+            }   
+
             $cuenta = Cuenta::find($this->cuenta);
+            $cuentaAbono = Cuenta::find($this->cuentaAbono);
             $departamento = CodigoDepartamento::where('Codigo_completo', '1.5.04')->first();
 
             $registro = [
@@ -107,8 +121,12 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesForm extends Com
                 'cuentaId' => $this->cuenta,
                 'codigoCuenta' => $cuenta->Codigo_cuenta,
                 'descripcionCuenta' => $cuenta->Descripcion_cuenta,
+                'cuentaAbonoId' => $this->cuentaAbono,
+                'codigoCuentaAbono' => $cuentaAbono->Codigo_cuenta,
+                'descripcionCuentaAbono' => $cuentaAbono->Descripcion_cuenta,
                 'mes' => $this->mes,
                 'importe' => $this->importe,
+                'importeAbono' => $this->importeAbono,
                 'pttoEjecutar' => $this->PTTOEjecutar
             ];
 
@@ -130,10 +148,12 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesForm extends Com
     public function limpiar()
     {
         $this->cuenta = "";
+        $this->cuentaAbono = "";
         $this->selectCodigoAreaResponsable = "";
         $this->mes = "";
         $this->PTTOEjecutar = 0;
         $this->importe = "";
+        $this->importeAbono = "";
         $this->dispatch('limpiar');
     }
 
@@ -141,17 +161,20 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesForm extends Com
     public function llenarFormulario($datosRegistro)
     {
         $this->cuenta = $datosRegistro['cuenta'];
+        $this->cuentaAbono = $datosRegistro['cuentaAbono'];
         $this->mes = $datosRegistro['mes'];
         $this->importe = $datosRegistro['importe'];
+        $this->importeAbono = $datosRegistro['importeAbono'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->PTTOEjecutar = $datosRegistro['pttoEjecutar'];
-        $this->dispatch('llenarFormulario', presupuesto: $this->PTTOEjecutar, importe: $this->importe);
+        $this->dispatch('llenarFormulario', presupuesto: $this->PTTOEjecutar, importe: $this->importe, importeAbono: $this->importeAbono);
     }
 
     #[On('consultar-registro')]
-    public function consultarRegistros($numeroPoliza, $total)
+    public function consultarRegistros($numeroEvento,$numeroPoliza, $total)
     {
         $this->consultarRegistro = true;
+        $this->numeroEvento = $numeroEvento;
         $this->numeroPoliza = $numeroPoliza;
         $this->total = $total;
     }

@@ -60,11 +60,15 @@
     }); */
 
     window.addEventListener('llenarFormulario', event => {
-        let parametros = event.__livewire.params
-        $('#inputPTTOEjecutar').val(parametros.presupuesto);
-        $('#inputImporte').val(parametros.importe);
-        formatearImporte({id: 'inputImporte'})
-        formatearImporte({id: 'inputPTTOEjecutar'})
+        setTimeout(() => {            
+            let parametros = event.__livewire.params
+            $('#inputPTTOEjecutar').val(parametros.presupuesto);
+            $('#inputImporte').val(parametros.importe);
+            $('#inputImporteAbono').val(parametros.importeAbono);
+            formatearImporte({id: 'inputImporte'})
+            formatearImporte({id: 'inputImporteAbono'})
+            formatearImporte({id: 'inputPTTOEjecutar'})
+        }, 10);
     });
 
 </script>

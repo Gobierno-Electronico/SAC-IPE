@@ -22,8 +22,8 @@
             </div>
         </div>
         <livewire:egresos.egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaEgresosComprometidoCapitulo2y3" urlFinalizar="/capitulo2y3-comprometido"
-            tipoPoliza="E" categoriaModulo='EGRESOS COMPROMETIDO CAPITULO 2y3' />
+            tipoMovimiento="OtorgamientoCompromisoDevengadoPrestamosIniciales" urlFinalizar="/capitulo7-otorgamiento-compromiso-devengado-prestamosIniciales"
+            tipoPoliza="E" categoriaModulo='OTORGAMIENTO COMPROMISO DEVENGADO PRESTAMOS INICIALES' />
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
@@ -104,8 +104,8 @@
                     @endforeach
                 </select>
 
-                <label for="inputImporte" class="form-label mt-3">Importe abono</label>
-                <input type="text" name="inputImporte" id="inputImporte" class="form-control"
+                <label for="inputImporteAbono" class="form-label mt-3">Importe abono</label>
+                <input type="text" name="inputImporteAbono" id="inputImporteAbono" class="form-control"
                     onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model="importeAbono">
             </div>
 
