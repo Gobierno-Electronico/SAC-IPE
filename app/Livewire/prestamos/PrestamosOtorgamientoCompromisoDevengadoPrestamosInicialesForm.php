@@ -175,7 +175,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesForm extends Com
     {
         $this->consultarRegistro = true;
         $this->numeroEvento = $numeroEvento;
-        $this->numeroPoliza = $numeroPoliza;
+         $this->numeroPoliza = $numeroPoliza;
         $this->total = $total;
     }
 }
