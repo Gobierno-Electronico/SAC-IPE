@@ -346,6 +346,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesTable extends Ta
                         'updated_at' => $fecha
                     ]);
                 }
+
                 dd($polizas);
                 Poliza::insert($polizas);
                 DB::commit();

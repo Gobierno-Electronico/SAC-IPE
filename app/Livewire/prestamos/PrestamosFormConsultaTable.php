@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\egresos;
+namespace App\Livewire\prestamos;
 
 use App\Models\Poliza;
 use Illuminate\Database\Eloquent\Builder;
@@ -13,7 +13,7 @@ use Carbon\Carbon;
 use App\Livewire\Tabla;
 use Log;
 
-class EgresosFormConsultaTable extends Tabla
+class PrestamosFormConsultaTable extends Tabla
 {
     public $tipo;
     public $registros = [];
