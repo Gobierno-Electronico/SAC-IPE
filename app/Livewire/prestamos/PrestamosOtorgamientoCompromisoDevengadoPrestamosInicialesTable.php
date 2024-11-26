@@ -284,7 +284,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesTable extends Ta
 
                 array_push($polizas, [
                     'area' => $movimiento['codigoAreaResponsable'],
-                    'tipo_poliza' => 'E',
+                    'tipo_poliza' => 'D',
                     'numero_poliza' =>  $this->numeroPoliza,
                     'fecha' => $movimiento['fechaAfectacion'],
                     'cuenta' => $movimiento['codigoCuentaAbono'],
@@ -308,7 +308,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesTable extends Ta
                     }
                     array_push($polizas, [
                         'area' => $movimiento['codigoAreaResponsable'],
-                        'tipo_poliza' => 'E',
+                        'tipo_poliza' => 'D',
                         'numero_poliza' =>  $this->numeroPoliza,
                         'fecha' => $movimiento['fechaAfectacion'],
                         'cuenta' => $dataCuenta['Codigo_cuenta'],
@@ -329,7 +329,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesTable extends Ta
                 foreach ($interaccionCuentaCuentasAbono as $key => $dataCuenta) {
                     array_push($polizas, [
                         'area' => $movimiento['codigoAreaResponsable'],
-                        'tipo_poliza' => 'E',
+                        'tipo_poliza' => 'D',
                         'numero_poliza' =>  $this->numeroPoliza,
                         'fecha' => $movimiento['fechaAfectacion'],
                         'cuenta' => $dataCuenta['Codigo_cuenta'],
@@ -346,8 +346,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesTable extends Ta
                         'updated_at' => $fecha
                     ]);
                 }
-
-                dd($polizas);
+                
                 Poliza::insert($polizas);
                 DB::commit();
             }
