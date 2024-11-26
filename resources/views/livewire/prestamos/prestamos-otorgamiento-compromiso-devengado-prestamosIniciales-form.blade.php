@@ -21,9 +21,9 @@
                 </div>
             </div>
         </div>
-        <livewire:egresos.egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="OtorgamientoCompromisoDevengadoPrestamosIniciales" urlFinalizar="/capitulo7-otorgamiento-compromiso-devengado-prestamosIniciales"
-            tipoPoliza="E" categoriaModulo='OTORGAMIENTO COMPROMISO DEVENGADO PRESTAMOS INICIALES' />
+        <livewire:prestamos.prestamos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+            tipoMovimiento="PolizaOtorgamientoCompromisoDevengadoPrestamosIniciales" urlFinalizar="/capitulo7-otorgamiento-compromiso-devengado-prestamosIniciales"
+            tipoPoliza="D" categoriaModulo='OTORGAMIENTO COMPROMISO DEVENGADO PRESTAMOS INICIALES' />
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
