@@ -42,11 +42,15 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesForm extends Com
     #[Validate('required', message: 'Importe abono requerido')]
     public $importeAbono = "";
 
+    #[Validate('required', message: 'Presupuesto por ejecutar requerido')]
     public $PTTOEjecutar = 0;
+
     public $consultarRegistro = false;
+    public $cambiarCuentaContableSeleccionada = true;
     public $numeroEvento;
     public $numeroPoliza;
     public $total;
+    public $cuentasAbono = [];
     
     public function render()
     {
@@ -55,12 +59,14 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesForm extends Com
             ->whereIn('interaccion_cuenta_conceptos.concepto_id', [94])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Cargo')
             ->orderBy('cuentas.Descripcion_cuenta')->get();
 
-            $cuentasAbono = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+/*             $cuentasAbono = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
             ->whereIn('interaccion_cuenta_conceptos.concepto_id', [94])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Abono')
             ->where('cuentas.Descripcion_cuenta', 'LIKE', '%Concesión%')
-            ->orderBy('cuentas.Descripcion_cuenta')->get();
-
-            return view('livewire.prestamos.prestamos-otorgamiento-compromiso-devengado-prestamosIniciales-form', ['cuentas' => $cuentas, 'cuentasAbono' => $cuentasAbono]);
+            ->orderBy('cuentas.Descripcion_cuenta')->get();  */
+            $this->cambiarCuentaContableSeleccionada = false;
+            $this->cargarCuentaContableAbono();
+            
+            return view('livewire.prestamos.prestamos-otorgamiento-compromiso-devengado-prestamosIniciales-form', ['cuentas' => $cuentas/* , 'cuentasAbono' => $cuentasAbono */]);
 
         }catch(\Throwable $th){
             Log::error('Ocurrió un error al cargar cuentas en compromiso-devengado préstamos inicales del capítulo 7000 ' . $th->getMessage());
@@ -90,6 +96,35 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesForm extends Com
         }
     }
 
+
+    public function cargarCuentaContableAbono()
+    {
+
+        if(!$this->cuenta) return;
+             
+        if ($this->cambiarCuentaContableSeleccionada) {
+            $this->cuentaAbono = "";
+            return;
+        }
+        $this->cambiarCuentaContableSeleccionada = true;
+        try{
+            $this->cargarPresupuesto();
+            $cuentaSeleccionada = Cuenta::find($this->cuenta);
+            $plazo = explode(')', explode('(', $cuentaSeleccionada->Descripcion_cuenta)[1])[0];
+
+            $this->cuentasAbono = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [94])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Abono')
+            ->where('cuentas.Descripcion_cuenta', 'LIKE', '%' . $plazo . '%')
+            ->get(); 
+        
+            $this->cuentaAbono = $this->cuentasAbono[0]->cuenta_id;
+
+        }catch (\Throwable $th) {
+            Log::error('Ocurrió un error al cargar cuenta contable abono en compromiso-devengado préstamos inicales del capítulo 7000: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar presupuesto, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
+    }
+
     public function agregarRegistro()
     {
         try{
@@ -108,6 +143,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesForm extends Com
 
             $cuenta = Cuenta::find($this->cuenta);
             $cuentaAbono = Cuenta::find($this->cuentaAbono);
+
             $departamento = CodigoDepartamento::where('Codigo_completo', '1.5.04')->first();
 
             $registro = [
