@@ -64,7 +64,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesForm extends Com
             ->where('cuentas.Descripcion_cuenta', 'LIKE', '%Concesión%')
             ->orderBy('cuentas.Descripcion_cuenta')->get();  */
             $this->cambiarCuentaContableSeleccionada = false;
-            $this->cargarCuentaContableAbono();
+            $this->cargarCuentaContableAbono(false);
             
             return view('livewire.prestamos.prestamos-otorgamiento-compromiso-devengado-prestamosIniciales-form', ['cuentas' => $cuentas/* , 'cuentasAbono' => $cuentasAbono */]);
 
@@ -97,18 +97,21 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesForm extends Com
     }
 
 
-    public function cargarCuentaContableAbono()
+    public function cargarCuentaContableAbono($bandera)
     {
-
+        if($bandera)
+        {
+            $this->cargarPresupuesto();
+        }
         if(!$this->cuenta) return;
-             
+
         if ($this->cambiarCuentaContableSeleccionada) {
             $this->cuentaAbono = "";
             return;
         }
         $this->cambiarCuentaContableSeleccionada = true;
         try{
-            $this->cargarPresupuesto();
+
             $cuentaSeleccionada = Cuenta::find($this->cuenta);
             $plazo = explode(')', explode('(', $cuentaSeleccionada->Descripcion_cuenta)[1])[0];
 

@@ -80,7 +80,7 @@
                 </select>
 
                 <label for="selectCuenta" class="form-label mt-3">Cuenta</label>
-                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta" wire:change="cargarCuentaContableAbono">
+                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta" wire:change="cargarCuentaContableAbono(true)">
                     <option value="" disabled>Seleccionar cuenta</option>
                     @foreach ($cuentas as $cuenta)
                         <option value="{{ $cuenta->cuenta_id }}">
