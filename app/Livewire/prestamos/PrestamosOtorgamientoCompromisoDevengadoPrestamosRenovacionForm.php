@@ -59,7 +59,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosRenovacionForm extends Co
             return view('livewire.prestamos.prestamos-otorgamiento-compromiso-devengado-prestamosRenovacion-form', ['cuentas' => $cuentas]);
 
         }catch(\Throwable $th){
-            Log::error('Ocurrió un error al cargar cuentas en compromiso-devengado préstamos inicales del capítulo 7000 ' . $th->getMessage());
+            Log::error('Ocurrió un error al cargar cuentas en compromiso-devengado préstamos renovación del capítulo 7000 ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000); 
         }
 
@@ -96,7 +96,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosRenovacionForm extends Co
         }catch (\Illuminate\Validation\ValidationException $e) {
             $this->dispatch('mostrarMensaje', mensaje: $e->getMessage(), tipo: 'warning', tiempo: 3000);
         }catch (\Throwable $th) {
-            Log::error('Ocurrió un error al agregar registro en Otorgamiento (Comprometido-devengado) Prestamos Iniciales: ' . $th->getMessage());
+            Log::error('Ocurrió un error al agregar registro en Otorgamiento (Comprometido-devengado) Prestamos Renovación: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -128,9 +128,10 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosRenovacionForm extends Co
     }
 
     #[On('consultar-registro')]
-    public function consultarRegistros($numeroPoliza, $total)
+    public function consultarRegistros($numeroEvento, $numeroPoliza, $total)
     {
         $this->consultarRegistro = true;
+        $this->numeroEvento = $numeroEvento;
         $this->numeroPoliza = $numeroPoliza;
         $this->total = $total;
     }
