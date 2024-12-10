@@ -7,6 +7,13 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use App\Clases\Column;
 use Livewire\Attributes\On;
 use Illuminate\Database\Eloquent\Builder;
+use Log;
+use DB;
+use Carbon\Carbon;
+use App\Models\InteraccionCuentaCuenta;
+use App\Models\InteraccionCuentaConcepto;
+use App\Http\Controllers\BitacoraController;
+use App\Models\Poliza;
 
 class PrestamosOtorgamientoCompromisoDevengadoPrestamosRenovacionTable extends Tabla
 {
@@ -47,14 +54,47 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosRenovacionTable extends T
         ];
     }
 
+    #[On('agregar-registro')]
+    public function agregarRegistro($registro)
+    {
+        try{
+
+        }catch (\Throwable $th) {
+            Log::error('Ocurrió un error al agregar registro en compromiso-devengado préstamos renovación del capítulo 7000: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
+    }
+
     public function edit($id)
     {
+        try{
 
+        }catch (\Throwable $th) {
+            Log::error('Ocurrió un error al editar en compromiso-devengado préstamos renovación del capítulo 7000: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al editar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
     }
 
     public function delete($id)
     {
+        try{
 
+        }catch(\Throwable $th) {
+            Log::error('Ocurrió un error al eliminar en compromiso-devengado préstamos renovación del capítulo 7000: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al editar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
+    }
+
+    #[On('finalizar-registros')]
+    public function finalizarRegistros()
+    {
+        try{
+
+        }catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error('Ocurrió un error al finalizarRegistro en compromiso-devengado préstamos renovación del capítulo 7000: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
     }
 
     public function changeState($value)

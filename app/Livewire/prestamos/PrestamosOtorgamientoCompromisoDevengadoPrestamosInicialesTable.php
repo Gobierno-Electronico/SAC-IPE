@@ -84,7 +84,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesTable extends Ta
                // $this->dispatch('cambioTotal', total: $this->total);
             }
         }catch (\Throwable $th) {
-            Log::error('Ocurrió un error al agregar registro en compromiso-devengado préstamos inicales del capítulo 7000: '. $th->getMessage());
+            Log::error('Ocurrió un error al agregar registro en compromiso-devengado préstamos iniciales del capítulo 7000: '. $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -146,7 +146,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesTable extends Ta
             $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
             $this->total = $totalActualizado;
         }catch (\Throwable $th) {
-            Log::error('Ocurrió un error al editar en compromiso-devengado préstamos inicales del capítulo 7000: '. $th->getMessage());
+            Log::error('Ocurrió un error al editar en compromiso-devengado préstamos iniciales del capítulo 7000: '. $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al editar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -174,7 +174,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesTable extends Ta
             $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
             $this->total = $totalActualizado;
         }catch(\Throwable $th) {
-            Log::error('Ocurrió un error al eliminar en compromiso-devengado préstamos inicales del capítulo 7000: '. $th->getMessage());
+            Log::error('Ocurrió un error al eliminar en compromiso-devengado préstamos iniciales del capítulo 7000: '. $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al editar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -353,7 +353,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesTable extends Ta
             $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
         }catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('Ocurrió un error al finalizarRegistro en compromiso-devengado préstamos inicales del capítulo 7000: '. $th->getMessage());
+            Log::error('Ocurrió un error al finalizarRegistro en compromiso-devengado préstamos iniciales del capítulo 7000: '. $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
