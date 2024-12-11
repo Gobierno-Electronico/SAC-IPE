@@ -20,6 +20,7 @@ class PrestamosFormConsultaTable extends Tabla
     public $numeroEvento;
     public $numeroPoliza;
     public $searchBy = [];
+    public $perPage = 10;
     public $fecha;
     public $hora;
     public $validado = false;

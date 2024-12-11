@@ -83,7 +83,7 @@ class GuiaContabilizadoraController extends Controller
                         $relacionesCuentaCapitulo[] = CuentaCapitulo::create([
                             'cuenta_id' => $cuenta->id,
                             'cuenta' => $cuenta->Codigo_cuenta,
-                            'capitulo' => '2000 y 3000'
+                            'capitulo' => '7000'
                         ]);                    
                     }
                  
@@ -244,7 +244,7 @@ class GuiaContabilizadoraController extends Controller
     public function relacionarCuentasCuentasSeguidas(Request $request)
     {
         // return response()->json('Método desactivado');
-        $path = public_path('CuentasCuentas/7000-Comprometido-Devengado-PresupIncial-CuentasCuentas.xlsx');
+        $path = public_path('CuentasCuentas/7000-Ejercido-Pagado-Recaudado-CuentasCuentasSeguidas.xlsx');
 
         // Validar que el archivo pueda ser analizado correctamente.
         if ($xlsx = SimpleXLSX::parse($path)) {

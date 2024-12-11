@@ -87,11 +87,9 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesForm extends
             if (!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
             $anioActual = Carbon::now()->year;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
-            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [94])->where('tipo_interaccion', '=', 'Contable - Cargo')->first();
-            $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')
-            ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->where('Descripcion_cuenta', 'LIKE', '%(Por ejecutar)%')->first();
+            $cuentaSeleccionada = Cuenta::find($this->cuenta);
 
-            $solvencia = DB::select('EXEC SolvenciaCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($departamento->Codigo_completo, $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $this->mes))[0]->Solvencia;
+            $solvencia = DB::select('EXEC SolvenciaOtorgamientoEjercidoPagadoRecaudadoPrestamosIniciales @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($departamento->Codigo_completo, $cuentaSeleccionada->Codigo_cuenta, $anioActual, $this->mes))[0]->Total;
             $this->PTTOEjecutar = ($solvencia > 0) ? floatval($solvencia) : 0;
 
             $this->dispatch('formato_importe', id: 'inputPTTOEjecutar', amount: "{$this->PTTOEjecutar}");
@@ -101,38 +99,6 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesForm extends
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar presupuesto, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
-
-
-    // public function cargarCuentaContableAbono($bandera)
-    // {
-    //     if($bandera)
-    //     {
-    //         $this->cargarPresupuesto();
-    //     }
-    //     if(!$this->cuenta) return;
-
-    //     if ($this->cambiarCuentaContableSeleccionada) {
-    //         $this->cuentaAbono = "";
-    //         return;
-    //     }
-    //     $this->cambiarCuentaContableSeleccionada = true;
-    //     try{
-
-    //         $cuentaSeleccionada = Cuenta::find($this->cuenta);
-    //         $plazo = explode(')', explode('(', $cuentaSeleccionada->Descripcion_cuenta)[1])[0];
-
-    //         $this->cuentasAbono = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-    //         ->whereIn('interaccion_cuenta_conceptos.concepto_id', [94])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Abono')
-    //         ->where('cuentas.Descripcion_cuenta', 'LIKE', '%' . $plazo . '%')
-    //         ->get(); 
-        
-    //         $this->cuentaAbono = $this->cuentasAbono[0]->cuenta_id;
-
-    //     }catch (\Throwable $th) {
-    //         Log::error('Ocurrió un error al cargar cuenta contable abono en ejercido-pagado-recaudado préstamos inicales del capítulo 7000: ' . $th->getMessage());
-    //         $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar presupuesto, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
-    //     }
-    // }
 
     public function agregarRegistro()
     {
@@ -193,13 +159,14 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesForm extends
 
     public function limpiar()
     {
-        $this->cuenta = "";
+        // $this->cuenta = "";
         $this->cuentaAbono = "";
-        $this->selectCodigoAreaResponsable = "";
+        // $this->selectCodigoAreaResponsable = "";
         $this->mes = "";
         $this->PTTOEjecutar = 0;
-        $this->importe = "";
+        // $this->importe = "";
         $this->importeAbono = "";
+        $this->destinoRecurso = "";
         $this->dispatch('limpiar');
     }
 

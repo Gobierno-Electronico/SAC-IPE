@@ -22,9 +22,9 @@
             </div>
         </div>
         <livewire:prestamos.prestamos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaOtorgamientoCompromisoDevengadoPrestamosIniciales"
-            urlFinalizar="/capitulo7-otorgamiento-compromiso-devengado-prestamosIniciales" tipoPoliza="D"
-            categoriaModulo='OTORGAMIENTO COMPROMISO DEVENGADO PRESTAMOS INICIALES' />
+            tipoMovimiento="PolizaOtorgamientoEjercidoPagadoRecaudadoPrestamosIniciales"
+            urlFinalizar="/capitulo7-otorgamiento-ejercido-pagado-recaudado-prestamosIniciales" tipoPoliza="D"
+            categoriaModulo='OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS INICIALES' />
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
@@ -58,10 +58,19 @@
                     <option value=""selected disabled>Seleccionar área</option>
                     @foreach (\App\Models\CodigoDepartamento::all() as $departamento)
                         @if (strlen($departamento->Codigo_completo) >= 5)
-                            <option value="{{ $departamento->Codigo_completo }}">
+                            <option value="{{ $departamento->id }}">
                                 {{ $departamento->Codigo_completo . ' ' . $departamento->Nombre }}
                             </option>
                         @endif
+                    @endforeach
+                </select>
+
+                <label for="selectCuenta" class="form-label mt-3">Cuenta</label>
+                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta" wire:change="cargarPresupuesto">
+                    <option value="" disabled>Seleccionar cuenta</option>
+                    @foreach ($cuentas as $cuenta)
+                        <option value="{{ $cuenta->cuenta_id }}">
+                            {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>  
                     @endforeach
                 </select>
 
@@ -78,14 +87,7 @@
                     @endforeach
                 </select>
 
-                <label for="selectCuenta" class="form-label mt-3">Cuenta</label>
-                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta">
-                    <option value="" disabled>Seleccionar cuenta</option>
-                    @foreach ($cuentas as $cuenta)
-                        <option value="{{ $cuenta->cuenta_id }}">
-                            {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
-                    @endforeach
-                </select>
+                
 
                 <label for="inputPTTOEjecutar" class="form-label mt-3">Presupuesto por ejecutar</label>
                 <input type="text" name="inputPTTOEjecutar" id="inputPTTOEjecutar" class="form-control" disabled>
