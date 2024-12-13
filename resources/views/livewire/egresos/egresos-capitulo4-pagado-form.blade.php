@@ -24,9 +24,9 @@
 
             </div>
         </div>
-        {{--         <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaIngresosDevengado" urlFinalizar="/ingresos-devengado" tipoPoliza="I"
-            categoriaModulo='INGRESOS DEVENGADO' /> --}}
+                <livewire:egresos.egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+            tipoMovimiento="PolizaEgresosPagadoCapitulo4" urlFinalizar="/capitulo4-pagado" :$numeroPolizaRemanente tipoPoliza="E"
+            categoriaModulo='EGRESOS PAGADO CAPITULO 4' categoriaRemanente='EGRESOS EJERCIDO CAPITULO 4 REMANENTE PAGADO'/>
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
@@ -48,7 +48,7 @@
             wire:model="observaciones">
 
         <label for="inputFechaAfectacion" class="form-label mt-3">Fecha de afectación</label>
-        <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control"
+        <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control" max="{{ now()->toDateString() }}"
             wire:model="fechaAfectacion">
 
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
@@ -59,16 +59,16 @@
                     <option value="" disabled>
                         Seleccionar un evento
                     </option>
-                    @foreach ($eventos as $evento /* => $descripcion */)
+                    @foreach ($eventos as $evento => $descripcion )
                         <option value="{{ $evento }}">
-                           {{ $evento }} {{-- {{ $evento }} - {{$descripcion}} --}}
+                           {{ $evento }} - {{$descripcion}}
                         </option>
                     @endforeach
                 </select>
 
                 <label for="selectAreaResponsable" class="form-label mt-3">Área responsable</label>
                 <select name="selectAreaResponsable" id="selectAreaResponsable" class="form-select"
-                    wire:model="selectCodigoAreaResponsable">
+                    wire:model="selectCodigoAreaResponsable"  wire:change="cargarPresupuestoEjercido">
                     <option value="" @if ($this->selectCodigoAreaResponsable == '') selected @endif disabled>
                         Seleccionar un área
                     </option>
@@ -99,8 +99,17 @@
                     @endforeach
                 </select>
 
+                <label for="selectCuenta" class="form-label mt-3">Cuenta contable</label>
+                <select name="selectRetenciones" id="selectRetenciones" class="form-select" wire:model="cuentaDeRetenciones" wire:change="cargarMontoContable">
+                    <option value="" disabled>Seleccionar cuenta de retención</option>
+                    @foreach ($cuentasRetenciones as $retencion)
+                        <option value="{{ $retencion['cuenta_id'] }}"> 
+                            {{ $retencion['Codigo_cuenta'] . '  ' . $retencion['Descripcion_cuenta'] }}</option>
+                    @endforeach
+                </select>
+
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
-                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes">
+                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes" wire:change="cargarPresupuestoEjercido">
                     <option value="" selected disabled>Seleccionar mes...</option>
                     @foreach (range(1, 12) as $mes)
                         @php
@@ -111,8 +120,16 @@
                     @endforeach
                 </select>
 
+                <label for="inputMontoEvento" class="form-label mt-3">Monto del evento</label>
+                <input type="text" name="inputMontoEvento" id="inputMontoEvento" class="form-control" disabled>
+
                 <label for="inputPTTOEjercido" class="form-label mt-3">Presupuesto ejercido</label>
                 <input type="text" name="inputPTTOEjercido" id="inputPTTOEjercido" class="form-control" disabled>
+
+                @if($partidaPresupuestal == '5960')
+                    <label for="inputMontoContable" id="labelMontoContable" class="form-label mt-3">Monto contable</label>
+                    <input type="text" id="inputMontoContable" name="inputMontoContable" class="form-control" disabled>
+                @endif
 
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control"
@@ -136,6 +153,7 @@
 </div>
 
 <script>
+
     window.addEventListener('formato_importe', event => {
         let params = event.__livewire.params
         formatearImporte({

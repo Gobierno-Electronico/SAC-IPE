@@ -24,9 +24,9 @@
 
             </div>
         </div>
-        {{--         <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaIngresosDevengado" urlFinalizar="/ingresos-devengado" tipoPoliza="I"
-            categoriaModulo='INGRESOS DEVENGADO' /> --}}
+        <livewire:egresos.egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+        tipoMovimiento="PolizaEgresosComprometidoCapitulo5" urlFinalizar="/capitulo5-comprometido" tipoPoliza="E"
+        categoriaModulo='EGRESOS COMPROMETIDO CAPITULO 5' />
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
@@ -47,8 +47,8 @@
         <input type="text" name="inputObservacion" id="inputObservacion" class="form-control"
             wire:model="observaciones">
 
-        <label for="inputFechaAfectacion" class="form-label mt-3">Fecha de afectación</label>
-        <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control"
+        <label for="inputFechaAfectacion" class="form-label mt-3">Fecha de afectación</label> 
+        <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control" max="{{ now()->toDateString() }}"
             wire:model="fechaAfectacion">
 
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
@@ -56,7 +56,7 @@
             <div class="col-3">
                 <label for="selectAreaResponsable" class="form-label mt-3">Área responsable</label>
                 <select name="selectAreaResponsable" id="selectAreaResponsable" class="form-select"
-                    wire:model="selectCodigoAreaResponsable">
+                    wire:model="selectCodigoAreaResponsable" wire:change="cambioPresupuesto">
                     <option value="" @if ($this->selectCodigoAreaResponsable == '') selected @endif disabled>
                         Seleccionar un área
                     </option>
@@ -69,17 +69,17 @@
                     @endforeach
                 </select>
 
-                <label for="selectCuenta" class="form-label mt-3">Cuenta contable</label>
-                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta">
+                <label for="selectCuenta" class="form-label mt-3">Cuenta</label>
+                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta" wire:change="cambioPresupuesto">
                     <option value="" disabled>Seleccionar cuenta</option>
                     @foreach ($cuentas as $cuenta)
-                        <option value="{{ $cuenta }}"> <!-- $cuenta->cuenta_id -->
-                            {{ $cuenta /* $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta */ }}</option>
+                        <option value="{{ $cuenta->cuenta_id }}"> 
+                            {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta  }}</option>
                     @endforeach
                 </select>
 
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
-                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes">
+                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes" wire:change="cambioPresupuesto">
                     <option value="" selected disabled>Seleccionar mes...</option>
                     @foreach (range(1, 12) as $mes)
                         @php
@@ -99,7 +99,7 @@
             </div>
 
             <div class="col">
-                <livewire:egresos.egresos-capitulo4-comprometido-table />
+                <livewire:egresos.egresos-capitulo5-comprometido-table />
             </div> 
 
             <div class="row mt-4">
@@ -124,14 +124,6 @@
 
     window.addEventListener('limpiar', event => {
         limpiar()
-    })
-
-    window.addEventListener('limpiarIVA', event => {
-        limpiarIVA()
-    })
-
-    window.addEventListener('limpiarImporteIva', event => {
-        limpiarImporteIva()
     })
 
     function keyPress(e, obj) {

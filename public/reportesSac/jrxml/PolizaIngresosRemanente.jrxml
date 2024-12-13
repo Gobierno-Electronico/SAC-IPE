@@ -90,7 +90,7 @@
 				<textElement textAlignment="Center">
 					<font fontName="Times New Roman" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[POLIZA AUXILIAR DE INGRESOS]]></text>
+				<text><![CDATA[PÓLIZA AUXILIAR DE INGRESOS]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="604" y="0" width="50" height="20" uuid="8c206f97-bf18-47f6-93df-85b27a0f630d">
@@ -478,10 +478,10 @@
 					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["L.A. ANAYUTH ORORIO LOPEZ"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["L.A.E. ANAYUTH OSORIO LÓPEZ"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="5" y="30" width="75" height="20" uuid="45523d6a-d0bd-45e3-b0d6-22a1b6072ed0">
+				<reportElement x="5" y="30" width="105" height="20" uuid="45523d6a-d0bd-45e3-b0d6-22a1b6072ed0">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
@@ -515,7 +515,7 @@
 				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="80" y="30" width="721" height="20" uuid="587789b8-219d-478d-a65d-9e7f9c04ba02">
+				<reportElement x="110" y="30" width="691" height="20" uuid="587789b8-219d-478d-a65d-9e7f9c04ba02">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
@@ -564,7 +564,7 @@
 					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["C.P. ANIBAL ANDRADE DIAZ"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["C.P. ANÍBAL ANDRADE DÍAZ"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="271" y="70" width="273" height="15" uuid="b0cd2b88-2324-4f66-8b92-644c93387ac8">

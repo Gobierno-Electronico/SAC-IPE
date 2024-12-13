@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 class IngresosController extends Controller
 {
@@ -56,5 +55,8 @@ class IngresosController extends Controller
 
     public function devolucionEspecie(){
         return view ('ingresos.devolucion-especie');
+    }
+    public function consultarMovimientos(){
+        return view ('ingresos.movimientos-ingresos');
     }
 }

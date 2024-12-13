@@ -12,6 +12,26 @@ class EgresosController extends Controller
         $this->middleware('auth');
     }
 
+    public function capitulo2y3Comprometido()
+    {
+        return view('egresos.egresos-capitulo2y3-comprometido');
+    }
+
+    public function capitulo2y3Devengado()
+    {
+        return view('egresos.egresos-capitulo2y3-devengado');
+    }
+
+    public function capitulo2y3Ejercido()
+    {
+        return view('egresos.egresos-capitulo2y3-ejercido');
+    }
+
+    public function capitulo2y3Pagado()
+    {
+        return view('egresos.egresos-capitulo2y3-pagado');
+    }
+
     public function capitulo4Comprometido()
     {
         return view('egresos.egresos-capitulo4-comprometido');
@@ -37,6 +57,12 @@ class EgresosController extends Controller
         return view('egresos.egresos-capitulo5-comprometido');
     }
 
+    public function capitulo5Devengado()
+    {
+        return view('egresos.egresos-capitulo5-devengado');
+    }
+
+
     public function capitulo5Ejercido()
     {
         return view('egresos.egresos-capitulo5-ejercido');
@@ -45,5 +71,9 @@ class EgresosController extends Controller
     public function capitulo5Pagado()
     {
         return view('egresos.egresos-capitulo5-pagado');
+    }
+
+    public function consultarMovimientos(){
+        return view ('egresos.movimientos-egresos');
     }
 }

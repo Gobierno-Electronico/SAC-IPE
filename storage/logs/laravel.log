@@ -1,0 +1,316 @@
+[2024-12-11 12:45:57] local.INFO: array (
+)  
+[2024-12-11 12:45:57] local.INFO: array (
+)  
+[2024-12-11 12:45:57] local.INFO: array (
+)  
+[2024-12-11 12:45:57] local.INFO: array (
+)  
+[2024-12-11 12:45:57] local.INFO: array (
+)  
+[2024-12-11 12:45:57] local.INFO: array (
+)  
+[2024-12-11 12:45:57] local.INFO: array (
+)  
+[2024-12-11 12:45:57] local.INFO: array (
+)  
+[2024-12-11 12:45:57] local.INFO: array (
+)  
+[2024-12-11 12:45:57] local.INFO: array (
+)  
+[2024-12-11 12:45:57] local.INFO: array (
+)  
+[2024-12-11 12:45:57] local.INFO: array (
+)  
+[2024-12-11 12:45:57] local.INFO: array (
+)  
+[2024-12-11 12:45:57] local.INFO: array (
+)  
+[2024-12-11 12:51:12] local.INFO: array (
+)  
+[2024-12-11 12:51:12] local.INFO: array (
+)  
+[2024-12-11 12:51:12] local.INFO: array (
+)  
+[2024-12-11 12:51:12] local.INFO: array (
+)  
+[2024-12-11 12:51:12] local.INFO: array (
+)  
+[2024-12-11 12:51:12] local.INFO: array (
+)  
+[2024-12-11 12:51:12] local.INFO: array (
+  0 => 
+  array (
+    'id' => 1527398,
+    'area' => '1.5.04',
+    'tipo_poliza' => 'D',
+    'numero_poliza' => '10',
+    'fecha' => '2024-12-07 00:00:00.000',
+    'cuenta' => '8.2.6.1.2.2.4.02.01',
+    'cuentaRelacionada' => NULL,
+    'concepto' => 'Concesión de préstamos al sector privado con fines de gestión de liquidez a Corto Plazo (Ejercido)------',
+    'total' => '100.0000000000',
+    'tipo_interaccion' => 'Presupuestal - Cargo',
+    'mes' => 'Noviembre',
+    'descripcion' => 'gerhgr',
+    'evento' => '57',
+    'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS INICIALES',
+    'validado' => '0',
+    'estatus_evento' => '1',
+    'created_at' => '2024-12-11T18:51:12.190000Z',
+    'updated_at' => '2024-12-11T18:51:12.190000Z',
+  ),
+  1 => 
+  array (
+    'id' => 1527401,
+    'area' => '1.5.04',
+    'tipo_poliza' => 'D',
+    'numero_poliza' => '10',
+    'fecha' => '2024-12-07 00:00:00.000',
+    'cuenta' => '8.2.6.1.2.2.4.02.01',
+    'cuentaRelacionada' => NULL,
+    'concepto' => 'Concesión de préstamos al sector privado con fines de gestión de liquidez a Corto Plazo (Ejercido)------',
+    'total' => '100.0000000000',
+    'tipo_interaccion' => 'Presupuestal - Abono',
+    'mes' => 'Noviembre',
+    'descripcion' => 'gerhgr',
+    'evento' => '57',
+    'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS INICIALES',
+    'validado' => '0',
+    'estatus_evento' => '1',
+    'created_at' => '2024-12-11T18:51:12.190000Z',
+    'updated_at' => '2024-12-11T18:51:12.190000Z',
+  ),
+)  
+[2024-12-11 12:51:12] local.INFO: array (
+  0 => 
+  array (
+    'id' => 1527399,
+    'area' => '1.5.04',
+    'tipo_poliza' => 'D',
+    'numero_poliza' => '10',
+    'fecha' => '2024-12-07 00:00:00.000',
+    'cuenta' => '8.2.7.1.2.2.4.02.01',
+    'cuentaRelacionada' => NULL,
+    'concepto' => 'Concesión de préstamos al sector privado con fines de gestión de liquidez a Corto Plazo (Pagado)------',
+    'total' => '100.0000000000',
+    'tipo_interaccion' => 'Presupuestal - Cargo',
+    'mes' => 'Noviembre',
+    'descripcion' => 'gerhgr',
+    'evento' => '57',
+    'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS INICIALES',
+    'validado' => '0',
+    'estatus_evento' => '1',
+    'created_at' => '2024-12-11T18:51:12.190000Z',
+    'updated_at' => '2024-12-11T18:51:12.190000Z',
+  ),
+)  
+[2024-12-11 12:51:12] local.INFO: array (
+  0 => 
+  array (
+    'id' => 1527400,
+    'area' => '1.5.04',
+    'tipo_poliza' => 'D',
+    'numero_poliza' => '10',
+    'fecha' => '2024-12-07 00:00:00.000',
+    'cuenta' => '8.2.5.1.2.2.4.02.01',
+    'cuentaRelacionada' => NULL,
+    'concepto' => 'Concesión de préstamos al sector privado con fines de gestión de liquidez a Corto Plazo (Devengado)------',
+    'total' => '100.0000000000',
+    'tipo_interaccion' => 'Presupuestal - Abono',
+    'mes' => 'Noviembre',
+    'descripcion' => 'gerhgr',
+    'evento' => '57',
+    'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS INICIALES',
+    'validado' => '0',
+    'estatus_evento' => '1',
+    'created_at' => '2024-12-11T18:51:12.190000Z',
+    'updated_at' => '2024-12-11T18:51:12.190000Z',
+  ),
+)  
+[2024-12-11 12:51:12] local.INFO: array (
+  0 => 
+  array (
+    'id' => 1527398,
+    'area' => '1.5.04',
+    'tipo_poliza' => 'D',
+    'numero_poliza' => '10',
+    'fecha' => '2024-12-07 00:00:00.000',
+    'cuenta' => '8.2.6.1.2.2.4.02.01',
+    'cuentaRelacionada' => NULL,
+    'concepto' => 'Concesión de préstamos al sector privado con fines de gestión de liquidez a Corto Plazo (Ejercido)------',
+    'total' => '100.0000000000',
+    'tipo_interaccion' => 'Presupuestal - Cargo',
+    'mes' => 'Noviembre',
+    'descripcion' => 'gerhgr',
+    'evento' => '57',
+    'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS INICIALES',
+    'validado' => '0',
+    'estatus_evento' => '1',
+    'created_at' => '2024-12-11T18:51:12.190000Z',
+    'updated_at' => '2024-12-11T18:51:12.190000Z',
+  ),
+  1 => 
+  array (
+    'id' => 1527401,
+    'area' => '1.5.04',
+    'tipo_poliza' => 'D',
+    'numero_poliza' => '10',
+    'fecha' => '2024-12-07 00:00:00.000',
+    'cuenta' => '8.2.6.1.2.2.4.02.01',
+    'cuentaRelacionada' => NULL,
+    'concepto' => 'Concesión de préstamos al sector privado con fines de gestión de liquidez a Corto Plazo (Ejercido)------',
+    'total' => '100.0000000000',
+    'tipo_interaccion' => 'Presupuestal - Abono',
+    'mes' => 'Noviembre',
+    'descripcion' => 'gerhgr',
+    'evento' => '57',
+    'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS INICIALES',
+    'validado' => '0',
+    'estatus_evento' => '1',
+    'created_at' => '2024-12-11T18:51:12.190000Z',
+    'updated_at' => '2024-12-11T18:51:12.190000Z',
+  ),
+)  
+[2024-12-11 12:51:12] local.INFO: array (
+  0 => 
+  array (
+    'id' => 1527398,
+    'area' => '1.5.04',
+    'tipo_poliza' => 'D',
+    'numero_poliza' => '10',
+    'fecha' => '2024-12-07 00:00:00.000',
+    'cuenta' => '8.2.6.1.2.2.4.02.01',
+    'cuentaRelacionada' => NULL,
+    'concepto' => 'Concesión de préstamos al sector privado con fines de gestión de liquidez a Corto Plazo (Ejercido)------',
+    'total' => '100.0000000000',
+    'tipo_interaccion' => 'Presupuestal - Cargo',
+    'mes' => 'Noviembre',
+    'descripcion' => 'gerhgr',
+    'evento' => '57',
+    'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS INICIALES',
+    'validado' => '0',
+    'estatus_evento' => '1',
+    'created_at' => '2024-12-11T18:51:12.190000Z',
+    'updated_at' => '2024-12-11T18:51:12.190000Z',
+  ),
+  1 => 
+  array (
+    'id' => 1527401,
+    'area' => '1.5.04',
+    'tipo_poliza' => 'D',
+    'numero_poliza' => '10',
+    'fecha' => '2024-12-07 00:00:00.000',
+    'cuenta' => '8.2.6.1.2.2.4.02.01',
+    'cuentaRelacionada' => NULL,
+    'concepto' => 'Concesión de préstamos al sector privado con fines de gestión de liquidez a Corto Plazo (Ejercido)------',
+    'total' => '100.0000000000',
+    'tipo_interaccion' => 'Presupuestal - Abono',
+    'mes' => 'Noviembre',
+    'descripcion' => 'gerhgr',
+    'evento' => '57',
+    'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS INICIALES',
+    'validado' => '0',
+    'estatus_evento' => '1',
+    'created_at' => '2024-12-11T18:51:12.190000Z',
+    'updated_at' => '2024-12-11T18:51:12.190000Z',
+  ),
+)  
+[2024-12-11 12:51:12] local.INFO: array (
+  0 => 
+  array (
+    'id' => 1527399,
+    'area' => '1.5.04',
+    'tipo_poliza' => 'D',
+    'numero_poliza' => '10',
+    'fecha' => '2024-12-07 00:00:00.000',
+    'cuenta' => '8.2.7.1.2.2.4.02.01',
+    'cuentaRelacionada' => NULL,
+    'concepto' => 'Concesión de préstamos al sector privado con fines de gestión de liquidez a Corto Plazo (Pagado)------',
+    'total' => '100.0000000000',
+    'tipo_interaccion' => 'Presupuestal - Cargo',
+    'mes' => 'Noviembre',
+    'descripcion' => 'gerhgr',
+    'evento' => '57',
+    'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS INICIALES',
+    'validado' => '0',
+    'estatus_evento' => '1',
+    'created_at' => '2024-12-11T18:51:12.190000Z',
+    'updated_at' => '2024-12-11T18:51:12.190000Z',
+  ),
+)  
+[2024-12-11 12:51:12] local.INFO: array (
+  0 => 
+  array (
+    'id' => 1527400,
+    'area' => '1.5.04',
+    'tipo_poliza' => 'D',
+    'numero_poliza' => '10',
+    'fecha' => '2024-12-07 00:00:00.000',
+    'cuenta' => '8.2.5.1.2.2.4.02.01',
+    'cuentaRelacionada' => NULL,
+    'concepto' => 'Concesión de préstamos al sector privado con fines de gestión de liquidez a Corto Plazo (Devengado)------',
+    'total' => '100.0000000000',
+    'tipo_interaccion' => 'Presupuestal - Abono',
+    'mes' => 'Noviembre',
+    'descripcion' => 'gerhgr',
+    'evento' => '57',
+    'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS INICIALES',
+    'validado' => '0',
+    'estatus_evento' => '1',
+    'created_at' => '2024-12-11T18:51:12.190000Z',
+    'updated_at' => '2024-12-11T18:51:12.190000Z',
+  ),
+)  
+[2024-12-11 12:51:12] local.INFO: array (
+  0 => 
+  array (
+    'id' => 1527398,
+    'area' => '1.5.04',
+    'tipo_poliza' => 'D',
+    'numero_poliza' => '10',
+    'fecha' => '2024-12-07 00:00:00.000',
+    'cuenta' => '8.2.6.1.2.2.4.02.01',
+    'cuentaRelacionada' => NULL,
+    'concepto' => 'Concesión de préstamos al sector privado con fines de gestión de liquidez a Corto Plazo (Ejercido)------',
+    'total' => '100.0000000000',
+    'tipo_interaccion' => 'Presupuestal - Cargo',
+    'mes' => 'Noviembre',
+    'descripcion' => 'gerhgr',
+    'evento' => '57',
+    'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS INICIALES',
+    'validado' => '0',
+    'estatus_evento' => '1',
+    'created_at' => '2024-12-11T18:51:12.190000Z',
+    'updated_at' => '2024-12-11T18:51:12.190000Z',
+  ),
+  1 => 
+  array (
+    'id' => 1527401,
+    'area' => '1.5.04',
+    'tipo_poliza' => 'D',
+    'numero_poliza' => '10',
+    'fecha' => '2024-12-07 00:00:00.000',
+    'cuenta' => '8.2.6.1.2.2.4.02.01',
+    'cuentaRelacionada' => NULL,
+    'concepto' => 'Concesión de préstamos al sector privado con fines de gestión de liquidez a Corto Plazo (Ejercido)------',
+    'total' => '100.0000000000',
+    'tipo_interaccion' => 'Presupuestal - Abono',
+    'mes' => 'Noviembre',
+    'descripcion' => 'gerhgr',
+    'evento' => '57',
+    'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS INICIALES',
+    'validado' => '0',
+    'estatus_evento' => '1',
+    'created_at' => '2024-12-11T18:51:12.190000Z',
+    'updated_at' => '2024-12-11T18:51:12.190000Z',
+  ),
+)  
+[2024-12-13 08:41:41] local.ERROR: Maximum execution time of 60 seconds exceeded {"userId":3,"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Maximum execution time of 60 seconds exceeded at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:414)
+[stacktrace]
+#0 {main}
+"} 
+[2024-12-13 08:44:28] local.ERROR: Maximum execution time of 60 seconds exceeded {"userId":3,"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Maximum execution time of 60 seconds exceeded at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:414)
+[stacktrace]
+#0 {main}
+"} 

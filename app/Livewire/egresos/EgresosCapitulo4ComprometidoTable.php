@@ -31,7 +31,7 @@ class EgresosCapitulo4ComprometidoTable extends Tabla
 
     public function query(): Builder
     {
-
+        return Poliza::query();
     }
 
     public function data()
@@ -124,6 +124,7 @@ class EgresosCapitulo4ComprometidoTable extends Tabla
                     ];
      
                     unset($this->dataCompleta[$key]);
+                    $this->dataCompleta = array_values($this->dataCompleta );
                     $this->dispatch('llenar-formulario', $datosRegistro);
                     break;
                 }
@@ -132,6 +133,7 @@ class EgresosCapitulo4ComprometidoTable extends Tabla
             foreach ($this->cacheData as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->cacheData[$key]);
+                    $this->cacheData = array_values($this->cacheData);
                     break;
                 }
             }
@@ -152,6 +154,7 @@ class EgresosCapitulo4ComprometidoTable extends Tabla
             foreach ($this->cacheData as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->cacheData[$key]);
+                    $this->cacheData = array_values($this->cacheData);
                     break;
                 }
             }
@@ -159,6 +162,7 @@ class EgresosCapitulo4ComprometidoTable extends Tabla
             foreach ($this->dataCompleta as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->dataCompleta[$key]);
+                    $this->dataCompleta = array_values($this->dataCompleta );
                     break;
                 }
             }
@@ -234,7 +238,7 @@ class EgresosCapitulo4ComprometidoTable extends Tabla
             $fecha->year($anioActual);
 
             $bitacora = new BitacoraController();
-            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un devengado con evento: '.$this->numeroEvento, request());
+            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un comprometido del capítulo 4 con evento: '.$this->numeroEvento, request());
             DB::beginTransaction();
 
             foreach ($this->dataCompleta as $movimiento) {

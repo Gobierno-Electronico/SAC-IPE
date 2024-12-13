@@ -30,7 +30,7 @@ class GuiaContabilizadoraController extends Controller
     public function crearGuiaContabilizadora(Request $request)
     {
         // return response()->json('Método desactivado');
-        $path = public_path('Guia/4000-Pagado-CuentasConceptos.xlsx');
+        $path = public_path('Guia/7000-Ejercido-Pagado-Recaudado-CuentasConceptos.xlsx'); // cambiar el número del capítulo cuando se carguen las relaciones
 
         // Validar que el archivo pueda ser analizado correctamente.
         if ($xlsx = SimpleXLSX::parse($path)) {
@@ -83,7 +83,7 @@ class GuiaContabilizadoraController extends Controller
                         $relacionesCuentaCapitulo[] = CuentaCapitulo::create([
                             'cuenta_id' => $cuenta->id,
                             'cuenta' => $cuenta->Codigo_cuenta,
-                            'capitulo' => '4000'
+                            'capitulo' => '7000'
                         ]);                    
                     }
                  
@@ -131,7 +131,7 @@ class GuiaContabilizadoraController extends Controller
     public function relacionarCuentasCuentas(Request $request)
     {
         // return response()->json('Método desactivado');
-        $path = public_path('CuentasCuentas/IngresosPorClas-CuentasCuentas-2506.xlsx');
+        $path = public_path('CuentasCuentas/2000y3000-Devengado-CuentasCuentas3.xlsx');
 
         // Validar que el archivo pueda ser analizado correctamente.
         if ($xlsx = SimpleXLSX::parse($path)) {
@@ -192,7 +192,7 @@ class GuiaContabilizadoraController extends Controller
                         }
                         $interaccionIzquierda = InteraccionCuentaConcepto::where(['cuenta_id' => $cuentaIzquierda->id, 'concepto_id' => $conceptoIzquierda->id, 'clasificador_de_concepto_id' => $clasificadorIzquierda->id, 'tipo_interaccion' => $rows[$k]['tipo']])->first();
                         $interaccionDerecha = InteraccionCuentaConcepto::where(['cuenta_id' => $cuentaDerecha->id, 'concepto_id' => $conceptoDerecha->id, 'clasificador_de_concepto_id' => $clasificadorDerecha->id, 'tipo_interaccion' => $rows[$k + ($separacionConceptos)]['tipo']])->first();
-                        // dd($cuentaDerecha,$conceptoDerecha, $clasificadorDerecha, $interaccionDerecha);
+                        //dd($cuentaDerecha,$conceptoDerecha, $clasificadorDerecha, $interaccionDerecha);
                         $interaccionExistente = InteraccionCuentaCuenta::where(['id_interaccion_concepto_cuenta_1' => $interaccionIzquierda->id, 'id_interaccion_concepto_cuenta_2' => $interaccionDerecha->id])->first();
                         // dd($interaccionIzquierda, $interaccionDerecha);
                         // dd($interaccionExistente);
@@ -244,7 +244,7 @@ class GuiaContabilizadoraController extends Controller
     public function relacionarCuentasCuentasSeguidas(Request $request)
     {
         // return response()->json('Método desactivado');
-        $path = public_path('CuentasCuentas/4000-Pagado-CuentasCuentasSeguidas.xlsx');
+        $path = public_path('CuentasCuentas/7000-Ejercido-Pagado-Recaudado-CuentasCuentasSeguidas.xlsx');
 
         // Validar que el archivo pueda ser analizado correctamente.
         if ($xlsx = SimpleXLSX::parse($path)) {

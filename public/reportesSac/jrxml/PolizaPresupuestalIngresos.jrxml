@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.20.5.final using JasperReports Library version 6.20.5-3efcf2e67f959db3888d79f73dde2dbd7acb4f8e  -->
+<!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PolizaPresupuestalIngresos" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="55a8c4bf-9344-4264-a6b2-ecc8cd2fda35">
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -76,7 +76,7 @@
 				<textElement textAlignment="Center">
 					<font fontName="Times New Roman" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[POLIZA DE PRESUPUESTAL]]></text>
+				<text><![CDATA[PÓLIZA DE PRESUPUESTAL]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="687" y="0" width="50" height="20" uuid="8c206f97-bf18-47f6-93df-85b27a0f630d">
@@ -190,9 +190,9 @@
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="12">
+		<band height="20">
 			<staticText>
-				<reportElement x="0" y="0" width="100" height="12" uuid="94a899f8-2502-46bf-a9dc-595d362649b7">
+				<reportElement x="0" y="0" width="100" height="20" uuid="94a899f8-2502-46bf-a9dc-595d362649b7">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
@@ -203,12 +203,12 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="5"/>
+					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[Cuenta]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="100" y="0" width="500" height="12" uuid="02f5e553-49db-4359-9c0a-5de1b8cf69aa">
+				<reportElement x="100" y="0" width="480" height="20" uuid="02f5e553-49db-4359-9c0a-5de1b8cf69aa">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
@@ -219,12 +219,12 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="5"/>
+					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[Descripción]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="600" y="0" width="100" height="12" uuid="747e932f-2d85-49da-84cc-a7049b1bdc01">
+				<reportElement x="580" y="0" width="110" height="20" uuid="747e932f-2d85-49da-84cc-a7049b1bdc01">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
@@ -235,12 +235,12 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="5"/>
+					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[Cargo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="700" y="0" width="101" height="12" uuid="ff900374-6332-4dc0-a982-64e6e28ce8d8">
+				<reportElement x="690" y="0" width="111" height="20" uuid="ff900374-6332-4dc0-a982-64e6e28ce8d8">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
@@ -251,16 +251,16 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="5"/>
+					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[Abono]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="15">
+		<band height="20">
 			<textField>
-				<reportElement x="0" y="0" width="100" height="15" uuid="463db3c5-421a-4fb8-91ad-715e68f7fa45">
+				<reportElement x="0" y="0" width="100" height="20" uuid="463db3c5-421a-4fb8-91ad-715e68f7fa45">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
@@ -271,13 +271,13 @@
 					<rightPen lineWidth="0.25"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="5"/>
+					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cuenta}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="100" y="0" width="500" height="15" uuid="6d772e21-3ae2-4634-9ac0-a2eb168bb5f3">
+				<reportElement x="100" y="0" width="480" height="20" uuid="6d772e21-3ae2-4634-9ac0-a2eb168bb5f3">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="81aece0a-5ee1-42cb-94bf-893494786400"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
@@ -288,13 +288,13 @@
 					<rightPen lineWidth="0.25"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="5"/>
+					<font fontName="Times New Roman" size="10"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{concepto}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="700" y="0" width="101" height="15" uuid="218657f9-3739-48d4-b2ad-00bdb0c79626">
+				<reportElement x="690" y="0" width="111" height="20" uuid="218657f9-3739-48d4-b2ad-00bdb0c79626">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Presupuestal - Abono"))]]></printWhenExpression>
@@ -306,13 +306,13 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="5"/>
+					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{total_suma})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="600" y="0" width="100" height="15" uuid="31974cca-a510-483f-9e0d-303d49106ecd">
+				<reportElement x="580" y="0" width="110" height="20" uuid="31974cca-a510-483f-9e0d-303d49106ecd">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Presupuestal - Cargo"))]]></printWhenExpression>
@@ -324,13 +324,13 @@
 					<rightPen lineWidth="0.25"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="5"/>
+					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{total_suma})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="600" y="0" width="100" height="15" uuid="b4f201f0-1738-4e19-8a97-e2aeab6a96a7">
+				<reportElement x="580" y="0" width="110" height="20" uuid="b4f201f0-1738-4e19-8a97-e2aeab6a96a7">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Presupuestal - Abono"))]]></printWhenExpression>
@@ -342,13 +342,13 @@
 					<rightPen lineWidth="0.25"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="5"/>
+					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="700" y="0" width="101" height="15" uuid="708517df-8336-4f80-baea-8b7f8e723f69">
+				<reportElement x="690" y="0" width="111" height="20" uuid="708517df-8336-4f80-baea-8b7f8e723f69">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Presupuestal - Cargo"))]]></printWhenExpression>
@@ -360,7 +360,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="5"/>
+					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[""]]></textFieldExpression>
@@ -368,67 +368,12 @@
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="15">
-			<textField pattern="¤#,##0.00;¤-#,##0.00">
-				<reportElement isPrintRepeatedValues="false" x="600" y="0" width="100" height="15" uuid="410d311f-8a95-4058-858e-b84168c8bad4">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
-					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
-					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Presupuestal - Abono"))]]></printWhenExpression>
-				</reportElement>
-				<box padding="1">
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="0.0"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.0"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="6"/>
-					<paragraph leftIndent="3"/>
-				</textElement>
-				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($V{SumaCargo})]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement isPrintRepeatedValues="false" x="700" y="0" width="101" height="15" uuid="7a60849e-452b-4488-94c6-30e141d0b97d">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
-					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
-					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Presupuestal - Abono"))]]></printWhenExpression>
-				</reportElement>
-				<box padding="1">
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="0.0"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.0"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="6"/>
-					<paragraph leftIndent="3"/>
-				</textElement>
-				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($V{SumaAbono})]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤#,##0.00;¤-#,##0.00">
-				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="600" height="15" uuid="a327554d-c0d7-4986-8c60-3ed6f8a50d23">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
-					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
-					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Presupuestal - Abono"))]]></printWhenExpression>
-				</reportElement>
-				<box padding="1">
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="0.0"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.0"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="6" isBold="true"/>
-					<paragraph leftIndent="3"/>
-				</textElement>
-				<textFieldExpression><![CDATA["TOTALES"]]></textFieldExpression>
-			</textField>
-		</band>
+		<band/>
 	</columnFooter>
 	<summary>
-		<band height="119">
+		<band height="141">
 			<textField>
-				<reportElement x="544" y="104" width="262" height="15" uuid="469cb8ac-1dd8-41d7-ba43-860b831b7404">
+				<reportElement x="544" y="126" width="257" height="15" uuid="469cb8ac-1dd8-41d7-ba43-860b831b7404">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
@@ -439,13 +384,13 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="6"/>
+					<font fontName="Times New Roman" size="10"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA["L.C. CLAUDIA IVONNE TEJEDA CHIMALPOPOCA"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="544" y="35" width="262" height="15" uuid="08e4d8f7-7719-4747-8d66-01c44b7658f8">
+				<reportElement x="544" y="57" width="257" height="15" uuid="08e4d8f7-7719-4747-8d66-01c44b7658f8">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
@@ -456,13 +401,13 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="6"/>
+					<font fontName="Times New Roman" size="10"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA["AUTORIZÓ REGISTRO"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="271" y="50" width="273" height="54" uuid="eadde7f4-d701-403c-9eee-0bdd7bd4c4c4">
+				<reportElement x="271" y="72" width="273" height="54" uuid="eadde7f4-d701-403c-9eee-0bdd7bd4c4c4">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
@@ -473,13 +418,13 @@
 					<rightPen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="6"/>
+					<font fontName="Times New Roman" size="10"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="5" y="104" width="266" height="15" uuid="46e184b1-419f-40b7-acfc-520ef1a97e98">
+				<reportElement x="0" y="126" width="271" height="15" uuid="46e184b1-419f-40b7-acfc-520ef1a97e98">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
@@ -490,13 +435,13 @@
 					<rightPen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="6"/>
+					<font fontName="Times New Roman" size="10"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["L.A. ANAYUTH ORORIO LOPEZ"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["L.A.E. ANAYUTH OSORIO LÓPEZ"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="5" y="5" width="40" height="15" uuid="45523d6a-d0bd-45e3-b0d6-22a1b6072ed0">
+				<reportElement x="0" y="30" width="120" height="15" uuid="45523d6a-d0bd-45e3-b0d6-22a1b6072ed0">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
@@ -507,13 +452,13 @@
 					<rightPen lineWidth="0.0"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="6"/>
+					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Concepto"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="544" y="50" width="262" height="54" uuid="09d3d9ff-75af-4aa1-b0cb-e1d668f2eeb2">
+				<reportElement x="544" y="72" width="257" height="54" uuid="09d3d9ff-75af-4aa1-b0cb-e1d668f2eeb2">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
@@ -524,13 +469,13 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="6"/>
+					<font fontName="Times New Roman" size="10"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="45" y="5" width="761" height="15" uuid="587789b8-219d-478d-a65d-9e7f9c04ba02">
+				<reportElement x="120" y="30" width="682" height="15" uuid="587789b8-219d-478d-a65d-9e7f9c04ba02">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
@@ -541,13 +486,13 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="6"/>
+					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{Concepto}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="5" y="50" width="266" height="54" uuid="f62adcca-16e5-4735-aeff-70959ff4b5ac">
+				<reportElement x="0" y="72" width="271" height="54" uuid="f62adcca-16e5-4735-aeff-70959ff4b5ac">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -559,13 +504,13 @@
 					<rightPen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="6"/>
+					<font fontName="Times New Roman" size="10"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="271" y="104" width="273" height="15" uuid="75928566-e05b-4ffe-9668-fa838469a289">
+				<reportElement x="271" y="126" width="273" height="15" uuid="75928566-e05b-4ffe-9668-fa838469a289">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
@@ -576,13 +521,13 @@
 					<rightPen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="6"/>
+					<font fontName="Times New Roman" size="10"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["C.P. ANIBAL ANDRADE DIAZ"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["C.P. ANÍBAL ANDRADE DÍAZ"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="271" y="35" width="273" height="15" uuid="b0cd2b88-2324-4f66-8b92-644c93387ac8">
+				<reportElement x="271" y="57" width="273" height="15" uuid="b0cd2b88-2324-4f66-8b92-644c93387ac8">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
@@ -593,13 +538,13 @@
 					<rightPen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="6"/>
+					<font fontName="Times New Roman" size="10"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA["VALIDÓ REGISTRO"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="5" y="35" width="266" height="15" uuid="51695294-77a4-4110-8db7-ba5f93326fd6">
+				<reportElement x="0" y="57" width="271" height="15" uuid="51695294-77a4-4110-8db7-ba5f93326fd6">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
@@ -610,10 +555,64 @@
 					<rightPen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="6"/>
+					<font fontName="Times New Roman" size="10"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA["REGISTRÓ"]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤#,##0.00;¤-#,##0.00">
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="580" height="20" uuid="a327554d-c0d7-4986-8c60-3ed6f8a50d23">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Presupuestal - Abono"))]]></printWhenExpression>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TOTALES"]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤#,##0.00;¤-#,##0.00">
+				<reportElement isPrintRepeatedValues="false" x="580" y="0" width="110" height="20" uuid="410d311f-8a95-4058-858e-b84168c8bad4">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Presupuestal - Abono"))]]></printWhenExpression>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($V{SumaCargo})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="690" y="0" width="111" height="20" uuid="7a60849e-452b-4488-94c6-30e141d0b97d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Presupuestal - Abono"))]]></printWhenExpression>
+				</reportElement>
+				<box padding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($V{SumaAbono})]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

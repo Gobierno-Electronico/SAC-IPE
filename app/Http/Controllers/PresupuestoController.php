@@ -88,15 +88,18 @@ class PresupuestoController extends Controller
         return view('movimientos.movimientos');
     }
 
-    public function consultaAmpliacionesReducciones(){
+    public function consultaAmpliacionesReducciones()
+    {
         return view('presupuestos.ampliaciones_reducciones.consulta-ampliaciones-reducciones');
     }
 
-    public function verDetalleAfectacion($evento){
+    public function verDetalleAfectacion($evento)
+    {
         return view('presupuestos.ampliaciones_reducciones.ver-detalle-afectacion', ['evento' => $evento]);
     }
 
-    public function recalendarizacion(){
+    public function recalendarizacion()
+    {
         return view('presupuestos.recalendarizacion.recalendarizacion');
     }
 
@@ -133,6 +136,7 @@ class PresupuestoController extends Controller
                 $reemplazarCaracterEspecial = function ($texto) {
                     return str_replace("\xc2\xa0", '', $texto);
                 };
+
                 $numeroRegistros = 0;
                 foreach ($xlsx->rows() as $numero_fila => $datos_fila) {
                     if ($numero_fila === 0) {
@@ -143,7 +147,56 @@ class PresupuestoController extends Controller
                     if (count($encabezados) != count($datos_fila)) {
                         dd($encabezados, $datos_fila);
                     }
+
+                    // Se combinan los+ encabezados y los datos de la fila para formar un array asociativo
                     $rows[] = array_combine(array_map('trim', array_filter($encabezados)), array_map('trim', array_map($reemplazarCaracterEspecial, $datos_fila)));
+
+                    $fila = array_combine(
+                        array_map('trim', array_filter($encabezados)),
+                        array_map('trim', array_map($reemplazarCaracterEspecial, $datos_fila))
+                    );
+
+                    // Verificar las columnas 'TOTAL', 'ENERO', 'FEBRERO', etc.
+                    $meses = ['TOTAL', 'ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
+
+                    foreach ($meses as $mes) {
+                        if (isset($fila[$mes])) {
+                            $valor = $fila[$mes];
+
+                            // Eliminar posibles caracteres no numéricos (espacios o caracteres especiales)
+                            $valor = preg_replace('/[^\d.-]/', '', $valor);
+
+                            // Validar si el valor es numérico
+                            if (!is_numeric($valor)) {
+                                $errores[] = "El valor de $mes en el registro $numero_fila no es numérico.";
+                                continue;
+                            }
+
+                            // Validar si el valor es mayor o igual a 0 (no negativo)
+                            if ($valor < 0) {
+                                $errores[] = "El valor de $mes en el registro $numero_fila no debe ser negativo.";
+                            }
+
+                            // Validar si el valor tiene como máximo dos decimales
+                            if (!preg_match('/^\d+(\.\d{1,2})?$/', $valor)) {
+                                $errores[] = "El valor de $mes en el registro $numero_fila debe tener como máximo dos dígitos después del punto decimal.";
+                            }
+
+                            // Asignar el valor limpio de vuelta al array
+                            $fila[$mes] = $valor;
+                        }
+                    }
+
+                    // Agregar la fila procesada al array de filas válidas
+                }
+                
+
+                // Si hay errores, devolverlos y abortar la operación
+                if (!empty($errores)) {
+                    // dd($errores);
+                    session()->flash('message', implode('<br>', $errores));
+                    session()->flash('message_type', 'error');
+                    return back();
                 }
                 // Se inicia una transacción de base de datos para que todas las operaciones de base de datos dentro del bloque se puedan revertir si ocurre algún error.
                 $usuariosController = new BitacoraController();
@@ -210,7 +263,7 @@ class PresupuestoController extends Controller
                             $cuentasFaltantes[] = $row["Cuenta"];
                         }
                     }
-                    $cri = ClasificadorRubroIngreso::where('Codificacion_rubro_ingreso', '=', $row["CRI"])->where('Nombre' , '=' , $row["Descripción"])->first();
+                    $cri = ClasificadorRubroIngreso::where('Codificacion_rubro_ingreso', '=', $row["CRI"])->where('Nombre', '=', $row["Descripción"])->first();
                     if (!$cri) {
                         ClasificadorRubroIngreso::create([
                             'Codificacion_rubro_ingreso' => $row["CRI"],
@@ -219,7 +272,7 @@ class PresupuestoController extends Controller
                             'Cuenta_registro' => $cuenta->Cuenta_registro
                         ]);
                     }
-                    $cff = ClasificadorFuenteFinanciamiento::where('Codificacion_fuente_financiamiento', '=', $row["CFF"])->where('Nombre' , '=' , $row["Descripción"])->first();
+                    $cff = ClasificadorFuenteFinanciamiento::where('Codificacion_fuente_financiamiento', '=', $row["CFF"])->where('Nombre', '=', $row["Descripción"])->first();
                     if (!$cff) {
                         ClasificadorFuenteFinanciamiento::create([
                             'Codificacion_fuente_financiamiento' => $row["CFF"],
@@ -376,8 +429,8 @@ class PresupuestoController extends Controller
                 'created_at' => $fecha,
                 'updated_at' => $fecha
             ];
-            $cri = ClasificadorRubroIngreso::where('Codificacion_rubro_ingreso', '=', $presupuesto["CRI"])->where('Nombre' , '=' , $cuentaDerecha->Descripcion_cuenta)->first();
-            $cff = ClasificadorFuenteFinanciamiento::where('Codificacion_fuente_financiamiento', '=', $presupuesto["CFF"])->where('Nombre' , '=' , $cuentaDerecha->Descripcion_cuenta)->first();
+            $cri = ClasificadorRubroIngreso::where('Codificacion_rubro_ingreso', '=', $presupuesto["CRI"])->where('Nombre', '=', $cuentaDerecha->Descripcion_cuenta)->first();
+            $cff = ClasificadorFuenteFinanciamiento::where('Codificacion_fuente_financiamiento', '=', $presupuesto["CFF"])->where('Nombre', '=', $cuentaDerecha->Descripcion_cuenta)->first();
 
             if (!$cri) {
                 ClasificadorRubroIngreso::create([
@@ -523,7 +576,50 @@ class PresupuestoController extends Controller
                     if (count($encabezados) != count($datos_fila)) {
                         dd($encabezados, $datos_fila);
                     }
-                    $rows[] = array_combine(array_map('trim', array_filter($encabezados)), array_map('trim', array_map($reemplazarCaracterEspecial, $datos_fila)));
+                    // $rows[] = array_combine(array_map('trim', array_filter($encabezados)), array_map('trim', array_map($reemplazarCaracterEspecial, $datos_fila)));
+                    $fila = array_combine(array_map('trim', array_filter($encabezados)), array_map('trim', array_map($reemplazarCaracterEspecial, $datos_fila)));
+
+                    // Verificar que los valores en las columnas de TOTAL, ENERO, FEBRERO, etc., no sean negativos y no tengan más de dos decimales.
+                    $meses = ['TOTAL', 'ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
+
+                    foreach ($meses as $mes) {
+                        if (isset($fila[$mes])) {
+                            $valor = $fila[$mes];
+
+                            // Eliminar posibles caracteres no numéricos (espacios o caracteres especiales)
+                            $valor = preg_replace('/[^\d.-]/', '', $valor);
+
+                            // Validar si el valor es numérico
+                            if (!is_numeric($valor)) {
+                                $errores[] = "El valor de $mes en el registo $numero_fila no es numérico.";
+                                continue;
+                            }
+
+                            // Validar si el valor es mayor o igual a 0 (no negativo)
+                            if ($valor < 0) {
+                                $errores[] = "El valor de $mes en el registro $numero_fila no debe ser negativo.";
+                            }
+
+                            // Validar si el valor tiene como máximo dos decimales
+                            if (!preg_match('/^\d+(\.\d{1,2})?$/', $valor)) {
+                                $errores[] = "El valor de $mes en el registro $numero_fila debe tener como máximo dos dígitos después del punto decimal.";
+                            }
+
+                            // Asignar el valor limpio de vuelta al array
+                            $fila[$mes] = $valor;
+                        }
+                    }
+
+                    // Agregar la fila procesada al array de filas válidas
+                    $rows[] = $fila;
+                }
+
+                // Si hay errores, devolverlos y abortar la operación
+                if (!empty($errores)) {
+                    Log::error($errores);
+                    session()->flash('message', implode('<br>', $errores));
+                    session()->flash('message_type', 'error');
+                    return back();
                 }
                 // Se inicia una transacción de base de datos para que todas las operaciones de base de datos dentro del bloque se puedan revertir si ocurre algún error.
                 $usuariosController = new BitacoraController();
@@ -577,7 +673,7 @@ class PresupuestoController extends Controller
                 $cuentasFaltantes = [];
                 $cuentasEnLaGuiaFaltantes = [];
                 // Se procesan los datos de cada fila del archivo Excel y se crea un nuevo registro en la base de datos utilizando el modelo Cuenta.
-                foreach ($rows as $row) { 
+                foreach ($rows as $row) {
                     $cuenta = Cuenta::where("Codigo_cuenta", $row["Cuenta"])->first();
 
                     $cuentaCapitulo = CuentaCapitulo::where('cuenta_id', '=', $cuenta->id)->first();
@@ -586,7 +682,7 @@ class PresupuestoController extends Controller
                             'cuenta_id' => $cuenta->id,
                             'cuenta' => $cuenta->Codigo_cuenta,
                             'capitulo' => $capitulo
-                        ]);                    
+                        ]);
                     }
 
                     if (!$cuenta) {
@@ -604,7 +700,7 @@ class PresupuestoController extends Controller
                         }
                     }
                     $relacionCuentaClasificador = cuentaClasificadorEgreso::where('codigoCuenta', '=', $row["Cuenta"])->first();
-                    if(!$relacionCuentaClasificador){
+                    if (!$relacionCuentaClasificador) {
                         CuentaClasificadorEgreso::create([
                             'codigoCuenta' => $row["Cuenta"],
                             'CTG' => $row["CTG"],
@@ -905,5 +1001,4 @@ class PresupuestoController extends Controller
         }
         return true;
     }
-
 }

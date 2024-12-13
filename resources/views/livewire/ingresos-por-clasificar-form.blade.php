@@ -45,7 +45,7 @@
                 wire:model.live="observaciones">
 
             <label for="inputFechaRegistro" class="form-label mt-3">Fecha de afectación</label>
-            <input type="date" name="inputFechaRegistro" id="inputFechaRegistro" class="form-control mb-3"
+            <input type="date" name="inputFechaRegistro" id="inputFechaRegistro" class="form-control mb-3" max="{{ now()->toDateString() }}"
                 wire:model.live="fechaAfectacion">
 
         </div>

@@ -18,15 +18,12 @@
                                 disabled>
                         </div>
                     </div>
-
-
                 </div>
-
             </div>
         </div>
-        {{--         <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaIngresosDevengado" urlFinalizar="/ingresos-devengado" tipoPoliza="I"
-            categoriaModulo='INGRESOS DEVENGADO' /> --}}
+        <livewire:egresos.egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+            tipoMovimiento="PolizaEgresosDevengadoCapitulo4" urlFinalizar="/capitulo4-devengado" :$numeroPolizaRemanente tipoPoliza="E"
+            categoriaModulo='EGRESOS DEVENGADO CAPITULO 4' categoriaRemanente='EGRESOS COMPROMETIDO CAPITULO 4 REMANENTE DEVENGADO'/>
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
@@ -48,7 +45,7 @@
             wire:model="observaciones">
 
         <label for="inputFechaAfectacion" class="form-label mt-3">Fecha de afectación</label>
-        <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control"
+        <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control" max="{{ now()->toDateString() }}"
             wire:model="fechaAfectacion">
 
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
@@ -59,16 +56,16 @@
                     <option value="" disabled>
                         Seleccionar un evento
                     </option>
-                    @foreach ($eventos as $evento /* => $descripcion */)
+                    @foreach ($eventos as $evento  => $descripcion)
                         <option value="{{ $evento }}">
-                           {{ $evento }} {{-- {{ $evento }} - {{$descripcion}} --}}
+                           {{ $evento }} - {{$descripcion}}
                         </option>
                     @endforeach
                 </select>
 
                 <label for="selectAreaResponsable" class="form-label mt-3">Área responsable</label>
                 <select name="selectAreaResponsable" id="selectAreaResponsable" class="form-select"
-                    wire:model="selectCodigoAreaResponsable">
+                    wire:model="selectCodigoAreaResponsable" wire:change="cargarPresupuestoComprometido">
                     <option value="" @if ($this->selectCodigoAreaResponsable == '') selected @endif disabled>
                         Seleccionar un área
                     </option>
@@ -92,7 +89,7 @@
 
                 <label for="selectCuenta" class="form-label mt-3">Cuenta contable</label>
                 <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuentaContable">
-                    <option value="" disabled>Seleccionar cuenta</option>
+                    <option value="" selected disabled>Seleccionar cuenta</option>
                     @foreach ($cuentasContables as $cuenta)
                         <option value="{{ $cuenta->cuenta_id }}"> 
                             {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}
@@ -101,7 +98,7 @@
                 </select>
 
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
-                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes">
+                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes" wire:change="cargarPresupuestoComprometido">
                     <option value="" selected disabled>Seleccionar mes...</option>
                     @foreach (range(1, 12) as $mes)
                         @php
@@ -112,9 +109,12 @@
                     @endforeach
                 </select>
 
-                <label for="inputPTTOEjecutar" class="form-label mt-3">Presupuesto por ejecutar</label>
-                <input type="text" name="inputPTTOEjecutar" id="inputPTTOEjecutar" class="form-control" disabled>
+                <label for="inputMontoEvento" class="form-label mt-3">Monto del evento</label>
+                <input type="text" name="inputMontoEvento" id="inputMontoEvento" class="form-control" disabled>
 
+                <label for="inputPTTOComprometido" class="form-label mt-3">Presupuesto comprometido</label>
+                <input type="text" name="inputPTTOComprometido" id="inputPTTOComprometido" class="form-control" disabled>
+                
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control"
                     onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model="importe">
@@ -148,14 +148,6 @@
         limpiar()
     })
 
-    window.addEventListener('limpiarIVA', event => {
-        limpiarIVA()
-    })
-
-    window.addEventListener('limpiarImporteIva', event => {
-        limpiarImporteIva()
-    })
-
     function keyPress(e, obj) {
         let isCurrency = $('#' + obj.id).val().search(/[$]/)
         let texto = $('#' + obj.id).val().replace(/[^0-9.]/g, '');
@@ -184,6 +176,6 @@
     }
 
     function limpiar() {
-        $('#inputPTTOEjecutar').val('');
+        $('#inputPTTOComprometido').val('');
     }
 </script>

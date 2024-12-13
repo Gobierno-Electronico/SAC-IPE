@@ -47,8 +47,8 @@
         <input type="text" name="inputObservacion" id="inputObservacion" class="form-control"
             wire:model="observaciones">
 
-        <label for="inputFechaAfectacion" class="form-label mt-3">Fecha de afetación</label>
-        <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control"
+        <label for="inputFechaAfectacion" class="form-label mt-3">Fecha de afectación</label>
+        <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control" max="{{ now()->toDateString() }}"
             wire:model="fechaAfectacion">
 
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
@@ -69,7 +69,7 @@
                     @endforeach
                 </select>
 
-                <label for="selectCuenta" class="form-label mt-3">Cuenta contable</label>
+                <label for="selectCuenta" class="form-label mt-3">Cuenta</label>
                 <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta" wire:change="cambioPresupuesto">
                     <option value="" disabled>Seleccionar cuenta</option>
                     @foreach ($cuentas as $cuenta)

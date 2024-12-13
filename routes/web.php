@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\AfectacionesLiquidasController;
 use App\Http\Controllers\CuentasController;
 use App\Http\Controllers\GuiaContabilizadoraController;
 use App\Http\Controllers\PresupuestoController;
+use App\Http\Controllers\PrestamosController;
 use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\BitacoraController;
 use App\Http\Controllers\ReportesController;
@@ -33,16 +33,16 @@ Route::get('/', function () {
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 //Cuentas
-Route::get('/cuentas', [CuentasController::class, 'listaDeCuentas'])->name('listaDeCuentas')->middleware('role:Administrador');
-Route::get('/cuentas/editar/{id}', [CuentasController::class, 'editarCuenta'])->name('editarCuenta')->middleware('role:Administrador');
-Route::post('/cuentas/cambiosCuenta', [CuentasController::class, 'cambiosCuenta'])->name('cambiosCuenta')->middleware('role:Administrador');
-Route::get('/cuentas/mostrarRegistrarCuenta', [CuentasController::class, 'mostrarRegistrarCuenta'])->middleware('role:Administrador');
-Route::get('/cuentas/llenarSiguienteNivel', [CuentasController::class, 'llenarSiguienteNivel'])->middleware('role:Administrador');
-Route::post('/cuentas/agregarCuenta', [CuentasController::class, 'agregarCuenta'])->middleware('role:Administrador');
-Route::get('/cuentas/cargaExcel', [CuentasController::class, 'cargaExcel'])->name('cargaExcel')->middleware('role:Administrador');
-Route::post('/importarExcel', [CuentasController::class, 'importarExcel'])->name('importarExcel')->middleware('role:Administrador');
-Route::get('/plantillaExcel/{archivo}', [CuentasController::class, 'plantillaExcel'])->name('plantillaExcel')->middleware('role:Administrador');
-Route::get('/limpiar-plan-cuentas', [CuentasController::class, 'limpiarCuentas'])->name('limpiarCuentas')->middleware('role:Administrador');
+Route::get('/cuentas', [CuentasController::class, 'listaDeCuentas'])->name('listaDeCuentas')->middleware('can:acceso-cuentas');
+Route::get('/cuentas/editar/{id}', [CuentasController::class, 'editarCuenta'])->name('editarCuenta')->middleware('can:acceso-cuentas');
+Route::post('/cuentas/cambiosCuenta', [CuentasController::class, 'cambiosCuenta'])->name('cambiosCuenta')->middleware('can:acceso-cuentas');
+Route::get('/cuentas/mostrarRegistrarCuenta', [CuentasController::class, 'mostrarRegistrarCuenta'])->middleware('can:acceso-cuentas');
+Route::get('/cuentas/llenarSiguienteNivel', [CuentasController::class, 'llenarSiguienteNivel'])->middleware('can:acceso-cuentas');
+Route::post('/cuentas/agregarCuenta', [CuentasController::class, 'agregarCuenta'])->middleware('can:acceso-cuentas');
+Route::get('/cuentas/cargaExcel', [CuentasController::class, 'cargaExcel'])->name('cargaExcel')->middleware('can:acceso-cuentas');
+Route::post('/importarExcel', [CuentasController::class, 'importarExcel'])->name('importarExcel')->middleware('can:acceso-cuentas');
+Route::get('/plantillaExcel/{archivo}', [CuentasController::class, 'plantillaExcel'])->name('plantillaExcel')->middleware('can:acceso-cuentas');
+Route::get('/limpiar-plan-cuentas', [CuentasController::class, 'limpiarCuentas'])->name('limpiarCuentas')->middleware('can:acceso-cuentas');
 
 //Usuarios
 Route::get('/usuarios', [UsuariosController::class, 'listaDeUsuarios'])->name('listaDeUsuarios')->middleware('role:Administrador');
@@ -64,48 +64,48 @@ Route::get('/relacionarCuentasCRI', [CuentasController::class, 'relacionarCuenta
 Route::get('/relacionarCuentasCFF', [CuentasController::class, 'relacionarCuentasCFF'])->name('relacionarCuentasCFF')->middleware('role:Administrador');
 
 //Presupuesto ingresos
-Route::get('/presupuesto/consulta-presupuesto-ingresos',[PresupuestoController::class, 'consultaPresupuestoIngresos'])->name('consultaPresupuestoIngresos')->middleware('role:Administrador');
-Route::get('/presupuesto/presupuesto-inicial-ingresos',[PresupuestoController::class, 'presupuestoInicialIngresos'])->name('presupuestoInicialIngresos')->middleware('role:Administrador');
-Route::post('/presupuesto/cargar-presupuesto-inicial-ingresos',[PresupuestoController::class, 'cargarPresupuestoInicialIngresos'])->name('cargarPresupuestoInicialIngresos')->middleware('role:Administrador');
-Route::get('/presupuesto/plantilla-presupuesto-inicial',[PresupuestoController::class, 'plantillaPresupuestoInicial'])->name('plantillaPresupuestoInicial')->middleware('role:Administrador');
+Route::get('/presupuesto/consulta-presupuesto-ingresos',[PresupuestoController::class, 'consultaPresupuestoIngresos'])->name('consultaPresupuestoIngresos')->middleware('can:acceso-presupuesto');
+Route::get('/presupuesto/presupuesto-inicial-ingresos',[PresupuestoController::class, 'presupuestoInicialIngresos'])->name('presupuestoInicialIngresos')->middleware('can:acceso-presupuesto');
+Route::post('/presupuesto/cargar-presupuesto-inicial-ingresos',[PresupuestoController::class, 'cargarPresupuestoInicialIngresos'])->name('cargarPresupuestoInicialIngresos')->middleware('can:acceso-presupuesto');
+Route::get('/presupuesto/plantilla-presupuesto-inicial',[PresupuestoController::class, 'plantillaPresupuestoInicial'])->name('plantillaPresupuestoInicial')->middleware('can:acceso-presupuesto');
 
 //Presupuesto egresos
-Route::get('/presupuesto/consulta-presupuesto-egresos',[PresupuestoController::class, 'consultaPresupuestoEgresos'])->name('consultaPresupuestoEgresos')->middleware('role:Administrador');
-Route::get('/presupuesto/presupuesto-inicial-egresos',[PresupuestoController::class, 'presupuestoInicialEgresos'])->name('presupuestoInicialEgresos')->middleware('role:Administrador');
-Route::post('/presupuesto/cargar-presupuesto-inicial-egresos',[PresupuestoController::class, 'cargarPresupuestoInicialEgresos'])->name('cargarPresupuestoInicialEgresos')->middleware('role:Administrador');
-Route::get('/presupuesto/plantilla-presupuesto-inicial-egresos',[PresupuestoController::class, 'plantillaPresupuestoInicial'])->name('plantillaPresupuestoInicialEgresos')->middleware('role:Administrador');
+Route::get('/presupuesto/consulta-presupuesto-egresos',[PresupuestoController::class, 'consultaPresupuestoEgresos'])->name('consultaPresupuestoEgresos')->middleware('can:acceso-presupuesto');
+Route::get('/presupuesto/presupuesto-inicial-egresos',[PresupuestoController::class, 'presupuestoInicialEgresos'])->name('presupuestoInicialEgresos')->middleware('can:acceso-presupuesto');
+Route::post('/presupuesto/cargar-presupuesto-inicial-egresos',[PresupuestoController::class, 'cargarPresupuestoInicialEgresos'])->name('cargarPresupuestoInicialEgresos')->middleware('can:acceso-presupuesto');
+Route::get('/presupuesto/plantilla-presupuesto-inicial-egresos',[PresupuestoController::class, 'plantillaPresupuestoInicial'])->name('plantillaPresupuestoInicialEgresos')->middleware('can:acceso-presupuesto');
 
 //Afectaciones líquidas
-Route::get('/presupuesto/consulta-ampliaciones-reducciones',[PresupuestoController::class, 'consultaAmpliacionesReducciones'])->name('consultaAmpliacionesReducciones')->middleware('role:Administrador');
-Route::get('/presupuesto/ingresos/ampliacion',[PresupuestoController::class, 'ampliacionIngresos'])->name('ampliacionIngresos')->middleware('role:Administrador');
-Route::get('/presupuesto/egresos/ampliacion',[PresupuestoController::class, 'ampliacionEgresos'])->name('ampliacionEgresos')->middleware('role:Administrador');
-Route::get('/presupuesto/ingresos/reduccion',[PresupuestoController::class, 'reduccionIngresos'])->name('reduccionIngresos')->middleware('role:Administrador');
-Route::get('/presupuesto/egresos/reduccion',[PresupuestoController::class, 'reduccionEgresos'])->name('reduccionEgresos')->middleware('role:Administrador');
-Route::get('/presupuesto/verDetalleAfectacion/{evento}',[PresupuestoController::class, 'verDetalleAfectacion'])->name('verDetalleAfectacion')->middleware('role:Administrador');
+Route::get('/presupuesto/consulta-ampliaciones-reducciones',[PresupuestoController::class, 'consultaAmpliacionesReducciones'])->name('consultaAmpliacionesReducciones')->middleware('can:acceso-presupuesto');
+Route::get('/presupuesto/ingresos/ampliacion',[PresupuestoController::class, 'ampliacionIngresos'])->name('ampliacionIngresos')->middleware('can:acceso-presupuesto');
+Route::get('/presupuesto/egresos/ampliacion',[PresupuestoController::class, 'ampliacionEgresos'])->name('ampliacionEgresos')->middleware('can:acceso-presupuesto');
+Route::get('/presupuesto/ingresos/reduccion',[PresupuestoController::class, 'reduccionIngresos'])->name('reduccionIngresos')->middleware('can:acceso-presupuesto');
+Route::get('/presupuesto/egresos/reduccion',[PresupuestoController::class, 'reduccionEgresos'])->name('reduccionEgresos')->middleware('can:acceso-presupuesto');
+Route::get('/presupuesto/verDetalleAfectacion/{evento}',[PresupuestoController::class, 'verDetalleAfectacion'])->name('verDetalleAfectacion')->middleware('can:acceso-presupuesto');
 
 // Recandelarización y Reclasificación
-Route::get('/presupuesto/recalendarizacion', [PresupuestoController::class, 'recalendarizacion'])->name('recalendarizacion')->middleware('role:Administrador');
+Route::get('/presupuesto/recalendarizacion', [PresupuestoController::class, 'recalendarizacion'])->name('recalendarizacion')->middleware('can:acceso-presupuesto');
 
 //Bitacora
 Route::get('/bitacoras', [BitacoraController::class, 'listarBitacoras'])->name('listarBitacoras')->middleware('role:Tecnico');
 
 //Balanza Armonizada
-Route::get('/balanza', [ReportesController::class, 'balanza'])->name('balanzaArmonizada')->middleware('role:Administrador');
+Route::get('/balanza', [ReportesController::class, 'balanza'])->name('balanzaArmonizada')->middleware('can:acceso-contabilidad-reportes');
 
 //Libro Mayor
-Route::get('/mayor', [ReportesController::class, 'mayor'])->name('libroMayor')->middleware('role:Administrador');
+Route::get('/mayor', [ReportesController::class, 'mayor'])->name('libroMayor')->middleware('can:acceso-contabilidad-reportes');
 
 //Libro Diario
-Route::get('/diario', [ReportesController::class, 'diario'])->name('libroDiario')->middleware('role:Administrador');
+Route::get('/diario', [ReportesController::class, 'diario'])->name('libroDiario')->middleware('can:acceso-contabilidad-reportes');
 
 //Carga contabilidad
-Route::get('/contabilidad/poliza-inicial', [ContabilidadController::class, 'polizaInicial'])->name('polizaInicial')->middleware('role:Administrador');
-Route::get('/contabilidad/plantilla-poliza-inicial', [ContabilidadController::class, 'plantillaPolizaInicial'])->name('plantillaActivos')->middleware('role:Administrador');
-Route::get('/contabilidad/consulta-poliza-inicial', [ContabilidadController::class, 'consultaPolizaInicial'])->name('consultaPolizaInicial')->middleware('role:Administrador');
-Route::post('/contabilidad/cargar-poliza-inicial', [ContabilidadController::class, 'cargarPolizaInicial'])->name('cargarPolizaInicial')->middleware('role:Administrador');
+Route::get('/contabilidad/poliza-inicial', [ContabilidadController::class, 'polizaInicial'])->name('polizaInicial')->middleware('can:acceso-contabilidad-consultar-carga');
+Route::get('/contabilidad/plantilla-poliza-inicial', [ContabilidadController::class, 'plantillaPolizaInicial'])->name('plantillaActivos')->middleware('can:acceso-contabilidad-consultar-carga');
+Route::get('/contabilidad/consulta-poliza-inicial', [ContabilidadController::class, 'consultaPolizaInicial'])->name('consultaPolizaInicial')->middleware('can:acceso-contabilidad-consultar-carga');
+Route::post('/contabilidad/cargar-poliza-inicial', [ContabilidadController::class, 'cargarPolizaInicial'])->name('cargarPolizaInicial')->middleware('can:acceso-contabilidad-consultar-carga');
 
 //Tipos de presupuesto
-Route::get("/tiposPresupuesto", [PresupuestoController::class, 'tiposPresupuesto'])->name('tiposPresupuesto')->middleware('role:Administrador');
+Route::get("/tiposPresupuesto", [PresupuestoController::class, 'tiposPresupuesto'])->name('tiposPresupuesto')->middleware('can:acceso-presupuesto');
 
 Route::get("/movimientos", [PresupuestoController::class, 'movimientos'])->name('movimientos')->middleware('role:Administrador');
 
@@ -121,15 +121,33 @@ Route::get("/autorizacion-reintegro", [IngresosController::class, 'autorizacionR
 Route::get("/pago-reintegro", [IngresosController::class, 'pagoReintegro'])->name('pagoReintegro')->middleware('role:Administrador');
 Route::get("/cobro-especie", [IngresosController::class, 'cobroEspecie'])->name('cobroEspecie')->middleware('role:Administrador');
 Route::get("/devolucion-especie", [IngresosController::class, 'devolucionEspecie'])->name('devolucionEspecie')->middleware('role:Administrador');
+Route::get("/movimientos-ingresos", [IngresosController::class, 'consultarMovimientos'])->name('movimientosIngresos')->middleware('role:Administrador');
+
 
 //Egresos
+Route::get("/capitulo2y3-comprometido", [EgresosController::class, 'capitulo2y3Comprometido'])->name('capitulo2y3Comprometido')->middleware('role:Administrador');
+Route::get("/capitulo2y3-devengado", [EgresosController::class, 'capitulo2y3Devengado'])->name('capitulo2y3Devengado')->middleware('role:Administrador');
+Route::get("/capitulo2y3-ejercido", [EgresosController::class, 'capitulo2y3Ejercido'])->name('capitulo2y3Ejercido')->middleware('role:Administrador');
+Route::get("/capitulo2y3-pagado", [EgresosController::class, 'capitulo2y3Pagado'])->name('capitulo2y3Pagado')->middleware('role:Administrador');
 Route::get("/capitulo4-comprometido", [EgresosController::class, 'capitulo4Comprometido'])->name('capitulo4Comprometido')->middleware('role:Administrador');
 Route::get("/capitulo4-devengado", [EgresosController::class, 'capitulo4Devengado'])->name('capitulo4Devengado')->middleware('role:Administrador');
 Route::get("/capitulo4-ejercido", [EgresosController::class, 'capitulo4Ejercido'])->name('capitulo4Ejercido')->middleware('role:Administrador');
 Route::get("/capitulo4-pagado", [EgresosController::class, 'capitulo4Pagado'])->name('capitulo4Pagado')->middleware('role:Administrador');
 Route::get("/capitulo5-comprometido", [EgresosController::class, 'capitulo5Comprometido'])->name('capitulo5Comprometido')->middleware('role:Administrador');
+Route::get("/capitulo5-devengado", [EgresosController::class, 'capitulo5Devengado'])->name('capitulo5Devengado')->middleware('role:Administrador');
 Route::get("/capitulo5-ejercido", [EgresosController::class, 'capitulo5Ejercido'])->name('capitulo5Ejercido')->middleware('role:Administrador');
 Route::get("/capitulo5-pagado", [EgresosController::class, 'capitulo5Pagado'])->name('capitulo5Pagado')->middleware('role:Administrador');
+Route::get("/movimientos-egresos", [EgresosController::class, 'consultarMovimientos'])->name('movimientosEgresos')->middleware('role:Administrador');
+
+//Prestamos
+Route::get("/capitulo7-otorgamiento-compromiso-devengado-prestamosIniciales", [PrestamosController::class, 'capitulo7CompromisoDevengadoPrestamosIniciales'])->name('capitulo7CompromisoDevengadoPrestamosIniciales')->middleware('role:Administrador');
+Route::get("/capitulo7-otorgamiento-compromiso-devengado-prestamosRenovacion", [PrestamosController::class, 'capitulo7CompromisoDevengadoPrestamosRenovacion'])->name('capitulo7CompromisoDevengadoPrestamosRenovacion')->middleware('role:Administrador');
+
+Route::get("/capitulo7-otorgamiento-ejercido-pagado-recaudado-prestamosIniciales", [PrestamosController::class, 'capitulo7EjercidoPagadoRecaudadoPrestamosIniciales'])->name('capitulo7EjercidoPagadoRecaudadoPrestamosIniciales')->middleware('role:Administrador');
+Route::get("/capitulo7-otorgamiento-ejercido-pagado-recaudado-prestamosRenovacion", [PrestamosController::class, 'capitulo7EjercidoPagadoRecaudadoPrestamosRenovacion'])->name('capitulo7EjercidoPagadoRecaudadoPrestamosRenovacion')->middleware('role:Administrador');
+
+Route::get("/capitulo7-recuperacion-recaudado-prestamosIniciales", [PrestamosController::class, 'capitulo7RecaudadoPrestamosIniciales'])->name('capitulo7RecaudadoPrestamosIniciales')->middleware('role:Administrador');
+Route::get("/capitulo7-recuperacion-recaudado-prestamosRenovacion", [PrestamosController::class, 'capitulo7RecaudadoPrestamosRenovacion'])->name('capitulo7RecaudadoPrestamosRenovacion')->middleware('role:Administrador');
 
 //ruta de prueba
 Route::get("/bancos", [IngresosController::class, 'bancos'])->name('bancos')->middleware('role:Administrador');

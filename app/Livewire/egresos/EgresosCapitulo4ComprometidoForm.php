@@ -85,9 +85,9 @@ class EgresosCapitulo4ComprometidoForm extends Component
     public function agregarRegistro()
     {
         try{
-            $this->validate();
             $this->importe = floatval(str_replace(['$', ','], "", $this->importe));
             $this->importe = ($this->importe > 0)  ? $this->importe : "";
+            $this->validate();
             $cuenta = Cuenta::find($this->cuenta);
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             

@@ -1,0 +1,176 @@
+<?php
+
+namespace App\Livewire\egresos;
+
+
+use App\Clases\Column;
+use App\Models\Poliza;
+use App\Livewire\Tabla;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Carbon;
+use DB;
+use Log;
+
+class MovimientosEgresosTable extends Tabla
+{
+
+    public $perPage = 10;
+
+    public $sortBy = '';
+
+    public $searchBy = ['evento', 'fechaAfectacion', 'fechaRegistro', 'descripcion', 'momentoContable'];
+
+    public $data = [];
+
+    public $capituloSeleccionado = '';
+
+    public $consultarRegistro = false;
+
+    public $numeroEvento;
+    public $numeroPoliza;
+    public $total;
+    public $descripcion;
+    public $tipoMovimiento;
+    public $numeroPolizaRemanente;
+    public $categoriaModulo;
+    public $categoriaRemanente;
+
+    public $eventoSeleccionado;
+
+    public function render()
+    {
+        $eventos = Poliza::select('evento', 'descripcion')
+            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->where('tipo_poliza', '=', 'E')
+            ->distinct()
+            ->pluck('descripcion', 'evento');
+        return view('livewire.egresos.movimientos-egresos-table', ['eventos' => $eventos]);
+    }
+
+    public function query(): Builder
+    {
+        return Poliza::query();
+    }
+
+    public function actualizarFiltros()
+    {
+        $this->eventoSeleccionado = $this->eventoSeleccionado;
+        $this->capituloSeleccionado = $this->capituloSeleccionado;
+    }
+
+    public function data()
+    {
+        $contador = 0;
+        $this->data = array_map(function ($entrada) use (&$contador) {
+            $entrada =  (array) $entrada;
+            $entrada['total'] = '$' . number_format($entrada['total'], 2, '.', ',');
+            $entrada['id'] = $contador++;
+            return $entrada;
+        }, DB::select('EXEC dbo.ConsultaMovimientosEgresos'));
+        $collection = collect($this->data);
+        if ($this->eventoSeleccionado) {
+            $collection = $collection->where('evento', $this->eventoSeleccionado);
+        }
+        if($this->capituloSeleccionado){
+            $collection = $collection->where('capitulo', $this->capituloSeleccionado);
+        }
+        if ($this->sortBy !== '') {
+            if ($this->sortDirection == "asc") {
+                $collection = $collection->sortBy($this->sortBy);
+            } else {
+                $collection = $collection->sortByDesc($this->sortBy);
+            }
+        }
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $filtered = $collection->filter(function ($value, $key) {
+            $contains = false;
+
+            if (!$this->searchTerm) return true;
+            foreach ($this->searchBy as $data => $term) {
+                // Verifica si $term existe en $value (array)
+                if (isset($value[$term]) && str_contains(strtolower($value[$term]), strtolower($this->searchTerm))) {
+                    $contains = true;
+                    continue;
+                }
+            }
+
+            return $contains;
+        });
+
+        $currentItems = array_slice($filtered->toArray(), $this->perPage * ($currentPage - 1), $this->perPage);
+        return new LengthAwarePaginator($currentItems, count($filtered), $this->perPage, $currentPage);
+    }
+
+    public function columns(): array
+    {
+        return [
+            Column::make('evento', 'Evento'),
+            Column::make('numero_poliza', 'Número de Póliza'),
+            Column::make('descripcion', 'Descripción'),
+            Column::make('momentoContable', 'Momento contable'),
+            Column::make('capitulo', 'Capítulo'),
+            Column::make('fechaAfectacion', 'Fecha de afectación'),
+            Column::make('fechaRegistro', 'Fecha de registro'),
+            Column::make('total', 'Monto del evento'),
+            Column::make('estatus_evento', 'Estado del momento contable')->component('columns.estado'),
+            Column::make('id', 'Acciones')->component('columns.accionVerMovimiento'),
+
+        ];
+    }
+
+    public function verMovimiento($value)
+    {
+
+        $this->numeroEvento = $this->data[$value]['evento'];
+        $this->numeroPoliza = $this->data[$value]['numero_poliza'];
+        $this->total = $this->data[$value]['total'];
+        $this->descripcion = $this->data[$value]['descripcion'];
+        $this->categoriaModulo = $this->data[$value]['categoria'];
+        $this->tipoMovimiento = 'PolizaEgresos' . ucfirst(strtolower($this->data[$value]['momentoContable'])) . 'Capitulo' . $this->data[$value]['capitulo'];
+        $numeroPoliza = $this->numeroPoliza;
+        $this->numeroPolizaRemanente = DB::table('polizas')
+            ->where('tipo_poliza', 'EAUX')
+            ->where('evento', '=', $this->numeroEvento)
+            ->where('id', '>', function ($query) use ($numeroPoliza) {
+                $query->select('id')
+                    ->from('polizas')
+                    ->where('numero_poliza', $numeroPoliza)
+                    ->where('tipo_poliza', 'E')
+                    ->limit(1);
+            })
+            ->orderBy('id', 'asc')
+            ->pluck('numero_poliza')
+            ->first();
+
+
+        if ($this->numeroPolizaRemanente == NULL) {
+            $this->numeroPolizaRemanente = 0;
+        }
+
+        switch ($this->data[$value]['momentoContable']) {
+            case "DEVENGADO":
+                $this->categoriaRemanente = 'EGRESOS COMPROMETIDO CAPITULO ' . $this->data[$value]['capitulo'] . ' REMANENTE DEVENGADO';
+                break;
+            case "EJERCIDO":
+                $this->categoriaRemanente = 'EGRESOS DEVENGADO CAPITULO ' . $this->data[$value]['capitulo'] . ' REMANENTE EJERCIDO';
+                break;
+            case "PAGADO":
+                $this->categoriaRemanente = 'EGRESOS EJERCIDO CAPITULO ' . $this->data[$value]['capitulo'] . ' REMANENTE PAGADO';
+                break;
+            default:
+                $this->categoriaRemanente = 'SIN REMANENTE';
+                $this->numeroPolizaRemanente = 0;
+                break;
+        }
+
+        $this->consultarRegistro = true;
+    }
+
+    public function search() {}
+
+
+    public function edit($value) {}
+
+    public function changeState($value) {}
+}

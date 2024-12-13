@@ -75,6 +75,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
                         'cuentaPago' => $registro['cuentaPagoId']
                     ];
                     unset($this->dataCompleta[$key]);
+                    $this->dataCompleta = array_values($this->dataCompleta );
                     $this->dispatch('llenar-formulario', $datosRegistro);
                     break;
                 }
@@ -83,6 +84,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
             foreach ($this->cacheData as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->cacheData[$key]);
+                    $this->cacheData = array_values($this->cacheData);
                     break;
                 }
             }
@@ -105,6 +107,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
             foreach ($this->cacheData as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->cacheData[$key]);
+                    $this->cacheData = array_values($this->cacheData);
                     break;
                 }
             }
@@ -112,6 +115,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
             foreach ($this->dataCompleta as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->dataCompleta[$key]);
+                    $this->dataCompleta = array_values($this->dataCompleta );
                     break;
                 }
             }
@@ -174,7 +178,6 @@ class DevengadoPrevRecaudadoTable extends Tabla
 
             $solvencia = DB::select('EXEC SolvenciaCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($registro['codigoAreaResponsable'], $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $registro['mes']));
             $solvenciaCuentaPago = DB::select('EXEC SolvenciaIngresosPorClasificar @cuenta = ?, @cuentaPago = ?, @evento =?', array($registro['codigoCuenta'], $registro['codigoCuentaPago'], $registro['evento']));
-            
             $this->sumarRegistrosPorCuentaPago($registro);
             if($this->totalRegistrosPorCuentaPago + $registro['importe'] > $solvenciaCuentaPago[0]->Total) {
                 $this->dispatch('mostrarMensaje', mensaje: 'Solvencia de la cuenta de pago insuficiente', tipo: 'error', tiempo: 3000);
@@ -283,7 +286,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
                         'numero_poliza' =>  $this->numeroPoliza,
                         'fecha' => $movimiento['fechaAfectacion'],
                         'cuenta' => $movimiento['codigoCuenta'],
-                        'cuentaPagoDevengadoPrevRecaudado' => $movimiento['codigoCuentaPago'],
+                        'cuentaRelacionada' => $movimiento['codigoCuentaPago'],
                         'concepto' => $movimiento['descripcionCuenta'],
                         'total' => abs($importeMovimiento),
                         'mes' => $movimiento['mes'],
@@ -316,7 +319,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
                         'numero_poliza' =>  $this->numeroPoliza,
                         'fecha' => $movimiento['fechaAfectacion'],
                         'cuenta' => $dataCuenta['Codigo_cuenta'],
-                        'cuentaPagoDevengadoPrevRecaudado' => $movimiento['codigoCuentaPago'],
+                        'cuentaRelacionada' => $movimiento['codigoCuentaPago'],
                         'concepto' => $dataCuenta['Descripcion_cuenta'],
                         'total' => $importe,
                         'mes' => $movimiento['mes'],
@@ -373,7 +376,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
             });
 
             // se agrupan las polizas devengado previamente recaudado por si hay más de un registro con la misma cuenta de pago
-            $polizaDevengadoPreviamenteRecaudado = $polizaDevengadoPreviamenteRecaudado->groupBy('cuentaPagoDevengadoPrevRecaudado')->map(function ($group) {
+            $polizaDevengadoPreviamenteRecaudado = $polizaDevengadoPreviamenteRecaudado->groupBy('cuentaRelacionada')->map(function ($group) {
                 $firstItem = $group->first()->toArray(); // Convertimos el primer elemento a un array
                 return array_merge($firstItem, [
                     'total' => $group->sum('total'),
@@ -386,7 +389,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
 
                 $remanentes = [];
                 $remanentes = $polizasInicialesIngresosPorClasificar->map(function ($ingreso) use ($polizaDevengadoPreviamenteRecaudado, $fecha) {
-                    $devengado = $polizaDevengadoPreviamenteRecaudado->firstWhere('cuentaPagoDevengadoPrevRecaudado', $ingreso->cuenta);
+                    $devengado = $polizaDevengadoPreviamenteRecaudado->firstWhere('cuentaRelacionada', $ingreso->cuenta);
 
                     if ($devengado) {
                         return [

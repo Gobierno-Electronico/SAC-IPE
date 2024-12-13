@@ -7,9 +7,9 @@
         'bg-secondary' => $value == 0,
     ])>
         @if ($value == 1)
-            Activa
+            Activo
             @else
-            Inactiva
+            Finalizado
         @endif
     </div>
 </div>

@@ -8,6 +8,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -77,6 +78,34 @@ class AppServiceProvider extends ServiceProvider
                 ->where([[$tabla . '.' . $campoWhere , '=', $valorWhere], [$tabla . '.' . $campoWhere2, '=', $valorWhere2]]);
         });
 
+        //Lógica para la comprobar la apertura del sistema
+        $polizasPresupuestales = DB::table('polizas')
+            ->select('categoria', 'evento')
+            ->where('tipo_poliza', '=', 'P')
+            ->groupBy('categoria', 'evento')
+            ->get();
+        
+        $hayPresupuestoCompleto = false;
+        $haySaldosIniciales = false;
+
+        //comparamos con 7 para verificar si ya estácargado el presupuesto de los 6 capítulos de egresos más el de ingresos
+        if($polizasPresupuestales->count() == 7 ){
+            $hayPresupuestoCompleto = true;
+        }
+
+        $polizaSaldosIniciales = DB::table('polizas')
+            ->where('categoria', '=', 'SALDO INICIAL')
+            ->first();
+
+        if($hayPresupuestoCompleto && $polizaSaldosIniciales != NULL){
+            $haySaldosIniciales = true;
+        }   
+
+        //Se comparten las variables para que puedan ser usadas por las vistas
+        View::share([
+            'hayPresupuestoCompleto' => $hayPresupuestoCompleto,
+            'haySaldosIniciales' => $haySaldosIniciales
+        ]);
 
         Blade::if('admin', function () {
             return Auth::user()?->rol == RolEnum::ADMINISTRADOR;
@@ -86,12 +115,20 @@ class AppServiceProvider extends ServiceProvider
             return Auth::user()?->rol == RolEnum::TECNICO;
         });
 
-        Blade::if('general', function () {
-            return Auth::user()?->rol == RolEnum::GENERAL;
+        Blade::if('jefe_dep_contabilidad', function () {
+            return Auth::user()?->rol == RolEnum::JEFE_DEPARTAMENTO_CONTABILIDAD;
         });
 
-        Blade::if('jefe_oficina', function () {
-            return Auth::user()?->rol == RolEnum::JEFE_OFICINA;
+        Blade::if('jefe_dep_financieros', function () {
+            return Auth::user()?->rol == RolEnum::JEFE_DEPARTAMENTO_RECURSOS_FINANCIEROS;
+        });
+
+        Blade::if('jefe_ofi_contabilidad', function () {
+            return Auth::user()?->rol == RolEnum::JEFE_OFICINA_CONTABILIDAD;
+        });
+
+        Blade::if('jefe_ofi_control', function () {
+            return Auth::user()?->rol == RolEnum::JEFE_OFICINA_CONTROL;
         });
 
         Blade::if('capturista', function () {
@@ -101,5 +138,6 @@ class AppServiceProvider extends ServiceProvider
         Blade::if('analista', function () {
             return Auth::user()?->rol == RolEnum::ANALISTA;
         });
+
     }
 }
