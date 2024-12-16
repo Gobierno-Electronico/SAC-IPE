@@ -59,10 +59,6 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesForm extends Com
             ->whereIn('interaccion_cuenta_conceptos.concepto_id', [94])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Cargo')
             ->orderBy('cuentas.Descripcion_cuenta')->get();
 
-/*             $cuentasAbono = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [94])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Abono')
-            ->where('cuentas.Descripcion_cuenta', 'LIKE', '%Concesión%')
-            ->orderBy('cuentas.Descripcion_cuenta')->get();  */
             $this->cambiarCuentaContableSeleccionada = false;
             $this->cargarCuentaContableAbono(false);
             
@@ -79,13 +75,24 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesForm extends Com
     {
         try{
             if (!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
+
+
+            $cuentaSeleccionada = Cuenta::find($this->cuenta);
+            $cuentaContableAbono = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuentaAbono)->whereIn('interaccion_cuenta_conceptos.concepto_id', [94])->where('tipo_interaccion', '=', 'Contable - Abono')->first();
+            
+
+            $cuentaContableAbono = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [94])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Abono')
+            ->where('cuentas.Descripcion_cuenta', 'LIKE', '%' . $cuentaSeleccionada->descripcionCuenta . '%')
+            ->get(); 
+
             $anioActual = Carbon::now()->year;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
-            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [94])->where('tipo_interaccion', '=', 'Contable - Cargo')->first();
+            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $cuentaContableAbono[0]->cuenta_id)->whereIn('interaccion_cuenta_conceptos.concepto_id', [94])->where('tipo_interaccion', '=', 'Contable - Abono')->first();
             $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')
-            ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->where('Descripcion_cuenta', 'LIKE', '%(Por ejecutar)%')->first();
+            ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->where('Descripcion_cuenta', 'LIKE', '%(Por ejercer)%')->first();
 
-            $solvencia = DB::select('EXEC SolvenciaCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($departamento->Codigo_completo, $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $this->mes))[0]->Solvencia;
+            $solvencia = DB::select('EXEC SolvenciaCuentasPorEjercer @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($departamento->Codigo_completo, $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $this->mes))[0]->Solvencia;
             $this->PTTOEjecutar = ($solvencia > 0) ? floatval($solvencia) : 0;
 
             $this->dispatch('formato_importe', id: 'inputPTTOEjecutar', amount: "{$this->PTTOEjecutar}");
