@@ -90,6 +90,14 @@
 
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control" onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model="importe">
+            
+                <label for="selectDestinoRecurso" class="form-label mt-3">Tipo de prestamo</label>
+                <select name="selectDestinoRecurso" id="selectDestinoRecurso" class="form-select"
+                    wire:model="destinoRecurso">
+                    <option value="" selected disabled>Seleccionar tipo de prestamo</option>
+                    <option value="corto">Corto plazo</option>
+                    <option value="mediano">Mediano plazo</option>
+                </select>
             </div>
 
             <div class="col">
