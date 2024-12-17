@@ -5,6 +5,9 @@ use App\Models\Cuenta;
 use Livewire\Component;
 use Carbon\Carbon;
 use App\Models\CodigoDepartamento;
+use App\Models\Poliza;
+use App\Models\InteraccionCuentaCuenta;
+use App\Models\InteraccionCuentaConcepto;
 use Livewire\Attributes\Validate;
 use Livewire\Attributes\On;
 use Log;
@@ -37,11 +40,8 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesForm extends Component
     #[Validate('required', message: 'Importe requerido')]
     public $importe = "";
 
-    #[Validate('required', message: 'Cuenta Abono requerida')]
-    public $cuentaAbono = "";
-
-    #[Validate('required', message:'Destino del recurso requerido')]
-    public $destinoRecurso="";
+    #[Validate('required', message: 'Cuenta de banco requerida')]
+    public $cuentaBanco = "";
 
     public $PTTOEjecutar = 0;
     public $consultarRegistro = false;
@@ -53,18 +53,24 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesForm extends Component
     public function render()
     {
         try{
-            $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+            /* $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
                         ->whereIn('interaccion_cuenta_conceptos.concepto_id', [10096])
                         ->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Abono')
                         ->orderBy('cuentas.Descripcion_cuenta')->get();
-            $this->cuentasAbono = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-                            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [10096])
-                            ->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Cargo')
-                            ->orderBy('cuentas.Descripcion_cuenta')->get(); 
-            $this->cambiarCuentaContableSeleccionada = false;
+
+            $this->cuenta = $cuentas->first()->cuenta_id; */
+
+            $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [10096])
+            ->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Abono')
+            ->orderBy('cuentas.Descripcion_cuenta')->get();
+  
+            $bancos = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+                        ->whereIn('interaccion_cuenta_conceptos.concepto_id', [10096])
+                        ->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Cargo')
+                        ->orderBy('cuentas.Descripcion_cuenta')->get();
             
-            return view('livewire.prestamos.prestamos-recuperacion-recaudado-prestamosIniciales-form', 
-            ['cuentas' => $cuentas, 'cuentasAbono' => $this->cuentasAbono]);
+            return view('livewire.prestamos.prestamos-recuperacion-recaudado-prestamosIniciales-form', ['cuentas' => $cuentas, 'bancos' => $bancos]);
 
         }catch(\Throwable $th){
             Log::error('Ocurrió un error al cargar cuentas en recaudado préstamos inicales del capítulo 7000 ' . $th->getMessage());
@@ -75,54 +81,42 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesForm extends Component
 
     public function cargarPresupuesto()
     {
-        try{
+        try{      
             if (!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
             $anioActual = Carbon::now()->year;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $cuentaSeleccionada = Cuenta::find($this->cuenta);
 
-            $solvencia = DB::select('EXEC SolvenciaOtorgamientoRecaudadoPrestamosIniciales @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($departamento->Codigo_completo, $cuentaSeleccionada->Codigo_cuenta, $anioActual, $this->mes))[0]->Total;
+            $cuentaConcesion = $this->obtenerCuentaConcesion();
+        
+            $solvencia = DB::select('EXEC SolvenciaOtorgamientoRecaudadoPrestamosIniciales @area = ?, @cuenta = ?, @cuentaConcesion = ?, @anio = ?, @mes = ?', array($departamento->Codigo_completo, $cuentaSeleccionada->Codigo_cuenta, $cuentaConcesion, $anioActual, $this->mes))[0]->Total;
             $this->PTTOEjecutar = ($solvencia > 0) ? floatval($solvencia) : 0;
 
             $this->dispatch('formato_importe', id: 'inputPTTOEjecutar', amount: "{$this->PTTOEjecutar}");
-            $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar cargado', tipo: 'success', tiempo: 1500); 
-
+            $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar cargado', tipo: 'success', tiempo: 1500);  
         }catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar presupuesto en recaudado préstamos inicales del capítulo 7000: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar presupuesto, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
-
-
-    public function cargarCuentaContableAbono($bandera)
+    
+    public function obtenerCuentaConcesion()
     {
-        if($bandera)
-        {
-            $this->cargarPresupuesto();
-        }
-        if(!$this->cuenta) return;
-
-        if ($this->cambiarCuentaContableSeleccionada) {
-            $this->cuentaAbono = "";
-            return;
-        }
-        $this->cambiarCuentaContableSeleccionada = true;
         try{
-
             $cuentaSeleccionada = Cuenta::find($this->cuenta);
             $plazo = explode(')', explode('(', $cuentaSeleccionada->Descripcion_cuenta)[1])[0];
 
-            $this->cuentasAbono = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [10096])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Abono')
+            $cuentaConcesion = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [95])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Cargo')
             ->where('cuentas.Descripcion_cuenta', 'LIKE', '%' . $plazo . '%')
             ->get(); 
-        
-            $this->cuentaAbono = $this->cuentasAbono[0]->cuenta_id;
+
+            return $cuentaConcesion[0]['Codigo_cuenta'];
 
         }catch (\Throwable $th) {
-            Log::error('Ocurrió un error al cargar cuenta contable abono en recaudado préstamos inicales del capítulo 7000: ' . $th->getMessage());
+            Log::error('Ocurrió un error al obtener la cuenta de concesión en recaudado préstamos inicales del capítulo 7000: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar presupuesto, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
-        }
+        } 
     }
 
     public function agregarRegistro()
@@ -131,18 +125,16 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesForm extends Component
             $this->importe = floatval(str_replace(['$', ','], "", $this->importe));
             $this->importe = ($this->importe > 0)  ? $this->importe : "";
 
-            $this->importeAbono = floatval(str_replace(['$', ','], "", $this->importeAbono));
-            $this->importeAbono = ($this->importeAbono > 0)  ? $this->importeAbono : "";
             $this->validate();
 
-            if($this->importeAbono >= $this->importe)
+/*             if($this->importeAbono >= $this->importe)
             {
                 $this->dispatch('mostrarMensaje', mensaje: 'El importe abono no puede ser mayor o igual al importe cargo', tipo: 'warning', tiempo: 3000);
                 return;
-            }   
+            }    */
 
             $cuenta = Cuenta::find($this->cuenta);
-            $cuentaAbono = Cuenta::find($this->cuentaAbono);
+            $cuentaBanco = Cuenta::find($this->cuentaAbono);
             $areaResponsable = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $departamento = CodigoDepartamento::where('Codigo_completo', '1.5.04')->first();
 

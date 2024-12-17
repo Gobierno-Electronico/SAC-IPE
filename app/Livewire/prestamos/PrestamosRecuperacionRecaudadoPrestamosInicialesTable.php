@@ -46,11 +46,10 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
             Column::make('area', 'Area'),
             Column::make('mes', 'Mes'),
             Column::make('partida', 'Partida'),
-            Column::make('cuentaAbono', 'Cuenta de abono'),
-            Column::make('importeAbono', 'Importe abono')->component('columns.importe'),
+            Column::make('cuentaBanco', 'Cuenta de banco'),
             Column::make('importe', 'Importe')->component('columns.importe'),
             Column::make('movimiento', 'Movimiento'),
-            Column::make('pttoEjecutar', 'PPTO por ejecutar')->component('columns.importe'),
+            Column::make('pttoEjecutar', 'PPTO')->component('columns.importe'),
             Column::make('disponibilidad', 'Disponibilidad')->component('columns.importe'),
             Column::make('id', 'Acciones')->component('columns.accionesIngresos')
         ];

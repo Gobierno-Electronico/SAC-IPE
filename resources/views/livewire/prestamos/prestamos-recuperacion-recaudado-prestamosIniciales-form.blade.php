@@ -77,7 +77,7 @@
                 </select>
 
                 <label for="selectCuenta" class="form-label mt-3" >Cuenta</label>
-                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta" wire:change="cargarCuentaContableAbono(true)">
+                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta" wire:change="cargarPresupuesto">
                     <option value="" disabled>Seleccionar cuenta</option>
                     @foreach ($cuentas as $cuenta)
                         <option value="{{ $cuenta->cuenta_id }}">
@@ -85,19 +85,29 @@
                     @endforeach
                 </select>
 
-                <label for="inputPTTOEjecutar" class="form-label mt-3">Presupuesto por ejecutar</label>
+                <label for="inputPTTOEjecutar" class="form-label mt-3">Presupuesto</label>
                 <input type="text" name="inputPTTOEjecutar" id="inputPTTOEjecutar" class="form-control" disabled>
+
+                <label for="selectCuentaBanco" class="form-label mt-3" >Cuenta de banco</label>
+                <select name="selectCuentaBanco" id="selectCuentaBanco" class="form-select" wire:model="cuentaBanco">
+                    <option value="" disabled>Seleccionar banco</option>
+                    @foreach ($bancos as $cuenta)
+                        <option value="{{ $cuenta->cuenta_id }}">
+                            {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
+                    @endforeach
+                </select>
+            
+{{--                 <label for="selectDestinoRecurso" class="form-label mt-3">Plazo del préstamo</label>
+                <select name="selectDestinoRecurso" id="selectDestinoRecurso" class="form-select"
+                    wire:model="destinoRecurso">
+                    <option value="" selected disabled>Seleccionar plazo del préstamo</option>
+                    <option value="corto">Corto plazo</option>
+                    <option value="mediano">Mediano plazo</option>
+                </select> --}}
 
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control" onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model="importe">
-            
-                <label for="selectDestinoRecurso" class="form-label mt-3">Tipo de prestamo</label>
-                <select name="selectDestinoRecurso" id="selectDestinoRecurso" class="form-select"
-                    wire:model="destinoRecurso">
-                    <option value="" selected disabled>Seleccionar tipo de prestamo</option>
-                    <option value="corto">Corto plazo</option>
-                    <option value="mediano">Mediano plazo</option>
-                </select>
+
             </div>
 
             <div class="col">
