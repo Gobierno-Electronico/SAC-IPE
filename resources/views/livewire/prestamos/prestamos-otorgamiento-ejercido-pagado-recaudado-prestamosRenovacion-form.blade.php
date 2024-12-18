@@ -22,8 +22,8 @@
             </div>
         </div>
         <livewire:egresos.egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaEgresosComprometidoCapitulo2y3" urlFinalizar="/capitulo2y3-comprometido"
-            tipoPoliza="E" categoriaModulo='EGRESOS COMPROMETIDO CAPITULO 2y3' />
+            tipoMovimiento="PolizaOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacion" urlFinalizar="/capitulo7-otorgamiento-ejercido-pagado-recaudado-prestamosRenovacion"
+            tipoPoliza="D" categoriaModulo='OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS RENOVACION' />
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
@@ -51,7 +51,7 @@
             <div class="col-3">
                 <label for="selectAreaResponsable" class="form-label mt-3">Área responsable</label>
                 <select name="selectAreaResponsable" id="selectAreaResponsable" class="form-select"
-                    wire:model="selectCodigoAreaResponsable" wire:change="">
+                    wire:model="selectCodigoAreaResponsable" wire:change="cargarPresupuesto">
                     <option value="" @if ($this->selectCodigoAreaResponsable == '') selected @endif disabled>
                         Seleccionar un área
                     </option> 
@@ -64,17 +64,17 @@
                     @endforeach
                 </select>
 
-                <label for="selectCuenta" class="form-label mt-3" >Cuenta</label>
-                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta" wire:change="">
+                <label for="selectCuenta" class="form-label mt-3">Cuenta</label>
+                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta" wire:change="cargarPresupuesto">
                     <option value="" disabled>Seleccionar cuenta</option>
-                   {{--  @foreach ($cuentas as $cuenta)
-                    <option value="{{ $cuenta->cuenta_id }}"> 
-                            {{  $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
-                    @endforeach --}}
+                    @foreach ($cuentas as $cuenta)
+                        <option value="{{ $cuenta->cuenta_id }}">
+                            {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>  
+                    @endforeach
                 </select>
 
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
-                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes" wire:change="">
+                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes" wire:change="cargarPresupuesto">
                     <option value="" selected disabled>Seleccionar mes...</option>
                     @foreach (range(1, 12) as $mes)
                         @php
@@ -89,7 +89,30 @@
                 <input type="text" name="inputPTTOEjecutar" id="inputPTTOEjecutar" class="form-control" disabled>
 
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
-                <input type="text" name="inputImporte" id="inputImporte" class="form-control" onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model="importe">
+                <input type="text" name="inputImporte" id="inputImporte" class="form-control"
+                    onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model="importe">
+
+                <label for="selectCuentaAbono" class="form-label mt-3">Cuenta de abono</label>
+                <select name="selectCuentaAbono" id="selectCuentaAbono" class="form-select" wire:model="cuentaAbono">
+                    <option value="" selected disabled>Seleccionar cuenta de abono</option>
+                    @foreach ($cuentasAbono as $item)
+                        <option value="{{ $item->cuenta_id }}">
+                            {{ $item->Codigo_cuenta . ' ' . $item->Descripcion_cuenta }}
+                        </option>
+                    @endforeach
+                </select>
+
+                <label for="inputImporteAbono" class="form-label mt-3">Importe abono</label>
+                <input type="text" name="inputImporteAbono" id="inputImporteAbono" class="form-control" onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model="importeAbono">
+
+                <label for="selectDestinoRecurso" class="form-label mt-3">Destino del recurso</label>
+                <select name="selectDestinoRecurso" id="selectDestinoRecurso" class="form-select"
+                    wire:model="destinoRecurso">
+                    <option value="" selected disabled>Seleccionar destino del recurso</option>
+                    <option value="capital">Capital</option>
+                    <option value="fondoGarantia">Fondo de Garantía</option>
+                    <option value="primaRenovacion">Prima de Renovación</option>
+                </select>
             </div>
 
             <div class="col">
