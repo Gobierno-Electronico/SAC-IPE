@@ -95,7 +95,7 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
         $totalImportes = 0;
 
         foreach ($this->cacheData as $movimiento){
-            if(str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && $movimiento['mes'] == $registro['mes']){
+            if(str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && $movimiento['mes'] == $registro['mes'] && str_contains($movimiento['partida'], $registro['codigoCuenta'])){
                 $totalImportes += $movimiento['importe'];
             }
         }
@@ -191,7 +191,7 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
         $totalImportes = 0;
         foreach($this->cacheData as $key => $movimiento)
         {
-            if($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && $movimiento['mes'] == $mesSeleccionado)
+            if($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && $movimiento['mes'] == $mesSeleccionado && str_contains($movimiento['partida'], $registro['codigoCuenta']))
             {
                 if($totalImportes == 0){
                     $movimiento['disponibilidad'] = $movimiento['pttoEjecutar'] - $movimiento['importe'];
