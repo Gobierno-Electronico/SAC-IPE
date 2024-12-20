@@ -22,6 +22,7 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
     public $perPage = 6;
     public $total = 0;
     public $totalDisponible = 0;
+    public $polizasFinales = [];
 
 
 
@@ -284,17 +285,18 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
                             $interaccionCuentaCuentasFiltradas[] = $cuenta;
                             continue;
                         }
-                    } else if ($cuenta['tipo_interaccion'] == 'Contable - Cargo') {
+                    } 
+                    
+                    else if ($cuenta['tipo_interaccion'] == 'Contable - Cargo') {
                         if ($cuenta['Codigo_cuenta'] != $movimiento['codigoCuentaBanco']) {
                             continue;
                         }
                     } else if($cuenta['tipo_interaccion'] == 'Contable - Abono'){
                             $plazoCuenta = explode(')', explode('(', $cuenta['Descripcion_cuenta'])[1])[0];
                             // dd($plazo);
-                            if($plazoCuenta==$plazo){
-                                $interaccionCuentaCuentasFiltradas[] = $cuenta;
+
                                 continue;
-                            }
+                            
                         } else {
                         if ($cuenta['tipo_interaccion'] != 'Contable - Cargo') {
                             $interaccionCuentaCuentasFiltradas[] = $cuenta;
@@ -309,7 +311,6 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
                 // dd($movimiento['importe']);
                 $interaccionCuentaCuentas = $interaccionCuentaCuentasFiltradas;
                 // dd($interaccionCuentaCuentas)   ;
-                $cuentaPrincipal = Cuenta::where('Codigo_cuenta', '=', '8.1.5.4.1.7.1.02.01')->first();
                 // dd($cuentaPrincipal);
                 $polizas = [
                     [
@@ -332,23 +333,23 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
                 ];
                 
 
-                array_push($polizas, [
-                    'area' => $movimiento['codigoAreaResponsable'],
-                    'tipo_poliza' => 'D',
-                    'numero_poliza' =>  $this->numeroPoliza,
-                    'fecha' => $movimiento['fechaAfectacion'],
-                    'cuenta' => $movimiento['codigoCuentaBanco'],
-                    'concepto' => $movimiento['descripcionCuentaBanco'],
-                    'total' => abs($movimiento['importe']),
-                    'mes' => $movimiento['mes'],
-                    'descripcion' => $movimiento['observaciones'],
-                    'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
-                    'validado' => false,
-                    'estatus_evento' => true,
-                    'categoria' => 'OTORGAMIENTO COMPROMISO RECAUDADO PRESTAMOS INICIALES',
-                    'created_at' => $fecha,
-                    'updated_at' => $fecha
-                ]);
+                // array_push($polizas, [
+                //     'area' => $movimiento['codigoAreaResponsable'],
+                //     'tipo_poliza' => 'D',
+                //     'numero_poliza' =>  $this->numeroPoliza,
+                //     'fecha' => $movimiento['fechaAfectacion'],
+                //     'cuenta' => $movimiento['codigoCuentaBanco'],
+                //     'concepto' => $movimiento['descripcionCuentaBanco'],
+                //     'total' => abs($movimiento['importe']),
+                //     'mes' => $movimiento['mes'],
+                //     'descripcion' => $movimiento['observaciones'],
+                //     'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
+                //     'validado' => false,
+                //     'estatus_evento' => true,
+                //     'categoria' => 'OTORGAMIENTO COMPROMISO RECAUDADO PRESTAMOS INICIALES',
+                //     'created_at' => $fecha,
+                //     'updated_at' => $fecha
+                // ]);
 
                 foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
                     $total = $movimiento['importe'];
@@ -368,17 +369,47 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
                         'estatus_evento' => true,
-                        'categoria' => 'OTORGAMIENTO COMPROMISO DEVENGADO PRESTAMOS INICIALES',
+                        'categoria' => 'OTORGAMIENTO COMPROMISO RECAUDADO PRESTAMOS INICIALES',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);
                 }
 
+
+                $this->polizasFinales = array_merge($this->polizasFinales, $polizas);
                 
-                // dd($polizas);
-                Poliza::insert($polizas);
+                
+
+
                 DB::commit();
             }
+
+            $cuentaPrincipal = Cuenta::where('Codigo_cuenta', '=', '8.1.5.4.1.7.1.02.01')->first();
+            // dd($cuentaPrincipal);
+            array_push($this->polizasFinales, [
+                'area' => $movimiento['codigoAreaResponsable'],
+                'tipo_poliza' => 'D',
+                'numero_poliza' =>  $this->numeroPoliza,
+                'fecha' => $movimiento['fechaAfectacion'],
+                'cuenta' => $cuentaPrincipal['Codigo_cuenta'],
+                'concepto' => $cuentaPrincipal['Descripcion_cuenta'],
+                'total' => $importeTotal,
+                'mes' => $movimiento['mes'],
+                'descripcion' => $movimiento['observaciones'],
+                'tipo_interaccion' => $cuentaPrincipal['tipo_interaccion'],
+                'validado' => false,
+                'estatus_evento' => true,
+                'categoria' => 'OTORGAMIENTO COMPROMISO RECAUDADO PRESTAMOS INICIALES',
+                'created_at' => $fecha,
+                'updated_at' => $fecha
+            ]);
+
+
+            // dd($importeTotal);
+
+            dd($this->polizasFinales);
+            Poliza::insert($polizas);
+
             $this->dispatch('consultar-registro', $this->numeroPoliza, $this->total);
         }catch (\Throwable $th) {
             DB::rollBack();
