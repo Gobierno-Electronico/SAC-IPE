@@ -22,8 +22,8 @@
             </div>
         </div>
         <livewire:prestamos.prestamos-recuperacion-recaudado-prestamosIniciales-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaEgresosComprometidoCapitulo2y3" urlFinalizar="/capitulo2y3-comprometido"
-            tipoPoliza="E" categoriaModulo='EGRESOS COMPROMETIDO CAPITULO 2y3' />
+            tipoMovimiento="PolizaOtorgamientoRecaudadoPrestamosIniciales" urlFinalizar="/capitulo7-otorgamiento-recaudado-prestamosIniciales"
+            tipoPoliza="D" categoriaModulo='OTORGAMIENTO COMPROMISO RECAUDADO PRESTAMOS INICIALES' />
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
@@ -51,7 +51,7 @@
             <div class="col-3">
                 <label for="selectAreaResponsable" class="form-label mt-3">Área responsable</label>
                 <select name="selectAreaResponsable" id="selectAreaResponsable" class="form-select"
-                    wire:model="selectCodigoAreaResponsable" wire:change="">
+                    wire:model="selectCodigoAreaResponsable" wire:change="cargarPresupuesto">
                     <option value="" @if ($this->selectCodigoAreaResponsable == '') selected @endif disabled>
                         Seleccionar un área
                     </option> 
@@ -64,17 +64,8 @@
                     @endforeach
                 </select>
 
-                <label for="selectCuenta" class="form-label mt-3" >Cuenta</label>
-                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta" wire:change="">
-                    <option value="" disabled>Seleccionar cuenta</option>
-                   {{--  @foreach ($cuentas as $cuenta)
-                    <option value="{{ $cuenta->cuenta_id }}"> 
-                            {{  $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
-                    @endforeach --}}
-                </select>
-
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
-                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes" wire:change="">
+                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes" wire:change="cargarPresupuesto">
                     <option value="" selected disabled>Seleccionar mes...</option>
                     @foreach (range(1, 12) as $mes)
                         @php
@@ -85,11 +76,38 @@
                     @endforeach
                 </select>
 
-                <label for="inputPTTOEjecutar" class="form-label mt-3">Presupuesto por ejecutar</label>
+                <label for="selectCuenta" class="form-label mt-3" >Cuenta</label>
+                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta" wire:change="cargarPresupuesto">
+                    <option value="" disabled>Seleccionar cuenta</option>
+                    @foreach ($cuentas as $cuenta)
+                        <option value="{{ $cuenta->cuenta_id }}">
+                            {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
+                    @endforeach
+                </select>
+
+                <label for="inputPTTOEjecutar" class="form-label mt-3">Presupuesto</label>
                 <input type="text" name="inputPTTOEjecutar" id="inputPTTOEjecutar" class="form-control" disabled>
+
+                <label for="selectCuentaBanco" class="form-label mt-3" >Cuenta de banco</label>
+                <select name="selectCuentaBanco" id="selectCuentaBanco" class="form-select" wire:model="cuentaBanco">
+                    <option value="" disabled>Seleccionar banco</option>
+                    @foreach ($bancos as $cuenta)
+                        <option value="{{ $cuenta->cuenta_id }}">
+                            {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
+                    @endforeach
+                </select>
+            
+{{--                 <label for="selectDestinoRecurso" class="form-label mt-3">Plazo del préstamo</label>
+                <select name="selectDestinoRecurso" id="selectDestinoRecurso" class="form-select"
+                    wire:model="destinoRecurso">
+                    <option value="" selected disabled>Seleccionar plazo del préstamo</option>
+                    <option value="corto">Corto plazo</option>
+                    <option value="mediano">Mediano plazo</option>
+                </select> --}}
 
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control" onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model="importe">
+
             </div>
 
             <div class="col">
@@ -108,3 +126,47 @@
         
     @endif
 </div>
+
+<script>
+    window.addEventListener('formato_importe', event => {
+        let params = event.__livewire.params
+        formatearImporte({
+            id: params.id
+        }, params.amount)
+    })
+
+    window.addEventListener('limpiar', event => {
+        limpiar()
+    })
+
+    function keyPress(e, obj) {
+        let isCurrency = $('#' + obj.id).val().search(/[$]/)
+        let texto = $('#' + obj.id).val().replace(/[^0-9.]/g, '');
+        let isDecimal = texto.search(/[.]/)
+        let amount = parseFloat(texto);
+        if (!isNaN(amount) && isDecimal < 0 || isCurrency == 0) {
+            $('#' + obj.id).val(amount.toLocaleString());
+        }
+    }
+
+    function formatearImporte(obj, amount = '') {
+        amount = (amount) ? amount : $('#' + obj.id).val().replace(/[^0-9.]/g, '');
+        amount = parseFloat(amount);
+        if (!isNaN(amount)) {
+            var formattedAmount = amount.toLocaleString('es-MX', {
+                style: 'currency',
+                currency: 'MXN',
+                minimumFractionDigits: 2,
+            });
+            $('#' + obj.id).val(formattedAmount);
+            console.log("Ejecuta: " + obj);
+        } else {
+            toastr.warning('Ingrese valores numéricos en el campo de importe');
+            $('#' + obj.id).val('');
+        }
+    }
+
+    function limpiar() {
+        $('#inputPTTOEjecutar').val('');
+    }
+</script>

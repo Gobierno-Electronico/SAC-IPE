@@ -118,17 +118,17 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesForm extends
 
             $cuenta = Cuenta::find($this->cuenta);
             $cuentaAbono = Cuenta::find($this->cuentaAbono);
-
+            $areaResponsable = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $departamento = CodigoDepartamento::where('Codigo_completo', '1.5.04')->first();
 
             $registro = [
                 'id' => 0,
-                'codigoArea' => $this->selectCodigoArea,
+                'codigoArea' => $departamento->Codigo_completo,
                 'observaciones' => $this->observaciones,
                 'fechaAfectacion' => $this->fechaAfectacion,
                 'areaResponsableId' => $this->selectCodigoAreaResponsable,
-                'codigoAreaResponsable' => $departamento->Codigo_completo,
-                'descripcionAreaResponsable' => $departamento->Nombre,
+                'codigoAreaResponsable' => $areaResponsable->Codigo_completo,
+                'descripcionAreaResponsable' => $areaResponsable->Nombre,
                 'cuentaId' => $this->cuenta,
                 'codigoCuenta' => $cuenta->Codigo_cuenta,
                 'descripcionCuenta' => $cuenta->Descripcion_cuenta,
