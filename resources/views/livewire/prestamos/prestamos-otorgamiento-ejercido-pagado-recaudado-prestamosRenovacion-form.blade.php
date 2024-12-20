@@ -131,3 +131,48 @@
         
     @endif
 </div>
+
+<script>
+    window.addEventListener('formato_importe', event => {
+        let params = event.__livewire.params
+        formatearImporte({
+            id: params.id
+        }, params.amount)
+    })
+
+    window.addEventListener('limpiar', event => {
+        limpiar()
+    })
+
+    function keyPress(e, obj) {
+        let isCurrency = $('#' + obj.id).val().search(/[$]/)
+        let texto = $('#' + obj.id).val().replace(/[^0-9.]/g, '');
+        let isDecimal = texto.search(/[.]/)
+        let amount = parseFloat(texto);
+        if (!isNaN(amount) && isDecimal < 0 || isCurrency == 0) {
+            $('#' + obj.id).val(amount.toLocaleString());
+        }
+    }
+
+    function formatearImporte(obj, amount = '') {
+        amount = (amount) ? amount : $('#' + obj.id).val().replace(/[^0-9.]/g, '');
+        amount = parseFloat(amount);
+        if (!isNaN(amount)) {
+            var formattedAmount = amount.toLocaleString('es-MX', {
+                style: 'currency',
+                currency: 'MXN',
+                minimumFractionDigits: 2,
+            });
+            $('#' + obj.id).val(formattedAmount);
+            console.log("Ejecuta: " + obj);
+        } else {
+            toastr.warning('Ingrese valores numéricos en el campo de importe');
+            $('#' + obj.id).val('');
+        }
+    }
+
+    function limpiar() {
+        $('#inputPTTOEjecutar').val('');
+    }
+</script>
+

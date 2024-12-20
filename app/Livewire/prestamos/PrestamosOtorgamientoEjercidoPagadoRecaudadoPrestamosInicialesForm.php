@@ -89,7 +89,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesForm extends
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $cuentaSeleccionada = Cuenta::find($this->cuenta);
 
-            $solvencia = DB::select('EXEC SolvenciaOtorgamientoEjercidoPagadoRecaudadoPrestamos @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($departamento->Codigo_completo, $cuentaSeleccionada->Codigo_cuenta, $anioActual, $this->mes))[0]->Total;
+            $solvencia = DB::select('EXEC SolvenciaOtorgamientoEjercidoPagadoRecaudadoPrestamosIniciales @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($departamento->Codigo_completo, $cuentaSeleccionada->Codigo_cuenta, $anioActual, $this->mes))[0]->Total;
             $this->PTTOEjecutar = ($solvencia > 0) ? floatval($solvencia) : 0;
 
             $this->dispatch('formato_importe', id: 'inputPTTOEjecutar', amount: "{$this->PTTOEjecutar}");

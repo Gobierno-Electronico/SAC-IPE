@@ -87,7 +87,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionForm extend
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $cuentaSeleccionada = Cuenta::find($this->cuenta);
 
-            $solvencia = DB::select('EXEC SolvenciaOtorgamientoEjercidoPagadoRecaudadoPrestamos @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($departamento->Codigo_completo, $cuentaSeleccionada->Codigo_cuenta, $anioActual, $this->mes))[0]->Total;
+            $solvencia = DB::select('EXEC SolvenciaOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacion @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($departamento->Codigo_completo, $cuentaSeleccionada->Codigo_cuenta, $anioActual, $this->mes))[0]->Total;            
             $this->PTTOEjecutar = ($solvencia > 0) ? floatval($solvencia) : 0;
 
             $this->dispatch('formato_importe', id: 'inputPTTOEjecutar', amount: "{$this->PTTOEjecutar}");
@@ -100,7 +100,55 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionForm extend
 
     public function agregarRegistro()
     {
+        try{
+            $this->importe = floatval(str_replace(['$', ','], "", $this->importe));
+            $this->importe = ($this->importe > 0)  ? $this->importe : "";
 
+            $this->importeAbono = floatval(str_replace(['$', ','], "", $this->importeAbono));
+            $this->importeAbono = ($this->importeAbono > 0)  ? $this->importeAbono : "";
+            $this->validate();
+
+            if($this->importeAbono >= $this->importe)
+            {
+                $this->dispatch('mostrarMensaje', mensaje: 'El importe abono no puede ser mayor o igual al importe cargo', tipo: 'warning', tiempo: 3000);
+                return;
+            }  
+            
+            $cuenta = Cuenta::find($this->cuenta);
+            $cuentaAbono = Cuenta::find($this->cuentaAbono);
+            $areaResponsable = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
+            $departamento = CodigoDepartamento::where('Codigo_completo', '1.5.04')->first();
+
+            $registro = [
+                'id' => 0,
+                'codigoArea' => $departamento->Codigo_completo,
+                'observaciones' => $this->observaciones,
+                'fechaAfectacion' => $this->fechaAfectacion,
+                'areaResponsableId' => $this->selectCodigoAreaResponsable,
+                'codigoAreaResponsable' => $areaResponsable->Codigo_completo,
+                'descripcionAreaResponsable' => $areaResponsable->Nombre,
+                'cuentaId' => $this->cuenta,
+                'codigoCuenta' => $cuenta->Codigo_cuenta,
+                'descripcionCuenta' => $cuenta->Descripcion_cuenta,
+                'cuentaAbonoId' => $this->cuentaAbono,
+                'codigoCuentaAbono' => $cuentaAbono->Codigo_cuenta,
+                'descripcionCuentaAbono' => $cuentaAbono->Descripcion_cuenta,
+                'mes' => $this->mes,
+                'importe' => $this->importe,
+                'importeAbono' => $this->importeAbono,
+                'pttoEjecutar' => $this->PTTOEjecutar,
+                'destinoRecurso' => $this->destinoRecurso
+            ];
+
+            $this->dispatch('agregar-registro', registro: $registro);
+            $this->limpiar(); 
+
+        }catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatch('mostrarMensaje', mensaje: $e->getMessage(), tipo: 'warning', tiempo: 3000);
+        }catch (\Throwable $th) {
+            Log::error('Ocurrió un error al agregar registro en Otorgamiento ejercido-pagado-recaudado Prestamos Renovación del capítulo 7000: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
     }
 
     public function finalizarRegistros()
