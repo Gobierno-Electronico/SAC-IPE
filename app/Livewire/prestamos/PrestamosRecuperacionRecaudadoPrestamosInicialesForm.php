@@ -16,7 +16,6 @@ use DB;
 
 class PrestamosRecuperacionRecaudadoPrestamosInicialesForm extends Component
 {
-    #[Validate('required', message: 'Área solicitante requerida')]
     public $selectCodigoArea = "";
 
     #[Validate('required', message: 'Observaciones requeridas')]
@@ -27,9 +26,6 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesForm extends Component
 
     #[Validate('required', message: 'Área responsable requerida')]
     public $selectCodigoAreaResponsable = "";
-
-    #[Validate('required', message: 'Importe abono requerido')]
-    public $importeAbono = "";
 
     #[Validate('required', message: 'Cuenta requerida')]
     public $cuenta = "";
@@ -127,14 +123,10 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesForm extends Component
 
             $this->validate();
 
-/*             if($this->importeAbono >= $this->importe)
-            {
-                $this->dispatch('mostrarMensaje', mensaje: 'El importe abono no puede ser mayor o igual al importe cargo', tipo: 'warning', tiempo: 3000);
-                return;
-            }    */
+
 
             $cuenta = Cuenta::find($this->cuenta);
-            $cuentaBanco = Cuenta::find($this->cuentaAbono);
+            $cuentaBanco = Cuenta::find($this->cuentaBanco);
             $areaResponsable = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $departamento = CodigoDepartamento::where('Codigo_completo', '1.5.04')->first();
 
@@ -149,14 +141,12 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesForm extends Component
                 'cuentaId' => $this->cuenta,
                 'codigoCuenta' => $cuenta->Codigo_cuenta,
                 'descripcionCuenta' => $cuenta->Descripcion_cuenta,
-                'cuentaAbonoId' => $this->cuentaAbono,
-                'codigoCuentaAbono' => $cuentaAbono->Codigo_cuenta,
-                'descripcionCuentaAbono' => $cuentaAbono->Descripcion_cuenta,
+                'cuentaBancoId' => $this->cuentaBanco,
+                'codigoCuentaBanco' => $cuentaBanco->Codigo_cuenta,
+                'descripcionCuentaBanco' => $cuentaBanco->Descripcion_cuenta,
                 'mes' => $this->mes,
                 'importe' => $this->importe,
-                'importeAbono' => $this->importeAbono,
                 'pttoEjecutar' => $this->PTTOEjecutar,
-                'destinoRecurso' => $this->destinoRecurso
             ];
 
             $this->dispatch('agregar-registro', registro: $registro);
@@ -177,13 +167,11 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesForm extends Component
     public function limpiar()
     {
         // $this->cuenta = "";
-        $this->cuentaAbono = "";
+        $this->cuentaBanco = "";
         // $this->selectCodigoAreaResponsable = "";
         $this->mes = "";
         $this->PTTOEjecutar = 0;
         // $this->importe = "";
-        $this->importeAbono = "";
-        $this->destinoRecurso = "";
         $this->dispatch('limpiar');
     }
 
@@ -191,13 +179,12 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesForm extends Component
     public function llenarFormulario($datosRegistro)
     {
         $this->cuenta = $datosRegistro['cuenta'];
-        $this->cuentaAbono = $datosRegistro['cuentaAbono'];
+        $this->cuentaBanco = $datosRegistro['cuentaBanco'];
         $this->mes = $datosRegistro['mes'];
         $this->importe = $datosRegistro['importe'];
-        $this->importeAbono = $datosRegistro['importeAbono'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->PTTOEjecutar = $datosRegistro['pttoEjecutar'];
-        $this->dispatch('llenarFormulario', presupuesto: $this->PTTOEjecutar, importe: $this->importe, importeAbono: $this->importeAbono);
+        $this->dispatch('llenarFormulario', presupuesto: $this->PTTOEjecutar, importe: $this->importe);
     }
 
     #[On('consultar-registro')]

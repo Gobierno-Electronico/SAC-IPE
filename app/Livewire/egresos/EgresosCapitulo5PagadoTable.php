@@ -276,6 +276,7 @@ class EgresosCapitulo5PagadoTable extends Tabla
             DB::beginTransaction();
 
             foreach ($this->dataCompleta as $movimiento) {
+                
                 $movimiento['importe'] = doubleval($movimiento['importe']);
                 $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['partidaId'])->whereIn('concepto_id', [80, 83, 84])
                     ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
