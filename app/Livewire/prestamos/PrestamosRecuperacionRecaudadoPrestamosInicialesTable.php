@@ -234,13 +234,15 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
             ->pluck('evento')
             ->toArray();
             sort($numerosEvento);
+            $this->numeroEvento = (int)end($numerosEvento) + 1;
+
 
             $anioActual = Carbon::now()->year;
             $fecha = Carbon::now('America/Mexico_City');
             $fecha->year($anioActual);
 
             $bitacora = new BitacoraController();
-            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un recaudado préstamos inicales del capítulo 7000: ', request());
+            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un recaudado préstamos inicales del capítulo 7000: '.$this->numeroEvento, request());
             DB::beginTransaction();
             // dd($this->dataCompleta);
             $importeTotalCortoPlazo = 0;
@@ -323,6 +325,7 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
                         'total' => abs($movimiento['importe']),
                         'mes' => $movimiento['mes'],
                         'descripcion' => $movimiento['observaciones'],
+                        'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
                         'estatus_evento' => true,
@@ -366,6 +369,7 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
                         'total' => $total,
                         'mes' => $movimiento['mes'],
                         'descripcion' => $movimiento['observaciones'],
+                        'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
                         'estatus_evento' => true,
@@ -396,7 +400,8 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
                 'total' => $importeTotal,
                 'mes' => $movimiento['mes'],
                 'descripcion' => $movimiento['observaciones'],
-                'tipo_interaccion' => $cuentaPrincipal['tipo_interaccion'],
+                'evento' => $this->numeroEvento,
+                'tipo_interaccion' => 'Presupuestal - Abono',
                 'validado' => false,
                 'estatus_evento' => true,
                 'categoria' => 'OTORGAMIENTO COMPROMISO RECAUDADO PRESTAMOS INICIALES',
@@ -407,10 +412,10 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
 
             // dd($importeTotal);
 
-            dd($this->polizasFinales);
-            Poliza::insert($polizas);
+            // dd($this->polizasFinales);
+            Poliza::insert($this->polizasFinales);
 
-            $this->dispatch('consultar-registro', $this->numeroPoliza, $this->total);
+            $this->dispatch('consultar-registro',$this->numeroEvento, $this->numeroPoliza, $this->total);
         }catch (\Throwable $th) {
             DB::rollBack();
             Log::error('Ocurrió un error al finalizarRegistro en recuperacion recaudado préstamos iniciales del capítulo 7000: '. $th->getMessage());

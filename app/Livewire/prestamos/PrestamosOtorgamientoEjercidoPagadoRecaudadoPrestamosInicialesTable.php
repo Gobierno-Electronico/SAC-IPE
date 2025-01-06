@@ -99,12 +99,12 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
 
         foreach ($this->cacheData as $movimiento){
             if(str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && $movimiento['mes'] == $registro['mes']){
-                $totalImportes += $movimiento['importe'];
+                $totalImportes += $movimiento['importeAbono'];
             }
         }
 
         if($totalImportes > 0){
-            $this->totalDisponible = $solvencia - $totalImportes - $registro['importe'];
+            $this->totalDisponible = $solvencia - $totalImportes - $registro['importeAbono'];
         }
 
         if($this->totalDisponible < 0){
