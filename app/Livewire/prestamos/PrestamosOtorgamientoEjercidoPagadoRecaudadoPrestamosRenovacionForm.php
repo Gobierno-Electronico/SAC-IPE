@@ -176,6 +176,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionForm extend
         $this->importeAbono = $datosRegistro['importeAbono'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->PTTOEjecutar = $datosRegistro['pttoEjecutar'];
+        $this->destinoRecurso = $datosRegistro['destinoRecurso'];
         $this->dispatch('llenarFormulario', presupuesto: $this->PTTOEjecutar, importe: $this->importe, importeAbono: $this->importeAbono);
     }
 
