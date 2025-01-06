@@ -413,7 +413,7 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
             $this->dispatch('consultar-registro', $this->numeroPoliza, $this->total);
         }catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('Ocurrió un error al finalizarRegistro en compromiso-devengado préstamos iniciales del capítulo 7000: '. $th->getMessage());
+            Log::error('Ocurrió un error al finalizarRegistro en recuperacion recaudado préstamos iniciales del capítulo 7000: '. $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
