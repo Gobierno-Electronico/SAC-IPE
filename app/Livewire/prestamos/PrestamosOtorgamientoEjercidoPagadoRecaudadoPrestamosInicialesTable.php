@@ -61,7 +61,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
     public function agregarRegistro($registro)
     {
         try{
-            // if($this->verificarPresupuesto($registro)){    
+            if($this->verificarPresupuesto($registro)){    
                 $nuevoRegistro = [
                     'id' => 0,
                     'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
@@ -83,8 +83,8 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
                     $this->dataCompleta[$key]['id'] = $key + 1;
                     $this->total += $registro['importe'];
                 }
-            //    $this->dispatch('cambioTotal', total: $this->total);
-            // }
+               $this->dispatch('cambioTotal', total: $this->total);
+            }
         }catch (\Throwable $th) {
             Log::error('Ocurrió un error al agregar registro en ejercido-pagado-recaudado préstamos inicales del capítulo 7000: '. $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
@@ -107,10 +107,10 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
             $this->totalDisponible = $solvencia - $totalImportes - $registro['importe'];
         }
 
-        // if($this->totalDisponible < 0){
-        //     $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar insuficiente', tipo: 'warning', tiempo: 3000);
-        //     return false;
-        // }
+        if($this->totalDisponible < 0){
+            $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar insuficiente', tipo: 'warning', tiempo: 3000);
+            return false;
+        }
         return true;
     }
 
@@ -293,8 +293,6 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
                 }
 
                 foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
-                   
-
                     $total = $movimiento['importe'];
                     if($dataCuenta['tipo_interaccion'] == 'Contable - Abono' && $dataCuenta['Codigo_cuenta'] == $movimiento['codigoCuentaAbono']){
                         $total = $movimiento['importeAbono'];
@@ -336,7 +334,6 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
                     }
                 }
 
-                // dd($interaccionCuentaCuentas);
                 if($movimiento['destinoRecurso'] == 'fondoGarantia'){
                     $interaccionCuentaConceptoAbono = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaAbonoId'])->whereIn('concepto_id', [95])
                     ->where('tipo_interaccion', '=', 'Contable - Abono')->first();

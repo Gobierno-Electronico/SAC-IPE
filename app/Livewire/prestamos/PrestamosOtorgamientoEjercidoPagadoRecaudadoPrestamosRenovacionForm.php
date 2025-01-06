@@ -59,13 +59,13 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionForm extend
     {
         try{
             $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-                        ->whereIn('interaccion_cuenta_conceptos.concepto_id', [95]) //..................CAMBIAR CONCEPTO
+                        ->whereIn('interaccion_cuenta_conceptos.concepto_id', [10097]) //..................CAMBIAR CONCEPTO
                         ->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Cargo')
                         ->where('cuentas.Descripcion_cuenta', 'LIKE', '%'. 'Concesión' .'%')
                         ->orderBy('cuentas.Descripcion_cuenta')->get();
 
             $this->cuentasAbono = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-                            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [95]) //..................CAMBIAR CONCEPTO
+                            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [10097]) //..................CAMBIAR CONCEPTO
                             ->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Abono')
                             ->where('cuentas.Descripcion_cuenta', 'NOT LIKE', '%'.'Recuperación'.'%')
                             ->orderBy('cuentas.Descripcion_cuenta')->get(); 

@@ -159,12 +159,9 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesForm extends
 
     public function limpiar()
     {
-        // $this->cuenta = "";
         $this->cuentaAbono = "";
-        // $this->selectCodigoAreaResponsable = "";
         $this->mes = "";
         $this->PTTOEjecutar = 0;
-        // $this->importe = "";
         $this->importeAbono = "";
         $this->destinoRecurso = "";
         $this->dispatch('limpiar');
@@ -188,7 +185,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesForm extends
     {
         $this->consultarRegistro = true;
         $this->numeroEvento = $numeroEvento;
-         $this->numeroPoliza = $numeroPoliza;
+        $this->numeroPoliza = $numeroPoliza;
         $this->total = $total;
     }
 }

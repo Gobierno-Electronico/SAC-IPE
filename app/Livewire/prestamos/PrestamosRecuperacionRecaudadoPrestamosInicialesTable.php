@@ -14,6 +14,7 @@ use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
 use App\Http\Controllers\BitacoraController;
 use App\Models\Poliza;
+use App\Models\Cuenta;
 class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
 {
     public $cacheData = [];
@@ -21,6 +22,8 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
     public $perPage = 6;
     public $total = 0;
     public $totalDisponible = 0;
+    public $polizasFinales = [];
+
 
 
     public function render()
@@ -59,17 +62,17 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
     public function agregarRegistro($registro)
     {
         try{
+            // dd($registro);
             if($this->verificarPresupuesto($registro)){    
                 $nuevoRegistro = [
                     'id' => 0,
                     'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
                     'partida' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
-                    'cuentaAbono' => $registro['codigoCuentaAbono'] . ' ' . $registro['descripcionCuentaAbono'],
+                    'cuentaBanco' => $registro['codigoCuentaBanco'] . ' ' . $registro['descripcionCuentaBanco'],
                     'mes' => $registro['mes'],
                     'movimiento' => 'OTORGAMIENTO RECAUDADO PRESTAMOS INICIALES', 
                     'pttoEjecutar' => $registro['pttoEjecutar'],
                     'importe' => $registro['importe'],
-                    'importeAbono' => $registro['importeAbono'],
                     'disponibilidad' => $this->totalDisponible,
                 ];
                 array_push($this->cacheData, $nuevoRegistro);
@@ -120,10 +123,9 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
                     $datosRegistro = [
                         'area' => $registro['areaResponsableId'],
                         'cuenta' => $registro['cuentaId'],
-                        'cuentaAbono' => $registro['cuentaAbonoId'],
+                        'cuentaBanco' => $registro['cuentaBancoId'],
                         'mes' => $registro['mes'],
                         'importe' => $registro['importe'],
-                        'importeAbono' => $registro['importeAbono'],
                         'pttoEjecutar' => $registro['pttoEjecutar']
                     ];
      
@@ -180,6 +182,7 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
 
     public function recalcularDisponibilidad($id)
     {   
+        // dd($this->dataCompleta);
         $mesSeleccionado = "";
         foreach ($this->dataCompleta as $key => $registro) {
             if ($registro['id'] == $id) {
@@ -231,31 +234,84 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
             ->pluck('evento')
             ->toArray();
             sort($numerosEvento);
-            $this->numeroEvento = (int)end($numerosEvento) + 1;
 
             $anioActual = Carbon::now()->year;
             $fecha = Carbon::now('America/Mexico_City');
             $fecha->year($anioActual);
 
             $bitacora = new BitacoraController();
-            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un recaudado préstamos inicales del capítulo 7000: '.$this->numeroEvento, request());
+            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un recaudado préstamos inicales del capítulo 7000: ', request());
             DB::beginTransaction();
-
+            // dd($this->dataCompleta);
+            $importeTotalCortoPlazo = 0;
+            $importeTotalMedioPlazo = 0;
+            $importeTotal = 0;
             foreach ($this->dataCompleta as $movimiento)
             {
-                $movimiento['importe'] = doubleval($movimiento['importe']);
-                $movimiento['importeAbono'] = doubleval($movimiento['importeAbono']);
+                
+                $plazo = explode(')', explode('(', $movimiento['descripcionCuenta'])[1])[0];
 
-                $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaId'])->whereIn('concepto_id', [94])
+
+                if($plazo == 'Corto plazo'){
+                    $importeTotalCortoPlazo = $importeTotalCortoPlazo + $movimiento['importe'];
+                }
+                elseif($plazo == 'Medio plazo'){
+                    $importeTotalMedioPlazo = $importeTotalMedioPlazo + $movimiento['importe'];
+                }
+                // dd($plazo);
+                $movimiento['importe'] = doubleval($movimiento['importe']);
+
+                $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('concepto_id', [10096])
                 ->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
+                // dd($interaccionCuentaConceptoPrincipal);
 
                 $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
-                ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
-                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
-                dd($interaccionCuentaCuentas);
+                    ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+                    ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
+                // dd($interaccionCuentaCuentas);
+
+                $interaccionCuentaCuentasFiltradas = [];
+                // dd($interaccionCuentaCuentas);
+                foreach ($interaccionCuentaCuentas as $cuenta) {
+                    // dd($cuenta['Descripcion_cuenta']);
+                    if($cuenta['tipo_interaccion'] == 'Contable - Abono'){
+                        $plazoCuenta = explode(')', explode('(', $cuenta['Descripcion_cuenta'])[1])[0];
+                    }
+                    
+
+
+                    if ($cuenta['tipo_interaccion'] == 'Contable - Cargo') {
+                        if ($cuenta['Codigo_cuenta'] == $movimiento['codigoCuentaBanco']) {
+                            $interaccionCuentaCuentasFiltradas[] = $cuenta;
+                            continue;
+                        }
+                    } 
+                    
+                    else if ($cuenta['tipo_interaccion'] == 'Contable - Cargo') {
+                        if ($cuenta['Codigo_cuenta'] != $movimiento['codigoCuentaBanco']) {
+                            continue;
+                        }
+                    } else if($cuenta['tipo_interaccion'] == 'Contable - Abono'){
+                            $plazoCuenta = explode(')', explode('(', $cuenta['Descripcion_cuenta'])[1])[0];
+                            // dd($plazo);
+
+                                continue;
+                            
+                        } else {
+                        if ($cuenta['tipo_interaccion'] != 'Contable - Cargo') {
+                            $interaccionCuentaCuentasFiltradas[] = $cuenta;
+                        }
+                    }
+                }
 
 
 
+
+                $importeTotal = $importeTotal + $movimiento['importe'];
+                // dd($movimiento['importe']);
+                $interaccionCuentaCuentas = $interaccionCuentaCuentasFiltradas;
+                // dd($interaccionCuentaCuentas)   ;
+                // dd($cuentaPrincipal);
                 $polizas = [
                     [
                         'area' => $movimiento['codigoAreaResponsable'],
@@ -267,39 +323,38 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
                         'total' => abs($movimiento['importe']),
                         'mes' => $movimiento['mes'],
                         'descripcion' => $movimiento['observaciones'],
-                        'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
                         'estatus_evento' => true,
-                        'categoria' => 'OTORGAMIENTO COMPROMISO DEVENGADO PRESTAMOS INICIALES',
+                        'categoria' => 'OTORGAMIENTO COMPROMISO RECAUDADO PRESTAMOS INICIALES',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]
                 ];
+                
 
-                array_push($polizas, [
-                    'area' => $movimiento['codigoAreaResponsable'],
-                    'tipo_poliza' => 'D',
-                    'numero_poliza' =>  $this->numeroPoliza,
-                    'fecha' => $movimiento['fechaAfectacion'],
-                    'cuenta' => $movimiento['codigoCuentaAbono'],
-                    'concepto' => $movimiento['descripcionCuentaAbono'],
-                    'total' => abs($movimiento['importeAbono']),
-                    'mes' => $movimiento['mes'],
-                    'descripcion' => $movimiento['observaciones'],
-                    'evento' => $this->numeroEvento,
-                    'tipo_interaccion' => $interaccionCuentaConceptoAbono->tipo_interaccion,
-                    'validado' => false,
-                    'estatus_evento' => true,
-                    'categoria' => 'OTORGAMIENTO COMPROMISO DEVENGADO PRESTAMOS INICIALES',
-                    'created_at' => $fecha,
-                    'updated_at' => $fecha
-                ]);
+                // array_push($polizas, [
+                //     'area' => $movimiento['codigoAreaResponsable'],
+                //     'tipo_poliza' => 'D',
+                //     'numero_poliza' =>  $this->numeroPoliza,
+                //     'fecha' => $movimiento['fechaAfectacion'],
+                //     'cuenta' => $movimiento['codigoCuentaBanco'],
+                //     'concepto' => $movimiento['descripcionCuentaBanco'],
+                //     'total' => abs($movimiento['importe']),
+                //     'mes' => $movimiento['mes'],
+                //     'descripcion' => $movimiento['observaciones'],
+                //     'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
+                //     'validado' => false,
+                //     'estatus_evento' => true,
+                //     'categoria' => 'OTORGAMIENTO COMPROMISO RECAUDADO PRESTAMOS INICIALES',
+                //     'created_at' => $fecha,
+                //     'updated_at' => $fecha
+                // ]);
 
                 foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
                     $total = $movimiento['importe'];
                     if($dataCuenta['tipo_interaccion'] == 'Contable - Abono'){
-                        $total = $movimiento['importe'] - $movimiento['importeAbono'];
+                        $total = $movimiento['importe'];
                     }
                     array_push($polizas, [
                         'area' => $movimiento['codigoAreaResponsable'],
@@ -311,44 +366,54 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
                         'total' => $total,
                         'mes' => $movimiento['mes'],
                         'descripcion' => $movimiento['observaciones'],
-                        'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
                         'estatus_evento' => true,
-                        'categoria' => 'OTORGAMIENTO COMPROMISO DEVENGADO PRESTAMOS INICIALES',
+                        'categoria' => 'OTORGAMIENTO COMPROMISO RECAUDADO PRESTAMOS INICIALES',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);
                 }
 
-                foreach ($interaccionCuentaCuentasAbono as $key => $dataCuenta) {
-                    array_push($polizas, [
-                        'area' => $movimiento['codigoAreaResponsable'],
-                        'tipo_poliza' => 'D',
-                        'numero_poliza' =>  $this->numeroPoliza,
-                        'fecha' => $movimiento['fechaAfectacion'],
-                        'cuenta' => $dataCuenta['Codigo_cuenta'],
-                        'concepto' => $dataCuenta['Descripcion_cuenta'],
-                        'total' => $movimiento['importeAbono'],
-                        'mes' => $movimiento['mes'],
-                        'descripcion' => $movimiento['observaciones'],
-                        'evento' => $this->numeroEvento,
-                        'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
-                        'validado' => false,
-                        'estatus_evento' => true,
-                        'categoria' => 'OTORGAMIENTO COMPROMISO DEVENGADO PRESTAMOS INICIALES',
-                        'created_at' => $fecha,
-                        'updated_at' => $fecha
-                    ]);
-                }
+
+                $this->polizasFinales = array_merge($this->polizasFinales, $polizas);
                 
-                Poliza::insert($polizas);
+                
+
+
                 DB::commit();
             }
-            $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
+
+            $cuentaPrincipal = Cuenta::where('Codigo_cuenta', '=', '8.1.5.4.1.7.1.02.01')->first();
+            // dd($cuentaPrincipal);
+            array_push($this->polizasFinales, [
+                'area' => $movimiento['codigoAreaResponsable'],
+                'tipo_poliza' => 'D',
+                'numero_poliza' =>  $this->numeroPoliza,
+                'fecha' => $movimiento['fechaAfectacion'],
+                'cuenta' => $cuentaPrincipal['Codigo_cuenta'],
+                'concepto' => $cuentaPrincipal['Descripcion_cuenta'],
+                'total' => $importeTotal,
+                'mes' => $movimiento['mes'],
+                'descripcion' => $movimiento['observaciones'],
+                'tipo_interaccion' => $cuentaPrincipal['tipo_interaccion'],
+                'validado' => false,
+                'estatus_evento' => true,
+                'categoria' => 'OTORGAMIENTO COMPROMISO RECAUDADO PRESTAMOS INICIALES',
+                'created_at' => $fecha,
+                'updated_at' => $fecha
+            ]);
+
+
+            // dd($importeTotal);
+
+            dd($this->polizasFinales);
+            Poliza::insert($polizas);
+
+            $this->dispatch('consultar-registro', $this->numeroPoliza, $this->total);
         }catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('Ocurrió un error al finalizarRegistro en compromiso-devengado préstamos iniciales del capítulo 7000: '. $th->getMessage());
+            Log::error('Ocurrió un error al finalizarRegistro en recuperacion recaudado préstamos iniciales del capítulo 7000: '. $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
