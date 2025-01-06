@@ -184,14 +184,14 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosRenovacionTable extends T
         foreach ($this->dataCompleta as $key => $registro) {
             if ($registro['id'] == $id) {
                 $mesSeleccionado = $registro['mes'];
-
+                $codigoAreaSeleccionado = $registro['codigoAreaResponsable'];
             }
         }
 
         $totalImportes = 0;
         foreach($this->cacheData as $key => $movimiento)
         {
-            if($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && $movimiento['mes'] == $mesSeleccionado)
+            if($movimiento['id'] != $id && str_contains($movimiento['area'], $codigoAreaSeleccionado) && $movimiento['mes'] == $mesSeleccionado)
             {
                 if($totalImportes == 0){
                     $movimiento['disponibilidad'] = $movimiento['pttoEjecutar'] - $movimiento['importe'];
