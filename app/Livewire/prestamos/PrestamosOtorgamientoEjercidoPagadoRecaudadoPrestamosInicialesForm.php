@@ -113,7 +113,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesForm extends
 
             if($this->importeAbono >= $this->importe)
             {
-                $this->dispatch('mostrarMensaje', mensaje: 'El importe abono no puede ser mayor o igual al importe cargo', tipo: 'warning', tiempo: 3000);
+                $this->dispatch('mostrarMensaje', mensaje: 'El importe abono no puede ser mayor o igual al importe general', tipo: 'warning', tiempo: 3000);
                 return;
             }   
 

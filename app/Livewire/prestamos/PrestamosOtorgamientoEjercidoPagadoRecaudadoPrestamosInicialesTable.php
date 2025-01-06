@@ -100,8 +100,14 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
         foreach ($this->cacheData as $movimiento){
             if(str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && $movimiento['mes'] == $registro['mes']){
                 $totalImportes += $movimiento['importeAbono'];
+                
+                if(!str_contains($movimiento['partida'], $registro['codigoCuenta'])){
+                    $totalImportes = 0;
+                    $totalImportes += $movimiento['importeAbono'];
+                }
             }
         }
+
 
         if($totalImportes > 0){
             $this->totalDisponible = $solvencia - $totalImportes - $registro['importeAbono'];
@@ -188,14 +194,17 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
         foreach ($this->dataCompleta as $key => $registro) {
             if ($registro['id'] == $id) {
                 $mesSeleccionado = $registro['mes'];
-
+                $datosSeleccionado = [
+                    'codigoArea' => $registro['codigoAreaResponsable'],
+                    'codigoCuenta' => $registro['codigoCuenta']
+                ];
             }
         }
 
         $totalImportes = 0;
         foreach($this->cacheData as $key => $movimiento)
         {
-            if($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && $movimiento['mes'] == $mesSeleccionado)
+            if($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuenta']) && $movimiento['mes'] == $mesSeleccionado)
             {
                 if($totalImportes == 0){
                     $movimiento['disponibilidad'] = $movimiento['pttoEjecutar'] - $movimiento['importe'];
