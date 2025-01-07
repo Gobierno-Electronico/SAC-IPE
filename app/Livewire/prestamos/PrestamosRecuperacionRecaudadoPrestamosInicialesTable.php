@@ -329,7 +329,7 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
                         'estatus_evento' => true,
-                        'categoria' => 'OTORGAMIENTO COMPROMISO RECAUDADO PRESTAMOS INICIALES',
+                        'categoria' => 'RECUPERACION RECAUDADO PRESTAMOS INICIALES',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]
@@ -373,7 +373,7 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
                         'estatus_evento' => true,
-                        'categoria' => 'OTORGAMIENTO COMPROMISO RECAUDADO PRESTAMOS INICIALES',
+                        'categoria' => 'RECUPERACION RECAUDADO PRESTAMOS INICIALES',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);
@@ -404,7 +404,7 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
                 'tipo_interaccion' => 'Presupuestal - Abono',
                 'validado' => false,
                 'estatus_evento' => true,
-                'categoria' => 'OTORGAMIENTO COMPROMISO RECAUDADO PRESTAMOS INICIALES',
+                'categoria' => 'RECUPERACION RECAUDADO PRESTAMOS INICIALES',
                 'created_at' => $fecha,
                 'updated_at' => $fecha
             ]);
