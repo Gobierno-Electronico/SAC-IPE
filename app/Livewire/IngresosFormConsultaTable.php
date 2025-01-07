@@ -38,7 +38,6 @@ class IngresosFormConsultaTable extends Tabla
 
     public function render()
     {
-        $this->resetPage();
         $poliza = Poliza::where('numero_poliza', '=', $this->numeroPoliza)
             ->where('tipo_poliza', '=', $this->tipoPoliza)
             ->where('evento', '=', $this->numeroEvento)->first();

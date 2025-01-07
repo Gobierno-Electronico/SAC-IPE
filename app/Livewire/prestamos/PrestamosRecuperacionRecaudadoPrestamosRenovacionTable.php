@@ -125,17 +125,20 @@ class PrestamosRecuperacionRecaudadoPrestamosRenovacionTable extends Tabla
 
     public function recalcularDisponibilidad($id)
     {
-        // dd($this->dataCompleta);
         $mesSeleccionado = "";
         foreach ($this->dataCompleta as $key => $registro) {
             if ($registro['id'] == $id) {
                 $mesSeleccionado = $registro['mes'];
+                $datosSeleccionado = [
+                    'codigoArea' => $registro['codigoAreaResponsable'],
+                    'codigoCuenta' => $registro['codigoCuenta']
+                ];
             }
         }
 
         $totalImportes = 0;
         foreach ($this->cacheData as $key => $movimiento) {
-            if ($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && $movimiento['mes'] == $mesSeleccionado && str_contains($movimiento['partida'], $registro['codigoCuenta'])) {
+            if ($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && $movimiento['mes'] == $mesSeleccionado && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuenta'])) {
                 if ($totalImportes == 0) {
                     $movimiento['disponibilidad'] = $movimiento['pttoEjecutar'] - $movimiento['importe'];
                     $totalImportes += $movimiento['importe'];

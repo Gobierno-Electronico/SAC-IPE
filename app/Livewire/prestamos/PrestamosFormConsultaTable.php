@@ -45,7 +45,6 @@ class PrestamosFormConsultaTable extends Tabla
     public function render()
     {
         try{
-            $this->resetPage();
             $poliza = Poliza::where('numero_poliza', '=', $this->numeroPoliza)
                 ->where('tipo_poliza', '=', $this->tipoPoliza)
                 ->where('evento', '=', $this->numeroEvento)->first();
@@ -119,9 +118,8 @@ class PrestamosFormConsultaTable extends Tabla
                 ->where('categoria', '=', $this->categoriaModulo)
                 ->where('numero_poliza', '=', $this->numeroPoliza)
                 ->where('validado', '=', false)->delete();
-            // PresupuestoInicial::where('anio', '=', $this->selectedYear)->where('categoria', '=', 'INGRESOS')->where('tipo', '=', 'P')->delete();
+            
             $this->validado = true;
-            // $this->dispatch('mostrarMensaje', mensaje: 'Se borró el movimiento de Reclasificación/Recalendarización', tipo: 'success', tiempo: 3000);
             $this->dispatch('cancelar-movimiento');
             DB::commit();
             return redirect($this->urlFinalizar)->with(['message' => 'Se borró el movimiento de ' . $this->categoriaModulo, 'message_type' => 'success']);
@@ -143,7 +141,6 @@ class PrestamosFormConsultaTable extends Tabla
                 ->where('categoria', '=', $this->categoriaModulo)
                 ->where('numero_poliza', '=', $this->numeroPoliza)
                 ->update(["validado" => true]);
-            // PresupuestoInicial::where('anio', '=', $this->selectedYear)->where('categoria', '=', 'INGRESOS')->where('tipo', '=', 'P')->update(["validado" => true]);
             $this->validado = true;
             DB::commit();
             $this->dispatch('mostrarMensaje', mensaje: 'Se validó el movimiento de ' . $this->categoriaModulo, tipo: 'success', tiempo: 3000);

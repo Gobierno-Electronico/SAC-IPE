@@ -85,7 +85,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesForm extends
     {
         try{
             if (!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
-            $anioActual = Carbon::now()->year;
+            $anioActual = 2024;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $cuentaSeleccionada = Cuenta::find($this->cuenta);
 
@@ -112,7 +112,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesForm extends
 
             if($this->importeAbono >= $this->importe)
             {
-                $this->dispatch('mostrarMensaje', mensaje: 'El importe abono no puede ser mayor o igual al importe cargo', tipo: 'warning', tiempo: 3000);
+                $this->dispatch('mostrarMensaje', mensaje: 'El importe abono no puede ser mayor o igual al importe general', tipo: 'warning', tiempo: 3000);
                 return;
             }   
 
@@ -177,6 +177,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesForm extends
         $this->importeAbono = $datosRegistro['importeAbono'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->PTTOEjecutar = $datosRegistro['pttoEjecutar'];
+        $this->destinoRecurso = $datosRegistro['destinoRecurso'];
         $this->dispatch('llenarFormulario', presupuesto: $this->PTTOEjecutar, importe: $this->importe, importeAbono: $this->importeAbono);
     }
 

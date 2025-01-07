@@ -63,29 +63,29 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
     public function agregarRegistro($registro)
     {
         try {
-            if($this->verificarPresupuesto($registro)){    
-            $nuevoRegistro = [
-                'id' => 0,
-                'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
-                'partida' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
-                'cuentaAbono' => $registro['codigoCuentaAbono'] . ' ' . $registro['descripcionCuentaAbono'],
-                'mes' => $registro['mes'],
-                'movimiento' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS RENOVACION',
-                'pttoEjecutar' => $registro['pttoEjecutar'],
-                'importe' => $registro['importe'],
-                'importeAbono' => $registro['importeAbono'],
-                'disponibilidad' => $this->totalDisponible,
-                'destinoRecurso' => $registro['destinoRecurso']
-            ];
-            array_push($this->cacheData, $nuevoRegistro);
-            array_push($this->dataCompleta, $registro);
-            $this->total = 0;
-            foreach ($this->cacheData as $key => $registro) {
-                $this->cacheData[$key]['id'] = $key + 1;
-                $this->dataCompleta[$key]['id'] = $key + 1;
-                $this->total += $registro['importe'];
-            }
-               $this->dispatch('cambioTotal', total: $this->total);
+            if ($this->verificarPresupuesto($registro)) {
+                $nuevoRegistro = [
+                    'id' => 0,
+                    'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
+                    'partida' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
+                    'cuentaAbono' => $registro['codigoCuentaAbono'] . ' ' . $registro['descripcionCuentaAbono'],
+                    'mes' => $registro['mes'],
+                    'movimiento' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS RENOVACION',
+                    'pttoEjecutar' => $registro['pttoEjecutar'],
+                    'importe' => $registro['importe'],
+                    'importeAbono' => $registro['importeAbono'],
+                    'disponibilidad' => $this->totalDisponible,
+                    'destinoRecurso' => $registro['destinoRecurso']
+                ];
+                array_push($this->cacheData, $nuevoRegistro);
+                array_push($this->dataCompleta, $registro);
+                $this->total = 0;
+                foreach ($this->cacheData as $key => $registro) {
+                    $this->cacheData[$key]['id'] = $key + 1;
+                    $this->dataCompleta[$key]['id'] = $key + 1;
+                    $this->total += $registro['importe'];
+                }
+                $this->dispatch('cambioTotal', total: $this->total);
             }
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al agregar registro en ejercido-pagado-recaudado préstamos renovación del capítulo 7000: ' . $th->getMessage());
@@ -100,16 +100,16 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
         $totalImportes = 0;
 
         foreach ($this->cacheData as $movimiento) {
-            if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && $movimiento['mes'] == $registro['mes']) {
-                $totalImportes += $movimiento['importe'];
+            if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoCuenta']) && $movimiento['mes'] == $registro['mes']) {
+                $totalImportes += $movimiento['importeAbono'];
             }
         }
 
         if ($totalImportes > 0) {
-            $this->totalDisponible = $solvencia - $totalImportes - $registro['importe'];
+            $this->totalDisponible = $solvencia - $totalImportes - $registro['importeAbono'];
         }
 
-        if($this->totalDisponible < 0){
+        if ($this->totalDisponible < 0) {
             $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar insuficiente', tipo: 'warning', tiempo: 3000);
             return false;
         }
@@ -190,12 +190,16 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
         foreach ($this->dataCompleta as $key => $registro) {
             if ($registro['id'] == $id) {
                 $mesSeleccionado = $registro['mes'];
+                $datosSeleccionado = [
+                    'codigoArea' => $registro['codigoAreaResponsable'],
+                    'codigoCuenta' => $registro['codigoCuenta']
+                ];
             }
         }
 
         $totalImportes = 0;
         foreach ($this->cacheData as $key => $movimiento) {
-            if ($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && $movimiento['mes'] == $mesSeleccionado) {
+            if ($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuenta']) && $movimiento['mes'] == $mesSeleccionado) {
                 if ($totalImportes == 0) {
                     $movimiento['disponibilidad'] = $movimiento['pttoEjecutar'] - $movimiento['importe'];
                     $totalImportes += $movimiento['importe'];
@@ -332,17 +336,17 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
                     }
                 }
 
-                if($movimiento['destinoRecurso'] == 'fondoGarantia'){
+                if ($movimiento['destinoRecurso'] == 'fondoGarantia') {
                     $interaccionCuentaConceptoAbono = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaAbonoId'])->whereIn('concepto_id', [10097])
-                    ->where('tipo_interaccion', '=', 'Contable - Abono')->first();
-    
+                        ->where('tipo_interaccion', '=', 'Contable - Abono')->first();
+
                     $interaccionCuentaCuentasAbono = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoAbono->id)
-                    ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
-                    ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-                    ->where('cuentas.Descripcion_cuenta', 'NOT LIKE', '%'.'Prima de Renovación'.'%')
-                    ->where('cuentas.Codigo_cuenta', '<>', '1.1.1.2.06.05')
-                    ->get()
-                    ->toArray();
+                        ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+                        ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+                        ->where('cuentas.Descripcion_cuenta', 'NOT LIKE', '%' . 'Prima de Renovación' . '%')
+                        ->where('cuentas.Codigo_cuenta', '<>', '1.1.1.2.06.05')
+                        ->get()
+                        ->toArray();
 
                     array_push($polizas, [
                         'area' => $movimiento['codigoAreaResponsable'],
@@ -393,7 +397,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
                     $interaccionCuentaCuentasAbono = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoAbono->id)
                         ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
                         ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-                        ->where('cuentas.Descripcion_cuenta', 'NOT LIKE', '%'.'Fondo de Garantía'.'%')
+                        ->where('cuentas.Descripcion_cuenta', 'NOT LIKE', '%' . 'Fondo de Garantía' . '%')
                         ->where('cuentas.Codigo_cuenta', '<>', '1.1.1.2.06.04')
                         ->get()
                         ->toArray();
