@@ -86,6 +86,8 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesForm extends Com
             ->where('cuentas.Descripcion_cuenta', 'LIKE', '%' . $cuentaSeleccionada->descripcionCuenta . '%')
             ->get(); 
 
+            
+            //$anioActual = 2024;//Carbon::now()->year;
             // $anioActual = Carbon::now()->year;
             $anioActual = 2024;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
