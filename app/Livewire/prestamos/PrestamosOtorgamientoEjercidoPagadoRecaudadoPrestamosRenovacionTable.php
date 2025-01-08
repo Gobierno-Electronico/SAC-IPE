@@ -21,7 +21,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
     public $dataCompleta = [];
     public $perPage = 6;
     public $total = 0;
-    public $totalDisponible = 0;
+    public $importeRestante = 0;
     public $numeroPoliza;
     public $numeroEvento;
 
@@ -51,10 +51,10 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
             Column::make('cuentaAbono', 'Cuenta de abono'),
             Column::make('importe', 'Importe')->component('columns.importe'),
             Column::make('importeAbono', 'Importe abono')->component('columns.importe'),
+            Column::make('importeRestante', 'Importe restante')->component('columns.importe'),
             Column::make('destinoRecurso', 'Destino recurso'),
             Column::make('movimiento', 'Movimiento'),
             Column::make('pttoEjecutar', 'PPTO por ejecutar')->component('columns.importe'),
-            Column::make('disponibilidad', 'Disponibilidad')->component('columns.importe'),
             Column::make('id', 'Acciones')->component('columns.accionesIngresos')
         ];
     }
@@ -74,7 +74,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
                     'pttoEjecutar' => $registro['pttoEjecutar'],
                     'importe' => $registro['importe'],
                     'importeAbono' => $registro['importeAbono'],
-                    'disponibilidad' => $this->totalDisponible,
+                    'importeRestante' => $this->importeRestante,
                     'destinoRecurso' => $registro['destinoRecurso']
                 ];
                 array_push($this->cacheData, $nuevoRegistro);
@@ -95,21 +95,25 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
 
     public function verificarPresupuesto($registro)
     {
-        $solvencia = $registro['pttoEjecutar'];
-        $this->totalDisponible = $solvencia - $registro['importe'];
+        $solvencia = $registro['pttoEjecutar'] - $registro['importe'];
+        $this->importeRestante = $registro['importe'] - $registro['importeAbono'];
         $totalImportes = 0;
 
         foreach ($this->cacheData as $movimiento) {
             if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoCuenta']) && $movimiento['mes'] == $registro['mes']) {
-                $totalImportes += $movimiento['importeAbono'];
+                $totalImportes += $movimiento['importeAbono']; 
             }
         }
 
         if ($totalImportes > 0) {
-            $this->totalDisponible = $solvencia - $totalImportes - $registro['importeAbono'];
+            $this->importeRestante = $registro['importe'] - $totalImportes - $registro['importeAbono'];
         }
 
-        if ($this->totalDisponible < 0) {
+        if ($this->importeRestante < 0) {
+            $this->dispatch('mostrarMensaje', mensaje: 'La suma de los importes abono no puede ser mayor al importe general', tipo: 'warning', tiempo: 3000);
+            return false;
+        }
+        if ($solvencia < 0) {
             $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar insuficiente', tipo: 'warning', tiempo: 3000);
             return false;
         }
