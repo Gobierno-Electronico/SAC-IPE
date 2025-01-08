@@ -148,7 +148,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesForm extends Com
             $this->importeAbono = ($this->importeAbono > 0)  ? $this->importeAbono : "";
             $this->validate();
 
-            if($this->importeAbono >= $this->importe)
+            if($this->importeAbono > $this->importe)
             {
                 $this->dispatch('mostrarMensaje', mensaje: 'El importe abono no puede ser mayor o igual al importe cargo', tipo: 'warning', tiempo: 3000);
                 return;
