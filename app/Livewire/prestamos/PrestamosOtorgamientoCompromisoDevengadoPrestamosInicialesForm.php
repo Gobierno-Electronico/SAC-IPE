@@ -87,9 +87,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesForm extends Com
             ->get(); 
 
             
-            //$anioActual = 2024;//Carbon::now()->year;
-            // $anioActual = Carbon::now()->year;
-            $anioActual = 2024;
+            $anioActual = Carbon::now()->year;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $cuentaContableAbono[0]->cuenta_id)->whereIn('interaccion_cuenta_conceptos.concepto_id', [94])->where('tipo_interaccion', '=', 'Contable - Abono')->first();
             $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')
@@ -148,7 +146,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesForm extends Com
             $this->importeAbono = ($this->importeAbono > 0)  ? $this->importeAbono : "";
             $this->validate();
 
-            if($this->importeAbono > $this->importe)
+            if($this->importeAbono >= $this->importe)
             {
                 $this->dispatch('mostrarMensaje', mensaje: 'El importe abono no puede ser mayor o igual al importe cargo', tipo: 'warning', tiempo: 3000);
                 return;

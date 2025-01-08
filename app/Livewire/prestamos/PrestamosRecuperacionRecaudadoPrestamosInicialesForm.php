@@ -79,8 +79,7 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesForm extends Component
     {
         try{      
             if (!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
-            // $anioActual = Carbon::now()->year;
-            $anioActual = 2024;
+            $anioActual = Carbon::now()->year;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $cuentaSeleccionada = Cuenta::find($this->cuenta);
 
