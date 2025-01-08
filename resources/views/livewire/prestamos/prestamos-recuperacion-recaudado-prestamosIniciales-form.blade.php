@@ -21,9 +21,10 @@
                 </div>
             </div>
         </div>
-        <livewire:prestamos.prestamos-recuperacion-recaudado-prestamosIniciales-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaOtorgamientoRecaudadoPrestamosIniciales" urlFinalizar="/capitulo7-otorgamiento-recaudado-prestamosIniciales"
-            tipoPoliza="D" categoriaModulo='OTORGAMIENTO COMPROMISO RECAUDADO PRESTAMOS INICIALES' />
+        <livewire:prestamos.prestamos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+            tipoMovimiento="PolizaOtorgamientoRecaudadoPrestamosIniciales" 
+            urlFinalizar="/capitulo7-recuperacion-recaudado-prestamosIniciales" tipoPoliza="D" 
+            categoriaModulo='OTORGAMIENTO COMPROMISO RECAUDADO PRESTAMOS INICIALES' />
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"

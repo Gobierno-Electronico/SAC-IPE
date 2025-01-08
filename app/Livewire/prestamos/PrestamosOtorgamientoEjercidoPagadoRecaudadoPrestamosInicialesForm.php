@@ -85,6 +85,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesForm extends
     {
         try{
             if (!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
+            // $anioActual = Carbon::now()->year;
             $anioActual = 2024;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $cuentaSeleccionada = Cuenta::find($this->cuenta);
