@@ -155,14 +155,14 @@ class PrestamosRecuperacionRecaudadoPrestamosRenovacionTable extends Tabla
     public function agregarRegistro($registro)
     {
         try {
-            // if($this->verificarPresupuesto($registro)){   
+            if($this->verificarPresupuesto($registro)){   
             $nuevoRegistro = [
                 'id' => 0,
                 'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
                 'partida' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
                 'cuentaBanco' => $registro['codigoCuentaBanco'] . ' ' . $registro['descripcionCuentaBanco'],
                 'mes' => $registro['mes'],
-                'movimiento' => 'OTORGAMIENTO RECAUDADO PRESTAMOS INICIALES',
+                'movimiento' => 'RECUPERACION RECAUDADO PRESTAMOS RENOVACION',
                 'pttoEjecutar' => $registro['pttoEjecutar'],
                 'importe' => $registro['importe'],
                 'disponibilidad' => $this->totalDisponible,
@@ -175,8 +175,8 @@ class PrestamosRecuperacionRecaudadoPrestamosRenovacionTable extends Tabla
                 $this->dataCompleta[$key]['id'] = $key + 1;
                 $this->total += $registro['importe'];
             }
-            // $this->dispatch('cambioTotal', total: $this->total);
-            // }
+            $this->dispatch('cambioTotal', total: $this->total);
+            }
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al agregar registro en recaudado préstamos renovación del capítulo 7000: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
@@ -247,7 +247,6 @@ class PrestamosRecuperacionRecaudadoPrestamosRenovacionTable extends Tabla
             foreach ($this->dataCompleta as $movimiento) {
                 $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('concepto_id', [10099])
                     ->where('tipo_interaccion', '=', 'Contable - Abono')->first();
-                // dd($interaccionCuentaConceptoPrincipal);
 
                 $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
                     ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
