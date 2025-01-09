@@ -197,7 +197,6 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesForm extends Com
     {
         $this->cuenta = "";
         $this->cuentaAbono = "";
-        $this->selectCodigoAreaResponsable = "";
         $this->mes = "";
         $this->PTTOEjecutar = 0;
         $this->importe = "";

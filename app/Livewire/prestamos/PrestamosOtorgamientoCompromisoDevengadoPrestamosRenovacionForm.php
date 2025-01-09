@@ -195,7 +195,6 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosRenovacionForm extends Co
     {
         $this->cuenta = "";
         $this->cuentaAbono = "";
-        $this->selectCodigoAreaResponsable = "";
         $this->mes = "";
         $this->PTTOEjecutar = 0;
         $this->importe = "";
