@@ -81,11 +81,7 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesForm extends Component
             if (!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
             $anioActual = Carbon::now()->year;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
-            $cuentaSeleccionada = Cuenta::find($this->cuenta);
-
-            $cuentaConcesion = $this->obtenerCuentaConcesion();
-        
-            $solvencia = DB::select('EXEC SolvenciaOtorgamientoRecaudadoPrestamosIniciales @area = ?, @cuenta = ?, @cuentaConcesion = ?, @anio = ?, @mes = ?', array($departamento->Codigo_completo, $cuentaSeleccionada->Codigo_cuenta, $cuentaConcesion, $anioActual, $this->mes))[0]->Total;
+            $solvencia = DB::select('EXEC SolvenciaRecuperacionRecaudadoPrestamosRenovacion @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($departamento->Codigo_completo, '8.1.4.4.1.7.1.02.01', $anioActual, $this->mes))[0]->Total;
             $this->PTTOEjecutar = ($solvencia > 0) ? floatval($solvencia) : 0;
 
             $this->dispatch('formato_importe', id: 'inputPTTOEjecutar', amount: "{$this->PTTOEjecutar}");
@@ -96,25 +92,6 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesForm extends Component
         }
     }
     
-    public function obtenerCuentaConcesion()
-    {
-        try{
-            $cuentaSeleccionada = Cuenta::find($this->cuenta);
-            $plazo = explode(')', explode('(', $cuentaSeleccionada->Descripcion_cuenta)[1])[0];
-
-            $cuentaConcesion = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [95])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Cargo')
-            ->where('cuentas.Descripcion_cuenta', 'LIKE', '%' . $plazo . '%')
-            ->get(); 
-
-            return $cuentaConcesion[0]['Codigo_cuenta'];
-
-        }catch (\Throwable $th) {
-            Log::error('Ocurrió un error al obtener la cuenta de concesión en recaudado préstamos inicales del capítulo 7000: ' . $th->getMessage());
-            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar presupuesto, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
-        } 
-    }
-
     public function agregarRegistro()
     {
         try{
