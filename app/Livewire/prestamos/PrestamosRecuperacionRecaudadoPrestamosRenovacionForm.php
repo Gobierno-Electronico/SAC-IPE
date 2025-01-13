@@ -50,37 +50,44 @@ class PrestamosRecuperacionRecaudadoPrestamosRenovacionForm extends Component
     {
         try {
             $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [10099])
-            ->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Abono')
-            ->orderBy('cuentas.Descripcion_cuenta')->get();
-    
+                ->whereIn('interaccion_cuenta_conceptos.concepto_id', [10099])
+                ->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Abono')
+                ->orderBy('cuentas.Descripcion_cuenta')->get();
+
             $bancos = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-                        ->whereIn('interaccion_cuenta_conceptos.concepto_id', [10099])
-                        ->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Cargo')
-                        ->orderBy('cuentas.Descripcion_cuenta')->get();
+                ->whereIn('interaccion_cuenta_conceptos.concepto_id', [10099])
+                ->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Cargo')
+                ->orderBy('cuentas.Descripcion_cuenta')->get();
             return view('livewire.prestamos.prestamos-recuperacion-recaudado-prestamosRenovacion-form', ['cuentas' => $cuentas, 'bancos' => $bancos]);
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar cuentas en recaudado préstamos con renovación del capítulo 7000' . $th->getMessage());
-            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000); 
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 
     public function cargarPresupuesto() //FALTA ACLARAR DE QUE CUENTAS SE VA A OBTENER EL PRESUPUESTO
     {
-        try{      
+        try {
             if (!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
             $anioActual = Carbon::now()->year;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
-            $cuentaSeleccionada = Cuenta::find($this->cuenta);
 
-            $cuentaConcesion = $this->obtenerCuentaConcesion();
-        
-            $solvencia = DB::select('EXEC SolvenciaOtorgamientoRecaudadoPrestamosIniciales @area = ?, @cuenta = ?, @cuentaConcesion = ?, @anio = ?, @mes = ?', array($departamento->Codigo_completo, $cuentaSeleccionada->Codigo_cuenta, $cuentaConcesion, $anioActual, $this->mes))[0]->Total;
+            $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('concepto_id', [10099])
+                ->where('tipo_interaccion', '=', 'Contable - Abono')->first();
+
+            $cuentaCompromisoDevengado = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', $interaccionCuentaConceptoPrincipal->id)
+                ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+                ->where('cuentas.Descripcion_cuenta', 'LIKE', '%'. '(Devengado)' .'%')
+                ->get()
+                ->toArray();                
+                
+            $solvencia = DB::select('EXEC SolvenciaRecuperacionRecaudadoPrestamosRenovacion @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($departamento->Codigo_completo, $cuentaCompromisoDevengado[0]['Codigo_cuenta'], $anioActual, $this->mes))[0]->Total;
             $this->PTTOEjecutar = ($solvencia > 0) ? floatval($solvencia) : 0;
 
             $this->dispatch('formato_importe', id: 'inputPTTOEjecutar', amount: "{$this->PTTOEjecutar}");
-            $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar cargado', tipo: 'success', tiempo: 1500);  
-        }catch (\Throwable $th) {
+            $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar cargado', tipo: 'success', tiempo: 1500);
+        } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar presupuesto en recaudado préstamos inicales del capítulo 7000: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar presupuesto, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
@@ -88,7 +95,7 @@ class PrestamosRecuperacionRecaudadoPrestamosRenovacionForm extends Component
 
     public function agregarRegistro()
     {
-        try{
+        try {
             $this->importe = floatval(str_replace(['$', ','], "", $this->importe));
             $this->importe = ($this->importe > 0)  ? $this->importe : "";
 
@@ -119,10 +126,10 @@ class PrestamosRecuperacionRecaudadoPrestamosRenovacionForm extends Component
             ];
 
             $this->dispatch('agregar-registro', registro: $registro);
-            $this->limpiar(); 
-        }catch (\Illuminate\Validation\ValidationException $e) {
+            $this->limpiar();
+        } catch (\Illuminate\Validation\ValidationException $e) {
             $this->dispatch('mostrarMensaje', mensaje: $e->getMessage(), tipo: 'warning', tiempo: 3000);
-        }catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             Log::error('Ocurrió un error al agregar registro en recaudado préstamos con renovación: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
@@ -156,7 +163,7 @@ class PrestamosRecuperacionRecaudadoPrestamosRenovacionForm extends Component
     }
 
     #[On('consultar-registro')]
-    public function consultarRegistros($numeroEvento,$numeroPoliza, $total)
+    public function consultarRegistros($numeroEvento, $numeroPoliza, $total)
     {
         $this->consultarRegistro = true;
         $this->numeroEvento = $numeroEvento;
