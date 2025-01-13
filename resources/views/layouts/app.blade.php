@@ -594,6 +594,11 @@
                                         <a href="{{ route('movimientosIngresos') }}" method="GET"
                                             class="dropdown-item" onclick="mostrarCargando()">Ingresos</a>
                                     </li>
+
+                                    <li class="dropend">
+                                        <a href="{{ route('movimientosPrestamos') }}" method="GET"
+                                            class="dropdown-item" onclick="mostrarCargando()">Préstamos</a>
+                                    </li>
                                 </ul>
                             </li>
 
