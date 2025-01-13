@@ -48,7 +48,6 @@
                         <option value="2y3">Capítulo 3000</option>
                         <option value="4">Capítulo 4000</option>
                         <option value="5">Capítulo 5000</option>
-                        <option value="7">Capítulo 7000</option>
 
                     </select>
                 </div>
