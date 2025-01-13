@@ -34,4 +34,8 @@ class PrestamosController extends Controller
     public function capitulo7RecaudadoPrestamosRenovacion(){
         return view("prestamos.prestamos-recuperacion-recaudado-prestamosRenovacion");
     }
+
+    public function consultarMovimientos(){
+        return view ('prestamos.movimientos-prestamos');
+    }
 }
