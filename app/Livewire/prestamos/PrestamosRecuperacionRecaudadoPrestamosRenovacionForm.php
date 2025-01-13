@@ -67,6 +67,23 @@ class PrestamosRecuperacionRecaudadoPrestamosRenovacionForm extends Component
 
     public function cargarPresupuesto() //FALTA ACLARAR DE QUE CUENTAS SE VA A OBTENER EL PRESUPUESTO
     {
+        try{      
+            if (!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
+            $anioActual = Carbon::now()->year;
+            $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
+            $cuentaSeleccionada = Cuenta::find($this->cuenta);
+
+            $cuentaConcesion = $this->obtenerCuentaConcesion();
+        
+            $solvencia = DB::select('EXEC SolvenciaOtorgamientoRecaudadoPrestamosIniciales @area = ?, @cuenta = ?, @cuentaConcesion = ?, @anio = ?, @mes = ?', array($departamento->Codigo_completo, $cuentaSeleccionada->Codigo_cuenta, $cuentaConcesion, $anioActual, $this->mes))[0]->Total;
+            $this->PTTOEjecutar = ($solvencia > 0) ? floatval($solvencia) : 0;
+
+            $this->dispatch('formato_importe', id: 'inputPTTOEjecutar', amount: "{$this->PTTOEjecutar}");
+            $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar cargado', tipo: 'success', tiempo: 1500);  
+        }catch (\Throwable $th) {
+            Log::error('Ocurrió un error al cargar presupuesto en recaudado préstamos inicales del capítulo 7000: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar presupuesto, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
     }
 
     public function agregarRegistro()

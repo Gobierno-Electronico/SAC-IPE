@@ -166,12 +166,10 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesForm extends Component
 
     public function limpiar()
     {
-        // $this->cuenta = "";
+        $this->cuenta = "";
         $this->cuentaBanco = "";
-        // $this->selectCodigoAreaResponsable = "";
         $this->mes = "";
         $this->PTTOEjecutar = 0;
-        // $this->importe = "";
         $this->dispatch('limpiar');
     }
 

@@ -159,7 +159,6 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionForm extend
     public function limpiar()
     {
         $this->cuentaAbono = "";
-        $this->mes = "";
         $this->PTTOEjecutar = 0;
         $this->importeAbono = "";
         $this->destinoRecurso = "";
