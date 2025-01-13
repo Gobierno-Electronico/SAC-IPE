@@ -81,8 +81,20 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesForm extends Component
             if (!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
             $anioActual = Carbon::now()->year;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
-            $solvencia = DB::select('EXEC SolvenciaRecuperacionRecaudadoPrestamosRenovacion @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($departamento->Codigo_completo, '8.1.4.4.1.7.1.02.01', $anioActual, $this->mes))[0]->Total;
+            $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('concepto_id', [10099])
+                ->where('tipo_interaccion', '=', 'Contable - Abono')->first();
+
+            $cuentaCompromisoDevengado = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', $interaccionCuentaConceptoPrincipal->id)
+                ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+                ->where('cuentas.Descripcion_cuenta', 'LIKE', '%'. '(Devengado)' .'%')
+                ->get()
+                ->toArray();                
+            
+            $solvencia = DB::select('EXEC SolvenciaRecuperacionRecaudadoPrestamosRenovacion @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($departamento->Codigo_completo, $cuentaCompromisoDevengado[0]['Codigo_cuenta'] , $anioActual, $this->mes))[0]->Total;
             $this->PTTOEjecutar = ($solvencia > 0) ? floatval($solvencia) : 0;
+
+            
 
             $this->dispatch('formato_importe', id: 'inputPTTOEjecutar', amount: "{$this->PTTOEjecutar}");
             $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar cargado', tipo: 'success', tiempo: 1500);  
