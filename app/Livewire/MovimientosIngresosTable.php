@@ -58,13 +58,14 @@ class MovimientosIngresosTable extends Tabla
 
     public function data()
     {
+        $anioActual = Carbon::now()->year;
         $contador = 0;
         $this->data = array_map(function ($entrada) use (&$contador) {
             $entrada =  (array) $entrada;
             $entrada['total'] = '$' . number_format($entrada['total'], 2, '.', ',');
             $entrada['id'] = $contador++;
             return $entrada;
-        }, DB::select('EXEC dbo.ConsultaMovimientosIngresos'));
+        }, DB::select('EXEC dbo.ConsultaMovimientosIngresos @anio = ?', array($anioActual)));
 
         $collection = collect($this->data);
         if ($this->eventoSeleccionado) {
