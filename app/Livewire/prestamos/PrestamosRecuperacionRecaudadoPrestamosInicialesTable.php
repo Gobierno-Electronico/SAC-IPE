@@ -63,7 +63,6 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
     {
 
         try{
-            // dd($registro);
             if($this->verificarPresupuesto($registro)){    
                 $nuevoRegistro = [
                     'id' => 0,
