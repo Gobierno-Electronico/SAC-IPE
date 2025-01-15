@@ -1,7 +1,7 @@
 <div>
     @if ($consultarRegistro)
     <div>
-        <h4>Resumen de movimientos de egresos</h4>
+        <h4>Resumen de movimientos de préstamos</h4>
 
         <div class="row mt-4">
             <div class="row mb-3">
@@ -21,9 +21,9 @@
             </div>
         </div>
     </div>
-    <livewire:egresos.egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-        :$tipoMovimiento urlFinalizar="/movimientos-egresos" :$numeroPolizaRemanente tipoPoliza="E"
-        :$categoriaModulo :$categoriaRemanente/>
+    <livewire:prestamos.prestamos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+        :$tipoMovimiento urlFinalizar="/movimientos-prestamos" tipoPoliza="D"
+        :$categoriaModulo/>
 
     @else
 
@@ -40,17 +40,6 @@
             <div class="d-flex flex-row">
                 <input type="text" class="input_busqueda rounded-1 shadow-sm border-0 w-25 me-3" placeholder='Buscar...'
                     wire:model.live="searchTerm">
-                <div>
-                    <select name="selectCapitulos" id="selectCapitulos" class="form-select" wire:model="capituloSeleccionado" wire:change="actualizarFiltros">
-                        <option value="" selected>Filtrar capítulo...</option>
-                        <option value="1">Capítulo 1000</option>
-                        <option value="2y3">Capítulo 2000</option>
-                        <option value="2y3">Capítulo 3000</option>
-                        <option value="4">Capítulo 4000</option>
-                        <option value="5">Capítulo 5000</option>
-
-                    </select>
-                </div>
                 <div class="ms-3">
                     <select name="selectEventos" id="selectEventos" class="form-select" wire:model="eventoSeleccionado" wire:change="actualizarFiltros">
                         <option value="" selected>Filtrar evento...</option>

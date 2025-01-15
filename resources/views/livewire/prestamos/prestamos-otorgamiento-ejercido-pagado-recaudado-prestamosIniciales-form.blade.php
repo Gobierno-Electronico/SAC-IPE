@@ -115,7 +115,7 @@
                     wire:model="destinoRecurso">
                     <option value="" selected disabled>Seleccionar destino del recurso</option>
                     <option value="capital">Capital</option>
-                    <option value="fondoGarantia">Fondo de garantía</option>
+                    <option value="fondoGarantia">Fondo de Garantía</option>
                 </select>
             </div>
 

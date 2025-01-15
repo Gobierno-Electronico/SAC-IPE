@@ -112,23 +112,23 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesForm extends
 
             if($this->importeAbono >= $this->importe)
             {
-                $this->dispatch('mostrarMensaje', mensaje: 'El importe abono no puede ser mayor o igual al importe cargo', tipo: 'warning', tiempo: 3000);
+                $this->dispatch('mostrarMensaje', mensaje: 'El importe abono no puede ser mayor o igual al importe general', tipo: 'warning', tiempo: 3000);
                 return;
             }   
 
             $cuenta = Cuenta::find($this->cuenta);
             $cuentaAbono = Cuenta::find($this->cuentaAbono);
-
+            $areaResponsable = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $departamento = CodigoDepartamento::where('Codigo_completo', '1.5.04')->first();
 
             $registro = [
                 'id' => 0,
-                'codigoArea' => $this->selectCodigoArea,
+                'codigoArea' => $departamento->Codigo_completo,
                 'observaciones' => $this->observaciones,
                 'fechaAfectacion' => $this->fechaAfectacion,
                 'areaResponsableId' => $this->selectCodigoAreaResponsable,
-                'codigoAreaResponsable' => $departamento->Codigo_completo,
-                'descripcionAreaResponsable' => $departamento->Nombre,
+                'codigoAreaResponsable' => $areaResponsable->Codigo_completo,
+                'descripcionAreaResponsable' => $areaResponsable->Nombre,
                 'cuentaId' => $this->cuenta,
                 'codigoCuenta' => $cuenta->Codigo_cuenta,
                 'descripcionCuenta' => $cuenta->Descripcion_cuenta,
@@ -159,12 +159,8 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesForm extends
 
     public function limpiar()
     {
-        // $this->cuenta = "";
         $this->cuentaAbono = "";
-        // $this->selectCodigoAreaResponsable = "";
-        $this->mes = "";
         $this->PTTOEjecutar = 0;
-        // $this->importe = "";
         $this->importeAbono = "";
         $this->destinoRecurso = "";
         $this->dispatch('limpiar');
@@ -180,6 +176,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesForm extends
         $this->importeAbono = $datosRegistro['importeAbono'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->PTTOEjecutar = $datosRegistro['pttoEjecutar'];
+        $this->destinoRecurso = $datosRegistro['destinoRecurso'];
         $this->dispatch('llenarFormulario', presupuesto: $this->PTTOEjecutar, importe: $this->importe, importeAbono: $this->importeAbono);
     }
 
@@ -188,7 +185,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesForm extends
     {
         $this->consultarRegistro = true;
         $this->numeroEvento = $numeroEvento;
-         $this->numeroPoliza = $numeroPoliza;
+        $this->numeroPoliza = $numeroPoliza;
         $this->total = $total;
     }
 }
