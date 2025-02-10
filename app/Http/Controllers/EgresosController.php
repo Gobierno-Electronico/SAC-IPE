@@ -12,6 +12,10 @@ class EgresosController extends Controller
         $this->middleware('auth');
     }
 
+    public function capitulo1Comprometido(){
+        return view('egresos.egresos-capitulo1-comprometido');
+    }
+
     public function capitulo2y3Comprometido()
     {
         return view('egresos.egresos-capitulo2y3-comprometido');
