@@ -26,7 +26,7 @@
             categoriaModulo='EGRESOS DEVENGADO CAPITULO 1' />
     @else
         <div class="col text-end">
-            <button class="btn btn-secondary" wire:click="">Importar nómina</button>
+            <button class="btn btn-secondary" wire:click="abrirVentanaCargaNomina">Importar nómina</button>
         </div>
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
@@ -181,4 +181,12 @@
     function limpiar() {
         $('#inputPTTOComprometido').val('');
     }
+    
+    function mostrarCargando() {
+        $('#loadingScreen').prop('hidden', false);
+        let mensajeEdoSolicitud = toastr.info("Cargando, espere un momento por favor . . .", "", {
+            timeOut: "0"
+        });
+
+        }
 </script>

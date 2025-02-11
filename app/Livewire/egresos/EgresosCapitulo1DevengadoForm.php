@@ -10,6 +10,7 @@ use App\Models\InteraccionCuentaConcepto;
 use App\Models\CodigoDepartamento;
 use Illuminate\Support\Collection;
 use Carbon\Carbon;
+use Livewire\egresos\EgresosCapitulo1DevengadoCargaForm;
 use Log;
 use DB;
 class EgresosCapitulo1DevengadoForm extends Component
@@ -210,6 +211,12 @@ class EgresosCapitulo1DevengadoForm extends Component
             Log::error('Ocurrió un error al registrar en devengado del capítulo 4: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
+    }
+
+    public function abrirVentanaCargaNomina()
+    {
+        $this->dispatch('mostrarCargando');
+        return redirect()->route('capitulo1DevengadoCarga');
     }
 
     public function finalizarRegistros()
