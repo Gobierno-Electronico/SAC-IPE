@@ -12,7 +12,7 @@
             </button>
 
             <button wire:click="cargarComprometido" class="btn btn-success shadow border-0" id="importarBoton" disabled>
-                Cargar comprometido
+                Cargar nómina
             </button>
         </div>
     </div>
