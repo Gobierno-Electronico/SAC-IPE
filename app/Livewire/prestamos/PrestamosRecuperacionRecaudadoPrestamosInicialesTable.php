@@ -258,6 +258,7 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
 
                 if($plazo == 'Corto plazo'){
                     $importeTotalCortoPlazo = $importeTotalCortoPlazo + $movimiento['importe'];
+                     
                 }
                 elseif($plazo == 'Medio plazo'){
                     $importeTotalMedioPlazo = $importeTotalMedioPlazo + $movimiento['importe'];
@@ -294,8 +295,6 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
                         }
                     }
                 }
-
-
 
 
                 $importeTotal = $importeTotal + $movimiento['importe'];
