@@ -30,7 +30,7 @@ class GuiaContabilizadoraController extends Controller
     public function crearGuiaContabilizadora(Request $request)
     {
         // return response()->json('Método desactivado');
-        $path = public_path('Guia/7000-Recaudado-Renovacion-CuentasConceptos.xlsx'); // cambiar el número del capítulo cuando se carguen las relaciones
+        $path = public_path('Guia/1000-Devengado-CuentasConceptos.xlsx'); // cambiar el número del capítulo cuando se carguen las relaciones
 
         // Validar que el archivo pueda ser analizado correctamente.
         if ($xlsx = SimpleXLSX::parse($path)) {
@@ -83,7 +83,7 @@ class GuiaContabilizadoraController extends Controller
                         $relacionesCuentaCapitulo[] = CuentaCapitulo::create([
                             'cuenta_id' => $cuenta->id,
                             'cuenta' => $cuenta->Codigo_cuenta,
-                            'capitulo' => '7000'
+                            'capitulo' => '1000'
                         ]);                    
                     }
                  
@@ -243,7 +243,7 @@ class GuiaContabilizadoraController extends Controller
     public function relacionarCuentasCuentasSeguidas(Request $request)
     {
         // return response()->json('Método desactivado');
-        $path = public_path('CuentasCuentas/7000-Recaudado-Renovacion-CuentasCuentasSeguidas.xlsx');
+        $path = public_path('CuentasCuentas/1000-Devengado-CuentasCuentasSeguidas.xlsx');
 
         // Validar que el archivo pueda ser analizado correctamente.
         if ($xlsx = SimpleXLSX::parse($path)) {
@@ -254,6 +254,7 @@ class GuiaContabilizadoraController extends Controller
             if (count($expectedHeaders) !== count($actualHeaders) || array_diff($expectedHeaders, $actualHeaders)) {
                 return response()->json(['error' => 'Los campos del archivo no coinciden con los campos esperados.']);
             }
+            
             $encabezados = $rows = [];
             $errores = [];
             try {
