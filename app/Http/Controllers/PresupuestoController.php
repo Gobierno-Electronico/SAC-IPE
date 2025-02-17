@@ -189,7 +189,7 @@ class PresupuestoController extends Controller
 
                     // Agregar la fila procesada al array de filas válidas
                 }
-                
+
 
                 // Si hay errores, devolverlos y abortar la operación
                 if (!empty($errores)) {
@@ -205,7 +205,7 @@ class PresupuestoController extends Controller
                 $total = 0;
                 $totalPresupuestos = count($rows);
                 $numeroRegistros--; //Se quita uno, ya que hay una fila que es el total
-                $cuentasFaltantes = [];
+                $cuentasFaltantesPlanCuentas = [];
                 $presupuestosRepetidos = [];
                 $cuentasEnLaGuiaFaltantes = [];
                 // $poliza = Poliza::whereYear('fecha', '=', Carbon::now()->year)->orderBy('numero_poliza','DESC')->first();
@@ -259,10 +259,39 @@ class PresupuestoController extends Controller
                     $cuenta = Cuenta::where("Codigo_cuenta", $row["Cuenta"])->first();
 
                     if (!$cuenta) {
-                        if (!$cuenta && !in_array($row["Cuenta"], $cuentasFaltantes)) {
-                            $cuentasFaltantes[] = $row["Cuenta"];
+                        if (!$cuenta && !in_array($row["Cuenta"], $cuentasFaltantesPlanCuentas)) {
+                            $cuentasFaltantesPlanCuentas[] = [
+                                "Codigo_cuenta" => $row["Cuenta"],
+                                "Descripcion_cuenta" => $row["Descripción"]
+                            ];
                         }
                     }
+
+                    if (!empty($cuentasFaltantesPlanCuentas)) {
+                        // dd($cuentasFaltantesPlanCuentas);
+                        DB::rollBack();
+                        session()->flash('message', 'Se detectó una cuenta que no pertenece al plan de cuentas.');
+                        session()->flash('message_type', 'error');
+
+                        $txtFileName = 'CuentasFaltantesEnPlanCuentas.txt';
+                        $txtFilePath = public_path('/CuentasFaltantes/' . $txtFileName);
+                        $archivo = fopen($txtFilePath, 'w');
+
+                        fwrite($archivo, 'Cuentas Faltantes en el plan de cuentas' . PHP_EOL . '---------------------------------------------------------------------------------------' . PHP_EOL);
+
+                        foreach ($cuentasFaltantesPlanCuentas as $cuenta) {
+                            $linea = 'Código de cuenta: ' . $cuenta["Codigo_cuenta"] . PHP_EOL. "Descripción: " . $cuenta["Descripcion_cuenta"];
+                            fwrite($archivo, $linea . PHP_EOL . '---------------------------------------------------------------------------------------' . PHP_EOL);
+                        }
+
+                        fclose($archivo);
+
+                        session()->flash('download', '1');
+                        session()->flash('path', '/CuentasFaltantes/' . $txtFileName);
+                        session()->flash('nombreArchivo', $txtFileName);
+                        return back();
+                    }
+
                     $cri = ClasificadorRubroIngreso::where('Codificacion_rubro_ingreso', '=', $row["CRI"])->where('Nombre', '=', $row["Descripción"])->first();
                     if (!$cri) {
                         ClasificadorRubroIngreso::create([
@@ -521,7 +550,7 @@ class PresupuestoController extends Controller
         set_time_limit(0);
         $validator = Validator::make(request()->all(), [
             'input-archivo' => 'required',
-            'input-archivo.*' => 'mimes:xlsx',
+            'input-archivo.*' => 'mimes:xlsx, xls',
             'capitulo' => 'required'
         ]);
         if ($validator->fails()) {
@@ -670,25 +699,17 @@ class PresupuestoController extends Controller
                 } else {
                     $numeroEvento = $eventoFaltante[0];
                 }
-                $cuentasFaltantes = [];
+                $cuentasFaltantesPlanCuentas = [];
                 $cuentasEnLaGuiaFaltantes = [];
                 // Se procesan los datos de cada fila del archivo Excel y se crea un nuevo registro en la base de datos utilizando el modelo Cuenta.
                 foreach ($rows as $row) {
                     $cuenta = Cuenta::where("Codigo_cuenta", $row["Cuenta"])->first();
-
-                    $cuentaCapitulo = CuentaCapitulo::where('cuenta_id', '=', $cuenta->id)->first();
-                    if (!$cuentaCapitulo) {
-                        $relacionesCuentaCapitulo[] = CuentaCapitulo::create([
-                            'cuenta_id' => $cuenta->id,
-                            'cuenta' => $cuenta->Codigo_cuenta,
-                            'capitulo' => $capitulo
-                        ]);
-                    }
-
                     if (!$cuenta) {
-                        if (!$cuenta && !in_array($row["Cuenta"], $cuentasFaltantes)) {
-
-                            $cuentasFaltantes[] = $row["Cuenta"];
+                        if (!$cuenta && !in_array($row["Cuenta"], $cuentasFaltantesPlanCuentas)) {
+                            $cuentasFaltantesPlanCuentas[] = [
+                                "Codigo_cuenta" => $row["Cuenta"],
+                                "Descripcion_cuenta" => $row["Descripción"]
+                            ];
                         }
                     } else {
                         $cuentaCapitulo = CuentaCapitulo::where('cuenta_id', '=', $cuenta->id)->first();
@@ -699,6 +720,40 @@ class PresupuestoController extends Controller
                             return back();
                         }
                     }
+
+                    if (!$cuentaCapitulo) {
+                        $relacionesCuentaCapitulo[] = CuentaCapitulo::create([
+                            'cuenta_id' => $cuenta->id,
+                            'cuenta' => $cuenta->Codigo_cuenta,
+                            'capitulo' => $capitulo
+                        ]);
+                    }
+
+                    if (!empty($cuentasFaltantesPlanCuentas)) {
+                        // dd($cuentasFaltantesPlanCuentas);
+                        DB::rollBack();
+                        session()->flash('message', 'Se detectó una cuenta que no pertenece al plan de cuentas.');
+                        session()->flash('message_type', 'error');
+
+                        $txtFileName = 'CuentasFaltantesEnPlanCuentas.txt';
+                        $txtFilePath = public_path('/CuentasFaltantes/' . $txtFileName);
+                        $archivo = fopen($txtFilePath, 'w');
+
+                        fwrite($archivo, 'Cuentas Faltantes en el plan de cuentas' . PHP_EOL . '---------------------------------------------------------------------------------------' . PHP_EOL);
+
+                        foreach ($cuentasFaltantesPlanCuentas as $cuenta) {
+                            $linea = 'Código de cuenta: ' . $cuenta["Codigo_cuenta"] . PHP_EOL. "Descripción: " . $cuenta["Descripcion_cuenta"];
+                            fwrite($archivo, $linea . PHP_EOL . '---------------------------------------------------------------------------------------' . PHP_EOL);
+                        }
+
+                        fclose($archivo);
+
+                        session()->flash('download', '1');
+                        session()->flash('path', '/CuentasFaltantes/' . $txtFileName);
+                        session()->flash('nombreArchivo', $txtFileName);
+                        return back();
+                    }
+
                     $relacionCuentaClasificador = cuentaClasificadorEgreso::where('codigoCuenta', '=', $row["Cuenta"])->first();
                     if (!$relacionCuentaClasificador) {
                         CuentaClasificadorEgreso::create([
@@ -812,11 +867,12 @@ class PresupuestoController extends Controller
                     session()->flash('nombreArchivo', $txtFileName);
                     return back();
                 }
+
                 // Si ocurre alguna excepción durante el proceso de importación, se revierte la transacción
                 // y se redirige con un mensaje de error que incluye detalles sobre la excepción.
             } catch (\Exception $error) {
                 DB::rollBack();
-                Log::debug($error->getMessage() . $error->getLine());
+                Log::debug($error->getMessage() . 'Linea de error: ' . $error->getLine());
 
                 session()->flash('message', 'error' . $error->getMessage());
                 session()->flash('message_type', 'error');
@@ -834,55 +890,13 @@ class PresupuestoController extends Controller
 
     private function generarPolizasPresupuestoInicialEgresos($presupuesto, &$cuentasEnLaGuiaFaltantes, $numPoliza, $numeroEvento)
     {
-        if ($this->cuentaActual == null) {
-            $cuenta = Cuenta::where('Codigo_cuenta', '=', $presupuesto['Cuenta'])->first();
-            $this->cuentaActual = $cuenta;
-            $interaccionCuentaConceptoIzquierda = InteraccionCuentaConcepto::where('cuenta_id', '=', $cuenta->id)->first();
-            $this->interaccionCuentaConceptoIzquierdaActual = $interaccionCuentaConceptoIzquierda;
-
-            if (!$interaccionCuentaConceptoIzquierda) {
-                if (!in_array($cuenta, $cuentasEnLaGuiaFaltantes)) {
-                    $cuentasEnLaGuiaFaltantes[] = $cuenta;
-                }
-                return false;
-            }
-            $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_2', '=', $interaccionCuentaConceptoIzquierda->id)->first();
-            $this->interaccionCuentaCuentaActual = $interaccionCuentaCuenta;
-            if (!$interaccionCuentaCuenta) {
-                if (!in_array($cuenta, $cuentasEnLaGuiaFaltantes)) {
-                    $cuentasEnLaGuiaFaltantes[] = $cuenta;
-                }
-                return false;
-            }
-            $interaccionCuentaConceptoDerecha = InteraccionCuentaConcepto::where('id', '=', $interaccionCuentaCuenta->id_interaccion_concepto_cuenta_1)->first();
-            $this->interaccionCuentaConceptoDerechaActual = $interaccionCuentaConceptoDerecha;
-
-            if (!$interaccionCuentaConceptoDerecha) {
-                if (!in_array($cuenta, $cuentasEnLaGuiaFaltantes)) {
-                    $cuentasEnLaGuiaFaltantes[] = $cuenta;
-                }
-                return false;
-            }
-            $cuentaDerecha = Cuenta::find($interaccionCuentaConceptoDerecha->cuenta_id);
-            $this->cuentaDerechaActual = $cuentaDerecha;
-            if (!$cuentaDerecha) {
-                if (!in_array($cuentaDerecha, $cuentasEnLaGuiaFaltantes)) {
-                    $cuentasEnLaGuiaFaltantes[] = $cuentaDerecha;
-                }
-                return false;
-            }
-        } else {
-            if ($presupuesto['Cuenta'] == $this->cuentaActual->Codigo_cuenta) {
-                // dd($presupuesto,$this->cuentaActual);
-                $interaccionCuentaConceptoIzquierda = $this->interaccionCuentaConceptoIzquierdaActual;
-                $interaccionCuentaCuenta = $this->interaccionCuentaCuentaActual;
-                $interaccionCuentaConceptoDerecha = $this->interaccionCuentaConceptoDerechaActual;
-                $cuentaDerecha = $this->cuentaDerechaActual;
-            } else {
+        try {
+            if ($this->cuentaActual == null) {
                 $cuenta = Cuenta::where('Codigo_cuenta', '=', $presupuesto['Cuenta'])->first();
                 $this->cuentaActual = $cuenta;
                 $interaccionCuentaConceptoIzquierda = InteraccionCuentaConcepto::where('cuenta_id', '=', $cuenta->id)->first();
                 $this->interaccionCuentaConceptoIzquierdaActual = $interaccionCuentaConceptoIzquierda;
+
                 if (!$interaccionCuentaConceptoIzquierda) {
                     if (!in_array($cuenta, $cuentasEnLaGuiaFaltantes)) {
                         $cuentasEnLaGuiaFaltantes[] = $cuenta;
@@ -891,7 +905,6 @@ class PresupuestoController extends Controller
                 }
                 $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_2', '=', $interaccionCuentaConceptoIzquierda->id)->first();
                 $this->interaccionCuentaCuentaActual = $interaccionCuentaCuenta;
-
                 if (!$interaccionCuentaCuenta) {
                     if (!in_array($cuenta, $cuentasEnLaGuiaFaltantes)) {
                         $cuentasEnLaGuiaFaltantes[] = $cuenta;
@@ -900,6 +913,7 @@ class PresupuestoController extends Controller
                 }
                 $interaccionCuentaConceptoDerecha = InteraccionCuentaConcepto::where('id', '=', $interaccionCuentaCuenta->id_interaccion_concepto_cuenta_1)->first();
                 $this->interaccionCuentaConceptoDerechaActual = $interaccionCuentaConceptoDerecha;
+
                 if (!$interaccionCuentaConceptoDerecha) {
                     if (!in_array($cuenta, $cuentasEnLaGuiaFaltantes)) {
                         $cuentasEnLaGuiaFaltantes[] = $cuenta;
@@ -914,7 +928,55 @@ class PresupuestoController extends Controller
                     }
                     return false;
                 }
+            } else {
+                if ($presupuesto['Cuenta'] == $this->cuentaActual->Codigo_cuenta) {
+                    // dd($presupuesto,$this->cuentaActual);
+                    $interaccionCuentaConceptoIzquierda = $this->interaccionCuentaConceptoIzquierdaActual;
+                    $interaccionCuentaCuenta = $this->interaccionCuentaCuentaActual;
+                    $interaccionCuentaConceptoDerecha = $this->interaccionCuentaConceptoDerechaActual;
+                    $cuentaDerecha = $this->cuentaDerechaActual;
+                } else {
+                    $cuenta = Cuenta::where('Codigo_cuenta', '=', $presupuesto['Cuenta'])->first();
+                    $this->cuentaActual = $cuenta;
+                    $interaccionCuentaConceptoIzquierda = InteraccionCuentaConcepto::where('cuenta_id', '=', $cuenta->id)->first();
+                    $this->interaccionCuentaConceptoIzquierdaActual = $interaccionCuentaConceptoIzquierda;
+                    if (!$interaccionCuentaConceptoIzquierda) {
+                        if (!in_array($cuenta, $cuentasEnLaGuiaFaltantes)) {
+                            $cuentasEnLaGuiaFaltantes[] = $cuenta;
+                        }
+                        return false;
+                    }
+                    $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_2', '=', $interaccionCuentaConceptoIzquierda->id)->first();
+                    $this->interaccionCuentaCuentaActual = $interaccionCuentaCuenta;
+
+                    if (!$interaccionCuentaCuenta) {
+                        if (!in_array($cuenta, $cuentasEnLaGuiaFaltantes)) {
+                            $cuentasEnLaGuiaFaltantes[] = $cuenta;
+                        }
+                        return false;
+                    }
+                    $interaccionCuentaConceptoDerecha = InteraccionCuentaConcepto::where('id', '=', $interaccionCuentaCuenta->id_interaccion_concepto_cuenta_1)->first();
+                    $this->interaccionCuentaConceptoDerechaActual = $interaccionCuentaConceptoDerecha;
+                    if (!$interaccionCuentaConceptoDerecha) {
+                        if (!in_array($cuenta, $cuentasEnLaGuiaFaltantes)) {
+                            $cuentasEnLaGuiaFaltantes[] = $cuenta;
+                        }
+                        return false;
+                    }
+                    $cuentaDerecha = Cuenta::find($interaccionCuentaConceptoDerecha->cuenta_id);
+                    $this->cuentaDerechaActual = $cuentaDerecha;
+                    if (!$cuentaDerecha) {
+                        if (!in_array($cuentaDerecha, $cuentasEnLaGuiaFaltantes)) {
+                            $cuentasEnLaGuiaFaltantes[] = $cuentaDerecha;
+                        }
+                        return false;
+                    }
+                }
             }
+        } catch (\Throwable $th) {
+            session()->flash('message', 'Error al cargar el presupuesto, contacte al área encargada');
+            session()->flash('message_type', 'error');
+            return back();
         }
         // dd($presupuesto, $cuenta, $interaccionCuentaConceptoIzquierda, $interaccionCuentaCuenta, $interaccionCuentaConceptoDeracha, $cuentaDerecha);
         $meses = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];

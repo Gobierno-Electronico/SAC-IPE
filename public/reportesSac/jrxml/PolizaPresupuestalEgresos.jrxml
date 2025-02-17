@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
+<!-- Created with Jaspersoft Studio version 6.20.5.final using JasperReports Library version 6.20.5-3efcf2e67f959db3888d79f73dde2dbd7acb4f8e  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PolizaPresupuestalEgresos" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="55a8c4bf-9344-4264-a6b2-ecc8cd2fda35">
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -10,7 +10,7 @@
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SQL Server Nueva"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SAC-IPE Tierra"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<parameter name="Anio" class="java.lang.String"/>
 	<parameter name="Tipo" class="java.lang.String"/>
@@ -30,7 +30,15 @@
 		<property name="com.jaspersoft.studio.field.name" value="tipo_interaccion"/>
 		<property name="com.jaspersoft.studio.field.label" value="tipo_interaccion"/>
 	</field>
-	<field name="concepto" class="java.sql.Clob">
+	<field name="evento" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="evento"/>
+		<property name="com.jaspersoft.studio.field.label" value="evento"/>
+	</field>
+	<field name="descripcion" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="descripcion"/>
+		<property name="com.jaspersoft.studio.field.label" value="descripcion"/>
+	</field>
+	<field name="concepto" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="concepto"/>
 		<property name="com.jaspersoft.studio.field.label" value="concepto"/>
 	</field>
@@ -42,7 +50,6 @@
 		<property name="com.jaspersoft.studio.field.name" value="validado"/>
 		<property name="com.jaspersoft.studio.field.label" value="validado"/>
 	</field>
-	<field name="evento" class="java.lang.String"/>
 	<variable name="SumaCargo" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{tipo_interaccion}.equals("Presupuestal - Cargo") ? $F{total_suma} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
@@ -289,7 +296,7 @@
 					<font fontName="Times New Roman" size="10"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{concepto}.getSubString( 1l, (new Long($F{concepto}.length())).intValue())]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{concepto}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="700" y="0" width="101" height="30" uuid="218657f9-3739-48d4-b2ad-00bdb0c79626">
@@ -484,7 +491,7 @@
 					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{Concepto}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="85" width="266" height="54" uuid="f62adcca-16e5-4735-aeff-70959ff4b5ac">
