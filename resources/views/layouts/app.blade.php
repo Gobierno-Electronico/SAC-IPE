@@ -383,7 +383,30 @@
                                         <a class="dropdown-item dropdown-toggle" href=""
                                             data-bs-toggle="dropdown">Capítulo 1000 Servicios personales</a>
                                         <ul class="dropdown-menu">
-
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('capitulo1Comprometido') }}"
+                                                    method="GET" onclick="mostrarCargando()">
+                                                    Comprometido
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('capitulo1Devengado') }}"
+                                                    method="GET" onclick="mostrarCargando()">
+                                                    Devengado
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('capitulo1Ejercido') }}"
+                                                    method="GET" onclick="mostrarCargando()">
+                                                    Ejercido
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href=""
+                                                    method="GET" onclick="mostrarCargando()">
+                                                    Pagado
+                                                </a>
+                                            </li>
                                         </ul>
                                     </li>
 

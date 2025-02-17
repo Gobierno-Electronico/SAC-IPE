@@ -1,5 +1,5 @@
-Cuentas Faltantes
+Cuentas Faltantes en el plan de cuentas
 ---------------------------------------------------------------------------------------
-Código de cuenta: 8.2.1.5.2.3.1.05
-Descripción: Subsidio a la Inversión
+Código de cuenta: 8.2.1.5.1.2.3.03.02
+Descripción: Productos de Papel, Cartón e Impresos Adquiridos como Materia Prima (Aprobado)
 ---------------------------------------------------------------------------------------
