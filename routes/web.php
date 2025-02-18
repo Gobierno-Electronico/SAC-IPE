@@ -129,6 +129,7 @@ Route::get("/capitulo1-comprometido", [EgresosController::class, 'capitulo1Compr
 Route::get("/capitulo1-devengado", [EgresosController::class, 'capitulo1Devengado'])->name('capitulo1Devengado')->middleware('role:Administrador');
 Route::get("/capitulo1-devengadoCarga", [EgresosController::class, 'capitulo1DevengadoCarga'])->name('capitulo1DevengadoCarga')->middleware('role:Administrador');
 Route::get("/capitulo1-ejercido", [EgresosController::class, 'capitulo1Ejercido'])->name('capitulo1Ejercido')->middleware('role:Administrador');
+Route::get("/capitulo1-pagado", [EgresosController::class, 'capitulo1Pagado'])->name('capitulo1Pagado')->middleware('role:Administrador');
 Route::get("/capitulo2y3-comprometido", [EgresosController::class, 'capitulo2y3Comprometido'])->name('capitulo2y3Comprometido')->middleware('role:Administrador');
 Route::get("/capitulo2y3-devengado", [EgresosController::class, 'capitulo2y3Devengado'])->name('capitulo2y3Devengado')->middleware('role:Administrador');
 Route::get("/capitulo2y3-ejercido", [EgresosController::class, 'capitulo2y3Ejercido'])->name('capitulo2y3Ejercido')->middleware('role:Administrador');
