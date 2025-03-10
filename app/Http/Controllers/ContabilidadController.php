@@ -48,7 +48,7 @@ class ContabilidadController extends Controller
         if ($xlsx = SimpleXLSX::parse($archivo)) {
             // Validar que los encabezados coincidan con los campos esperados.
             $expectedHeaders = ['Cuenta', 'Descripcion', 'Cargo', 'Abono', 'Naturaleza'];
-
+  
             $actualHeaders = $xlsx->rows()[0];
             $actualHeaders = array_map('trim', array_filter($actualHeaders));
             if (count($expectedHeaders) !== count($actualHeaders) || array_diff($expectedHeaders, $actualHeaders) || count($xlsx->sheetNames()) > 1) {
@@ -122,7 +122,6 @@ class ContabilidadController extends Controller
 
                 // Si hay errores, devolverlos y abortar la operación
                 if (!empty($errores)) {
-                    dd($errores);
                     session()->flash('message', implode('<br>', $errores));
                     session()->flash('message_type', 'error');
                     return back();
