@@ -92,4 +92,26 @@ class EgresosController extends Controller
     public function consultarMovimientos(){
         return view ('egresos.movimientos-egresos');
     }
+    public function plantillaCargaComprometidoCapitulo1000(){
+        $validator = Validator::make(request()->all(), [
+            'type' => ['required', 'string', 'max:255'],
+        ]);
+        if ($validator->fails()) {
+            abort(404);
+        }
+        $formFields = $validator->getData();
+        $rutaArchivo = public_path('plantillas/formatoCargaComprometido1000' . $formFields['type'] . '.xlsx');
+        // dd($rutaArchivo);
+        // Verificar si el archivo existe
+        if (file_exists($rutaArchivo)) {
+            // Descargar el archivo Excel
+            $usuariosController = new BitacoraController();
+            $usuariosController->bitacora('plantillaCargaComprometidoCapitulo1000', 'descargó la plantilla de carga de compromiso del capítulo 1000', request());
+            return response()->download($rutaArchivo, 'formatoCargaComprometido1000.xlsx', [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            ]);
+        } else {
+            abort(404);
+        }
+    }
 }
