@@ -1,5 +1,71 @@
 Cuentas Faltantes
 ---------------------------------------------------------------------------------------
-Código de cuenta: 8.2.1.5.2.3.1.05
-Descripción: Subsidio a la Inversión
+Código de cuenta: 8.2.4.5.1.1.7.01.01
+Descripción: Previsiones de carácter laboral, económica y de seguridad social (Comprometido)
+---------------------------------------------------------------------------------------
+Código de cuenta: 8.2.4.5.1.1.7.01.01
+Descripción: Previsiones de carácter laboral, económica y de seguridad social (Comprometido)
+---------------------------------------------------------------------------------------
+Código de cuenta: 8.2.4.5.1.1.7.01.01
+Descripción: Previsiones de carácter laboral, económica y de seguridad social (Comprometido)
+---------------------------------------------------------------------------------------
+Código de cuenta: 8.2.4.5.1.1.7.01.01
+Descripción: Previsiones de carácter laboral, económica y de seguridad social (Comprometido)
+---------------------------------------------------------------------------------------
+Código de cuenta: 8.2.4.5.1.1.7.01.01
+Descripción: Previsiones de carácter laboral, económica y de seguridad social (Comprometido)
+---------------------------------------------------------------------------------------
+Código de cuenta: 8.2.4.5.1.1.7.01.01
+Descripción: Previsiones de carácter laboral, económica y de seguridad social (Comprometido)
+---------------------------------------------------------------------------------------
+Código de cuenta: 8.2.4.5.1.1.7.01.01
+Descripción: Previsiones de carácter laboral, económica y de seguridad social (Comprometido)
+---------------------------------------------------------------------------------------
+Código de cuenta: 8.2.4.5.1.1.7.01.01
+Descripción: Previsiones de carácter laboral, económica y de seguridad social (Comprometido)
+---------------------------------------------------------------------------------------
+Código de cuenta: 8.2.4.5.1.1.7.01.01
+Descripción: Previsiones de carácter laboral, económica y de seguridad social (Comprometido)
+---------------------------------------------------------------------------------------
+Código de cuenta: 8.2.4.5.1.1.7.01.01
+Descripción: Previsiones de carácter laboral, económica y de seguridad social (Comprometido)
+---------------------------------------------------------------------------------------
+Código de cuenta: 8.2.4.5.1.1.7.01.01
+Descripción: Previsiones de carácter laboral, económica y de seguridad social (Comprometido)
+---------------------------------------------------------------------------------------
+Código de cuenta: 8.2.4.5.1.1.7.01.01
+Descripción: Previsiones de carácter laboral, económica y de seguridad social (Comprometido)
+---------------------------------------------------------------------------------------
+Código de cuenta: 8.2.4.5.1.1.7.01.01
+Descripción: Previsiones de carácter laboral, económica y de seguridad social (Comprometido)
+---------------------------------------------------------------------------------------
+Código de cuenta: 8.2.4.5.1.1.7.01.01
+Descripción: Previsiones de carácter laboral, económica y de seguridad social (Comprometido)
+---------------------------------------------------------------------------------------
+Código de cuenta: 8.2.4.5.1.1.7.01.01
+Descripción: Previsiones de carácter laboral, económica y de seguridad social (Comprometido)
+---------------------------------------------------------------------------------------
+Código de cuenta: 8.2.4.5.1.1.7.01.01
+Descripción: Previsiones de carácter laboral, económica y de seguridad social (Comprometido)
+---------------------------------------------------------------------------------------
+Código de cuenta: 8.2.4.5.1.1.7.01.01
+Descripción: Previsiones de carácter laboral, económica y de seguridad social (Comprometido)
+---------------------------------------------------------------------------------------
+Código de cuenta: 8.2.4.5.1.1.7.01.01
+Descripción: Previsiones de carácter laboral, económica y de seguridad social (Comprometido)
+---------------------------------------------------------------------------------------
+Código de cuenta: 8.2.4.5.1.1.7.01.01
+Descripción: Previsiones de carácter laboral, económica y de seguridad social (Comprometido)
+---------------------------------------------------------------------------------------
+Código de cuenta: 8.2.4.5.1.1.7.01.01
+Descripción: Previsiones de carácter laboral, económica y de seguridad social (Comprometido)
+---------------------------------------------------------------------------------------
+Código de cuenta: 8.2.4.5.1.1.7.01.01
+Descripción: Previsiones de carácter laboral, económica y de seguridad social (Comprometido)
+---------------------------------------------------------------------------------------
+Código de cuenta: 8.2.4.5.1.1.7.01.01
+Descripción: Previsiones de carácter laboral, económica y de seguridad social (Comprometido)
+---------------------------------------------------------------------------------------
+Código de cuenta: 8.2.4.5.1.1.7.01.01
+Descripción: Previsiones de carácter laboral, económica y de seguridad social (Comprometido)
 ---------------------------------------------------------------------------------------
