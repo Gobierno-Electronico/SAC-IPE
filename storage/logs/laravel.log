@@ -1,5 +1,10 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 [2025-03-13 09:41:46] local.ERROR: Error al procesar el archivo en carga de comprometido del 1000: A non-numeric value encountered 203  
 [2025-03-13 10:14:21] local.ERROR: Error al procesar el archivo en carga de comprometido del 1000: A non-numeric value encountered 203  
 >>>>>>> 297294da3f72f25d8debfa8811dac83f55c3dd17
+=======
+[2025-03-13 09:41:46] local.ERROR: Error al procesar el archivo en carga de comprometido del 1000: A non-numeric value encountered 203  
+[2025-03-13 10:14:21] local.ERROR: Error al procesar el archivo en carga de comprometido del 1000: A non-numeric value encountered 203  
+>>>>>>> 6b4eba2d07d87bc15105d77e3ae807f95b634c73
