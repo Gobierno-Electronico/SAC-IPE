@@ -30,7 +30,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
     public $numeroEvento;
     public $numeroPoliza;
     public $total;
-    public $observaciones = 'Hola';
+    public $observaciones = '';
 
     public function render()
     {
@@ -76,6 +76,11 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
             $polizas = [];
             foreach ($datosExcelAsociados as $dato) {
+                
+                if ($this->observaciones == '') {
+                    $this->observaciones = $dato['CONCEPTO'];
+                }
+
                 $cuenta = Cuenta::where("Codigo_cuenta", $dato["CUENTA"])->first();
                 if (!$cuenta) {
                     $codigosExistentesPlan = array_column($cuentasFaltantesPlanCuentas, 'Codigo_cuenta');
@@ -191,7 +196,10 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
             }
 
             if (empty($cuentasEnLaGuiaFaltantes)) {
-                Poliza::insert($polizas);
+                collect($polizas)->chunk(120)->each(function ($chunk) {
+                    Poliza::insert($chunk->toArray());
+                }); // divide $polizas en partes pequeñas (chunks) de 120 elementos. Esto evita la sobrecarga de memoria al hacer inserciones en la base.
+
                 DB::commit();
                 $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, 1000);
             } else {
