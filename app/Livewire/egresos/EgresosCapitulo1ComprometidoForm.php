@@ -31,7 +31,7 @@ class EgresosCapitulo1ComprometidoForm extends Component
     public $numeroEvento;
     public $numeroPoliza;
     public $total;
-    public $observaciones = 'Hola';
+    public $observaciones = '';
 
     public function render()
     {
@@ -124,7 +124,7 @@ class EgresosCapitulo1ComprometidoForm extends Component
 
             $datosExcelAsociados = [];
 
-            foreach (array_slice($data, 1) as $fila) { 
+            foreach (array_slice($data, 1) as $fila) {
 
                 $fila = array_values(array_filter($fila, function ($valor) {
                     return trim($valor) !== '';
@@ -156,12 +156,19 @@ class EgresosCapitulo1ComprometidoForm extends Component
             $ultimoNumero = end($numerosPolizas);
             $this->numeroPoliza = ($ultimoNumero) ? $ultimoNumero + 1 : 1;
             $this->numeroEvento = end($numerosEvento) + 1;
+            $polizas = [];
+
+            $cuentas = Cuenta::whereIn("Codigo_cuenta", array_column($datosExcelAsociados, "CUENTA"))->get()->keyBy("Codigo_cuenta"); //extrae toas las cuentas antes de un ciclo foreach y después dentro del ciclo se obtienen en memoria y no desde la base, esti ayuda a mejorar el procedimiento porque evita hacer miles de consultas dentro del ciclo.
 
             foreach ($datosExcelAsociados as $dato) {
-                $cuenta = Cuenta::where("Codigo_cuenta", $dato["CUENTA"])->first();
+
+                if ($this->observaciones == '') {
+                    $this->observaciones = $dato['CONCEPTO'];
+                }
+                $cuenta = $cuentas[$dato["CUENTA"]] ?? null; // se extrae la cuenta del array que anteriormente se guardó en memoria, esto evita hacer consultas dentro de un ciclo.
 
                 if (!$cuenta) {
-                    $codigosExistentesPlan = array_column($cuentasEnLaGuiaFaltantes, 'Codigo_cuenta');
+                    $codigosExistentesPlan = array_column($cuentasFaltantesPlanCuentas, 'Codigo_cuenta');
                     if (!in_array($dato["CUENTA"], $codigosExistentesPlan)) {
                         $cuentasFaltantesPlanCuentas[] = [
                             "Codigo_cuenta" => $dato["CUENTA"],
@@ -178,12 +185,11 @@ class EgresosCapitulo1ComprometidoForm extends Component
                 if (!$interaccionCuentaConceptoPrincipal) {
                     $codigosExistentes = array_column($cuentasEnLaGuiaFaltantes, 'Codigo_cuenta');
 
-                    if(!in_array($dato['CUENTA'], $codigosExistentes)){
+                    if (!in_array($dato['CUENTA'], $codigosExistentes)) {
                         $cuentasEnLaGuiaFaltantes[] = [
                             "Codigo_cuenta" => $dato["CUENTA"],
                             "Descripcion_cuenta" => $dato["DESCRIPCION"]
                         ];
-                        
                     }
                     continue;
                 }
@@ -193,30 +199,32 @@ class EgresosCapitulo1ComprometidoForm extends Component
                     ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
 
                 foreach ($meses as $mes) {
-                    $polizas = [
-                        [
-                            'area' => $dato['Area Ejecutora'],
-                            'tipo_poliza' => 'E',
-                            'numero_poliza' =>  $this->numeroPoliza,
-                            'fecha' => $this->fechaAfectacion,
-                            'cuenta' => $dato['CUENTA'],
-                            'concepto' => $dato['DESCRIPCION'],
-                            'total' => abs(doubleval($dato[$mes])),
-                            'mes' => $mes,
-                            'descripcion' => $dato['CONCEPTO'],
-                            'evento' => $this->numeroEvento,
-                            'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
-                            'validado' => false,
-                            'estatus_evento' => true,
-                            'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 1',
-                            'created_at' => $fecha,
-                            'updated_at' => $fecha
-                        ]
-                    ];
+                    $dato[$mes] = str_replace(',', '', $dato[$mes]);
+                    $this->total = $this->total + $dato[$mes];
+                    array_push($polizas, [
+                        'area' => $dato['Area Ejecutora'],
+                        'tipo_poliza' => 'E',
+                        'numero_poliza' =>  $this->numeroPoliza,
+                        'fecha' => $this->fechaAfectacion,
+                        'cuenta' => $dato['CUENTA'],
+                        'concepto' => $dato['DESCRIPCION'],
+                        'total' => $dato[$mes],
+                        'mes' => $mes,
+                        'descripcion' => $dato['CONCEPTO'],
+                        'evento' => $this->numeroEvento,
+                        'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
+                        'validado' => false,
+                        'estatus_evento' => true,
+                        'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 1',
+                        'created_at' => $fecha,
+                        'updated_at' => $fecha
+                    ]);
                 }
 
                 foreach ($interaccionCuentaCuentas as $polizaPorEjercer) {
                     foreach ($meses as $mes) {
+                        $dato[$mes] = str_replace(',', '', $dato[$mes]);
+                        $this->total = $this->total + $dato[$mes];
                         array_push($polizas, [
                             'area' => $dato['Area Ejecutora'],
                             'tipo_poliza' => 'E',
@@ -224,7 +232,7 @@ class EgresosCapitulo1ComprometidoForm extends Component
                             'fecha' => $this->fechaAfectacion,
                             'cuenta' => $polizaPorEjercer['Codigo_cuenta'],
                             'concepto' => $polizaPorEjercer['Descripcion_cuenta'],
-                            'total' => doubleval($dato[$mes]),
+                            'total' => $dato[$mes],
                             'mes' => $mes,
                             'descripcion' => $dato['CONCEPTO'],
                             'evento' => $this->numeroEvento,
@@ -250,15 +258,18 @@ class EgresosCapitulo1ComprometidoForm extends Component
             }
 
             if (empty($cuentasEnLaGuiaFaltantes)) {
-                Poliza::insert($polizas);
+                collect($polizas)->chunk(120)->each(function ($chunk) {
+                    Poliza::insert($chunk->toArray());
+                }); // divide $polizas en partes pequeñas (chunks) de 120 elementos. Esto evita la sobrecarga de memoria al hacer inserciones en la base.
+
                 DB::commit();
                 Storage::delete($path);
-                $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, 1000);
+                $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
             } else {
                 Storage::delete($path);
                 $mensajeError = "Cuentas Faltantes en la guía contabilizadora:<br>";
                 foreach ($cuentasEnLaGuiaFaltantes as $cuenta) {
-                   $mensajeError .= "Código: {$cuenta['Codigo_cuenta']} - Descripción: {$cuenta['Descripcion_cuenta']}<br>";
+                    $mensajeError .= "Código: {$cuenta['Codigo_cuenta']} - Descripción: {$cuenta['Descripcion_cuenta']}<br>";
                 }
 
                 $this->dispatch('mostrarMensaje', mensaje: $mensajeError, tipo: 'error', tiempo: 5000);
@@ -280,4 +291,4 @@ class EgresosCapitulo1ComprometidoForm extends Component
         $this->numeroPoliza = $numeroPoliza;
         $this->total = $total;
     }
-} 
+}
