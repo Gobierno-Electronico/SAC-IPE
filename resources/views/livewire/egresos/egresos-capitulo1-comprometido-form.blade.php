@@ -14,8 +14,9 @@
                         </div>
                         <div>
                             <label for="inputObservaciones" class="col-md-12 col-form-label">{{ __('Total') }}</label>
-                            <input value="{{ $total }}" type="text" class="form-control" name="inputAumentado"
-                                disabled>
+                            <input value="{{ '$' . number_format($total, 2, '.', ',') }}" type="text"
+                                class="form-control" name="inputAumentado" disabled>
+
                         </div>
                     </div>
                 </div>
@@ -38,17 +39,17 @@
                 <input class="form-control" type="file" accept=".xlsx" id="archivo" wire:model="archivo">
             </div>
             <div class="mt-5 d-flex justify-content-between">
-                <button type="button" onclick="descargarPlantilla(this,'egresos')" class="btn btn-success shadow border-0"
-                    id="botonPlantilla">
+                <button type="button" onclick="descargarPlantilla(this,'egresos')"
+                    class="btn btn-success shadow border-0" id="botonPlantilla">
                     Descargar plantilla
                 </button>
 
-                <button wire:click="cargarComprometido" class="btn btn-success shadow border-0" id="importarBoton" wire:loading.attr="disabled">
+                <button wire:click="cargarComprometido" class="btn btn-success shadow border-0" id="importarBoton"
+                    wire:loading.attr="disabled">
                     Cargar comprometido
                 </button>
-                
+
             </div>
         </div>
     @endif
-    <script>
-    </script>
+    <script></script>
