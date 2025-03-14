@@ -130,7 +130,7 @@ class GuiaContabilizadoraController extends Controller
     public function relacionarCuentasCuentas(Request $request)
     {
         // return response()->json('Método desactivado');
-        $path = public_path('CuentasCuentas/2000y3000-Devengado-CuentasCuentas3.xlsx');
+        $path = public_path('CuentasCuentas/cuentasCuentasPagado1000.xlsx');
 
         // Validar que el archivo pueda ser analizado correctamente.
         if ($xlsx = SimpleXLSX::parse($path)) {
