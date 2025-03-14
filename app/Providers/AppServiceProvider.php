@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class AppServiceProvider extends ServiceProvider
@@ -34,6 +35,8 @@ class AppServiceProvider extends ServiceProvider
         //         $query->time
         //     );
         // });
+        $anioActual = Carbon::now()->year;
+
 
         Builder::macro('search', function ($fields, $string) {
             if (!$string)
@@ -82,6 +85,7 @@ class AppServiceProvider extends ServiceProvider
         $polizasPresupuestales = DB::table('polizas')
             ->select('categoria', 'evento')
             ->where('tipo_poliza', '=', 'P')
+            ->whereYear('fecha', '=', $anioActual)
             ->groupBy('categoria', 'evento')
             ->get();
         
@@ -95,6 +99,7 @@ class AppServiceProvider extends ServiceProvider
 
         $polizaSaldosIniciales = DB::table('polizas')
             ->where('categoria', '=', 'SALDO INICIAL')
+            ->whereYear('fecha', '=', $anioActual)
             ->first();
 
         if($hayPresupuestoCompleto && $polizaSaldosIniciales != NULL){
