@@ -691,6 +691,9 @@
         toastr.error('Para iniciar el registro de movimientos primero cargue el presupuesto y los saldos iniciales',
             'ATENCIÓN');
     }
+    function mostrarHola(){
+        console.log("Hola");
+    }
 </script>
 
 </html>
