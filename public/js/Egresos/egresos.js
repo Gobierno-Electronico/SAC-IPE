@@ -143,7 +143,7 @@ function generarPolizaRemanenteLiberado(btn){
 }
 
 function cambioArchivo() {
-    let archivo = document.getElementById('input-archivo')
+    let archivo = document.getElementById('archivo')
     let nombreArchivo = ""
     let importarBoton = $("#importarBoton")
     if (archivo.files.length > 0) {
@@ -172,7 +172,7 @@ function descargarPlantilla(btn, tipo) {
     });
     $.ajax({
         type: 'GET',
-        url: '/presupuesto/plantilla-presupuesto-inicial',
+        url: '/capitulo1/plantillaCompromiso1000',
         data: { "type": tipo },
         success: function (data) {
             var blob = new Blob([data], {
@@ -182,7 +182,7 @@ function descargarPlantilla(btn, tipo) {
             var a = document.createElement('a');
             a.href = url;
             a.download =
-                `Formato presupuesto inicial ${tipo}.xlsx`; // Reemplaza 'nombre_del_archivo.xlsx' con el nombre de tu archivo
+                `formatoCargaComprometido1000 ${tipo}.xlsx`; // Reemplaza 'nombre_del_archivo.xlsx' con el nombre de tu archivo
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);

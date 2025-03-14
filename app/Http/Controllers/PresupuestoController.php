@@ -729,6 +729,7 @@ class PresupuestoController extends Controller
                         ]);
                     }
 
+                
                     if (!empty($cuentasFaltantesPlanCuentas)) {
                         // dd($cuentasFaltantesPlanCuentas);
                         DB::rollBack();

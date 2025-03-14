@@ -14,33 +14,41 @@
                         </div>
                         <div>
                             <label for="inputObservaciones" class="col-md-12 col-form-label">{{ __('Total') }}</label>
-                            <input value="{{ $total }}" type="text" class="form-control" name="inputAumentado"
-                                disabled>
+                            <input value="{{ '$' . number_format($total, 2, '.', ',') }}" type="text"
+                                class="form-control" name="inputAumentado" disabled>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <livewire:egresos.egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaEgresosComprometidoCapitulo1" urlFinalizar="/capitulo1-comprometido"
-            tipoPoliza="E" categoriaModulo='EGRESOS COMPROMETIDO CAPITULO 1'/>
+            tipoMovimiento="PolizaEgresosComprometidoCapitulo1" urlFinalizar="/capitulo1-comprometido" tipoPoliza="E"
+            categoriaModulo='EGRESOS COMPROMETIDO CAPITULO 1' />
     @else
         <button id="downloadButton" hidden></button>
         <div class="container mt-5">
+
+            <div class="col-2">
+                <label for="inputFechaAfectacion" class="form-label mt-3">Fecha de afectación</label>
+                <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control"
+                    max="{{ now()->toDateString() }}" wire:model="fechaAfectacion">
+            </div>
+
             <div class="mt-5">
-                <input class="form-control" type="file" accept=".xlsx" name="input-archivo" id="input-archivo"
-                    onchange="cambioArchivo()">
+                <input class="form-control" type="file" accept=".xlsx" id="archivo" wire:model="archivo">
             </div>
             <div class="mt-5 d-flex justify-content-between">
-                <button type="button" onclick="descargarPlantilla()" class="btn btn-success shadow border-0"
-                    id="botonPlantilla">
+                <button type="button" onclick="descargarPlantilla(this,'egresos')"
+                    class="btn btn-success shadow border-0" id="botonPlantilla">
                     Descargar plantilla
                 </button>
 
                 <button wire:click="cargarComprometido" class="btn btn-success shadow border-0" id="importarBoton"
-                    disabled>
+                    wire:loading.attr="disabled">
                     Cargar comprometido
                 </button>
+
             </div>
         </div>
     @endif
