@@ -57,31 +57,53 @@ class EgresosCapitulo1DevengadoForm extends Component
                 ->where('estatus_evento', '=', true)
                 ->distinct()
                 ->pluck('descripcion', 'evento');
+
             $this->cambiarPartidaPresupuestalSeleccionada = false;
             $this->llenarPartidasPresupuestales();
+
             $this->cambiarCuentaContableSeleccionada = false;
             $this->llenarCuentasContables();
+
             return view('livewire.egresos.egresos-capitulo1-devengado-form', ['eventos' => $eventos]);
         }catch(\Throwable $th){
-            Log::error('Ocurrió un error al cargar eventos en Devengado del capítulo 4: ' . $th->getMessage());
+            Log::error('Ocurrió un error al cargar eventos en Devengado del capítulo 1: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000); 
+        }
+    }
+
+    public function llenarCuentasContables(){
+        
+        if ($this->cambiarCuentaContableSeleccionada) {
+            $this->cuentaContable = "";
+        }
+        
+        try{
+            $this->cambiarCuentaContableSeleccionada = true;
+
+            $cuentasAbono = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [10102])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Abono')
+            ->orderBy('cuentas.Codigo_cuenta')->get();
+
+            $this->cuentasContables = $cuentasAbono;
+        }catch (\Throwable $th) {
+            Log::error('Ocurrió un error al cargar las cuentas contables en devengado capítulo 1: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas contables, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 
     public function cambioEvento(){
         try{
             $this->limpiar();   
-            $this->montoDelEvento = DB::select('EXEC ImporteTotalCapitulo4Devengado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
+            $this->montoDelEvento = DB::select('EXEC ImporteTotalCapitulo1Devengado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             $this->dispatch('formato_importe', id: 'inputMontoEvento', amount: ($this->montoDelEvento > 0) ? $this->montoDelEvento : '');
             $this->dispatch('mostrarMensaje', mensaje: 'Monto del evento cargado', tipo: 'success', tiempo: 1500);
 
             $this->llenarPartidasPresupuestales();
-            $this->cuentaContable = "";
+            $this->llenarCuentasContables();
         }catch (\Throwable $th) {
-            Log::error('Ocurrió un error al cargar el evento en Devengado del capítulo 4: ' . $th->getMessage());
+            Log::error('Ocurrió un error al cargar el evento en Devengado del capítulo 1: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
-
     }
 
     public function llenarPartidasPresupuestales(){
@@ -98,7 +120,7 @@ class EgresosCapitulo1DevengadoForm extends Component
             ->get();
 
             $cuentasDevengadas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [63, 64, 56, 58])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
+            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [10102])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
             ->orderBy('cuentas.Codigo_cuenta')->get();
            
             $cuentasDevengadasAux = new Collection();
@@ -112,40 +134,10 @@ class EgresosCapitulo1DevengadoForm extends Component
             }
 
             $cuentasDevengadasAux = $cuentasDevengadasAux->unique('Codigo_cuenta');
-            $this->partidasPresupuestales = $cuentasDevengadasAux;
+            $this->partidasPresupuestales = $cuentasDevengadasAux; 
         }catch (\Throwable $th) {
-            Log::error('Ocurrió un error al cargar partidas presupuestales en Devengado del capítulo 4: ' . $th->getMessage());
+            Log::error('Ocurrió un error al cargar partidas presupuestales en Devengado del capítulo 1: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las partidas presupuestales, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
-        }
-    }
-
-    public function llenarCuentasContables(){
-        if(!$this->partidaPresupuestal) return;
-        
-        if ($this->cambiarCuentaContableSeleccionada) {
-            $this->cuentaContable = "";
-            $this->cargarPresupuestoComprometido();
-        }
-        
-        try{
-            $this->cambiarCuentaContableSeleccionada = true;
-            
-            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('interaccion_cuenta_conceptos.concepto_id', [63, 64, 56, 58])
-           
-            ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
-            $this->cuentasContables = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
-                ->join('interaccion_cuenta_conceptos', function ($join) {
-                    $join->on('interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
-                        ->where('tipo_interaccion', '=', 'Contable - Abono');
-                })
-                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get(); 
-
-            if (count($this->cuentasContables) === 1) {
-                $this->cuentaContable = $this->cuentasContables[0]['id'];
-            }
-        }catch (\Throwable $th) {
-            Log::error('Ocurrió un error al cargar las cuentas contables en devengado capítulo 4000: ' . $th->getMessage());
-            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas contables, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 
@@ -155,18 +147,18 @@ class EgresosCapitulo1DevengadoForm extends Component
 
             $anioActual = Carbon::now()->year;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
-            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('interaccion_cuenta_conceptos.concepto_id', [63, 64, 56, 58])->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
+            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('interaccion_cuenta_conceptos.concepto_id', [10102])->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
             $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')
             ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->where('Descripcion_cuenta', 'LIKE', '%(Comprometido)%')->first();
 
             
-            $solvencia = DB::select('EXEC SolvenciaComprometidosCapitulo4 @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?', array($departamento->Codigo_completo, $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $this->mes, $this->numeroEvento))[0]->Total;
+            $solvencia = DB::select('EXEC SolvenciaDevengadoCapitulo1 @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?', array($departamento->Codigo_completo, $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $this->mes, $this->numeroEvento))[0]->Total;
             $this->PTTOComprometido = ($solvencia > 0) ? floatval($solvencia) : 0;
 
             $this->dispatch('formato_importe', id: 'inputPTTOComprometido', amount: "{$this->PTTOComprometido}");
             $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto comprometido cargado', tipo: 'success', tiempo: 1500);
         }catch (\Throwable $th) {
-            Log::error('Ocurrió un error al cargar presupuesto en devengado del capítulo 4: ' . $th->getMessage());
+            Log::error('Ocurrió un error al cargar presupuesto en devengado del capítulo 1: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar presupuesto, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
