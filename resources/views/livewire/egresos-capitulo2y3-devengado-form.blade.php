@@ -151,7 +151,7 @@
             </div>
 
             <div class="col">
-                <livewire:egresos.egresos-capitulo2y3-devengado-table />
+                <livewire:egresos-capitulo2y3-devengado-table />
             </div>
 
             <div class="row mt-4">
