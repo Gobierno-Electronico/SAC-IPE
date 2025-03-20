@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\egresos;
+namespace App\Livewire;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Clases\Column;
@@ -27,7 +27,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
     
     public function render()
     {
-        return view('livewire.egresos.egresos-capitulo2y3-devengado-table');
+        return view('livewire.egresos-capitulo2y3-devengado-table');
     }
 
     public function query(): Builder
