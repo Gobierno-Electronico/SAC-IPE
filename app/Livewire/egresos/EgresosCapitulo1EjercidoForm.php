@@ -44,7 +44,7 @@ class EgresosCapitulo1EjercidoForm extends Component
     #[Validate('required', message: 'Mes requerido')]
     public $mes = "";
 
-    #[Validate('required', message: 'Monto del evento requerido')]
+    #[Validate('required', message: 'Monto del evento requerido')]  
     public $montoDelEvento = "";
 
     #[Validate('required', message: 'Importe requerido')]
@@ -60,7 +60,7 @@ class EgresosCapitulo1EjercidoForm extends Component
             $eventos =  Poliza::select('evento', 'descripcion')
                 ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where('tipo_poliza', '=', 'E')
-                ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 4')
+                ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 1')
                 ->where('estatus_evento', '=', true)
                 ->distinct()
                 ->pluck('descripcion', 'evento');
@@ -76,7 +76,7 @@ class EgresosCapitulo1EjercidoForm extends Component
     public function cambioEvento(){
         try {
             $this->limpiar();
-            $this->montoDelEvento = DB::select('EXEC ImporteTotalCapitulo4Ejercido @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
+            $this->montoDelEvento = DB::select('EXEC ImporteTotalCapitulo1Ejercido @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             $this->dispatch('formato_importe', id: 'inputMontoEvento', amount: ($this->montoDelEvento > 0) ? $this->montoDelEvento : '');
             $this->dispatch('mostrarMensaje', mensaje: 'Monto del evento cargado', tipo: 'success', tiempo: 1500);
             $this->llenarCuentasPresupuestalCargo();
@@ -102,7 +102,7 @@ class EgresosCapitulo1EjercidoForm extends Component
                 ->get();
 
             $cuentasEjercidas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-                ->whereIn('interaccion_cuenta_conceptos.concepto_id', [59, 60, 61, 62])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
+                ->whereIn('interaccion_cuenta_conceptos.concepto_id', [10104])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
                 ->orderBy('cuentas.Codigo_cuenta')->get();
 
             $cuentasEjercidasAux = new Collection();
