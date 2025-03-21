@@ -60,10 +60,12 @@
     });
 
     window.addEventListener('llenarFormulario', event => {
-        let parametros = event.__livewire.params
-        $('#inputPTTOComprometido').val(parametros.presupuesto);
-        $('#inputImporte').val(parametros.importe);
-        formatearImporte({id: 'inputImporte'})
-        formatearImporte({id: 'inputPTTOComprometido'})
+        setTimeout(() => {            
+            let parametros = event.__livewire.params
+            $('#inputPTTOComprometido').val(parametros.presupuesto);
+            $('#inputImporte').val(parametros.importe);
+            formatearImporte({id: 'inputImporte'})
+            formatearImporte({id: 'inputPTTOComprometido'})
+        }, 500);
     });
 </script>

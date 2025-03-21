@@ -85,20 +85,11 @@
                 <select name="selectPartidaPresupuestal" id="selectPartidaPresupuestal" class="form-select" wire:model="partidaPresupuestal" wire:change="cargarPresupuestoComprometido">
                     <option value="" selected disabled>Seleccionar partida presupuestal</option>
                     @foreach ($partidasPresupuestales as $partida)
-                    <option value="{{ $partida['id'] }}">
+                    <option value="{{ $partida['cuenta_id'] }}">
                         {{ $partida['Codigo_cuenta'] . '  ' . $partida['Descripcion_cuenta'] }}</option>
                 @endforeach
                 </select>
-
-                <label for="selectCuenta" class="form-label mt-3">Cuenta contable</label>
-                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuentaContable">
-                    <option value="" selected disabled>Seleccionar cuenta</option>
-                    @foreach ($cuentasContables as $partida)
-                    <option value="{{ $partida['id'] }}">
-                        {{ $partida['Codigo_cuenta'] . '  ' . $partida['Descripcion_cuenta'] }}</option>
-                @endforeach
-                </select>
-
+                
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
                 <select name="selectMes" id="selectMes" class="form-select" wire:model="mes" wire:change="cargarPresupuestoComprometido">
                     <option value="" selected disabled>Seleccionar mes...</option>
@@ -110,16 +101,31 @@
                         </option>
                     @endforeach
                 </select>
+                <label for="inputImporte" class="form-label mt-3">Importe total</label>
+                <input type="text" name="inputImporte" id="inputImporte" class="form-control"
+                    onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model="importe">
+                
+
 
                 <label for="inputMontoEvento" class="form-label mt-3">Monto del evento</label>
                 <input type="text" name="inputMontoEvento" id="inputMontoEvento" class="form-control" disabled>
 
                 <label for="inputPTTOComprometido" class="form-label mt-3">Presupuesto comprometido</label>
                 <input type="text" name="inputPTTOComprometido" id="inputPTTOComprometido" class="form-control" disabled>
-                
-                <label for="inputImporte" class="form-label mt-3">Importe</label>
+
+                <label for="selectCuenta" class="form-label mt-3">Cuenta contable</label>
+                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuentaContable">
+                    <option value="" selected disabled>Seleccionar cuenta</option>
+                    @foreach ($cuentasContables as $partida)
+                    <option value="{{ $partida['cuenta_id'] }}">
+                        {{ $partida['Codigo_cuenta'] . '  ' . $partida['Descripcion_cuenta'] }}</option>
+                @endforeach
+                </select>
+
+                <label for="inputImporte" class="form-label mt-3">Importe abono</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control"
-                    onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model="importe">
+                    onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model="importeAbono">
+                
             </div>
 
             <div class="col">

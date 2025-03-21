@@ -125,6 +125,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
                     $interaccionCuentaCuentas = $interaccionCuentaCuentasFiltradas;
 
+                    $this->total = $this->total + floatval(str_replace([',', '$', ' '], ['', '', ''], $dato['CARGO']));
                     array_push($polizas, [
                             'area' => $dato['AREA EJECUTORA'],
                             'tipo_poliza' => 'E',
@@ -145,6 +146,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                     ]);
 
                     foreach ($interaccionCuentaCuentas as $dataCuenta){
+                        $this->total = $this->total + floatval(str_replace([',', '$', ' '], ['', '', ''], $dato['CARGO']));
                         array_push($polizas, [
                             'area' => $dato['AREA EJECUTORA'],
                             'tipo_poliza' => 'E',
@@ -165,6 +167,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                         ]);
                     }
                 }else{
+                    $this->total = $this->total + floatval(str_replace([',', '$', ' '], ['', '', ''], $dato['ABONO']));
                     array_push($polizas, [
                         'area' => $dato['AREA EJECUTORA'],
                         'tipo_poliza' => 'E',
@@ -201,7 +204,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                 }); // divide $polizas en partes pequeñas (chunks) de 120 elementos. Esto evita la sobrecarga de memoria al hacer inserciones en la base.
 
                 DB::commit();
-                $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, 1000);
+                $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
             } else {
                 $mensajeError = "Cuentas Faltantes en la guía contabilizadora:<br>";
                 foreach ($cuentasEnLaGuiaFaltantes as $cuenta) {
