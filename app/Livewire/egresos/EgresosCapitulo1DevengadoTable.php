@@ -50,6 +50,7 @@ class EgresosCapitulo1DevengadoTable extends Tabla
             Column::make('movimiento', 'Movimiento'),
             Column::make('pttoComprometido', 'PPTO Comprometido')->component('columns.importe'),
             Column::make('importe', 'Importe')->component('columns.importe'),
+            Column::make('importeAbono', 'Importe abono')->component('columns.importe'),
             Column::make('disponibilidad', 'Disponibilidad')->component('columns.importe'),
             Column::make('id', 'Acciones')->component('columns.accionesIngresos')
         ];
@@ -68,12 +69,13 @@ class EgresosCapitulo1DevengadoTable extends Tabla
                 $nuevoRegistro = [
                     'id' => 0,
                     'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
-                    'partida' => $registro['codigoPartida'] . ' ' . $registro['descripcionPartida'],
-                    'cuentaContable' => $registro['codigoCuentaContable'] . ' ' . $registro['descripcionCuentaContable'],
+                    'partida' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
+                    'cuentaContable' => $registro['codigoCuentaAbono'] . ' ' . $registro['descripcionCuentaAbono'],
                     'mes' => $registro['mes'],
                     'movimiento' => 'DEVENGADO',
                     'pttoComprometido' => $registro['pttoComprometido'],
                     'importe' => $registro['importe'],
+                    'importeAbono' => $registro['importeAbono'],
                     'disponibilidad' => $this->totalDisponible,
                 ];
                 array_push($this->cacheData, $nuevoRegistro);
@@ -99,7 +101,7 @@ class EgresosCapitulo1DevengadoTable extends Tabla
         $totalImportes = 0;
 
         foreach ($this->cacheData as $movimiento) {
-            if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoPartida']) && $movimiento['mes'] == $registro['mes']) {
+            if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoCuenta']) && $movimiento['mes'] == $registro['mes']) {
                 $totalImportes += $movimiento['importe'];
             }
         }
@@ -123,10 +125,11 @@ class EgresosCapitulo1DevengadoTable extends Tabla
                 if ($registro['id'] == $id) {
                     $datosRegistro = [
                         'area' => $registro['areaResponsableId'],
-                        'partida' => $registro['partidaId'],
-                        'cuentaContable' => $registro['cuentaContableId'],
+                        'partida' => $registro['cuentaId'],
+                        'cuentaContable' => $registro['cuentaAbonoId'],
                         'mes' => $registro['mes'],
                         'importe' => $registro['importe'],
+                        'importeAbono' => $registro['importeAbono'],
                         'pttoComprometido' => $registro['pttoComprometido']
                     ];
 
@@ -190,7 +193,7 @@ class EgresosCapitulo1DevengadoTable extends Tabla
             if ($registro['id'] == $id) {
                 $datosSeleccionado = [
                     'codigoArea' => $registro['codigoAreaResponsable'],
-                    'codigoCuentaPartida' => $registro['codigoPartida'],
+                    'codigoCuentaPartida' => $registro['codigoCuenta'],
                     'mes' => $registro['mes']
                 ];
             }
@@ -242,7 +245,7 @@ class EgresosCapitulo1DevengadoTable extends Tabla
 
             foreach ($this->dataCompleta as $movimiento) {
                 $movimiento['importe'] = doubleval($movimiento['importe']);
-                $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['partidaId'])->whereIn('concepto_id', [63, 64, 56, 58])
+                $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaId'])->whereIn('concepto_id', [63, 64, 56, 58])
                     ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
 
                 $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
@@ -252,7 +255,7 @@ class EgresosCapitulo1DevengadoTable extends Tabla
                 $interaccionCuentaCuentasFiltradas = [];
                 foreach ($interaccionCuentaCuentas as $cuenta) {
                     if ($cuenta['tipo_interaccion'] == 'Contable - Abono') {
-                        if ($cuenta['Codigo_cuenta'] == $movimiento['codigoCuentaContable']) {
+                        if ($cuenta['Codigo_cuenta'] == $movimiento['codigoCuentaAbono']) {
                             $interaccionCuentaCuentasFiltradas[] = $cuenta;
                             continue;
                         }
@@ -269,8 +272,8 @@ class EgresosCapitulo1DevengadoTable extends Tabla
                         'tipo_poliza' => 'E',
                         'numero_poliza' =>  $this->numeroPoliza,
                         'fecha' => $movimiento['fechaAfectacion'],
-                        'cuenta' => $movimiento['codigoPartida'],
-                        'concepto' => $movimiento['descripcionPartida'],
+                        'cuenta' => $movimiento['codigoCuenta'],
+                        'concepto' => $movimiento['descripcionCuenta'],
                         'total' => abs($movimiento['importe']),
                         'mes' => $movimiento['mes'],
                         'descripcion' => $movimiento['observaciones'],
@@ -278,7 +281,7 @@ class EgresosCapitulo1DevengadoTable extends Tabla
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
                         'estatus_evento' => true,
-                        'categoria' => 'EGRESOS DEVENGADO CAPITULO 4',
+                        'categoria' => 'EGRESOS DEVENGADO CAPITULO 1',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]
@@ -299,7 +302,7 @@ class EgresosCapitulo1DevengadoTable extends Tabla
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
                         'estatus_evento' => true,
-                        'categoria' => 'EGRESOS DEVENGADO CAPITULO 4',
+                        'categoria' => 'EGRESOS DEVENGADO CAPITULO 1',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);
