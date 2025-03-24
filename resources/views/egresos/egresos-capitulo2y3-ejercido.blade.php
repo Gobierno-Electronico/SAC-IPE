@@ -9,7 +9,7 @@
                 <div class="card-body bg-white p-5">
                     <h2>Egresos capítulo 2000 Materiales/Suministros y 3000 Servicios generales</h2>
                     <h4>Ejercido</h4>
-                    <livewire:egresos.egresos-capitulo2y3-ejercido-form/>
+                    <livewire:egresos-capitulo2y3-ejercido-form/>
                 </div>
             </div>
         </div>
