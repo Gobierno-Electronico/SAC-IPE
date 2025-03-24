@@ -8,7 +8,7 @@
             <div class="card shadow border-0">
                 <div class="card-body bg-white p-5">
                     <h2>Consulta de movimientos de Egresos</h2>
-                    <livewire:egresos.movimientos-egresos-table/>
+                    <livewire:movimientos-egresos-table/>
                 </div>
             </div>
         </div>

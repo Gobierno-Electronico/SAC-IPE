@@ -21,7 +21,7 @@
                 </div>
             </div>
         </div>
-        <livewire:egresos.egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total :$numeroPolizaRemanente
+        <livewire:egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total :$numeroPolizaRemanente
             tipoMovimiento="PolizaEgresosDevengadoCapitulo2y3" urlFinalizar="/capitulo2y3-devengado" tipoPoliza="E"
             categoriaModulo='EGRESOS DEVENGADO CAPITULO 2y3' 
             categoriaRemanente='EGRESOS COMPROMETIDO CAPITULO 2y3 REMANENTE DEVENGADO' />

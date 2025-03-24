@@ -9,7 +9,7 @@
                 <div class="card-body bg-white p-5">
                     <h2>Egresos capítulo 4000 transferencias y pensiones</h2>
                     <h4>Pagado</h4>
-                    <livewire:egresos.egresos-capitulo4-pagado-form/>
+                    <livewire:egresos-capitulo4-pagado-form/>
                 </div>
             </div>
         </div>
