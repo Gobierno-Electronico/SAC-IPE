@@ -92,7 +92,7 @@ class EgresosCapitulo1DevengadoForm extends Component
             $this->cambiarCuentaContableSeleccionada = false;
             $this->llenarCuentasContables();
 
-            return view('livewire.egresos-capitulo1-devengado-form', ['eventos' => $eventos]);
+            return view('livewire.egresos-capitulo1-devengado-form', ['eventos' => $this->eventos]);
         }catch(\Throwable $th){
             Log::error('Ocurrió un error al cargar eventos en Devengado del capítulo 1: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000); 
