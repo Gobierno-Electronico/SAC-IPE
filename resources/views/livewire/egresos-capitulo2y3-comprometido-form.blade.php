@@ -66,14 +66,16 @@
                     @endforeach
                 </select>
 
-                <label for="selectCuenta" class="form-label mt-3" >Cuenta</label>
+                <label for="selectCuenta" class="form-label mt-3">Cuenta</label>
                 <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta" wire:change="cambioPresupuesto">
                     <option value="" disabled>Seleccionar cuenta</option>
-                    @foreach ($cuentas as $cuenta)
-                    <option value="{{ $cuenta->cuenta_id }}"> 
-                            {{  $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
+                    @foreach ($cuentas->sortBy('Codigo_cuenta') as $cuenta)
+                        <option value="{{ $cuenta->cuenta_id }}">
+                            {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}
+                        </option>
                     @endforeach
                 </select>
+                
 
 
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>

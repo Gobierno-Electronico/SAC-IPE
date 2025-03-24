@@ -84,11 +84,13 @@
                 <select name="selectPartidaPresupuestal" id="selectPartidaPresupuestal" class="form-select"
                     wire:model="partidaPresupuestal" wire:change="verificarCantidadRelaciones">
                     <option value="" selected disabled>Seleccionar partida presupuestal</option>
-                    @foreach ($partidasPresupuestales as $partida)
+                    @foreach (collect($partidasPresupuestales)->sortBy('Codigo_cuenta') as $partida)
                         <option value="{{ $partida['id'] }}">
-                            {{ $partida['Codigo_cuenta'] . '  ' . $partida['Descripcion_cuenta'] }}</option>
+                            {{ $partida['Codigo_cuenta'] . '  ' . $partida['Descripcion_cuenta'] }}
+                        </option>
                     @endforeach
                 </select>
+                
 
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
                 <select name="selectMes" id="selectMes" class="form-select" wire:model="mes"

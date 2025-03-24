@@ -84,7 +84,7 @@
                 <label for="selectCuenta" class="form-label mt-3">Cuenta</label>
                 <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta" wire:change="cargarPresupuestoDevengado">
                     <option value="" disabled>Seleccionar cuenta</option>
-                    @foreach ($partidasPresupuestales as $partida)
+                    @foreach ($partidasPresupuestales->sortBy('Codigo_cuenta') as $partida)
                     <option value="{{ $partida->cuenta_id }}">
                         {{ $partida->Codigo_cuenta . '  ' . $partida->Descripcion_cuenta }}</option>
                     @endforeach
