@@ -82,6 +82,7 @@ Route::get('/presupuesto/egresos/ampliacion',[PresupuestoController::class, 'amp
 Route::get('/presupuesto/ingresos/reduccion',[PresupuestoController::class, 'reduccionIngresos'])->name('reduccionIngresos')->middleware('can:acceso-presupuesto');
 Route::get('/presupuesto/egresos/reduccion',[PresupuestoController::class, 'reduccionEgresos'])->name('reduccionEgresos')->middleware('can:acceso-presupuesto');
 Route::get('/presupuesto/verDetalleAfectacion/{evento}',[PresupuestoController::class, 'verDetalleAfectacion'])->name('verDetalleAfectacion')->middleware('can:acceso-presupuesto');
+Route::get('/presupuesto/consulta-transferencias', [PresupuestoController::class, 'consultarTransferencias'])->name('consultaTransferencias')->middleware('role:Administrador');
 
 // Recandelarización y Reclasificación
 Route::get('/presupuesto/recalendarizacion', [PresupuestoController::class, 'recalendarizacion'])->name('recalendarizacion')->middleware('can:acceso-presupuesto');
