@@ -9,7 +9,7 @@
                 <div class="card-body bg-white p-5">
                     <h2>Egresos capítulo 1000 Servicios Personales</h2>
                     <h4>Carga de devengado</h4>
-                    <livewire:egresos.egresos-capitulo1-devengadoCarga-form/>
+                    <livewire:egresos-capitulo1-devengadoCarga-form/>
                 </div>
             </div>
         </div>

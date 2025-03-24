@@ -9,7 +9,7 @@
                 <div class="card-body bg-white p-5">
                     <h2>Egresos capítulo 5000 Bienes muebles, inmuebles e intangibles</h2>
                     <h4>Devengado</h4>
-                    <livewire:egresos.egresos-capitulo5-devengado-form/>
+                    <livewire:egresos-capitulo5-devengado-form/>
                 </div>
             </div>
         </div>

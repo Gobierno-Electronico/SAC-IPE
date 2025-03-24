@@ -9,7 +9,7 @@
                 <div class="card-body bg-white p-5">
                     <h2>Otorgamiento préstamos con renovación (Compromiso-Devengado)</h2>
                     <h4>Ingreso devengado y Egreso comprometido - devengado</h4>
-                    <livewire:prestamos.prestamos-otorgamiento-compromiso-devengado-prestamosRenovacion-form/>
+                    <livewire:prestamos-otorgamiento-compromiso-devengado-prestamosRenovacion-form/>
                 </div>
             </div>
         </div>

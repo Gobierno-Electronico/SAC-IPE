@@ -9,7 +9,7 @@
                 <div class="card-body bg-white p-5">
                     <h2>Egresos capítulo 4000 transferencias y pensiones</h2>
                     <h4>Devengado</h4>
-                    <livewire:egresos.egresos-capitulo4-devengado-form/>
+                    <livewire:egresos-capitulo4-devengado-form/>
                 </div>
             </div>
         </div>
