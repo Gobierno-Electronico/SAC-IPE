@@ -37,6 +37,8 @@ class EgresosCapitulo1DevengadoForm extends Component
     public $mes = "";
     #[Validate('required', message: 'Importe requerido')]
     public $importe = "";
+    #[Validate('required', message: 'Importe abono requerido')]
+    public $importeAbono = "";
  
     #[Validate('required', message: 'Monto del evento requerido')]
     public $montoDelEvento = "";
@@ -46,11 +48,39 @@ class EgresosCapitulo1DevengadoForm extends Component
     public $cambiarCuentaContableSeleccionada = true;
     public $partidasPresupuestales = [];
     public $cambiarPartidaPresupuestalSeleccionada = true;
+    public $cambiarEventoSeleccionado = true;
+    public $eventos = [];
+    public $eventoAuxiliar = "";
 
     public function render() 
     {
+        try{         
+            $this->cambiarEventoSeleccionado = false;
+            $this->cargarEventos();
+
+            $this->cambiarPartidaPresupuestalSeleccionada = false;
+            $this->llenarPartidasPresupuestales();
+
+            $this->cambiarCuentaContableSeleccionada = false;
+            $this->llenarCuentasContables(); 
+
+            return view('livewire.egresos-capitulo1-devengado-form', ['eventos' => $this->eventos]);
+        }catch(\Throwable $th){
+            Log::error('Ocurrió un error al cargar eventos en Devengado del capítulo 1: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000); 
+        }
+    }
+
+    public function cargarEventos(){
+        if ($this->cambiarEventoSeleccionado) {
+            $this->numeroEvento = "";
+        }
+
         try{
-            $eventos =  Poliza::select('evento', 'descripcion')
+            $this->cambiarEventoSeleccionado = true;
+            Log::info('evento: ' . $this->numeroEvento . ' auxiliar: ' . $this->eventoAuxiliar);
+            $this->numeroEvento = $this->eventoAuxiliar;
+            $this->eventos =  Poliza::select('evento', 'descripcion')
                 ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 1')
@@ -58,21 +88,19 @@ class EgresosCapitulo1DevengadoForm extends Component
                 ->distinct()
                 ->pluck('descripcion', 'evento');
 
-            $this->cambiarPartidaPresupuestalSeleccionada = false;
-            $this->llenarPartidasPresupuestales();
 
             $this->cambiarCuentaContableSeleccionada = false;
             $this->llenarCuentasContables();
 
-            return view('livewire.egresos-capitulo1-devengado-form', ['eventos' => $eventos]);
         }catch(\Throwable $th){
             Log::error('Ocurrió un error al cargar eventos en Devengado del capítulo 1: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000); 
         }
+
     }
 
     public function llenarCuentasContables(){
-        
+       // sleep(3);
         if ($this->cambiarCuentaContableSeleccionada) {
             $this->cuentaContable = "";
         }
@@ -93,6 +121,8 @@ class EgresosCapitulo1DevengadoForm extends Component
 
     public function cambioEvento(){
         try{
+            sleep(1);
+            $this->eventoAuxiliar = $this->numeroEvento;
             $this->limpiar();   
             $this->montoDelEvento = DB::select('EXEC ImporteTotalCapitulo1Devengado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             $this->dispatch('formato_importe', id: 'inputMontoEvento', amount: ($this->montoDelEvento > 0) ? $this->montoDelEvento : '');
@@ -122,7 +152,7 @@ class EgresosCapitulo1DevengadoForm extends Component
             $cuentasDevengadas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
             ->whereIn('interaccion_cuenta_conceptos.concepto_id', [10102])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
             ->orderBy('cuentas.Codigo_cuenta')->get();
-           
+
             $cuentasDevengadasAux = new Collection();
             foreach($cuentasDevengadas as $devengada){
                 foreach($cuentasComprometidas as $comprometida){
@@ -134,7 +164,7 @@ class EgresosCapitulo1DevengadoForm extends Component
             }
 
             $cuentasDevengadasAux = $cuentasDevengadasAux->unique('Codigo_cuenta');
-            $this->partidasPresupuestales = $cuentasDevengadasAux; 
+            $this->partidasPresupuestales = $cuentasDevengadasAux->toArray(); 
         }catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar partidas presupuestales en Devengado del capítulo 1: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las partidas presupuestales, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
@@ -144,7 +174,6 @@ class EgresosCapitulo1DevengadoForm extends Component
     public function cargarPresupuestoComprometido(){
         try{
             if (!$this->partidaPresupuestal || !$this->mes || !$this->selectCodigoAreaResponsable) return;
-
             $anioActual = Carbon::now()->year;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('interaccion_cuenta_conceptos.concepto_id', [10102])->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
@@ -168,6 +197,9 @@ class EgresosCapitulo1DevengadoForm extends Component
         try{
             $this->importe = floatval(str_replace(['$', ','], "", $this->importe));
             $this->importe = ($this->importe > 0)  ? $this->importe : "";
+
+            $this->importeAbono = floatval(str_replace(['$', ','], "", $this->importeAbono));
+            $this->importeAbono = ($this->importeAbono > 0)  ? $this->importeAbono : "";
             $this->validate();
 
             $partida = Cuenta::find($this->partidaPresupuestal);
@@ -183,14 +215,15 @@ class EgresosCapitulo1DevengadoForm extends Component
                 'areaResponsableId' => $this->selectCodigoAreaResponsable,
                 'codigoAreaResponsable' => $departamento->Codigo_completo,
                 'descripcionAreaResponsable' => $departamento->Nombre,
-                'partidaId' => $this->partidaPresupuestal,
-                'codigoPartida' => $partida->Codigo_cuenta,
-                'descripcionPartida' => $partida->Descripcion_cuenta,
-                'cuentaContableId' => $this->cuentaContable,
-                'codigoCuentaContable' => $cuentaContableSeleccionada->Codigo_cuenta,
-                'descripcionCuentaContable' => $cuentaContableSeleccionada->Descripcion_cuenta,
+                'cuentaId' => $this->partidaPresupuestal,
+                'codigoCuenta' => $partida->Codigo_cuenta,
+                'descripcionCuenta' => $partida->Descripcion_cuenta,
+                'cuentaAbonoId' => $this->cuentaContable,
+                'codigoCuentaAbono' => $cuentaContableSeleccionada->Codigo_cuenta,
+                'descripcionCuentaAbono' => $cuentaContableSeleccionada->Descripcion_cuenta,
                 'mes' => $this->mes,
                 'importe' => $this->importe,
+                'importeAbono' => $this->importeAbono,
                 'montoEvento' => $this->montoDelEvento,
                 'pttoComprometido' => $this->PTTOComprometido
             ];
@@ -219,8 +252,10 @@ class EgresosCapitulo1DevengadoForm extends Component
     public function limpiar()
     {
         $this->PTTOComprometido = "";
-        $this->importe = "";
+        $this->importeAbono = "";
         $this->mes = "";
+        $this->cuentaContable = "";
+        $this->cargarEventos();
         $this->dispatch('limpiar');
     }
 
@@ -231,9 +266,10 @@ class EgresosCapitulo1DevengadoForm extends Component
         $this->cuentaContable = $datosRegistro['cuentaContable'];
         $this->mes = $datosRegistro['mes'];
         $this->importe = $datosRegistro['importe'];
+        $this->importeAbono = $datosRegistro['importeAbono'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->PTTOComprometido = $datosRegistro['pttoComprometido'];
-        $this->dispatch('llenarFormulario', presupuesto: $this->PTTOComprometido, importe: $this->importe);
+        $this->dispatch('llenarFormulario', presupuesto: $this->PTTOComprometido, importe: $this->importe, importeAbono: $this->importeAbono);
     }
 
     #[On('consultar-registro')]

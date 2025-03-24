@@ -102,6 +102,9 @@ class PresupuestoController extends Controller
     {
         return view('presupuestos.recalendarizacion.recalendarizacion');
     }
+    public function consultarTransferencias(){
+        return view('presupuestos.recalendarizacion.consultaRecalendarizacion');
+    }
 
     public function cargarPresupuestoInicialIngresos(Request $request)
     {
