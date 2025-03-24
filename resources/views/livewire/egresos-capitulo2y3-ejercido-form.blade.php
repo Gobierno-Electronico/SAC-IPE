@@ -26,7 +26,8 @@
         </div>
         <livewire:egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total :$numeroPolizaRemanente
             tipoMovimiento="PolizaEgresosEjercidoCapitulo2y3" urlFinalizar="/capitulo2y3-ejercido" tipoPoliza="E"
-            categoriaModulo='EGRESOS EJERCIDO CAPITULO 2y3' categoriaRemanente='EGRESOS DEVENGADO CAPITULO 2y3 REMANENTE EJERCIDO'/>
+            categoriaModulo='EGRESOS EJERCIDO CAPITULO 2y3'
+            categoriaRemanente='EGRESOS DEVENGADO CAPITULO 2y3 REMANENTE EJERCIDO' />
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
@@ -48,20 +49,21 @@
             wire:model="observaciones">
 
         <label for="inputFechaAfectacion" class="form-label mt-3">Fecha de afectación</label>
-        <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control" max="{{ now()->toDateString() }}"
-            wire:model="fechaAfectacion">
+        <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control"
+            max="{{ now()->toDateString() }}" wire:model="fechaAfectacion">
 
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
         <div class="row">
             <div class="col-3">
                 <label for="inputSeguimientoEvento" class="form-label mt-3">Número de seguimiento de evento</label>
-                <select name="selectSeguimientoEvento" id="selectSeguimientoEvento" class="form-select" wire:model="numeroEvento" wire:change="cambioEvento">
+                <select name="selectSeguimientoEvento" id="selectSeguimientoEvento" class="form-select"
+                    wire:model="numeroEvento" wire:change="cambioEvento">
                     <option value="" disabled>
                         Seleccionar un evento
                     </option>
                     @foreach ($eventos as $evento => $descripcion)
                         <option value="{{ $evento }}">
-                           {{ $evento }} - {{$descripcion}}
+                            {{ $evento }} - {{ $descripcion }}
                         </option>
                     @endforeach
                 </select>
@@ -82,16 +84,18 @@
                 </select>
 
                 <label for="selectCuenta" class="form-label mt-3">Cuenta</label>
-                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta" wire:change="cargarPresupuestoDevengado">
+                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta"
+                    wire:change="cargarPresupuestoDevengado">
                     <option value="" disabled>Seleccionar cuenta</option>
                     @foreach ($cuentas as $cuenta)
-                        <option value="{{ $cuenta['cuenta_id'] }}">
-                            {{ $cuenta['Codigo_cuenta'] . '  ' . $cuenta['Descripcion_cuenta'] }}</option>
+                        <option value="{{ $cuenta->id }}">
+                            {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
                     @endforeach
                 </select>
 
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
-                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes" wire:change="cargarPresupuestoDevengado">
+                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes"
+                    wire:change="cargarPresupuestoDevengado">
                     <option value="" selected disabled>Seleccionar mes...</option>
                     @foreach (range(1, 12) as $mes)
                         @php
