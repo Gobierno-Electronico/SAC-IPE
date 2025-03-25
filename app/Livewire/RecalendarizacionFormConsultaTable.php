@@ -144,4 +144,8 @@ class RecalendarizacionFormConsultaTable extends Tabla
         $this->numeroPoliza = 0;
         return redirect($this->urlFinalizar)->with(['message' => 'Se realizó el registro del ingreso de ' . $this->categoriaModulo . ' con éxito', 'message_type' => 'success']);
     }
+    public function regresar()
+    {
+        return redirect($this->urlFinalizar);
+    }
 }
