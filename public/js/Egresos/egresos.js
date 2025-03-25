@@ -1,5 +1,5 @@
-const IP_PORT = '10.0.2.62:8080'
-// const IP_PORT = '10.0.0.12:8080'
+//const IP_PORT = '10.0.2.62:8080'
+const IP_PORT = '10.0.0.12:8080'
 function generarPoliza(btn) {
     let url;
     let btnId = btn.id; //obtenemos el id del boton
@@ -12,7 +12,7 @@ function generarPoliza(btn) {
 
     nombrereporte = $('#botonMovimiento').val();
     console.log(nombrereporte)
-    const wsUrl = "http://"+IP_PORT+"/Reporteador/webresources/service/report?name="+nombrereporte+"&params="
+    const wsUrl = "http://"+IP_PORT+"/ReporteadorSAC-IPE/webresources/service/report?name="+nombrereporte+"&params="
     url = `${wsUrl}Fecha;${$('#botonFecha').val()},Hora;${$('#botonHora').val()},Numero;${$('#botonNumeroPoliza').val()},Evento;${$('#botonEvento').val()}`;
     let mensajeEdoSolicitud = toastr.info("Procesando solicitud, espere un momento por favor . . .", "", { timeOut: "0" });
     fetch(url, {
@@ -62,7 +62,7 @@ function generarPolizaRemanente(btn, liberado) {
     $('#loadingScreen').prop('hidden', false);
 
   console.log($('#botonRemanente').val())
-    const wsUrl = "http://"+IP_PORT+"/Reporteador/webresources/service/report?name=PolizaEgresosRemanente&params="
+    const wsUrl = "http://"+IP_PORT+"/ReporteadorSAC-IPE/webresources/service/report?name=PolizaEgresosRemanente&params="
     url = `${wsUrl}Fecha;${$('#botonFecha').val()},Hora;${$('#botonHora').val()},Evento;${$('#botonEvento').val()},categoriaRemanente;${$('#botonRemanente').val()}, estatusRemanente;${estatusRemanente}`;
     let mensajeEdoSolicitud = toastr.info("Procesando solicitud, espere un momento por favor . . .", "", { timeOut: "0" });
     fetch(url, {
@@ -108,7 +108,7 @@ function generarPolizaRemanenteLiberado(btn){
     $('#loadingScreen').prop('hidden', false);
 
     var categoriaRemanente = 'LIBERACION ' + $('#botonRemanente').val()
-    const wsUrl = "http://"+IP_PORT+"/Reporteador/webresources/service/report?name=PolizaEgresosRemanenteLiberado&params="
+    const wsUrl = "http://"+IP_PORT+"/ReporteadorSAC-IPE/webresources/service/report?name=PolizaEgresosRemanenteLiberado&params="
     url = `${wsUrl}Fecha;${$('#botonFecha').val()},Hora;${$('#botonHora').val()},Evento;${$('#botonEvento').val()},categoriaRemanente;${categoriaRemanente}`;
     let mensajeEdoSolicitud = toastr.info("Procesando solicitud, espere un momento por favor . . .", "", { timeOut: "0" });
     fetch(url, {
