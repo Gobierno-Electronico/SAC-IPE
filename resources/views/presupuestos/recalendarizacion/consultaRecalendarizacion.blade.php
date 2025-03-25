@@ -2,6 +2,9 @@
 @section('title', 'Consulta de Recalendarización')
 
 @section('content')
+<script>
+    window.IP_PORT = @json(config('app.ip_port'));
+</script>
 <script src="{{ asset('js/Presupuesto/reclasificacion.js') }}"></script>
      
     
