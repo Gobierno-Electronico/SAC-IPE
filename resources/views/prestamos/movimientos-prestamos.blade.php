@@ -8,7 +8,7 @@
             <div class="card shadow border-0">
                 <div class="card-body bg-white p-5">
                     <h2>Consulta de movimientos de préstamos</h2>
-                    <livewire:prestamos.movimientos-prestamos-table/>
+                    <livewire:movimientos-prestamos-table/>
                 </div>
             </div>
         </div>

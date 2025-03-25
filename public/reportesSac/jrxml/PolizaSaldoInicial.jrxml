@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
+<!-- Created with Jaspersoft Studio version 6.20.5.final using JasperReports Library version 6.20.5-3efcf2e67f959db3888d79f73dde2dbd7acb4f8e  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PolizaSaldoInicial" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="55a8c4bf-9344-4264-a6b2-ecc8cd2fda35">
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -10,7 +10,7 @@
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SQL Server Nueva"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SAC-IPE"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<parameter name="Anio" class="java.lang.String"/>
 	<parameter name="Tipo" class="java.lang.String"/>
@@ -41,7 +41,7 @@
 		<property name="com.jaspersoft.studio.field.name" value="categoria"/>
 		<property name="com.jaspersoft.studio.field.label" value="categoria"/>
 	</field>
-	<field name="concepto" class="java.sql.Clob">
+	<field name="concepto" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="concepto"/>
 		<property name="com.jaspersoft.studio.field.label" value="concepto"/>
 	</field>
@@ -58,7 +58,7 @@
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
 	<variable name="SumaAbono" class="java.math.BigDecimal" calculation="Sum">
-		<variableExpression><![CDATA[$F{tipo_interaccion}.equals("Abono") ? ($F{Naturaleza}.equals("ACREEDORA") ? ($F{total_suma}) : $F{total_suma}.negate()) : 0]]></variableExpression>
+		<variableExpression><![CDATA[$F{tipo_interaccion}.equals("Abono") ? ($F{Naturaleza}.equals("ACREEDORA") ? ($F{total_suma}) : $F{total_suma}) : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
 	<group name="Cuentas">
@@ -201,8 +201,9 @@
 	<columnHeader>
 		<band height="20">
 			<staticText>
-				<reportElement x="0" y="0" width="100" height="20" uuid="94a899f8-2502-46bf-a9dc-595d362649b7">
+				<reportElement x="0" y="0" width="156" height="20" uuid="94a899f8-2502-46bf-a9dc-595d362649b7">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
 					<pen lineWidth="0.0"/>
@@ -217,8 +218,10 @@
 				<text><![CDATA[Cuenta]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="100" y="0" width="500" height="20" uuid="02f5e553-49db-4359-9c0a-5de1b8cf69aa">
+				<reportElement x="157" y="0" width="442" height="20" uuid="02f5e553-49db-4359-9c0a-5de1b8cf69aa">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
 					<pen lineWidth="0.0"/>
@@ -269,9 +272,10 @@
 	<detail>
 		<band height="20">
 			<textField>
-				<reportElement x="0" y="0" width="100" height="20" uuid="463db3c5-421a-4fb8-91ad-715e68f7fa45">
+				<reportElement x="0" y="0" width="156" height="20" uuid="463db3c5-421a-4fb8-91ad-715e68f7fa45">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<box padding="1">
 					<topPen lineWidth="0.25"/>
@@ -286,9 +290,11 @@
 				<textFieldExpression><![CDATA[$F{cuenta}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="100" y="0" width="500" height="20" uuid="6d772e21-3ae2-4634-9ac0-a2eb168bb5f3">
+				<reportElement x="156" y="0" width="442" height="20" uuid="6d772e21-3ae2-4634-9ac0-a2eb168bb5f3">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="81aece0a-5ee1-42cb-94bf-893494786400"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box padding="1">
 					<topPen lineWidth="0.25"/>
@@ -300,7 +306,7 @@
 					<font fontName="Times New Roman" size="10"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{concepto}.getSubString( 1l, (new Long($F{concepto}.length())).intValue())]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{concepto}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="700" y="0" width="101" height="20" uuid="218657f9-3739-48d4-b2ad-00bdb0c79626">

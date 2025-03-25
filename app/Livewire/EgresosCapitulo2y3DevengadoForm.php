@@ -1,0 +1,337 @@
+<?php
+
+namespace App\Livewire;
+
+use Livewire\Component;
+use Livewire\Attributes\Validate;
+use Livewire\Attributes\On;
+use App\Models\Cuenta;
+use App\Models\Poliza;
+use App\Models\InteraccionCuentaCuenta;
+use App\Models\InteraccionCuentaConcepto;
+use App\Models\CodigoDepartamento;
+use Illuminate\Support\Collection;
+use Carbon\Carbon;
+use Log;
+use DB;
+
+
+class EgresosCapitulo2y3DevengadoForm extends Component
+{
+    #[Validate('required', message: 'Área solicitante requerida')]
+    public $selectCodigoArea = "";
+
+    #[Validate('required', message: 'Observaciones requeridas')]
+    public $observaciones = "";
+
+    #[Validate('required', message: 'Fecha de afectación requerida')]
+    public $fechaAfectacion = "";
+
+    #[Validate('required', message: 'Evento requerido')]
+    public $numeroEvento = "";
+
+    #[Validate('required', message: 'Área responsable requerida')]
+    public $selectCodigoAreaResponsable = "";
+
+    #[Validate('required', message: 'Partida presupuestal requerida')]
+    public $partidaPresupuestal = "";
+
+    #[Validate('required', message: 'Selector de pago de retenciones requerido')]
+    public $selectorPagoRetenciones = "";
+
+    public $cuentaContableAbono = "";
+
+    #[Validate('required', message: 'Mes requerido')]
+    public $mes = "";
+
+    public $tipoRegistro = "";
+
+    #[Validate('required', message: 'Importe requerido')]
+    public $importe = "";
+
+    #[Validate('required', message: 'Monto del evento requerido')]
+    public $montoDelEvento = "";
+
+    public $PTTOComprometido = 0;
+
+    public $consultarRegistro = false;
+    public $numeroPoliza;
+    public $numeroPolizaRemanente;
+    public $total;
+
+    public $partidasPresupuestales = [];
+    public $cambiarPartidaPresupuestalSeleccionada = true;
+    
+    public $cuentasContableAbono = [];
+    public $cambiarCuentaContableSeleccionada = true;
+
+    public $habilitarSelectorTipoRegistro = false;
+
+    public function render() 
+    {
+        try{
+            $eventos =  Poliza::select('evento', 'descripcion')
+                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->where('tipo_poliza', '=', 'E')
+                ->where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 2y3')
+                ->where('estatus_evento', '=', true)
+                ->distinct()
+                ->pluck('descripcion', 'evento');
+
+                $this->cambiarPartidaPresupuestalSeleccionada = false;
+                $this->llenarPartidasPresupuestales();
+    
+    
+                $this->cambiarCuentaContableSeleccionada = false;
+                $this->llenarCuentasContableAbono();
+            return view('livewire.egresos-capitulo2y3-devengado-form', ['eventos' => $eventos]);
+        }catch(\Throwable $th){
+            Log::error('Ocurrió un error al cargar eventos en Devengado del capítulo 2 y 3: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar los eventos, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000); 
+        }
+    }
+
+    public function cambioEvento(){
+        $this->limpiar(); 
+        try{
+            $this->montoDelEvento = DB::select('EXEC ImporteTotalCapitulo2y3Devengado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
+            $this->dispatch('formato_importe', id: 'inputMontoEvento', amount: ($this->montoDelEvento > 0) ? $this->montoDelEvento : '');
+            $this->dispatch('mostrarMensaje', mensaje: 'Monto del evento cargado', tipo: 'success', tiempo: 1500);
+            Log::info('evento');
+            $this->llenarPartidasPresupuestales();
+        }catch (\Throwable $th) {
+            Log::error('Ocurrió un error al cargar el monto del evento en Devengado del capítulo 2 y 3: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
+    }
+
+    public function llenarPartidasPresupuestales()
+    {
+        if(!$this->numeroEvento){
+            return;
+        }
+
+        if ($this->cambiarPartidaPresupuestalSeleccionada) {
+            $this->partidaPresupuestal = "";
+        }
+        $this->cambiarPartidaPresupuestalSeleccionada = true;
+
+        try{
+            $cuentasComprometidas = Poliza::join('cuentas', 'cuentas.Codigo_cuenta', '=', 'polizas.cuenta')
+            ->where('polizas.evento', '=', $this->numeroEvento)
+            ->where('polizas.tipo_poliza', '=', 'E')
+            ->where('polizas.concepto', 'LIKE', '%Comprometido%')
+            ->get();
+
+            foreach($cuentasComprometidas as $comprometida){
+                $interaccionCuentaConceptoComprometido = InteraccionCuentaConcepto::where('cuenta_id', '=', $comprometida->id)->whereIn('concepto_id', [87, 89])
+                ->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
+
+                $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_2', '=', $interaccionCuentaConceptoComprometido->id)
+                ->first();
+                
+                $interaccionCuentaDevengada = InteraccionCuentaConcepto::where('id', '=', $interaccionCuentaCuenta->id_interaccion_concepto_cuenta_1)
+                ->whereIn('concepto_id', [87, 89])->where('tipo_interaccion', '=', 'Presupuestal - Cargo')
+                ->first();
+
+                $cuentaDevengada = Cuenta::where('id', '=', $interaccionCuentaDevengada->cuenta_id)->first();
+                array_push($this->partidasPresupuestales, $cuentaDevengada);
+            }
+
+            $this->partidasPresupuestales = array_unique($this->partidasPresupuestales);
+        }catch (\Throwable $th) {
+            Log::error('Ocurrió un error al cargar partidas presupuestales en Devengado del capítulo 2 y 3: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las partidas presupuestales, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
+    }
+
+    public function verificarCantidadRelaciones()
+    {
+        $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('concepto_id', [87, 89])
+        ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
+
+        $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
+        ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+        ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
+
+        if(count($interaccionCuentaCuentas) > 7)
+        {
+            $this->habilitarSelectorTipoRegistro = true;
+        }else{
+            $this->habilitarSelectorTipoRegistro = false;
+        }
+
+        $this->cargarPresupuestoComprometido();
+    }
+
+    public function cargarPresupuestoComprometido()
+    {
+
+        if (!$this->partidaPresupuestal || !$this->mes || !$this->selectCodigoAreaResponsable) return;
+        
+        try{
+            $anioActual = Carbon::now()->year;
+            $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
+            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('interaccion_cuenta_conceptos.concepto_id', [87, 89])->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
+            $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')
+            ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->where('Descripcion_cuenta', 'LIKE', '%(Comprometido)%')->first();
+
+            $solvencia = DB::select('EXEC SolvenciaComprometidosCapitulo2y3 @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?', array($departamento->Codigo_completo, $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $this->mes, $this->numeroEvento))[0]->Total;
+            $this->PTTOComprometido = ($solvencia > 0) ? floatval($solvencia) : 0;
+
+            $this->dispatch('formato_importe', id: 'inputPTTOComprometido', amount: "{$this->PTTOComprometido}");
+            $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto comprometido cargado', tipo: 'success', tiempo: 1500);
+        }catch (\Throwable $th) {
+            Log::error('Ocurrió un error al cargar presupuesto en devengado del capítulo 2 y 3: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar presupuesto, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
+    }
+
+    public function llenarCuentasContableAbono()
+    {
+        if(!$this->partidaPresupuestal) return;
+        if ($this->cambiarCuentaContableSeleccionada) {
+            $this->cuentaContableAbono = "";
+        }
+
+        try{
+            $this->cambiarCuentaContableSeleccionada = true;
+
+            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('interaccion_cuenta_conceptos.concepto_id', [87, 89])
+            ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
+            $this->cuentasContableAbono = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
+                ->join('interaccion_cuenta_conceptos', function ($join) {
+                    $join->on('interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+                        ->where('tipo_interaccion', '=', 'Contable - Abono');
+                })
+                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+                ->get(); 
+        }catch (\Throwable $th) {
+            Log::error('Ocurrió un error al cargar las cuentas contables en devengado capítulo 2 y 3: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas contables, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
+    }
+
+    public function asignarCuentaContableAbono()
+    {
+        try{
+            $descripcionPartida = Cuenta::select('Descripcion_cuenta')->where('id', '=', $this->partidaPresupuestal)->get();
+            $conceptoGeneralPartida = rtrim(explode('(', $descripcionPartida[0]->Descripcion_cuenta)[0]);
+                    
+            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('interaccion_cuenta_conceptos.concepto_id', [87, 89])
+            ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
+            $cuentasContables = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
+                ->join('interaccion_cuenta_conceptos', function ($join) {
+                    $join->on('interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+                        ->where('tipo_interaccion', '=', 'Contable - Abono');
+                })
+                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+                ->where('cuentas.Descripcion_cuenta', 'like', '%' . $conceptoGeneralPartida . '%')
+                ->get(); 
+            
+            $this->cuentaContableAbono = $cuentasContables[0]->cuenta_id;
+        }catch(\Throwable $th) {
+            Log::error('Ocurrió un error al asignar cuenta contable en devengado capítulo 2 y 3: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al asignar cuenta contable, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
+    }
+
+    public function agregarRegistro()
+    {
+        try{
+            if($this->selectorPagoRetenciones == 'SI' && $this->cuentaContableAbono == ""){
+                $this->dispatch('mostrarMensaje', mensaje: 'Retención requerida', tipo: 'warning', tiempo: 3000);
+                return;
+            }
+
+            if($this->selectorPagoRetenciones == 'NO'){
+                $this->asignarCuentaContableAbono();
+            }
+
+            if($this->habilitarSelectorTipoRegistro == true && $this->tipoRegistro == ""){
+                $this->dispatch('mostrarMensaje', mensaje: 'Tipo de registro requerido', tipo: 'warning', tiempo: 3000);
+                return;
+            }
+
+            $this->importe = floatval(str_replace(['$', ','], "", $this->importe));
+            $this->importe = ($this->importe > 0)  ? $this->importe : "";
+            $this->validate();
+
+            $partida = Cuenta::find($this->partidaPresupuestal);
+            $cuentaContableAbonoSeleccionada = Cuenta::find($this->cuentaContableAbono);
+            $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
+
+            $registro = [
+                'id' => 0,
+                'codigoArea' => $this->selectCodigoArea,
+                'observaciones' => $this->observaciones,
+                'fechaAfectacion' => $this->fechaAfectacion,
+                'evento' => $this->numeroEvento,
+                'areaResponsableId' => $this->selectCodigoAreaResponsable,
+                'codigoAreaResponsable' => $departamento->Codigo_completo,
+                'descripcionAreaResponsable' => $departamento->Nombre,
+                'partidaId' => $this->partidaPresupuestal,
+                'codigoPartida' => $partida->Codigo_cuenta,
+                'descripcionPartida' => $partida->Descripcion_cuenta,
+                'cuentaContableId' => $this->cuentaContableAbono,
+                'codigoCuentaContable' => $cuentaContableAbonoSeleccionada->Codigo_cuenta,
+                'descripcionCuentaContable' => $cuentaContableAbonoSeleccionada->Descripcion_cuenta,
+                'mes' => $this->mes,
+                'importe' => $this->importe,
+                'montoEvento' => $this->montoDelEvento,
+                'pttoComprometido' => $this->PTTOComprometido,
+                'selectorPagoRetenciones' => $this->selectorPagoRetenciones,
+                'tipoRegistro' => $this->tipoRegistro
+            ];
+
+            $this->dispatch('agregar-registro', registro: $registro);
+            $this->limpiar();
+        }catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatch('mostrarMensaje', mensaje: $e->getMessage(), tipo: 'warning', tiempo: 3000);
+        }catch (\Throwable $th) {
+            Log::error('Ocurrió un error al registrar en devengado del capítulo 2 y 3: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
+    }
+
+    public function finalizarRegistros()
+    {
+        $this->dispatch('finalizar-registros');
+    }
+
+    public function limpiar()
+    {
+        $this->PTTOComprometido = "";
+        $this->importe = "";
+        $this->mes = "";
+        $this->selectorPagoRetenciones = "";
+        $this->cuentaContableAbono = "";
+        $this->tipoRegistro = "";
+        $this->dispatch('limpiar');
+    }
+
+    #[On('llenar-formulario')]
+    public function llenarFormulario($datosRegistro)
+    {
+        $this->partidaPresupuestal = $datosRegistro['partida']; 
+        $this->cuentaContableAbono = $datosRegistro['cuentaContable'];
+        $this->mes = $datosRegistro['mes'];
+        $this->importe = $datosRegistro['importe'];
+        $this->selectCodigoAreaResponsable = $datosRegistro['area'];
+        $this->PTTOComprometido = $datosRegistro['pttoComprometido'];
+        $this->selectorPagoRetenciones = $datosRegistro['selectorPagoRetenciones'];
+        $this->tipoRegistro = $datosRegistro['tipoRegistro'];
+        $this->dispatch('llenarFormulario', presupuesto: $this->PTTOComprometido, importe: $this->importe);
+    }
+
+    #[On('consultar-registro')]
+    public function consultarRegistros($numeroEvento, $numeroPoliza, $total, $numeroPolizaRemanente)
+    {
+        $this->consultarRegistro = true;
+        $this->numeroEvento = $numeroEvento;
+        $this->numeroPoliza = $numeroPoliza;
+        $this->numeroPolizaRemanente = $numeroPolizaRemanente;
+        $this->total = $total;
+    }
+}
+

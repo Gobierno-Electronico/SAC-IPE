@@ -142,6 +142,13 @@
                                                         {{ __('Ampliaciones/Reducciones') }}
                                                     </a>
                                                 </li>
+                                                <li>
+                                                    <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                        wire:navigate.hover
+                                                        href="{{ route('consultaTransferencias') }}" method="GET">
+                                                        {{ __('Consultar tranferencias') }}
+                                                    </a>
+                                                </li>
                                             </ul>
                                         </li>
                                         <li class="dropend">
@@ -694,3 +701,4 @@
 </script>
 
 </html>
+

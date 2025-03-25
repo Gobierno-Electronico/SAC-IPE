@@ -89,6 +89,18 @@
 
     </div>
     <div class="mt-4 d-flex gap-3 justify-content-end">
+
+        @if (!$validado)
+            <div>
+                <button id="botonRegresar" wire:click="regresar" type="button"
+                    class="btn btn-success shadow border-1 mt-3 mt-md-0">
+                    Regresar
+                </button>
+            </div>
+        @else
+            <div></div>
+        @endif
+        
         @if (!$validado)
             <button id="botonGenerarPoliza" onclick="generarPolizaReclasificacion(this)" type="button"
                 class="btn btn-success shadow border-1 mt-3 mt-md-0">

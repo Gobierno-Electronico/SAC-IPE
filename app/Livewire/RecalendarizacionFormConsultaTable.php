@@ -27,12 +27,22 @@ class RecalendarizacionFormConsultaTable extends Tabla
     public $estadoOriginal;
     public $totalAumentado = 0;
     public $totalDisminuido = 0;
+    public $urlFinalizar = "";
+    public $categoriaModulo = "";
 
 
 
     public function render()
     {
 
+        $poliza = Poliza::where('numero_poliza', '=', $this->numeroPoliza)
+            ->where('tipo_poliza', '=', 'D')
+            ->where('evento', '=', $this->numeroEvento)->first();
+
+        if ($poliza['validado'] == 1) {
+            $this->validado = true;
+            $this->init();
+        }
         return view('livewire.recalendarizacion-form-consulta-table');
     }
 
@@ -68,16 +78,15 @@ class RecalendarizacionFormConsultaTable extends Tabla
     public function columns(): array
     {
 
-            return [
-                Column::make('area', 'Area'),
-                Column::make('cuenta', 'Cuenta'),
-                Column::make('concepto', 'Concepto'),
-                Column::make('mes', 'Mes'),
-                Column::make('total', 'Total')->component('columns.importe'),
-                Column::make('evento', 'No. de evento'),
-                Column::make('validado', 'Validado')->component('columns.validado'),
-            ];
-
+        return [
+            Column::make('area', 'Area'),
+            Column::make('cuenta', 'Cuenta'),
+            Column::make('concepto', 'Concepto'),
+            Column::make('mes', 'Mes'),
+            Column::make('total', 'Total')->component('columns.importe'),
+            Column::make('evento', 'No. de evento'),
+            Column::make('validado', 'Validado')->component('columns.validado'),
+        ];
     }
 
     public function borrar()
@@ -121,13 +130,9 @@ class RecalendarizacionFormConsultaTable extends Tabla
     }
 
 
-    public function edit($value)
-    {
-    }
+    public function edit($value) {}
 
-    public function changeState($value)
-    {
-    }
+    public function changeState($value) {}
 
     public function finalizar($tipo)
     {
@@ -137,6 +142,10 @@ class RecalendarizacionFormConsultaTable extends Tabla
         $this->dispatch('reiniciar');
         $this->numeroEvento = 0;
         $this->numeroPoliza = 0;
-
+        return redirect($this->urlFinalizar)->with(['message' => 'Se realizó el registro del ingreso de ' . $this->categoriaModulo . ' con éxito', 'message_type' => 'success']);
+    }
+    public function regresar()
+    {
+        return redirect($this->urlFinalizar);
     }
 }

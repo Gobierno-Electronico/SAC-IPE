@@ -1,7 +1,7 @@
 <div>
     @if ($consultarRegistro)
         <div>
-            <h4>Resumen de movimientos de egresos</h4>
+            <h4>Resumen de movimientos de ingresos</h4>
 
             <div class="row mt-4">
                 <div class="row mb-3">
