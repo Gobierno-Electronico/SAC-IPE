@@ -1,5 +1,5 @@
-//const IP_PORT = '10.0.2.62:8080'
-const IP_PORT = '10.0.0.12:8080'
+const IP_PORT = '10.0.2.62:8080'
+// const IP_PORT = '10.0.0.12:8080'
 //ReporteadorSAC-IPE
 function generarPolizaInicial(btn) {
     let url;
@@ -14,7 +14,7 @@ function generarPolizaInicial(btn) {
     nombrereporte = "PolizaInicial";
     $('#loadingScreen').prop('hidden', false);
 
-    const wsUrl = "http://"+IP_PORT+"/ReporteadorSAC-IPE/webresources/service/report?name=PolizaSaldoInicial&params="
+    const wsUrl = "http://"+IP_PORT+"/Reporteador/webresources/service/report?name=PolizaSaldoInicial&params="
     url = `${wsUrl}Anio;${$('#Anio').val()},Tipo;${'SI'},Fecha;${$('#botonFecha').val()},Hora;${$('#botonHora').val()},Numero;${$('#botonNumeroPoliza').val()},Concepto;${'CARGA DE SALDOS INICIALES DEL EJERCICIO ' + $('#Anio').val()}`;
     let mensajeEdoSolicitud = toastr.info("Procesando solicitud, espere un momento por favor . . .", "", { timeOut: "0" });
     fetch(url, {

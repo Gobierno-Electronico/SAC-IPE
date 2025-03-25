@@ -1,6 +1,6 @@
-const IP_PORT = '10.0.2.62:8080'
+let IP_PORT = '10.0.2.62:8080'
 
-// const IP_PORT = '10.0.0.12:8080'
+// let IP_PORT = '10.0.0.12:8080'
 //ReporteadorSAC-IPE
 function generarPolizaReclasificacion(btn){
     let url;
