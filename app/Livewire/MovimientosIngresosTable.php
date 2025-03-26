@@ -43,7 +43,7 @@ class MovimientosIngresosTable extends Tabla
         ->whereYear('fecha', '=', Carbon::now()->year)
         ->where('tipo_poliza', '=', 'I')
         ->distinct()
-        ->orderBy('evento')
+        ->orderByRaw('CAST(evento AS INT)')
         ->pluck('descripcion', 'evento');
         return view('livewire.movimientos-ingresos-table', ['eventos' => $eventos]);
     }
