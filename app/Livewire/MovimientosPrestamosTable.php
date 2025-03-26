@@ -41,6 +41,7 @@ class MovimientosPrestamosTable extends Tabla
             ->whereYear('fecha', '=', Carbon::now()->year)
             ->where('tipo_poliza', '=', 'D')
             ->distinct()
+            ->orderBy('evento')
             ->pluck('descripcion', 'evento');
         return view('livewire.movimientos-prestamos-table', ['eventos' => $eventos]);
     }
