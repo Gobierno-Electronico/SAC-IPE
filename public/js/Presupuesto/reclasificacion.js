@@ -1,7 +1,7 @@
 // console.log(window.IP_PORT);
-let IP_PORT = '10.0.2.62:8080'
+//let IP_PORT = '10.0.2.62:8080'
 
-// let IP_PORT = '10.0.0.12:8080'
+ let IP_PORT = '10.0.0.12:8080'
 //ReporteadorSAC-IPE
 function generarPolizaReclasificacion(btn){
     let url;
@@ -27,7 +27,7 @@ function generarPolizaReclasificacion(btn){
     //     default:
     //         break;
     // }
-    const wsUrl = "http://"+IP_PORT+"/Reporteador/webresources/service/report?name=PolizaReclasificacion&params="
+    const wsUrl = "http://"+IP_PORT+"/ReporteadorSAC-IPE/webresources/service/report?name=PolizaReclasificacion&params="
     url = `${wsUrl}Fecha;${$('#botonFecha').val()},Hora;${$('#botonHora').val()},Numero;${$('#botonNumeroPoliza').val()},Evento;${$('#botonEvento').val()}`;
     let mensajeEdoSolicitud = toastr.info("Procesando solicitud, espere un momento por favor . . .", "", { timeOut: "0" });
     console.log("url ", url);
