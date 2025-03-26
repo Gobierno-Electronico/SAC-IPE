@@ -111,27 +111,28 @@ class EgresosCapitulo2y3PagadoForm extends Component
 
             $this->cambiarPartidaPresupuestalSeleccionada = true;
 
-            $cuentasEjercidas = Poliza::where('evento', '=', $this->numeroEvento)
-                ->where('tipo_poliza', '=', 'E')
-                ->where('concepto', 'LIKE', '%Ejercido%')
-                ->get();
+            $cuentasEjercidas = Poliza::join('cuentas', 'cuentas.Codigo_cuenta', '=', 'polizas.cuenta')
+            ->where('polizas.evento', '=', $this->numeroEvento)
+            ->where('polizas.tipo_poliza', '=', 'E')
+            ->where('polizas.concepto', 'LIKE', '%Ejercido%')
+            ->get();
 
-            $cuentasPagadas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-                ->whereIn('interaccion_cuenta_conceptos.concepto_id', [92, 93])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
-                ->orderBy('cuentas.Codigo_cuenta')->get();
+            foreach ($cuentasEjercidas as $ejercida) {
+                $interaccionCuentaConceptoEjercido = InteraccionCuentaConcepto::where('cuenta_id', '=', $ejercida->id)->whereIn('concepto_id', [92,93])
+                ->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
 
-            $cuentasDevengadasAux = new Collection();
-            foreach ($cuentasPagadas as $pagada) {
-                foreach ($cuentasEjercidas as $ejercida) {
-                    $conceptoComprometida = explode('(', $ejercida->concepto);
-                    if (str_contains($pagada->Descripcion_cuenta, $conceptoComprometida[0])) {
-                        $cuentasDevengadasAux->push($pagada);
-                    }
-                }
+                $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_2', '=', $interaccionCuentaConceptoEjercido->id)
+                ->first();
+
+                $interaccionCuentaPagado = InteraccionCuentaConcepto::where('id', '=', $interaccionCuentaCuenta->id_interaccion_concepto_cuenta_1)
+                ->whereIn('concepto_id', [92,93])->where('tipo_interaccion', '=', 'Presupuestal - Cargo')
+                ->first();
+
+                $cuentaPagado = Cuenta::where('id', '=', $interaccionCuentaPagado->cuenta_id)->first();
+                array_push($this->partidasPresupuestales, $cuentaPagado);
             }
 
-            $cuentasDevengadasAux = $cuentasDevengadasAux->unique('Codigo_cuenta');
-            $this->partidasPresupuestales = $cuentasDevengadasAux->toArray();
+            $this->partidasPresupuestales = array_unique($this->partidasPresupuestales);
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al llenar partidas presupuestales en pagado del capítulo 2000 y 3000: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);

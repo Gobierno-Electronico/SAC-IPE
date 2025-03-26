@@ -83,7 +83,7 @@
                 <select name="selectPartidaPresupuestal" id="selectPartidaPresupuestal" class="form-select" wire:model="partidaPresupuestal" wire:change="llenarCuentasBanco">
                     <option value="" selected disabled>Seleccionar partida presupuestal</option>
                     @foreach ($partidasPresupuestales as $partida)
-                        <option value="{{ $partida['cuenta_id'] }}"> 
+                        <option value="{{ $partida['id'] }}"> 
                             {{$partida['Codigo_cuenta'] . '  ' . $partida['Descripcion_cuenta']}}</option>
                     @endforeach
                 </select>
