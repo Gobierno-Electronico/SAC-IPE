@@ -44,6 +44,7 @@ class MovimientosEgresosTable extends Tabla
             ->whereYear('fecha', '=', Carbon::now()->year)
             ->where('tipo_poliza', '=', 'E')
             ->distinct()
+            ->orderBy('evento')
             ->pluck('descripcion', 'evento');
         return view('livewire.movimientos-egresos-table', ['eventos' => $eventos]);
     }

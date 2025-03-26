@@ -83,7 +83,7 @@
                 <select name="selectPartidaPresupuestal" id="selectPartidaPresupuestal" class="form-select" wire:model="partidaPresupuestal" wire:change="llenarCuentasBanco">
                     <option value="" selected disabled>Seleccionar partida presupuestal</option>
                     @foreach ($partidasPresupuestales as $partida)
-                        <option value="{{ $partida['cuenta_id'] }}"> 
+                        <option value="{{ $partida['id'] }}"> 
                             {{$partida['Codigo_cuenta'] . '  ' . $partida['Descripcion_cuenta']}}</option>
                     @endforeach
                 </select>
@@ -130,7 +130,7 @@
 
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control"
-                    onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model="importe">
+                    onkeyup="validarDecimales(this)" onchange="formatearImporte(this)" wire:model="importe">
 
             </div>
 
@@ -161,6 +161,27 @@
     window.addEventListener('limpiar', event => {
         limpiar()
     })
+
+    function validarDecimales(input) {
+        // Obtener solo números y un punto decimal permitido
+        let valor = input.value.replace(/[^0-9.]/g, '') // Elimina caracteres no numéricos
+                           .replace(/(\..*)\./g, '$1') // Evita más de un punto decimal
+                           .replace(/^0+(\d)/, '$1') // Elimina ceros iniciales
+                           .replace(/^(\d+)(\.\d{0,2})?.*$/, '$1$2'); // Máximo 2 decimales
+
+        // Si el valor es solo un punto, permitirlo sin formatear
+        if (valor === ".") {
+            input.value = valor;
+            return;
+        }
+
+        // Convertir a número para formateo
+        let partes = valor.split('.');
+        let numeroEntero = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Agrega comas a los miles
+
+        // Reconstruir con decimales si existen
+        input.value = partes.length > 1 ? `${numeroEntero}.${partes[1]}` : numeroEntero;
+    }
 
     function keyPress(e, obj) {
         let isCurrency = $('#' + obj.id).val().search(/[$]/)

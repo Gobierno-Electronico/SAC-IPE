@@ -63,6 +63,9 @@ class EgresosCapitulo2y3EjercidoForm extends Component
                 ->where('estatus_evento', '=', true)
                 ->distinct()
                 ->pluck('descripcion', 'evento');
+
+            $this->cambiarCuentaSeleccionada = false;
+            $this->llenarCuentas();
                 
             return view('livewire.egresos-capitulo2y3-ejercido-form', ['eventos' => $eventos]);
         }catch(\Throwable $th){
@@ -87,37 +90,41 @@ class EgresosCapitulo2y3EjercidoForm extends Component
     public function llenarCuentas()
     {
         try{
+
+            if(!$this->numeroEvento){
+                return;
+            }
+
             if ($this->cambiarCuentaSeleccionada) {
                 $this->cuenta = "";
-                $this->cargarPresupuestoDevengado();
+                //$this->cargarPresupuestoDevengado();
             }
 
             $this->cambiarCuentaSeleccionada = true;
 
-            $cuentasDevengadas = Poliza::where('evento', '=', $this->numeroEvento)
-                ->where('tipo_poliza', '=', 'E')
-                ->where('concepto', 'LIKE', '%Devengado%')
-                ->get();
+            $cuentasDevengadas = Poliza::join('cuentas', 'cuentas.Codigo_cuenta', '=', 'polizas.cuenta')
+            ->where('polizas.evento', '=', $this->numeroEvento)
+            ->where('polizas.tipo_poliza', '=', 'E')
+            ->where('polizas.concepto', 'LIKE', '%Devengado%')
+            ->get();
 
-            $cuentasEjercidas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-                ->whereIn('interaccion_cuenta_conceptos.concepto_id', [90, 91])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
-                ->orderBy('cuentas.Codigo_cuenta')->get();
+            foreach ($cuentasDevengadas as $devengada) {
+                $interaccionCuentaConceptoDevengado = InteraccionCuentaConcepto::where('cuenta_id', '=', $devengada->id)->whereIn('concepto_id', [90, 91])
+                ->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
+
+                $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_2', '=', $interaccionCuentaConceptoDevengado->id)
+                ->first();
                 
-            $cuentasAuxiliar = new Collection();
+                $interaccionCuentaEjercida = InteraccionCuentaConcepto::where('id', '=', $interaccionCuentaCuenta->id_interaccion_concepto_cuenta_1)
+                ->whereIn('concepto_id', [90, 91])->where('tipo_interaccion', '=', 'Presupuestal - Cargo')
+                ->first();
 
-            foreach ($cuentasEjercidas as $ejercida) {
-                foreach ($cuentasDevengadas as $devengada) {
-                    $conceptoDevengada = explode('(', $devengada->concepto);
-                    if (str_contains($ejercida->Descripcion_cuenta, $conceptoDevengada[0])) {
-                        if (!$cuentasAuxiliar->contains(function($value) use ($ejercida) {
-                            return $value->Descripcion_cuenta === $ejercida->Descripcion_cuenta;
-                            })) {
-                            $cuentasAuxiliar->push($ejercida);
-                        }
-                    }
-                }
+                $cuentaEjercida = Cuenta::where('id', '=', $interaccionCuentaEjercida->cuenta_id)->first();
+                array_push($this->cuentas, $cuentaEjercida);
             }
-            $this->cuentas = $cuentasAuxiliar->toArray();;    
+
+            $this->cuentas = array_unique($this->cuentas);
+
         }catch (\Throwable $th) {
             Log::error('Ocurrió un error al llenar las cuentas en Ejercido del capítulo 2 y 3: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
@@ -127,9 +134,8 @@ class EgresosCapitulo2y3EjercidoForm extends Component
     public function cargarPresupuestoDevengado()
     {
         try{
-            $this->cambiarCuentaSeleccionada = false;
-            $this->llenarCuentas();
-
+/*             $this->cambiarCuentaSeleccionada = false;
+            $this->llenarCuentas(); */
             if (!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
             $anioActual = Carbon::now()->year;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
