@@ -44,8 +44,10 @@ class MovimientosEgresosTable extends Tabla
             ->whereYear('fecha', '=', Carbon::now()->year)
             ->where('tipo_poliza', '=', 'E')
             ->distinct()
-            ->orderByRaw('CAST(evento AS INT)')
+            ->get()
+            ->sortBy(fn($item) => (int) $item->evento) // Ordenar en PHP convirtiendo a número
             ->pluck('descripcion', 'evento');
+
         return view('livewire.movimientos-egresos-table', ['eventos' => $eventos]);
     }
 
@@ -74,7 +76,7 @@ class MovimientosEgresosTable extends Tabla
         if ($this->eventoSeleccionado) {
             $collection = $collection->where('evento', $this->eventoSeleccionado);
         }
-        if($this->capituloSeleccionado){
+        if ($this->capituloSeleccionado) {
             $collection = $collection->where('capitulo', $this->capituloSeleccionado);
         }
         if ($this->sortBy !== '') {
