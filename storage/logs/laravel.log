@@ -4858,3 +4858,6 @@
 #74 C:\\Users\\RMartinez\\Documents\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('C:\\\\Users\\\\RMarti...')
 #75 {main}
 "} 
+[2025-03-25 09:11:05] local.INFO: evento  
+[2025-03-25 09:24:40] local.INFO: evento  
+[2025-03-25 09:27:02] local.INFO: evento  
