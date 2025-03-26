@@ -44,7 +44,8 @@ class MovimientosReclasificacionTable extends Tabla
             ->whereYear('fecha', '=', Carbon::now()->year)
             ->where('tipo_poliza', '=', 'D')
             ->distinct()
-            ->orderByRaw('CAST(evento AS INT)')
+            ->get()
+            ->sortBy(fn($item) => (int) $item->evento) // Ordenar en PHP convirtiendo a número
             ->pluck('descripcion', 'evento');
         return view('livewire.movimientos-reclasificacion-table', ['eventos' => $eventos]);
     }
