@@ -30,6 +30,7 @@ class MovimientosEgresosTable extends Tabla
     public $numeroEvento;
     public $numeroPoliza;
     public $total;
+    public $totalPoliza;
     public $descripcion;
     public $tipoMovimiento;
     public $numeroPolizaRemanente;
@@ -63,45 +64,80 @@ class MovimientosEgresosTable extends Tabla
     {
         $anioActual = Carbon::now()->year;
         $contador = 0;
+    
+        // Obtener datos desde la consulta SQL
         $this->data = array_map(function ($entrada) use (&$contador) {
-            $entrada =  (array) $entrada;
+            
+            $entrada = (array) $entrada;
+            
+            // Convertir a número y dividir entre 2
+            $entrada['total'] = floatval($entrada['total']) / 2;
+            
+            // Formatear el número
             $entrada['total'] = '$' . number_format($entrada['total'], 2, '.', ',');
+            
             $entrada['id'] = $contador++;
-            return $entrada;
-        }, DB::select('EXEC dbo.ConsultaMovimientosEgresos @anio = ?', array($anioActual)));
+        
+            return $entrada;      
+        }, DB::select('EXEC dbo.ConsultaMovimientosEgresos @anio = ?', [$anioActual]));
+    
         $collection = collect($this->data);
+    
+        // Aplicar filtros
         if ($this->eventoSeleccionado) {
             $collection = $collection->where('evento', $this->eventoSeleccionado);
         }
-        if($this->capituloSeleccionado){
+        if ($this->capituloSeleccionado) {
             $collection = $collection->where('capitulo', $this->capituloSeleccionado);
         }
         if ($this->sortBy !== '') {
-            if ($this->sortDirection == "asc") {
-                $collection = $collection->sortBy($this->sortBy);
-            } else {
-                $collection = $collection->sortByDesc($this->sortBy);
-            }
+            $collection = $this->sortDirection == "asc"
+                ? $collection->sortBy($this->sortBy)
+                : $collection->sortByDesc($this->sortBy);
         }
+    
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
-        $filtered = $collection->filter(function ($value, $key) {
-            $contains = false;
-
+    
+        $filtered = $collection->filter(function ($value) {
             if (!$this->searchTerm) return true;
-            foreach ($this->searchBy as $data => $term) {
-                // Verifica si $term existe en $value (array)
+    
+            foreach ($this->searchBy as $term) {
                 if (isset($value[$term]) && str_contains(strtolower($value[$term]), strtolower($this->searchTerm))) {
-                    $contains = true;
-                    continue;
+                    return true;
                 }
             }
-
-            return $contains;
+    
+            return false;
         });
+        // NUEVO: Agregar el total agrupado por evento y número de póliza
+        $filtered = $filtered->map(function ($item) {
 
+            $totalesPolizas = Poliza::select('evento', 'numero_poliza', 'total') 
+            ->whereYear('fecha', '=', Carbon::now()->year) // Filtra por año actual
+            ->where('evento', '=', $item['evento'])
+            ->where('tipo_poliza', '=', 'E')
+            ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')
+            ->where('categoria', 'like', '%COMPROMETIDO%') // Filtra categoría que contenga 'comprometido'
+            ->get();
+        
+            
+            // $sumaTotal = $totalesPolizas->sum('total');
+            // dd($totalesPolizas);
+            $sumaTotal = $totalesPolizas->sum('total'); // NUEVO: Sumar los valores del atributo 'total'
+    
+            $item['total_evento'] = '$' . number_format($sumaTotal, 2, '.', ','); // NUEVO: Formatear el total
+            return $item;
+        });
+        // dd($filtered);
+
+    
+        // Paginación manual
         $currentItems = array_slice($filtered->toArray(), $this->perPage * ($currentPage - 1), $this->perPage);
+    
         return new LengthAwarePaginator($currentItems, count($filtered), $this->perPage, $currentPage);
     }
+    
+    
 
     public function columns(): array
     {
@@ -113,12 +149,13 @@ class MovimientosEgresosTable extends Tabla
             Column::make('capitulo', 'Capítulo'),
             Column::make('fechaAfectacion', 'Fecha de afectación'),
             Column::make('fechaRegistro', 'Fecha de registro'),
-            Column::make('total', 'Monto del evento'),
+            Column::make('total_evento', 'Monto del evento'),
+            Column::make('total', 'Total por Póliza'), // NUEVA COLUMNA
             Column::make('estatus_evento', 'Estado del momento contable')->component('columns.estado'),
             Column::make('id', 'Acciones')->component('columns.accionVerMovimiento'),
-
         ];
     }
+    
 
     public function verMovimiento($value)
     {
