@@ -277,6 +277,7 @@ class EgresosCapitulo2y3PagadoForm extends Component
         $conceptoGeneralPartidaPagado = explode('(', $partidaPagadoSeleccionada->Descripcion_cuenta);
         $partidaDevengado = Cuenta::where('Descripcion_cuenta', 'LIKE', '%' . $conceptoGeneralPartidaPagado[0] . '(Devengado)' . '%')->get();
 
+        //este bloque filtra codigoCuentaPagada en base a su codigo cuenta debido a que puede haber cuentas que compartan descripcion o sean similares
         if(count($partidaDevengado) > 1){
             // Obtener los últimos dos segmentos de partidaPresupuestalSeleccionada
             $codigoPresupuestal = explode('.', $partidaPagadoSeleccionada->Codigo_cuenta);
