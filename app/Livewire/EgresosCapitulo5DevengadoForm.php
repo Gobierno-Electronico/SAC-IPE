@@ -275,6 +275,7 @@ class EgresosCapitulo5DevengadoForm extends Component
         $this->importe = "";
         $this->mes = "";
         $this->selectorPagoRetenciones = "";
+        $this->partidasPresupuestales = [];
         $this->cuentaContableAbono = "";
         $this->dispatch('limpiar');
     }

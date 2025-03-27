@@ -198,6 +198,7 @@ class EgresosCapitulo5EjercidoForm extends Component
     {
         $this->cuenta = "";
         $this->selectCodigoAreaResponsable = "";
+        $this->cuentas = [];
         $this->PTTODevengado = "";
         $this->importe = "";
         $this->mes = "";

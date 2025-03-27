@@ -2,13 +2,13 @@
 @section('title', 'Devolución en especie')
 
 @section('content')
-     
+    <script src="{{ asset('js/Ingresos/ingresos.js') }}"></script>
     <div class="row justify-content-center p-5">
         <div class="col-md-12">
-            <div class="card shadow border-0">  
-                <div class="card-body bg-white p-5"> 
+            <div class="card shadow border-0">
+                <div class="card-body bg-white p-5">
                     <h2>Devolución en especie</h2>
-                    <livewire:devolucion-especie-form/>    
+                    <livewire:devolucion-especie-form />
                 </div>
             </div>
         </div>

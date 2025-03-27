@@ -14,6 +14,7 @@ use Illuminate\Support\Collection;
 use Log;
 use DB;
 use Carbon\Carbon;
+
 class EgresosCapitulo2y3PagadoForm extends Component
 {
     public $consultarRegistro = false;
@@ -112,21 +113,21 @@ class EgresosCapitulo2y3PagadoForm extends Component
             $this->cambiarPartidaPresupuestalSeleccionada = true;
 
             $cuentasEjercidas = Poliza::join('cuentas', 'cuentas.Codigo_cuenta', '=', 'polizas.cuenta')
-            ->where('polizas.evento', '=', $this->numeroEvento)
-            ->where('polizas.tipo_poliza', '=', 'E')
-            ->where('polizas.concepto', 'LIKE', '%Ejercido%')
-            ->get();
+                ->where('polizas.evento', '=', $this->numeroEvento)
+                ->where('polizas.tipo_poliza', '=', 'E')
+                ->where('polizas.concepto', 'LIKE', '%Ejercido%')
+                ->get();
 
             foreach ($cuentasEjercidas as $ejercida) {
-                $interaccionCuentaConceptoEjercido = InteraccionCuentaConcepto::where('cuenta_id', '=', $ejercida->id)->whereIn('concepto_id', [92,93])
-                ->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
+                $interaccionCuentaConceptoEjercido = InteraccionCuentaConcepto::where('cuenta_id', '=', $ejercida->id)->whereIn('concepto_id', [92, 93])
+                    ->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
 
                 $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_2', '=', $interaccionCuentaConceptoEjercido->id)
-                ->first();
+                    ->first();
 
                 $interaccionCuentaPagado = InteraccionCuentaConcepto::where('id', '=', $interaccionCuentaCuenta->id_interaccion_concepto_cuenta_1)
-                ->whereIn('concepto_id', [92,93])->where('tipo_interaccion', '=', 'Presupuestal - Cargo')
-                ->first();
+                    ->whereIn('concepto_id', [92, 93])->where('tipo_interaccion', '=', 'Presupuestal - Cargo')
+                    ->first();
 
                 $cuentaPagado = Cuenta::where('id', '=', $interaccionCuentaPagado->cuenta_id)->first();
                 array_push($this->partidasPresupuestales, $cuentaPagado);
@@ -151,7 +152,7 @@ class EgresosCapitulo2y3PagadoForm extends Component
 
         try {
             $this->cambiarCuentaBancoSeleccionada = true;
-            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('interaccion_cuenta_conceptos.concepto_id', [92,93])
+            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('interaccion_cuenta_conceptos.concepto_id', [92, 93])
                 ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
             $this->cuentasBanco = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
                 ->join('interaccion_cuenta_conceptos', function ($join) {
@@ -201,10 +202,28 @@ class EgresosCapitulo2y3PagadoForm extends Component
                 $this->cuentaDeRetenciones = "";
             }
             $partidaPresupuestalSeleccionada = Cuenta::find($this->partidaPresupuestal);
+
+
             $conceptoGeneralPartidaSeleccionada = explode('(', $partidaPresupuestalSeleccionada->Descripcion_cuenta);
             $partidaDevengado = Cuenta::where('Descripcion_cuenta', 'LIKE', '%' . $conceptoGeneralPartidaSeleccionada[0] . '(Devengado)' . '%')->get();
 
+            if(count($partidaDevengado) > 1){
+                // Obtener los últimos dos segmentos de partidaPresupuestalSeleccionada
+                $codigoPresupuestal = explode('.', $partidaPresupuestalSeleccionada->Codigo_cuenta);
+                $ultimosDosPresupuestal = implode('.', array_slice($codigoPresupuestal, -2, 2));
+    
+                // Filtrar partidaDevengado dejando solo la cuenta que coincida en los últimos dos segmentos
+                $partidaDevengado = $partidaDevengado->filter(function ($cuenta) use ($ultimosDosPresupuestal) {
+                    $codigoCuenta = explode('.', $cuenta->Codigo_cuenta);
+                    $ultimosDosCuenta = implode('.', array_slice($codigoCuenta, -2, 2));
+    
+                    return $ultimosDosCuenta == $ultimosDosPresupuestal;
+                })->values();
+            }
+            
 
+            // Si quieres reiniciar los índices del array después del filtro
+            $partidaDevengado = $partidaDevengado->values();
 
             $cuentasDevengadas = Poliza::where('evento', '=', $this->numeroEvento)
                 ->where('tipo_poliza', '=', 'E')
@@ -257,6 +276,21 @@ class EgresosCapitulo2y3PagadoForm extends Component
         $partidaPagadoSeleccionada = Cuenta::find($this->partidaPresupuestal);
         $conceptoGeneralPartidaPagado = explode('(', $partidaPagadoSeleccionada->Descripcion_cuenta);
         $partidaDevengado = Cuenta::where('Descripcion_cuenta', 'LIKE', '%' . $conceptoGeneralPartidaPagado[0] . '(Devengado)' . '%')->get();
+
+        if(count($partidaDevengado) > 1){
+            // Obtener los últimos dos segmentos de partidaPresupuestalSeleccionada
+            $codigoPresupuestal = explode('.', $partidaPagadoSeleccionada->Codigo_cuenta);
+            $ultimosDosPresupuestal = implode('.', array_slice($codigoPresupuestal, -2, 2));
+
+            // Filtrar partidaDevengado dejando solo la cuenta que coincida en los últimos dos segmentos
+            $partidaDevengado = $partidaDevengado->filter(function ($cuenta) use ($ultimosDosPresupuestal) {
+                $codigoCuenta = explode('.', $cuenta->Codigo_cuenta);
+                $ultimosDosCuenta = implode('.', array_slice($codigoCuenta, -2, 2));
+
+                return $ultimosDosCuenta == $ultimosDosPresupuestal;
+            })->values();
+        }
+
         $solvenciaContable = DB::select('EXEC SolvenciaDevengadoCuentaContableCapitulo2y3 @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?, @partidaPagado = ?, @partidaDevengado = ?', array($codigoDepartamento->Codigo_completo, $codigoCuentaContableSeleccionada, $anioActual, $this->mes, $this->numeroEvento, $partidaPagadoSeleccionada->Codigo_cuenta, $partidaDevengado[0]['Codigo_cuenta']))[0]->Total;
 
         $this->montoContable = ($solvenciaContable > 0) ? floatval($solvenciaContable) : 0;
@@ -316,6 +350,7 @@ class EgresosCapitulo2y3PagadoForm extends Component
         $this->cuentasBanco = [];
         $this->PPTOEjercido = "";
         $this->partidaPresupuestal = "";
+        $this->partidasPresupuestales = [];
         $this->cuentaBanco = "";
         $this->cuentaDeRetenciones = "";
         $this->importe = "";

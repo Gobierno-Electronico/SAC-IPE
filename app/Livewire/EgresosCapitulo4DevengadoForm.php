@@ -221,6 +221,7 @@ class EgresosCapitulo4DevengadoForm extends Component
     {
         $this->PTTOComprometido = "";
         $this->importe = "";
+        $this->partidasPresupuestales = [];
         $this->mes = "";
         $this->dispatch('limpiar');
     }

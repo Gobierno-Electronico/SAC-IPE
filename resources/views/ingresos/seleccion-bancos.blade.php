@@ -2,7 +2,7 @@
 @section('title', 'Selección de bancos')
 
 @section('content')
-     
+    <script src="{{ asset('js/Ingresos/ingresos.js') }}"></script>
     <div class="row justify-content-center p-5">
         <div class="col-md-12">
             <div class="card shadow border-0">  

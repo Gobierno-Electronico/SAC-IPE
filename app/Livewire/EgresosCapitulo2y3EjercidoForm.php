@@ -202,6 +202,7 @@ class EgresosCapitulo2y3EjercidoForm extends Component
         $this->cuenta = "";
         $this->selectCodigoAreaResponsable = "";
         $this->PTTODevengado = "";
+        $this->cuentas = "";
         $this->importe = "";
         $this->mes = "";
         $this->dispatch('limpiar');
