@@ -308,6 +308,7 @@ class EgresosCapitulo4PagadoForm extends Component
         $this->cuentasBanco = [];
         $this->PPTOEjercido = "";
         $this->partidaPresupuestal = "";
+        $this->partidasPresupuestales = [];
         $this->cuentaBanco = "";
         $this->cuentaDeRetenciones = "";
         $this->importe = "";

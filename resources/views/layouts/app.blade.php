@@ -21,6 +21,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <!-- Scripts -->
     <script src="https://kit.fontawesome.com/5a7f009297.js" crossorigin="anonymous"></script>
+    <script>
+        window.IP_PORT = @json(config('app.ip_port'));
+        window.NOMBRE_REPORTEADOR = @json(config('app.nombre_reporteador'));
+    </script>
+    
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     @vite(['resources/css/layouts/app.css', 'resources/css/layouts/loading.css', 'resources/css/layouts/loadingDots.css'])
 

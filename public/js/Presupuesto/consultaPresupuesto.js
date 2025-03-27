@@ -1,6 +1,6 @@
-//const IP_PORT = '10.0.2.62:8080'
-const IP_PORT = '10.0.0.12:8080'
-//ReporteadorSAC-IPE
+let IP_PORT = window.IP_PORT
+let NOMBRE_REPORTEADOR = window.NOMBRE_REPORTEADOR
++
 function generarPolizaPresupuestalIngresos(btn) {
     let url;
     let btnId = btn.id; //obtenemos el id del boton
@@ -13,7 +13,7 @@ function generarPolizaPresupuestalIngresos(btn) {
 
     nombrereporte = "PolizaPresupuestal";
     $('#loadingScreen').prop('hidden', false);
-    const wsUrl = "http://"+IP_PORT+"/ReporteadorSAC-IPE/webresources/service/report?name=PolizaPresupuestalIngresos&params="
+    const wsUrl = "http://"+IP_PORT+"/"+NOMBRE_REPORTEADOR+"/webresources/service/report?name=PolizaPresupuestalIngresos&params="
     url = `${wsUrl}Anio;${$('#Anio').val()},Tipo;${'P'},Fecha;${$('#botonFecha').val()},Hora;${$('#botonHora').val()},Numero;${$('#botonNumeroPoliza').val()},Concepto;${'PRESUPUESTO INICIAL ' + $('#Anio').val()}`;
     let mensajeEdoSolicitud = toastr.info("Procesando solicitud, espere un momento por favor . . .", "", { timeOut: "0" });
     fetch(url, {
@@ -72,7 +72,7 @@ function generarPolizaPresupuestalEgresos(btn) {
     //     default:
     //         break;
     // }
-    const wsUrl = "http://"+IP_PORT+"/ReporteadorSAC-IPE/webresources/service/report?name=PolizaPresupuestalEgresos&params="
+    const wsUrl = "http://"+IP_PORT+"/"+NOMBRE_REPORTEADOR+"/webresources/service/report?name=PolizaPresupuestalEgresos&params="
     url = `${wsUrl}Anio;${$('#Anio').val()},Tipo;${'P'},Fecha;${$('#botonFecha').val()},Hora;${$('#botonHora').val()},Numero;${$('#botonNumeroPoliza').val()},Concepto;${'PRESUPUESTO INICIAL ' + $('#Anio').val()},Orden;${orden}`;
     let mensajeEdoSolicitud = toastr.info("Procesando solicitud, espere un momento por favor . . .", "", { timeOut: "0" });
     fetch(url, {

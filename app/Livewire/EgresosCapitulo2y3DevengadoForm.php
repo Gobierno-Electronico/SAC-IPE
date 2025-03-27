@@ -307,6 +307,7 @@ class EgresosCapitulo2y3DevengadoForm extends Component
         $this->selectorPagoRetenciones = "";
         $this->cuentaContableAbono = "";
         $this->tipoRegistro = "";
+        $this->partidasPresupuestales = [];
         $this->dispatch('limpiar');
     }
 
