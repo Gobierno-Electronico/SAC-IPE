@@ -33,7 +33,7 @@ class MovimientosPrestamosTable extends Tabla
     public $tipoMovimiento;
     public $categoriaModulo;
     public $eventoSeleccionado;
-    
+
 
     public function render()
     {
@@ -63,6 +63,8 @@ class MovimientosPrestamosTable extends Tabla
         $contador = 0;
         $this->data = array_map(function ($entrada) use (&$contador) {
             $entrada =  (array) $entrada;
+            // Convertir a número y dividir entre 2
+            $entrada['total'] = floatval($entrada['total']) / 2;
             $entrada['total'] = '$' . number_format($entrada['total'], 2, '.', ',');
             $entrada['id'] = $contador++;
             return $entrada;
@@ -93,6 +95,7 @@ class MovimientosPrestamosTable extends Tabla
             return $contains;
         });
 
+
         $currentItems = array_slice($filtered->toArray(), $this->perPage * ($currentPage - 1), $this->perPage);
         return new LengthAwarePaginator($currentItems, count($filtered), $this->perPage, $currentPage);
     }
@@ -106,7 +109,7 @@ class MovimientosPrestamosTable extends Tabla
             Column::make('momentoContable', 'Momento contable'),
             Column::make('fechaAfectacion', 'Fecha de afectación'),
             Column::make('fechaRegistro', 'Fecha de registro'),
-            Column::make('total', 'Monto del evento'),
+            Column::make('total', 'Total por Póliza'), // NUEVA COLUMNA
             Column::make('estatus_evento', 'Estado del momento contable')->component('columns.estado'),
             Column::make('id', 'Acciones')->component('columns.accionVerMovimiento'),
 
@@ -122,13 +125,13 @@ class MovimientosPrestamosTable extends Tabla
         $this->descripcion = $this->data[$value]['descripcion'];
         $this->categoriaModulo = $this->data[$value]['categoria'];
         $nombrePoliza = '';
-        if(str_contains($this->categoriaModulo, 'RECAUDADO') && !str_contains($this->categoriaModulo, 'PAGADO')){
+        if (str_contains($this->categoriaModulo, 'RECAUDADO') && !str_contains($this->categoriaModulo, 'PAGADO')) {
             $nombrePoliza = 'PolizaRecuperacion';
-        }else{
+        } else {
             $nombrePoliza = 'PolizaOtorgamiento';
         }
         $this->tipoMovimiento = $nombrePoliza . str_replace(' ', '', ucwords(strtolower($this->data[$value]['momentoContable'])));
-       
+
         $this->consultarRegistro = true;
     }
 

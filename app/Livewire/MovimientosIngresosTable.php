@@ -64,7 +64,8 @@ class MovimientosIngresosTable extends Tabla
         $contador = 0;
         $this->data = array_map(function ($entrada) use (&$contador) {
             $entrada =  (array) $entrada;
-            $entrada['total'] = '$' . number_format($entrada['total'], 2, '.', ',');
+        // Convertir a número y dividir entre 2
+            $entrada['total'] = floatval($entrada['total']) / 2;            $entrada['total'] = '$' . number_format($entrada['total'], 2, '.', ',');
             $entrada['id'] = $contador++;
             return $entrada;
         }, DB::select('EXEC dbo.ConsultaMovimientosIngresos @anio = ?', array($anioActual)));
@@ -96,6 +97,28 @@ class MovimientosIngresosTable extends Tabla
             return $contains;
         });
 
+        // NUEVO: Agregar el total agrupado por evento y número de póliza
+        $filtered = $filtered->map(function ($item) {
+
+            $totalesPolizas = Poliza::select('evento', 'numero_poliza', 'total') 
+            ->whereYear('fecha', '=', Carbon::now()->year) // Filtra por año actual
+            ->where('evento', '=', $item['evento'])
+            ->where('tipo_poliza', '=', 'I')
+            ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')
+            ->where('categoria', 'like', '%DEVENGADO%') // Filtra categoría que contenga 'comprometido'
+            ->get();
+        
+            
+            // $sumaTotal = $totalesPolizas->sum('total');
+            // dd($totalesPolizas);
+            $sumaTotal = $totalesPolizas->sum('total'); // NUEVO: Sumar los valores del atributo 'total'
+    
+            $item['total_evento'] = '$' . number_format($sumaTotal, 2, '.', ','); // NUEVO: Formatear el total
+            return $item;
+        });
+
+
+
         $currentItems = array_slice($filtered->toArray(), $this->perPage * ($currentPage - 1), $this->perPage);
         return new LengthAwarePaginator($currentItems, count($filtered), $this->perPage, $currentPage);
     }
@@ -109,7 +132,8 @@ class MovimientosIngresosTable extends Tabla
             Column::make('momentoContable', 'Momento contable'),
             Column::make('fechaAfectacion', 'Fecha de afectación'),
             Column::make('fechaRegistro', 'Fecha de registro'),
-            Column::make('total', 'Monto del evento'),
+            Column::make('total_evento', 'Monto del evento'),
+            Column::make('total', 'Total por Póliza'), // NUEVA COLUMNA
             Column::make('estatus_evento', 'Estado del momento contable')->component('columns.estado'),
             Column::make('id', 'Acciones')->component('columns.accionVerMovimiento'),
 
