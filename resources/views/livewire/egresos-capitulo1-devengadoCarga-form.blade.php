@@ -37,6 +37,9 @@
                 <div class="mt-5">
                     <input class="form-control" type="file" accept=".xlsx" name="archivo" id="archivo"
                         wire:model="archivo">
+                    <div wire:loading wire:target="archivo" class="mt-2">
+                        <p class="fw-bold h5">Subiendo archivo, espere por favor...</p>
+                    </div>
                 </div>
 
                 <div class="mt-5 d-flex justify-content-between">
