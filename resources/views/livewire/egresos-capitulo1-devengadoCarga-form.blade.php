@@ -37,6 +37,9 @@
                 <div class="mt-5">
                     <input class="form-control" type="file" accept=".xlsx" name="archivo" id="archivo"
                         wire:model="archivo">
+                    <div wire:loading wire:target="archivo" class="mt-2">
+                        <p class="fw-bold h5">Subiendo archivo, espere por favor...</p>
+                    </div>
                 </div>
 
                 <div class="mt-5 d-flex justify-content-between">
@@ -46,7 +49,7 @@
                     </button>
 
                     <button wire:click="cargarDevengado" class="btn btn-success shadow border-0" id="importarBoton"
-                        wire:loading.attr="disabled">
+                        wire:loading.attr="disabled" wire:target="archivo" onclick="mostrarCarga()">
                         Cargar devengado
                     </button>
                 </div>
@@ -54,4 +57,17 @@
         </div>
     @endif
 </div>
-<script></script>
+<script>
+    function mostrarCarga() {
+        $('#loadingScreen').prop('hidden', false);
+    }
+
+    window.addEventListener('esconderCargando', event => {
+        esconderCargando()
+    })
+
+    function esconderCargando() {
+        $('#loadingScreen').prop('hidden', true);
+        toastr.clear();
+    }
+</script>

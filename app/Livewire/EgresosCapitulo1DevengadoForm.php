@@ -78,7 +78,6 @@ class EgresosCapitulo1DevengadoForm extends Component
 
         try{
             $this->cambiarEventoSeleccionado = true;
-            Log::info('evento: ' . $this->numeroEvento . ' auxiliar: ' . $this->eventoAuxiliar);
             $this->numeroEvento = $this->eventoAuxiliar;
             $this->eventos =  Poliza::select('evento', 'descripcion')
                 ->whereYear('fecha', '=', Carbon::now()->year)
@@ -202,6 +201,12 @@ class EgresosCapitulo1DevengadoForm extends Component
             $this->importeAbono = ($this->importeAbono > 0)  ? $this->importeAbono : "";
             $this->validate();
 
+            if($this->importeAbono > $this->importe)
+            {
+                $this->dispatch('mostrarMensaje', mensaje: 'El importe abono no puede ser mayor al importe general', tipo: 'warning', tiempo: 3000);
+                return;
+            }   
+
             $partida = Cuenta::find($this->partidaPresupuestal);
             $cuentaContableSeleccionada = Cuenta::find($this->cuentaContable);
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
@@ -225,7 +230,8 @@ class EgresosCapitulo1DevengadoForm extends Component
                 'importe' => $this->importe,
                 'importeAbono' => $this->importeAbono,
                 'montoEvento' => $this->montoDelEvento,
-                'pttoComprometido' => $this->PTTOComprometido
+                'pttoComprometido' => $this->PTTOComprometido,
+                'evento' => $this->numeroEvento
             ];
 
             $this->dispatch('agregar-registro', registro: $registro);
