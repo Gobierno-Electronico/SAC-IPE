@@ -40,6 +40,7 @@ class MovimientosPrestamosTable extends Tabla
         $eventos = Poliza::select('evento', 'descripcion')
             ->whereYear('fecha', '=', Carbon::now()->year)
             ->where('tipo_poliza', '=', 'D')
+            ->where('categoria', 'LIKE', '%prestamos%')
             ->distinct()
             ->get()
             ->sortBy(fn($item) => (int) $item->evento) // Ordenar en PHP convirtiendo a número

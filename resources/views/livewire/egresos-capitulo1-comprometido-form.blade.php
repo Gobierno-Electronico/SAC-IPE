@@ -50,11 +50,24 @@
                 </button>
 
                 <button wire:click="cargarComprometido" class="btn btn-success shadow border-0" id="importarBoton"
-                    wire:loading.attr="disabled" wire:target="archivo">
+                    wire:loading.attr="disabled" wire:target="archivo" onclick="mostrarCarga()">
                     Cargar comprometido
                 </button>
 
             </div>
         </div>
     @endif
-    <script></script>
+    <script>
+        function mostrarCarga() {
+            $('#loadingScreen').prop('hidden', false);
+        }
+
+        window.addEventListener('esconderCargando', event => {
+            esconderCargando()
+        })
+
+        function esconderCargando() {
+            $('#loadingScreen').prop('hidden', true);
+            toastr.clear();
+        }
+    </script>

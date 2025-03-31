@@ -265,6 +265,7 @@ class EgresosCapitulo1ComprometidoForm extends Component
 
                 DB::commit();
                 Storage::delete($path);
+                $this->dispatch('esconderCargando');
                 $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
             } else {
                 Storage::delete($path);
