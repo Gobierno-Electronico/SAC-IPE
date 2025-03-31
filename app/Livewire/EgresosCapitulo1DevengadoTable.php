@@ -24,6 +24,7 @@ class EgresosCapitulo1DevengadoTable extends Tabla
     public $totalDisponible = 0;
     public $numeroEvento;
     public $numeroPolizaRemanente;
+    public $importeRestante = 0;
 
 
     public function render()
@@ -51,7 +52,7 @@ class EgresosCapitulo1DevengadoTable extends Tabla
             Column::make('pttoComprometido', 'PPTO Comprometido')->component('columns.importe'),
             Column::make('importe', 'Importe')->component('columns.importe'),
             Column::make('importeAbono', 'Importe abono')->component('columns.importe'),
-            Column::make('disponibilidad', 'Disponibilidad')->component('columns.importe'),
+            Column::make('importeRestante', 'Importe restante')->component('columns.importe'),
             Column::make('id', 'Acciones')->component('columns.accionesIngresos')
         ];
     }
@@ -76,7 +77,7 @@ class EgresosCapitulo1DevengadoTable extends Tabla
                     'pttoComprometido' => $registro['pttoComprometido'],
                     'importe' => $registro['importe'],
                     'importeAbono' => $registro['importeAbono'],
-                    'disponibilidad' => $this->totalDisponible,
+                    'importeRestante' => $this->importeRestante,
                 ];
                 array_push($this->cacheData, $nuevoRegistro);
                 array_push($this->dataCompleta, $registro);
@@ -84,7 +85,7 @@ class EgresosCapitulo1DevengadoTable extends Tabla
                 foreach ($this->cacheData as $key => $registro) {
                     $this->cacheData[$key]['id'] = $key + 1;
                     $this->dataCompleta[$key]['id'] = $key + 1;
-                    $this->total += $registro['importe'];
+                    $this->total += $registro['importeAbono'];
                 }
                 $this->dispatch('cambioTotal', total: $this->total);
             }
@@ -96,22 +97,50 @@ class EgresosCapitulo1DevengadoTable extends Tabla
 
     public function verificarPresupuesto($registro)
     {
-        $solvencia = $registro['pttoComprometido'];
-        $this->totalDisponible = $solvencia - $registro['importe'];
+        $solvencia = $registro['pttoComprometido'] - $registro['importe'];
+        $this->importeRestante = $registro['importe'] - $registro['importeAbono']; 
         $totalImportes = 0;
 
         foreach ($this->cacheData as $movimiento) {
             if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoCuenta']) && $movimiento['mes'] == $registro['mes']) {
-                $totalImportes += $movimiento['importe'];
+                $totalImportes += $movimiento['importeAbono'];
             }
         }
 
         if ($totalImportes > 0) {
-            $this->totalDisponible = $solvencia - $totalImportes - $registro['importe'];
+            $this->importeRestante = $registro['importe'] - $totalImportes - $registro['importeAbono'];
         }
 
-        if ($this->totalDisponible < 0) {
-            $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto comprometido insuficiente', tipo: 'warning', tiempo: 3000);
+        if ($this->importeRestante < 0) {
+            $this->dispatch('mostrarMensaje', mensaje: 'La suma de los importes abono no puede ser mayor al importe general', tipo: 'warning', tiempo: 3000);
+            return false;
+        }
+
+        if ($solvencia < 0) {
+            $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar insuficiente', tipo: 'warning', tiempo: 3000);
+            return false;
+        }
+
+        return true;
+    }
+
+    public function verificarBalance(){
+        $totalImportesAbonos = array_sum(array_column($this->cacheData, 'importeAbono'));
+
+        $importesTotalesUnicos = [];
+        $totalImportes = 0;
+
+        foreach ($this->cacheData as $movimiento) {
+            $clave = $movimiento['area'].'-'.$movimiento['partida'].'-'.$movimiento['mes'];
+            if (!isset($importesTotalesUnicos[$clave])) {
+                $importesTotalesUnicos[$clave] = $movimiento['importe'];
+            }
+        }
+
+        $totalImportes = array_sum($importesTotalesUnicos);
+
+        if($totalImportesAbonos < $totalImportes){
+            $this->dispatch('mostrarMensaje', mensaje: 'La póliza no está balanceada', tipo: 'warning', tiempo: 3000);
             return false;
         }
         return true;
@@ -217,6 +246,11 @@ class EgresosCapitulo1DevengadoTable extends Tabla
     #[On('finalizar-registros')]
     public function finalizarRegistros()
     {
+
+        if(!$this->verificarBalance()){
+            return;
+        };
+
         if (empty($this->cacheData)) {
             $this->dispatch('mostrarMensaje', mensaje: 'Tabla sin registros', tipo: 'error', tiempo: 3000);
             return;
@@ -240,12 +274,14 @@ class EgresosCapitulo1DevengadoTable extends Tabla
             $fecha->year($anioActual);
 
             $bitacora = new BitacoraController();
-            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un devengado del capítulo 4 con evento: ' . $this->numeroEvento, request());
+            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un devengado del capítulo 1 con evento: ' . $this->numeroEvento, request());
             DB::beginTransaction();
 
             foreach ($this->dataCompleta as $movimiento) {
                 $movimiento['importe'] = doubleval($movimiento['importe']);
-                $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaId'])->whereIn('concepto_id', [63, 64, 56, 58])
+                $movimiento['importeAbono'] = doubleval($movimiento['importeAbono']);
+                
+                $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaId'])->whereIn('concepto_id', [10102])
                     ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
 
                 $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
@@ -253,10 +289,12 @@ class EgresosCapitulo1DevengadoTable extends Tabla
                     ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
 
                 $interaccionCuentaCuentasFiltradas = [];
+                $interaccionCuentaCuentasContable = [];
+                $polizas = [];
                 foreach ($interaccionCuentaCuentas as $cuenta) {
                     if ($cuenta['tipo_interaccion'] == 'Contable - Abono') {
                         if ($cuenta['Codigo_cuenta'] == $movimiento['codigoCuentaAbono']) {
-                            $interaccionCuentaCuentasFiltradas[] = $cuenta;
+                            $interaccionCuentaCuentasContable[] = $cuenta;
                             continue;
                         }
                     } else {
@@ -264,30 +302,62 @@ class EgresosCapitulo1DevengadoTable extends Tabla
                     }
                 }
 
-                $interaccionCuentaCuentas = $interaccionCuentaCuentasFiltradas;
+                $interaccionCuentaCuentas = $interaccionCuentaCuentasFiltradas; 
 
-                $polizas = [
-                    [
-                        'area' => $movimiento['codigoAreaResponsable'],
-                        'tipo_poliza' => 'E',
-                        'numero_poliza' =>  $this->numeroPoliza,
-                        'fecha' => $movimiento['fechaAfectacion'],
-                        'cuenta' => $movimiento['codigoCuenta'],
-                        'concepto' => $movimiento['descripcionCuenta'],
-                        'total' => abs($movimiento['importe']),
-                        'mes' => $movimiento['mes'],
-                        'descripcion' => $movimiento['observaciones'],
-                        'evento' => $this->numeroEvento,
-                        'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
-                        'validado' => false,
-                        'estatus_evento' => true,
-                        'categoria' => 'EGRESOS DEVENGADO CAPITULO 1',
-                        'created_at' => $fecha,
-                        'updated_at' => $fecha
-                    ]
-                ];
+                $polizaPrincipalRegistrada = Poliza::where('cuenta', '=', $movimiento['codigoCuenta'])
+                ->where('evento', '=', $this->numeroEvento)
+                ->where('numero_poliza', '=', $this->numeroPoliza)
+                ->where('tipo_poliza', '=', 'E')
+                ->where('area', '=', $movimiento['codigoAreaResponsable'])
+                ->where('mes', '=', $movimiento['mes'])
+                ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 1')
+                ->get();
 
-                foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
+                if($polizaPrincipalRegistrada->isEmpty()){
+                    $polizas = [
+                        [
+                            'area' => $movimiento['codigoAreaResponsable'],
+                            'tipo_poliza' => 'E',
+                            'numero_poliza' =>  $this->numeroPoliza,
+                            'fecha' => $movimiento['fechaAfectacion'],
+                            'cuenta' => $movimiento['codigoCuenta'],
+                            'concepto' => $movimiento['descripcionCuenta'],
+                            'total' => abs($movimiento['importe']),
+                            'mes' => $movimiento['mes'],
+                            'descripcion' => $movimiento['observaciones'],
+                            'evento' => $this->numeroEvento,
+                            'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
+                            'validado' => false,
+                            'estatus_evento' => true,
+                            'categoria' => 'EGRESOS DEVENGADO CAPITULO 1',
+                            'created_at' => $fecha,
+                            'updated_at' => $fecha
+                        ]
+                    ];
+
+                    foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
+                        array_push($polizas, [
+                            'area' => $movimiento['codigoAreaResponsable'],
+                            'tipo_poliza' => 'E',
+                            'numero_poliza' =>  $this->numeroPoliza,
+                            'fecha' => $movimiento['fechaAfectacion'],
+                            'cuenta' => $dataCuenta['Codigo_cuenta'],
+                            'concepto' => $dataCuenta['Descripcion_cuenta'],
+                            'total' => $movimiento['importe'],
+                            'mes' => $movimiento['mes'],
+                            'descripcion' => $movimiento['observaciones'],
+                            'evento' => $this->numeroEvento,
+                            'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
+                            'validado' => false,
+                            'estatus_evento' => true,
+                            'categoria' => 'EGRESOS DEVENGADO CAPITULO 1',
+                            'created_at' => $fecha,
+                            'updated_at' => $fecha
+                        ]);
+                    }
+               }
+
+               foreach ($interaccionCuentaCuentasContable as $key => $dataCuenta) {
                     array_push($polizas, [
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'E',
@@ -295,7 +365,7 @@ class EgresosCapitulo1DevengadoTable extends Tabla
                         'fecha' => $movimiento['fechaAfectacion'],
                         'cuenta' => $dataCuenta['Codigo_cuenta'],
                         'concepto' => $dataCuenta['Descripcion_cuenta'],
-                        'total' => $movimiento['importe'],
+                        'total' => $movimiento['importeAbono'],
                         'mes' => $movimiento['mes'],
                         'descripcion' => $movimiento['observaciones'],
                         'evento' => $this->numeroEvento,
@@ -308,7 +378,8 @@ class EgresosCapitulo1DevengadoTable extends Tabla
                     ]);
                 }
 
-                Poliza::insert($polizas);
+               Poliza::insert($polizas);
+
             }
 
             $numerosPolizas = Poliza::select('numero_poliza')
@@ -322,17 +393,17 @@ class EgresosCapitulo1DevengadoTable extends Tabla
             $this->numeroPolizaRemanente = (int)end($numerosPolizas) + 1;
 
             $polizasInicialesEgresosComprometido = Poliza::where('tipo_poliza', '=', 'E')
-                ->where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 4')
+                ->where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 1')
                 ->where('evento', '=', $this->numeroEvento)
                 ->get();
 
             $polizasInicialesEgresosDevengado = Poliza::where('tipo_poliza', '=', 'E')
-                ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 4')
+                ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 1')
                 ->where('evento', '=', $this->numeroEvento)
                 ->where('concepto', 'LIKE', '%(Devengado)%')
                 ->get();
 
-            $totalRemanente = DB::select('EXEC ImporteTotalCapitulo4Devengado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
+            $totalRemanente = DB::select('EXEC ImporteTotalCapitulo1Devengado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             if ($totalRemanente > 0) {
                 foreach ($polizasInicialesEgresosComprometido as $polizaImporte) {
                     $clave = $polizaImporte->cuenta . '-' . $polizaImporte->concepto;
@@ -354,7 +425,7 @@ class EgresosCapitulo1DevengadoTable extends Tabla
                             'tipo_interaccion' => $polizaImporte->tipo_interaccion,
                             'validado' => false,
                             'estatus_evento' => false,
-                            'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 4 REMANENTE DEVENGADO',
+                            'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 1 REMANENTE DEVENGADO',
                             'created_at' => $fecha,
                             'updated_at' => $fecha
                         ];
@@ -384,7 +455,7 @@ class EgresosCapitulo1DevengadoTable extends Tabla
                         'tipo_interaccion' => $polizaInicial['tipo_interaccion'],
                         'validado' => false,
                         'estatus_evento' => false,
-                        'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 4 REMANENTE DEVENGADO',
+                        'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 1 REMANENTE DEVENGADO',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);
@@ -393,19 +464,19 @@ class EgresosCapitulo1DevengadoTable extends Tabla
                 $this->numeroPolizaRemanente = 0;
             }
 
-            $importeTotalEvento = DB::select('EXEC ImporteTotalCapitulo4Devengado @evento = ?', [$this->numeroEvento]);
+            $importeTotalEvento = DB::select('EXEC ImporteTotalCapitulo1Devengado @evento = ?', [$this->numeroEvento]);
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
                 Poliza::where('evento', '=', $this->numeroEvento)
-                    ->whereIn('categoria', ['EGRESOS COMPROMETIDO CAPITULO 4'])
+                    ->whereIn('categoria', ['EGRESOS COMPROMETIDO CAPITULO 1'])
                     ->update(['estatus_evento' => false]);
             }
             DB::commit();
-            $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente);
-        } catch (\Throwable $th) {
+            $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente); 
+         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('Ocurrió un error al finalizarRegistro en devengado del capítulo 4: ' . $th->getMessage());
+            Log::error('Ocurrió un error al finalizarRegistro en devengado del capítulo 1: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
-        }
+        } 
     }
 
     public function changeState($value) {}

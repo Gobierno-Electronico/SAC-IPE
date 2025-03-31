@@ -31,6 +31,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
     public $numeroPoliza;
     public $total;
     public $observaciones = '';
+    public $path = "";
 
     public function render()
     {
@@ -204,6 +205,8 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                 }); // divide $polizas en partes pequeñas (chunks) de 120 elementos. Esto evita la sobrecarga de memoria al hacer inserciones en la base.
 
                 DB::commit();
+                Storage::delete($this->path);
+                $this->dispatch('esconderCargando');
                 $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
             } else {
                 $mensajeError = "Cuentas Faltantes en la guía contabilizadora:<br>";
@@ -234,6 +237,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                 'fechaAfectacion.required' => "La fecha de afectación es requerida."
             ]);
 
+            $path = $this->path;
             $path = $this->archivo->store('temp');
             $filePath = storage_path('app/' . $path);
 
