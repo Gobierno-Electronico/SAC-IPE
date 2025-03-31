@@ -98,6 +98,7 @@ class EgresosCapitulo4EjercidoForm extends Component
 
             $cuentasDevengadas = Poliza::where('evento', '=', $this->numeroEvento)
                 ->where('tipo_poliza', '=', 'E')
+                ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where('concepto', 'LIKE', '%Devengado%')
                 ->get();
 

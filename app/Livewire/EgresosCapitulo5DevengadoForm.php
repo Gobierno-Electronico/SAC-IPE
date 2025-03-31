@@ -114,6 +114,7 @@ class EgresosCapitulo5DevengadoForm extends Component
 
         try{
             $cuentasComprometidas = Poliza::where('evento', '=', $this->numeroEvento)
+            ->whereYear('fecha', '=', Carbon::now()->year)
             ->where('tipo_poliza', '=', 'E')
             ->where('concepto', 'LIKE', '%Comprometido%')
             ->get();

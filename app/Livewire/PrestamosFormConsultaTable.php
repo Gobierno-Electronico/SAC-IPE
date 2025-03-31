@@ -47,7 +47,9 @@ class PrestamosFormConsultaTable extends Tabla
         try{
             $poliza = Poliza::where('numero_poliza', '=', $this->numeroPoliza)
                 ->where('tipo_poliza', '=', $this->tipoPoliza)
-                ->where('evento', '=', $this->numeroEvento)->first();
+                ->where('evento', '=', $this->numeroEvento)
+                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->first();
 
             if ($poliza['validado'] == 1) {
                 $this->validado = true;
@@ -85,6 +87,7 @@ class PrestamosFormConsultaTable extends Tabla
             ->where('tipo_poliza', '=', $this->tipoPoliza)
             ->where('numero_poliza', '=', $this->numeroPoliza)
             ->where('evento', '=', $this->numeroEvento)
+            ->whereYear('fecha', '=', Carbon::now()->year)
             ->search($this->searchBy, $this->searchTerm)
             ->paginate($this->perPage);
         return $datos;

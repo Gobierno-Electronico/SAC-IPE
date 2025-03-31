@@ -247,6 +247,7 @@ class IngresosRecaudadoTable extends Tabla
             $polizasInicialesIngresosDevengado = Poliza::where('tipo_poliza', '=', 'I')
                 ->where('categoria', '=', 'INGRESOS DEVENGADO')
                 ->where('evento', '=', $this->numeroEvento)
+                ->whereYear('fecha', '=', Carbon::now()->year)
                 ->orderBy('id', 'desc')
                 ->get();
             $sumaAbonos = 0;
@@ -378,7 +379,9 @@ class IngresosRecaudadoTable extends Tabla
                     $query->where('categoria', '=', 'INGRESOS RECAUDADO')
                         ->orwhere('categoria', '=', 'INGRESOS COBRO ESPECIE');
                 })
-                ->where('evento', '=', $this->numeroEvento)->where('concepto', 'LIKE', '%(Recaudado)%')->get();
+                ->where('evento', '=', $this->numeroEvento)
+                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->where('concepto', 'LIKE', '%(Recaudado)%')->get();
             $totalRemanente = DB::select('EXEC ImporteTotalRecaudado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             if ($totalRemanente > 0) {
                 // Se suma el total de los movimientos agrupados por conceptos
@@ -452,6 +455,7 @@ class IngresosRecaudadoTable extends Tabla
             $importeTotalEvento = DB::select('EXEC ImporteTotalRecaudado @evento = ?', [$this->numeroEvento]);
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
                 Poliza::where('evento', '=', $this->numeroEvento)
+                    ->whereYear('fecha', '=', Carbon::now()->year)
                     ->whereIn('categoria', ['INGRESOS DEVENGADO', 'INGRESOS RECAUDADO', 'INGRESOS COBRO ESPECIE'])
                     ->update(['estatus_evento' => false]);
             }

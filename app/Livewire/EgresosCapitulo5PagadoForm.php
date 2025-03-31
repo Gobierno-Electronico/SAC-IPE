@@ -116,6 +116,7 @@ class EgresosCapitulo5PagadoForm extends Component
             $this->cambiarPartidaPresupuestalSeleccionada = true;
 
             $cuentasEjercidas = Poliza::where('evento', '=', $this->numeroEvento)
+                ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where('tipo_poliza', '=', 'E')
                 ->where('concepto', 'LIKE', '%Ejercido%')
                 ->get();
@@ -210,6 +211,7 @@ class EgresosCapitulo5PagadoForm extends Component
 
 
             $cuentasDevengadas = Poliza::where('evento', '=', $this->numeroEvento)
+                ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where('tipo_poliza', '=', 'E')
                 ->where('tipo_interaccion', '=', 'Contable - Abono')
                 ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 5')
