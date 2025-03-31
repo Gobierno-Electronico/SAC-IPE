@@ -1,367 +1,409 @@
-[2025-03-27 13:17:06] local.DEBUG: 8.2.5.5.1.2.2.01.02  
-[2025-03-27 13:17:06] local.DEBUG: 8.2.7.5.1.2.2.01.02  
-[2025-03-27 13:17:06] local.DEBUG: 8.2.5.5.1.2.2.01.02  
-[2025-03-27 13:17:06] local.DEBUG: 8.2.7.5.1.2.2.01.02  
-[2025-03-27 13:17:06] local.DEBUG: 8.2.5.5.1.3.7.02.01  
-[2025-03-27 13:17:06] local.DEBUG: 8.2.7.5.1.3.7.02.01  
-[2025-03-27 13:18:07] local.DEBUG: 8.2.5.5.1.2.2.01.02  
-[2025-03-27 13:18:07] local.DEBUG: 8.2.7.5.1.2.2.01.02  
-[2025-03-27 13:18:07] local.DEBUG: 8.2.5.5.1.2.2.01.02  
-[2025-03-27 13:18:07] local.DEBUG: 8.2.7.5.1.2.2.01.02  
-[2025-03-27 13:18:07] local.DEBUG: 8.2.5.5.1.3.7.02.01  
-[2025-03-27 13:18:07] local.DEBUG: 8.2.7.5.1.3.7.02.01  
-[2025-03-27 13:21:14] local.DEBUG: 8.2.5.5.1.2.2.01.02  
-[2025-03-27 13:21:14] local.DEBUG: 8.2.7.5.1.2.2.01.02  
-[2025-03-27 13:21:14] local.DEBUG: 8.2.5.5.1.2.2.01.02  
-[2025-03-27 13:21:14] local.DEBUG: 8.2.7.5.1.2.2.01.02  
-[2025-03-27 13:21:15] local.DEBUG: 8.2.5.5.1.3.7.02.01  
-[2025-03-27 13:21:15] local.DEBUG: 8.2.7.5.1.3.7.02.01  
-[2025-03-27 13:21:28] local.DEBUG: 8.2.5.5.1.2.2.01.02  
-[2025-03-27 13:21:28] local.DEBUG: 8.2.7.5.1.2.2.01.02  
-[2025-03-27 13:21:28] local.DEBUG: 8.2.5.5.1.2.2.01.02  
-[2025-03-27 13:21:28] local.DEBUG: 8.2.7.5.1.2.2.01.02  
-[2025-03-27 13:21:29] local.DEBUG: 8.2.5.5.1.3.7.02.01  
-[2025-03-27 13:21:29] local.DEBUG: 8.2.7.5.1.3.7.02.01  
-[2025-03-28 07:55:50] local.ERROR: SQLSTATE[08001]: [Microsoft][ODBC Driver 17 for SQL Server]TCP Provider: No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión.
- (Connection: sqlsrv, SQL: select [categoria], [evento] from [polizas] where [tipo_poliza] = P and year([fecha]) = 2025 group by [categoria], [evento]) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 08001): SQLSTATE[08001]: [Microsoft][ODBC Driver 17 for SQL Server]TCP Provider: No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión.
-
- (Connection: sqlsrv, SQL: select [categoria], [evento] from [polizas] where [tipo_poliza] = P and year([fecha]) = 2025 group by [categoria], [evento]) at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:813)
-[stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(767): Illuminate\\Database\\Connection->runQueryCallback('select [categor...', Array, Object(Closure))
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(398): Illuminate\\Database\\Connection->run('select [categor...', Array, Object(Closure))
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(2899): Illuminate\\Database\\Connection->select('select [categor...', Array, true)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(2884): Illuminate\\Database\\Query\\Builder->runSelect()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(3468): Illuminate\\Database\\Query\\Builder->Illuminate\\Database\\Query\\{closure}()
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(2883): Illuminate\\Database\\Query\\Builder->onceWithColumns(Array, Object(Closure))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\app\\Providers\\AppServiceProvider.php(90): Illuminate\\Database\\Query\\Builder->get()
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): App\\Providers\\AppServiceProvider->boot()
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#11 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#12 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1099): Illuminate\\Container\\Container->call(Array)
-#13 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1080): Illuminate\\Foundation\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))
-#14 [internal function]: Illuminate\\Foundation\\Application->Illuminate\\Foundation\\{closure}(Object(App\\Providers\\AppServiceProvider), 28)
-#15 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1079): array_walk(Array, Object(Closure))
-#16 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\BootProviders.php(17): Illuminate\\Foundation\\Application->boot()
-#17 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(309): Illuminate\\Foundation\\Bootstrap\\BootProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
-#18 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(470): Illuminate\\Foundation\\Application->bootstrapWith(Array)
-#19 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(194): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
-#20 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#21 {main}
-
-[previous exception] [object] (PDOException(code: 08001): SQLSTATE[08001]: [Microsoft][ODBC Driver 17 for SQL Server]TCP Provider: No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión.
-
- at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php:65)
-[stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php(65): PDO->__construct('sqlsrv:Server=1...', 'usuarioPrueba', Object(SensitiveParameterValue), Array)
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php(44): Illuminate\\Database\\Connectors\\Connector->createPdoConnection('sqlsrv:Server=1...', 'usuarioPrueba', 'contrasena', Array)
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\SqlServerConnector.php(31): Illuminate\\Database\\Connectors\\Connector->createConnection('sqlsrv:Server=1...', Array, Array)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\ConnectionFactory.php(185): Illuminate\\Database\\Connectors\\SqlServerConnector->connect(Array)
-#4 [internal function]: Illuminate\\Database\\Connectors\\ConnectionFactory->Illuminate\\Database\\Connectors\\{closure}()
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(1219): call_user_func(Object(Closure))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(1255): Illuminate\\Database\\Connection->getPdo()
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(512): Illuminate\\Database\\Connection->getReadPdo()
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(407): Illuminate\\Database\\Connection->getPdoForSelect(true)
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(800): Illuminate\\Database\\Connection->Illuminate\\Database\\{closure}('select [categor...', Array)
-#10 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(767): Illuminate\\Database\\Connection->runQueryCallback('select [categor...', Array, Object(Closure))
-#11 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(398): Illuminate\\Database\\Connection->run('select [categor...', Array, Object(Closure))
-#12 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(2899): Illuminate\\Database\\Connection->select('select [categor...', Array, true)
-#13 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(2884): Illuminate\\Database\\Query\\Builder->runSelect()
-#14 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(3468): Illuminate\\Database\\Query\\Builder->Illuminate\\Database\\Query\\{closure}()
-#15 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(2883): Illuminate\\Database\\Query\\Builder->onceWithColumns(Array, Object(Closure))
-#16 C:\\xampp\\htdocs\\SAC-IPE\\app\\Providers\\AppServiceProvider.php(90): Illuminate\\Database\\Query\\Builder->get()
-#17 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): App\\Providers\\AppServiceProvider->boot()
-#18 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#19 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
-#20 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#21 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#22 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1099): Illuminate\\Container\\Container->call(Array)
-#23 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1080): Illuminate\\Foundation\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))
-#24 [internal function]: Illuminate\\Foundation\\Application->Illuminate\\Foundation\\{closure}(Object(App\\Providers\\AppServiceProvider), 28)
-#25 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1079): array_walk(Array, Object(Closure))
-#26 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\BootProviders.php(17): Illuminate\\Foundation\\Application->boot()
-#27 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(309): Illuminate\\Foundation\\Bootstrap\\BootProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
-#28 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(470): Illuminate\\Foundation\\Application->bootstrapWith(Array)
-#29 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(194): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
-#30 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#31 {main}
-"} 
-[2025-03-28 07:56:09] local.ERROR: SQLSTATE[08001]: [Microsoft][ODBC Driver 17 for SQL Server]TCP Provider: No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión.
- (Connection: sqlsrv, SQL: select [categoria], [evento] from [polizas] where [tipo_poliza] = P and year([fecha]) = 2025 group by [categoria], [evento]) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 08001): SQLSTATE[08001]: [Microsoft][ODBC Driver 17 for SQL Server]TCP Provider: No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión.
-
- (Connection: sqlsrv, SQL: select [categoria], [evento] from [polizas] where [tipo_poliza] = P and year([fecha]) = 2025 group by [categoria], [evento]) at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:813)
-[stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(767): Illuminate\\Database\\Connection->runQueryCallback('select [categor...', Array, Object(Closure))
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(398): Illuminate\\Database\\Connection->run('select [categor...', Array, Object(Closure))
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(2899): Illuminate\\Database\\Connection->select('select [categor...', Array, true)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(2884): Illuminate\\Database\\Query\\Builder->runSelect()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(3468): Illuminate\\Database\\Query\\Builder->Illuminate\\Database\\Query\\{closure}()
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(2883): Illuminate\\Database\\Query\\Builder->onceWithColumns(Array, Object(Closure))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\app\\Providers\\AppServiceProvider.php(90): Illuminate\\Database\\Query\\Builder->get()
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): App\\Providers\\AppServiceProvider->boot()
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#11 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#12 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1099): Illuminate\\Container\\Container->call(Array)
-#13 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1080): Illuminate\\Foundation\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))
-#14 [internal function]: Illuminate\\Foundation\\Application->Illuminate\\Foundation\\{closure}(Object(App\\Providers\\AppServiceProvider), 28)
-#15 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1079): array_walk(Array, Object(Closure))
-#16 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\BootProviders.php(17): Illuminate\\Foundation\\Application->boot()
-#17 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(309): Illuminate\\Foundation\\Bootstrap\\BootProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
-#18 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(470): Illuminate\\Foundation\\Application->bootstrapWith(Array)
-#19 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(194): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
-#20 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#21 {main}
-
-[previous exception] [object] (PDOException(code: 08001): SQLSTATE[08001]: [Microsoft][ODBC Driver 17 for SQL Server]TCP Provider: No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión.
-
- at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php:65)
-[stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php(65): PDO->__construct('sqlsrv:Server=1...', 'usuarioPrueba', Object(SensitiveParameterValue), Array)
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php(44): Illuminate\\Database\\Connectors\\Connector->createPdoConnection('sqlsrv:Server=1...', 'usuarioPrueba', 'contrasena', Array)
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\SqlServerConnector.php(31): Illuminate\\Database\\Connectors\\Connector->createConnection('sqlsrv:Server=1...', Array, Array)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\ConnectionFactory.php(185): Illuminate\\Database\\Connectors\\SqlServerConnector->connect(Array)
-#4 [internal function]: Illuminate\\Database\\Connectors\\ConnectionFactory->Illuminate\\Database\\Connectors\\{closure}()
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(1219): call_user_func(Object(Closure))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(1255): Illuminate\\Database\\Connection->getPdo()
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(512): Illuminate\\Database\\Connection->getReadPdo()
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(407): Illuminate\\Database\\Connection->getPdoForSelect(true)
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(800): Illuminate\\Database\\Connection->Illuminate\\Database\\{closure}('select [categor...', Array)
-#10 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(767): Illuminate\\Database\\Connection->runQueryCallback('select [categor...', Array, Object(Closure))
-#11 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(398): Illuminate\\Database\\Connection->run('select [categor...', Array, Object(Closure))
-#12 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(2899): Illuminate\\Database\\Connection->select('select [categor...', Array, true)
-#13 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(2884): Illuminate\\Database\\Query\\Builder->runSelect()
-#14 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(3468): Illuminate\\Database\\Query\\Builder->Illuminate\\Database\\Query\\{closure}()
-#15 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(2883): Illuminate\\Database\\Query\\Builder->onceWithColumns(Array, Object(Closure))
-#16 C:\\xampp\\htdocs\\SAC-IPE\\app\\Providers\\AppServiceProvider.php(90): Illuminate\\Database\\Query\\Builder->get()
-#17 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): App\\Providers\\AppServiceProvider->boot()
-#18 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#19 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
-#20 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#21 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#22 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1099): Illuminate\\Container\\Container->call(Array)
-#23 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1080): Illuminate\\Foundation\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))
-#24 [internal function]: Illuminate\\Foundation\\Application->Illuminate\\Foundation\\{closure}(Object(App\\Providers\\AppServiceProvider), 28)
-#25 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1079): array_walk(Array, Object(Closure))
-#26 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\BootProviders.php(17): Illuminate\\Foundation\\Application->boot()
-#27 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(309): Illuminate\\Foundation\\Bootstrap\\BootProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
-#28 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(470): Illuminate\\Foundation\\Application->bootstrapWith(Array)
-#29 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(194): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
-#30 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#31 {main}
-"} 
-[2025-03-28 07:56:27] local.ERROR: SQLSTATE[08001]: [Microsoft][ODBC Driver 17 for SQL Server]TCP Provider: No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión.
- (Connection: sqlsrv, SQL: select [categoria], [evento] from [polizas] where [tipo_poliza] = P and year([fecha]) = 2025 group by [categoria], [evento]) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 08001): SQLSTATE[08001]: [Microsoft][ODBC Driver 17 for SQL Server]TCP Provider: No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión.
-
- (Connection: sqlsrv, SQL: select [categoria], [evento] from [polizas] where [tipo_poliza] = P and year([fecha]) = 2025 group by [categoria], [evento]) at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:813)
-[stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(767): Illuminate\\Database\\Connection->runQueryCallback('select [categor...', Array, Object(Closure))
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(398): Illuminate\\Database\\Connection->run('select [categor...', Array, Object(Closure))
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(2899): Illuminate\\Database\\Connection->select('select [categor...', Array, true)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(2884): Illuminate\\Database\\Query\\Builder->runSelect()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(3468): Illuminate\\Database\\Query\\Builder->Illuminate\\Database\\Query\\{closure}()
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(2883): Illuminate\\Database\\Query\\Builder->onceWithColumns(Array, Object(Closure))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\app\\Providers\\AppServiceProvider.php(90): Illuminate\\Database\\Query\\Builder->get()
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): App\\Providers\\AppServiceProvider->boot()
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#11 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#12 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1099): Illuminate\\Container\\Container->call(Array)
-#13 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1080): Illuminate\\Foundation\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))
-#14 [internal function]: Illuminate\\Foundation\\Application->Illuminate\\Foundation\\{closure}(Object(App\\Providers\\AppServiceProvider), 28)
-#15 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1079): array_walk(Array, Object(Closure))
-#16 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\BootProviders.php(17): Illuminate\\Foundation\\Application->boot()
-#17 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(309): Illuminate\\Foundation\\Bootstrap\\BootProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
-#18 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(470): Illuminate\\Foundation\\Application->bootstrapWith(Array)
-#19 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(194): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
-#20 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#21 {main}
-
-[previous exception] [object] (PDOException(code: 08001): SQLSTATE[08001]: [Microsoft][ODBC Driver 17 for SQL Server]TCP Provider: No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión.
-
- at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php:65)
-[stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php(65): PDO->__construct('sqlsrv:Server=1...', 'usuarioPrueba', Object(SensitiveParameterValue), Array)
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php(44): Illuminate\\Database\\Connectors\\Connector->createPdoConnection('sqlsrv:Server=1...', 'usuarioPrueba', 'contrasena', Array)
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\SqlServerConnector.php(31): Illuminate\\Database\\Connectors\\Connector->createConnection('sqlsrv:Server=1...', Array, Array)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\ConnectionFactory.php(185): Illuminate\\Database\\Connectors\\SqlServerConnector->connect(Array)
-#4 [internal function]: Illuminate\\Database\\Connectors\\ConnectionFactory->Illuminate\\Database\\Connectors\\{closure}()
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(1219): call_user_func(Object(Closure))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(1255): Illuminate\\Database\\Connection->getPdo()
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(512): Illuminate\\Database\\Connection->getReadPdo()
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(407): Illuminate\\Database\\Connection->getPdoForSelect(true)
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(800): Illuminate\\Database\\Connection->Illuminate\\Database\\{closure}('select [categor...', Array)
-#10 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(767): Illuminate\\Database\\Connection->runQueryCallback('select [categor...', Array, Object(Closure))
-#11 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(398): Illuminate\\Database\\Connection->run('select [categor...', Array, Object(Closure))
-#12 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(2899): Illuminate\\Database\\Connection->select('select [categor...', Array, true)
-#13 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(2884): Illuminate\\Database\\Query\\Builder->runSelect()
-#14 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(3468): Illuminate\\Database\\Query\\Builder->Illuminate\\Database\\Query\\{closure}()
-#15 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(2883): Illuminate\\Database\\Query\\Builder->onceWithColumns(Array, Object(Closure))
-#16 C:\\xampp\\htdocs\\SAC-IPE\\app\\Providers\\AppServiceProvider.php(90): Illuminate\\Database\\Query\\Builder->get()
-#17 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): App\\Providers\\AppServiceProvider->boot()
-#18 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#19 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
-#20 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#21 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#22 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1099): Illuminate\\Container\\Container->call(Array)
-#23 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1080): Illuminate\\Foundation\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))
-#24 [internal function]: Illuminate\\Foundation\\Application->Illuminate\\Foundation\\{closure}(Object(App\\Providers\\AppServiceProvider), 28)
-#25 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1079): array_walk(Array, Object(Closure))
-#26 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\BootProviders.php(17): Illuminate\\Foundation\\Application->boot()
-#27 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(309): Illuminate\\Foundation\\Bootstrap\\BootProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
-#28 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(470): Illuminate\\Foundation\\Application->bootstrapWith(Array)
-#29 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(194): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
-#30 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#31 {main}
-"} 
-[2025-03-28 12:03:50] local.ERROR: Class "App\Http\Controllers\Validator" not found {"userId":3,"exception":"[object] (Error(code: 0): Class \"App\\Http\\Controllers\\Validator\" not found at C:\\xampp\\htdocs\\SAC-IPE\\app\\Http\\Controllers\\EgresosController.php:99)
-[stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Controller.php(54): App\\Http\\Controllers\\EgresosController->plantillaCargaComprometidoCapitulo1000()
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php(43): Illuminate\\Routing\\Controller->callAction('plantillaCargaC...', Array)
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(260): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\EgresosController), 'plantillaCargaC...')
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(206): Illuminate\\Routing\\Route->runController()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(806): Illuminate\\Routing\\Route->run()
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\app\\Http\\Middleware\\Role.php(25): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): App\\Http\\Middleware\\Role->handle(Object(Illuminate\\Http\\Request), Object(Closure), 'Administrador')
-#8 C:\\xampp\\htdocs\\SAC-IPE\\app\\Http\\Middleware\\ResetPassword.php(23): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): App\\Http\\Middleware\\ResetPassword->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#11 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#12 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\Middleware\\Authenticate.php(64): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#13 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Auth\\Middleware\\Authenticate->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#14 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken.php(88): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#15 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#16 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Middleware\\ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#17 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#18 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#19 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
-#20 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#21 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#22 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#23 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\EncryptCookies.php(75): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#24 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#25 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#26 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(805): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
-#27 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
-#28 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(748): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
-#29 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
-#30 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
-#31 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
-#32 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\livewire\\livewire\\src\\Features\\SupportDisablingBackButtonCache\\DisableBackButtonCacheMiddleware.php(19): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#33 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Livewire\\Features\\SupportDisablingBackButtonCache\\DisableBackButtonCacheMiddleware->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#34 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#35 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#36 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#37 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#38 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(51): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#39 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#40 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#41 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#42 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(110): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#43 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#44 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#45 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#46 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#47 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#48 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#49 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
-#50 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
-#51 C:\\xampp\\htdocs\\SAC-IPE\\public\\index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
-#52 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('C:\\\\xampp\\\\htdocs...')
-#53 {main}
-"} 
-[2025-03-28 12:43:47] local.INFO: evento  
-[2025-03-28 15:29:08] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
-[stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#11 {main}
-"} 
-[2025-03-28 15:29:12] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
-[stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#11 {main}
-"} 
-[2025-03-28 15:29:16] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
-[stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#11 {main}
-"} 
-[2025-03-31 08:03:13] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
-[stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#11 {main}
-"} 
-[2025-03-31 08:03:17] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
-[stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#11 {main}
-"} 
-[2025-03-31 08:03:20] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
-[stacktrace]
-#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
-#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
-#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
-#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
-#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
-#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#11 {main}
-"} 
+[2025-03-31 12:47:46] local.ERROR: Ocurrió un error al finalizarRegistro en pagado del capítulo 2 y 3: Undefined array key 0  
+[2025-03-31 12:48:02] local.INFO: array (
+  0 => 
+  array (
+    'id' => 1879297,
+    'area' => '1.4.07',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '18',
+    'fecha' => '2025-03-27 00:00:00.000',
+    'cuenta' => '2.1.1.7.01.03',
+    'cuentaRelacionada' => '8.2.5.5.1.2.2.01.02',
+    'concepto' => 'ISR 1.25% sobre RESICO',
+    'total' => '15.1800000000',
+    'tipo_interaccion' => 'Contable - Abono',
+    'mes' => 'Enero',
+    'descripcion' => 'Prueba 2y3',
+    'evento' => '16',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 2y3',
+    'validado' => '0',
+    'estatus_evento' => '0',
+    'created_at' => '2025-03-27T18:14:43.273000Z',
+    'updated_at' => '2025-03-27T18:15:30.947000Z',
+    'matchEncontrado' => 0,
+  ),
+)  
+[2025-03-31 12:48:02] local.INFO: array (
+  0 => 
+  array (
+    'id' => 1879292,
+    'area' => '1.4.07',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '18',
+    'fecha' => '2025-03-27 00:00:00.000',
+    'cuenta' => '5.1.2.2.01.02',
+    'cuentaRelacionada' => '8.2.5.5.1.2.2.01.02',
+    'concepto' => 'Productos Alimenticios para Personas Derivado de la Prestación de Servicios Públicos en Instalaciones Propias',
+    'total' => '4561.4200000000',
+    'tipo_interaccion' => 'Contable - Cargo',
+    'mes' => 'Enero',
+    'descripcion' => 'Prueba 2y3',
+    'evento' => '16',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 2y3',
+    'validado' => '0',
+    'estatus_evento' => '0',
+    'created_at' => '2025-03-27T18:14:43.273000Z',
+    'updated_at' => '2025-03-27T18:15:30.947000Z',
+  ),
+  1 => 
+  array (
+    'id' => 1879296,
+    'area' => '1.4.07',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '18',
+    'fecha' => '2025-03-27 00:00:00.000',
+    'cuenta' => '5.1.2.2.01.02',
+    'cuentaRelacionada' => '8.2.5.5.1.2.2.01.02',
+    'concepto' => 'Productos Alimenticios para Personas Derivado de la Prestación de Servicios Públicos en Instalaciones Propias',
+    'total' => '15.1800000000',
+    'tipo_interaccion' => 'Contable - Cargo',
+    'mes' => 'Enero',
+    'descripcion' => 'Prueba 2y3',
+    'evento' => '16',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 2y3',
+    'validado' => '0',
+    'estatus_evento' => '0',
+    'created_at' => '2025-03-27T18:14:43.273000Z',
+    'updated_at' => '2025-03-27T18:15:30.947000Z',
+  ),
+  2 => 
+  array (
+    'id' => 1879300,
+    'area' => '1.4.07',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '18',
+    'fecha' => '2025-03-27 00:00:00.000',
+    'cuenta' => '5.1.3.7.02.01',
+    'cuentaRelacionada' => '8.2.5.5.1.3.7.02.01',
+    'concepto' => 'Pasajes Nacionales a Servidores Públicos',
+    'total' => '1050.0000000000',
+    'tipo_interaccion' => 'Contable - Cargo',
+    'mes' => 'Enero',
+    'descripcion' => 'Prueba 2y3',
+    'evento' => '16',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 2y3',
+    'validado' => '0',
+    'estatus_evento' => '0',
+    'created_at' => '2025-03-27T18:14:43.273000Z',
+    'updated_at' => '2025-03-27T18:15:30.947000Z',
+  ),
+)  
+[2025-03-31 12:51:33] local.INFO: array (
+  0 => 
+  array (
+    'id' => 1879297,
+    'area' => '1.4.07',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '18',
+    'fecha' => '2025-03-27 00:00:00.000',
+    'cuenta' => '2.1.1.7.01.03',
+    'cuentaRelacionada' => '8.2.5.5.1.2.2.01.02',
+    'concepto' => 'ISR 1.25% sobre RESICO',
+    'total' => '15.1800000000',
+    'tipo_interaccion' => 'Contable - Abono',
+    'mes' => 'Enero',
+    'descripcion' => 'Prueba 2y3',
+    'evento' => '16',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 2y3',
+    'validado' => '0',
+    'estatus_evento' => '0',
+    'created_at' => '2025-03-27T18:14:43.273000Z',
+    'updated_at' => '2025-03-27T18:15:30.947000Z',
+    'matchEncontrado' => 0,
+  ),
+  1 => 
+  \App\Models\Poliza::__set_state(array(
+     'connection' => 'sqlsrv',
+     'table' => 'polizas',
+     'primaryKey' => 'id',
+     'keyType' => 'int',
+     'incrementing' => true,
+     'with' => 
+    array (
+    ),
+     'withCount' => 
+    array (
+    ),
+     'preventsLazyLoading' => false,
+     'perPage' => 15,
+     'exists' => true,
+     'wasRecentlyCreated' => false,
+     'escapeWhenCastingToString' => false,
+     'attributes' => 
+    array (
+      'id' => '1879296',
+      'area' => '1.4.07',
+      'tipo_poliza' => 'E',
+      'numero_poliza' => '18',
+      'fecha' => '2025-03-27 00:00:00.000',
+      'cuenta' => '5.1.2.2.01.02',
+      'cuentaRelacionada' => '8.2.5.5.1.2.2.01.02',
+      'concepto' => 'Productos Alimenticios para Personas Derivado de la Prestación de Servicios Públicos en Instalaciones Propias',
+      'total' => '15.1800000000',
+      'tipo_interaccion' => 'Contable - Cargo',
+      'mes' => 'Enero',
+      'descripcion' => 'Prueba 2y3',
+      'evento' => '16',
+      'categoria' => 'EGRESOS DEVENGADO CAPITULO 2y3',
+      'validado' => '0',
+      'estatus_evento' => '0',
+      'created_at' => '2025-03-27 12:14:43.273',
+      'updated_at' => '2025-03-27 12:15:30.947',
+    ),
+     'original' => 
+    array (
+      'id' => '1879296',
+      'area' => '1.4.07',
+      'tipo_poliza' => 'E',
+      'numero_poliza' => '18',
+      'fecha' => '2025-03-27 00:00:00.000',
+      'cuenta' => '5.1.2.2.01.02',
+      'cuentaRelacionada' => '8.2.5.5.1.2.2.01.02',
+      'concepto' => 'Productos Alimenticios para Personas Derivado de la Prestación de Servicios Públicos en Instalaciones Propias',
+      'total' => '15.1800000000',
+      'tipo_interaccion' => 'Contable - Cargo',
+      'mes' => 'Enero',
+      'descripcion' => 'Prueba 2y3',
+      'evento' => '16',
+      'categoria' => 'EGRESOS DEVENGADO CAPITULO 2y3',
+      'validado' => '0',
+      'estatus_evento' => '0',
+      'created_at' => '2025-03-27 12:14:43.273',
+      'updated_at' => '2025-03-27 12:15:30.947',
+    ),
+     'changes' => 
+    array (
+    ),
+     'casts' => 
+    array (
+    ),
+     'classCastCache' => 
+    array (
+    ),
+     'attributeCastCache' => 
+    array (
+    ),
+     'dateFormat' => NULL,
+     'appends' => 
+    array (
+    ),
+     'dispatchesEvents' => 
+    array (
+    ),
+     'observables' => 
+    array (
+    ),
+     'relations' => 
+    array (
+    ),
+     'touches' => 
+    array (
+    ),
+     'timestamps' => true,
+     'usesUniqueIds' => false,
+     'hidden' => 
+    array (
+    ),
+     'visible' => 
+    array (
+    ),
+     'fillable' => 
+    array (
+      0 => 'area',
+      1 => 'tipo_poliza',
+      2 => 'numero_poliza',
+      3 => 'fecha',
+      4 => 'cuenta',
+      5 => 'cuentaRelacionada',
+      6 => 'concepto',
+      7 => 'total',
+      8 => 'descripcion',
+      9 => 'evento',
+      10 => 'asiento',
+      11 => 'mes',
+      12 => 'tipo_interaccion',
+      13 => 'validado',
+      14 => 'categoria',
+      15 => 'estatus_evento',
+    ),
+     'guarded' => 
+    array (
+      0 => '*',
+    ),
+  )),
+)  
+[2025-03-31 12:51:33] local.INFO: array (
+  0 => 
+  array (
+    'id' => 1879292,
+    'area' => '1.4.07',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '18',
+    'fecha' => '2025-03-27 00:00:00.000',
+    'cuenta' => '5.1.2.2.01.02',
+    'cuentaRelacionada' => '8.2.5.5.1.2.2.01.02',
+    'concepto' => 'Productos Alimenticios para Personas Derivado de la Prestación de Servicios Públicos en Instalaciones Propias',
+    'total' => '4561.4200000000',
+    'tipo_interaccion' => 'Contable - Cargo',
+    'mes' => 'Enero',
+    'descripcion' => 'Prueba 2y3',
+    'evento' => '16',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 2y3',
+    'validado' => '0',
+    'estatus_evento' => '0',
+    'created_at' => '2025-03-27T18:14:43.273000Z',
+    'updated_at' => '2025-03-27T18:15:30.947000Z',
+  ),
+  1 => 
+  array (
+    'id' => 1879296,
+    'area' => '1.4.07',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '18',
+    'fecha' => '2025-03-27 00:00:00.000',
+    'cuenta' => '5.1.2.2.01.02',
+    'cuentaRelacionada' => '8.2.5.5.1.2.2.01.02',
+    'concepto' => 'Productos Alimenticios para Personas Derivado de la Prestación de Servicios Públicos en Instalaciones Propias',
+    'total' => '15.1800000000',
+    'tipo_interaccion' => 'Contable - Cargo',
+    'mes' => 'Enero',
+    'descripcion' => 'Prueba 2y3',
+    'evento' => '16',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 2y3',
+    'validado' => '0',
+    'estatus_evento' => '0',
+    'created_at' => '2025-03-27T18:14:43.273000Z',
+    'updated_at' => '2025-03-27T18:15:30.947000Z',
+  ),
+  2 => 
+  array (
+    'id' => 1879300,
+    'area' => '1.4.07',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '18',
+    'fecha' => '2025-03-27 00:00:00.000',
+    'cuenta' => '5.1.3.7.02.01',
+    'cuentaRelacionada' => '8.2.5.5.1.3.7.02.01',
+    'concepto' => 'Pasajes Nacionales a Servidores Públicos',
+    'total' => '1050.0000000000',
+    'tipo_interaccion' => 'Contable - Cargo',
+    'mes' => 'Enero',
+    'descripcion' => 'Prueba 2y3',
+    'evento' => '16',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 2y3',
+    'validado' => '0',
+    'estatus_evento' => '0',
+    'created_at' => '2025-03-27T18:14:43.273000Z',
+    'updated_at' => '2025-03-27T18:15:30.947000Z',
+  ),
+)  
+[2025-03-31 12:52:00] local.INFO: array (
+  0 => 
+  array (
+    'id' => 1879297,
+    'area' => '1.4.07',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '18',
+    'fecha' => '2025-03-27 00:00:00.000',
+    'cuenta' => '2.1.1.7.01.03',
+    'cuentaRelacionada' => '8.2.5.5.1.2.2.01.02',
+    'concepto' => 'ISR 1.25% sobre RESICO',
+    'total' => '15.1800000000',
+    'tipo_interaccion' => 'Contable - Abono',
+    'mes' => 'Enero',
+    'descripcion' => 'Prueba 2y3',
+    'evento' => '16',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 2y3',
+    'validado' => '0',
+    'estatus_evento' => '0',
+    'created_at' => '2025-03-27T18:14:43.273000Z',
+    'updated_at' => '2025-03-27T18:15:30.947000Z',
+    'matchEncontrado' => 0,
+  ),
+  1 => 
+  array (
+    'id' => 1879296,
+    'area' => '1.4.07',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '18',
+    'fecha' => '2025-03-27 00:00:00.000',
+    'cuenta' => '5.1.2.2.01.02',
+    'cuentaRelacionada' => '8.2.5.5.1.2.2.01.02',
+    'concepto' => 'Productos Alimenticios para Personas Derivado de la Prestación de Servicios Públicos en Instalaciones Propias',
+    'total' => '15.1800000000',
+    'tipo_interaccion' => 'Contable - Cargo',
+    'mes' => 'Enero',
+    'descripcion' => 'Prueba 2y3',
+    'evento' => '16',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 2y3',
+    'validado' => '0',
+    'estatus_evento' => '0',
+    'created_at' => '2025-03-27T18:14:43.273000Z',
+    'updated_at' => '2025-03-27T18:15:30.947000Z',
+  ),
+)  
+[2025-03-31 12:52:00] local.INFO: array (
+  0 => 
+  array (
+    'id' => 1879292,
+    'area' => '1.4.07',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '18',
+    'fecha' => '2025-03-27 00:00:00.000',
+    'cuenta' => '5.1.2.2.01.02',
+    'cuentaRelacionada' => '8.2.5.5.1.2.2.01.02',
+    'concepto' => 'Productos Alimenticios para Personas Derivado de la Prestación de Servicios Públicos en Instalaciones Propias',
+    'total' => '4561.4200000000',
+    'tipo_interaccion' => 'Contable - Cargo',
+    'mes' => 'Enero',
+    'descripcion' => 'Prueba 2y3',
+    'evento' => '16',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 2y3',
+    'validado' => '0',
+    'estatus_evento' => '0',
+    'created_at' => '2025-03-27T18:14:43.273000Z',
+    'updated_at' => '2025-03-27T18:15:30.947000Z',
+  ),
+  1 => 
+  array (
+    'id' => 1879296,
+    'area' => '1.4.07',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '18',
+    'fecha' => '2025-03-27 00:00:00.000',
+    'cuenta' => '5.1.2.2.01.02',
+    'cuentaRelacionada' => '8.2.5.5.1.2.2.01.02',
+    'concepto' => 'Productos Alimenticios para Personas Derivado de la Prestación de Servicios Públicos en Instalaciones Propias',
+    'total' => '15.1800000000',
+    'tipo_interaccion' => 'Contable - Cargo',
+    'mes' => 'Enero',
+    'descripcion' => 'Prueba 2y3',
+    'evento' => '16',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 2y3',
+    'validado' => '0',
+    'estatus_evento' => '0',
+    'created_at' => '2025-03-27T18:14:43.273000Z',
+    'updated_at' => '2025-03-27T18:15:30.947000Z',
+  ),
+  2 => 
+  array (
+    'id' => 1879300,
+    'area' => '1.4.07',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '18',
+    'fecha' => '2025-03-27 00:00:00.000',
+    'cuenta' => '5.1.3.7.02.01',
+    'cuentaRelacionada' => '8.2.5.5.1.3.7.02.01',
+    'concepto' => 'Pasajes Nacionales a Servidores Públicos',
+    'total' => '1050.0000000000',
+    'tipo_interaccion' => 'Contable - Cargo',
+    'mes' => 'Enero',
+    'descripcion' => 'Prueba 2y3',
+    'evento' => '16',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 2y3',
+    'validado' => '0',
+    'estatus_evento' => '0',
+    'created_at' => '2025-03-27T18:14:43.273000Z',
+    'updated_at' => '2025-03-27T18:15:30.947000Z',
+  ),
+)  
