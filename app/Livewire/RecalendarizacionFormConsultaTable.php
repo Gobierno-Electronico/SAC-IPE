@@ -37,7 +37,9 @@ class RecalendarizacionFormConsultaTable extends Tabla
 
         $poliza = Poliza::where('numero_poliza', '=', $this->numeroPoliza)
             ->where('tipo_poliza', '=', 'D')
-            ->where('evento', '=', $this->numeroEvento)->first();
+            ->where('evento', '=', $this->numeroEvento)
+            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->first();
 
         if ($poliza['validado'] == 1) {
             $this->validado = true;
@@ -69,6 +71,7 @@ class RecalendarizacionFormConsultaTable extends Tabla
             })
             ->where('tipo_poliza', '=', 'D')
             ->where('numero_poliza', '=', $this->numeroPoliza)
+            ->whereYear('fecha', '=', Carbon::now()->year)
             ->where('evento', '=', $this->numeroEvento)
             ->search($this->searchBy, $this->searchTerm)
             ->paginate($this->perPage);
