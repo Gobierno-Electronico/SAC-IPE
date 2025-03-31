@@ -107,7 +107,7 @@
                 </select> --}}
 
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
-                <input type="text" name="inputImporte" id="inputImporte" class="form-control" onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model="importe">
+                <input type="text" name="inputImporte" id="inputImporte" class="form-control" onkeyup="validarDecimales(this)" onchange="formatearImporte(this)" wire:model="importe">
 
             </div>
 
@@ -150,21 +150,25 @@
         }
     }
 
-    function formatearImporte(obj, amount = '') {
-        amount = (amount) ? amount : $('#' + obj.id).val().replace(/[^0-9.]/g, '');
-        amount = parseFloat(amount);
-        if (!isNaN(amount)) {
-            var formattedAmount = amount.toLocaleString('es-MX', {
-                style: 'currency',
-                currency: 'MXN',
-                minimumFractionDigits: 2,
-            });
-            $('#' + obj.id).val(formattedAmount);
-            console.log("Ejecuta: " + obj);
-        } else {
-            toastr.warning('Ingrese valores numéricos en el campo de importe');
-            $('#' + obj.id).val('');
+    function validarDecimales(input) {
+        // Obtener solo números y un punto decimal permitido
+        let valor = input.value.replace(/[^0-9.]/g, '') // Elimina caracteres no numéricos
+                           .replace(/(\..*)\./g, '$1') // Evita más de un punto decimal
+                           .replace(/^0+(\d)/, '$1') // Elimina ceros iniciales
+                           .replace(/^(\d+)(\.\d{0,2})?.*$/, '$1$2'); // Máximo 2 decimales
+
+        // Si el valor es solo un punto, permitirlo sin formatear
+        if (valor === ".") {
+            input.value = valor;
+            return;
         }
+
+        // Convertir a número para formateo
+        let partes = valor.split('.');
+        let numeroEntero = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Agrega comas a los miles
+
+        // Reconstruir con decimales si existen
+        input.value = partes.length > 1 ? `${numeroEntero}.${partes[1]}` : numeroEntero;
     }
 
     function limpiar() {
