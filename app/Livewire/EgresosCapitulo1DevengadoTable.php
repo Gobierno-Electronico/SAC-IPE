@@ -382,7 +382,7 @@ class EgresosCapitulo1DevengadoTable extends Tabla
 
             }
 
-            $numerosPolizas = Poliza::select('numero_poliza')
+           /*  $numerosPolizas = Poliza::select('numero_poliza')
                 ->where('tipo_poliza', '=', 'EAUX')
                 ->whereYear('fecha', '=', Carbon::now()->year)
                 ->distinct()
@@ -469,7 +469,7 @@ class EgresosCapitulo1DevengadoTable extends Tabla
                 Poliza::where('evento', '=', $this->numeroEvento)
                     ->whereIn('categoria', ['EGRESOS COMPROMETIDO CAPITULO 1'])
                     ->update(['estatus_evento' => false]);
-            }
+            } */
             DB::commit();
             $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente); 
          } catch (\Throwable $th) {
