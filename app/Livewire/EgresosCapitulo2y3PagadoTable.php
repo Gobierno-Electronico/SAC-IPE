@@ -365,17 +365,20 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
             $polizasInicialesEgresosEjercido = Poliza::where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 2y3')
                 ->where('evento', '=', $this->numeroEvento)
+                ->whereYear('fecha', '=', Carbon::now()->year)
                 ->get();
 
             $polizasInicialesEgresosPagado = Poliza::where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS PAGADO CAPITULO 2y3')
                 ->where('evento', '=', $this->numeroEvento)
+                ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where('concepto', 'LIKE', '%(Pagado)%')
                 ->get();
 
             $polizasDevengado = Poliza::where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 2y3')
                 ->where('evento', '=', $this->numeroEvento)
+                ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where('tipo_interaccion', '=', 'Contable - Abono')
                 ->get();
 
@@ -383,6 +386,7 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
             $polizasPagadoContableCargo =  Poliza::where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS PAGADO CAPITULO 2y3')
                 ->where('evento', '=', $this->numeroEvento)
+                ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where('tipo_interaccion', '=', 'Contable - Cargo')
                 ->get();
 
@@ -395,9 +399,24 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
                     $devengado->matchEncontrado = 0;
                     $conceptoCuentaDevengada = Poliza::where('cuentaRelacionada', '=', $devengado->cuentaRelacionada)->value('concepto');
                     $conceptoGeneralCuentaDevengada = explode('(', $conceptoCuentaDevengada);
-                    $codigoCuentaPagada = Cuenta::where('Descripcion_cuenta', 'LIKE', '%' . $conceptoGeneralCuentaDevengada[0] . '(Pagado)' . '%')->value('Codigo_cuenta');
+                    $codigoCuentaPagada = Cuenta::where('Descripcion_cuenta', 'LIKE', '%' . $conceptoGeneralCuentaDevengada[0] . '(Pagado)' . '%')->get();
+
+                    if(count($codigoCuentaPagada) > 1){
+                        // Obtener los últimos dos segmentos de partidaPresupuestalSeleccionada
+                        $codigoPresupuestal = explode('.', $devengado->cuentaRelacionada);
+                        $ultimosDosPresupuestal = implode('.', array_slice($codigoPresupuestal, -2, 2));
+            
+                        // Filtrar partidaDevengado dejando solo la cuenta que coincida en los últimos dos segmentos
+                        $codigoCuentaPagada = $codigoCuentaPagada->filter(function ($cuenta) use ($ultimosDosPresupuestal) {
+                            $codigoCuenta = explode('.', $cuenta->Codigo_cuenta);
+                            $ultimosDosCuenta = implode('.', array_slice($codigoCuenta, -2, 2));
+            
+                            return $ultimosDosCuenta == $ultimosDosPresupuestal;
+                        })->values();
+                    }
+
                     foreach ($polizasPagadoContableCargo as $index => $pagado) {
-                        if ($pagado->cuentaRelacionada == $codigoCuentaPagada && $devengado->concepto == $pagado->concepto) {
+                        if ($pagado->cuentaRelacionada == $codigoCuentaPagada->first()->Codigo_cuenta && $devengado->concepto == $pagado->concepto) {
                             $totalRemanente = $devengado->total - $pagado->total;
                             $devengado->total = $totalRemanente;
                             $pagado->total = $totalRemanente;
@@ -418,6 +437,8 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
                         array_push($remanentesContables, $devengado->toArray());
                     }
                 }
+
+                $remanentesContables = array_values(array_filter($remanentesContables, fn($item) => $item['total'] != 0));
                 foreach ($remanentesContables as $remanente) {
                     Poliza::create([
                         'area' => $remanente['area'],

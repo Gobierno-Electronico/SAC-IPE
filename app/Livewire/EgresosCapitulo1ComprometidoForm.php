@@ -46,6 +46,7 @@ class EgresosCapitulo1ComprometidoForm extends Component
     public function cargarComprometido()
     {
         try {
+            $this->dispatch('mostrarCargando');
             $this->validate([
                 'archivo' => 'required|mimes:xlsx',
                 'fechaAfectacion' => 'required'
@@ -264,6 +265,7 @@ class EgresosCapitulo1ComprometidoForm extends Component
 
                 DB::commit();
                 Storage::delete($path);
+                $this->dispatch('esconderCargando');
                 $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
             } else {
                 Storage::delete($path);
@@ -280,6 +282,8 @@ class EgresosCapitulo1ComprometidoForm extends Component
             Log::error("Error al procesar el archivo en carga de comprometido del 1000: " . $e->getMessage() . ' ' . $e->getLine());
             Storage::delete($path); // Asegurar que el archivo se borre en caso de error
             $this->dispatch('mostrarMensaje', mensaje: 'Hubo un error al procesar el archivo.', tipo: 'error', tiempo: 3000);
+        }finally{
+            $this->dispatch('esconderCargando');
         }
     }
 
