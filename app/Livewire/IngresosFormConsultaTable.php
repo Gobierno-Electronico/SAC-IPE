@@ -40,7 +40,9 @@ class IngresosFormConsultaTable extends Tabla
     {
         $poliza = Poliza::where('numero_poliza', '=', $this->numeroPoliza)
             ->where('tipo_poliza', '=', $this->tipoPoliza)
-            ->where('evento', '=', $this->numeroEvento)->first();
+            ->where('evento', '=', $this->numeroEvento)
+            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->first();
             if($poliza['validado'] == 1){ 
                 $this->validado = true;
                 $this->init();
@@ -73,6 +75,7 @@ class IngresosFormConsultaTable extends Tabla
             ->where('tipo_poliza', '=', $this->tipoPoliza)
             ->where('numero_poliza', '=', $this->numeroPoliza)
             ->where('evento', '=', $this->numeroEvento)
+            ->whereYear('fecha', '=', Carbon::now()->year)
             ->search($this->searchBy, $this->searchTerm)
             ->paginate($this->perPage);
         return $datos;
@@ -117,18 +120,21 @@ class IngresosFormConsultaTable extends Tabla
                 case 'INGRESOS DEVENGADO PREVIAMENTE RECAUDADO':
                     Poliza::where('categoria', '=', 'INGRESOS POR CLASIFICAR')
                         ->where('evento', '=', $this->numeroEvento)
+                        ->whereYear('fecha', '=', Carbon::now()->year)
                         ->update(['estatus_evento' => true]);
                     break;
 
                 case 'INGRESOS RECAUDADO':
                     Poliza::where('categoria', '=', 'INGRESOS DEVENGADO')
                         ->where('evento', '=', $this->numeroEvento)
+                        ->whereYear('fecha', '=', Carbon::now()->year)
                         ->update(['estatus_evento' => true]);
                     break;
 
                 case 'INGRESOS COBRO ESPECIE':
                     Poliza::where('categoria', '=', 'INGRESOS DEVENGADO')
                         ->where('evento', '=', $this->numeroEvento)
+                        ->whereYear('fecha', '=', Carbon::now()->year)
                         ->update(['estatus_evento' => true]);
                     break;
             }
