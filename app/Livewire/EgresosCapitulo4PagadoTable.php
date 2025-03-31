@@ -361,17 +361,20 @@ class EgresosCapitulo4PagadoTable extends Tabla
             $polizasInicialesEgresosEjercido = Poliza::where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 4')
                 ->where('evento', '=', $this->numeroEvento)
+                ->whereYear('fecha', '=', Carbon::now()->year)
                 ->get();
 
             $polizasInicialesEgresosPagado = Poliza::where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS PAGADO CAPITULO 4')
                 ->where('evento', '=', $this->numeroEvento)
+                ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where('concepto', 'LIKE', '%(Pagado)%')
                 ->get();
 
             $polizasDevengado = Poliza::where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 4')
                 ->where('evento', '=', $this->numeroEvento)
+                ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where('tipo_interaccion', '=', 'Contable - Abono')
                 ->get();
 
@@ -379,6 +382,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
             $polizasPagadoContableCargo =  Poliza::where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS PAGADO CAPITULO 4')
                 ->where('evento', '=', $this->numeroEvento)
+                ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where('tipo_interaccion', '=', 'Contable - Cargo')
                 ->get();
 
@@ -513,6 +517,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
             $importeTotalEvento = DB::select('EXEC ImporteTotalCapitulo4Pagado @evento = ?', [$this->numeroEvento]);
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
                 Poliza::where('evento', '=', $this->numeroEvento)
+                    ->whereYear('fecha', '=', Carbon::now()->year)
                     ->whereIn('categoria', ['EGRESOS EJERCIDO CAPITULO 4', 'EGRESOS PAGADO CAPITULO 4'])
                     ->update(['estatus_evento' => 0]);
             }

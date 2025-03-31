@@ -267,6 +267,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
                 $hayRepetidosContables = false;
                 $polizaPrincipalRegistrada = Poliza::where('cuenta', '=', $movimiento['codigoCuenta'])
                     ->where('evento', '=', $this->numeroEvento)
+                    ->whereYear('fecha', '=', Carbon::now()->year)
                     ->get();
                 if (!$polizaPrincipalRegistrada->isEmpty()) {
                     $hayRepetidosContables = true;
@@ -311,6 +312,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
                     $hayRepetidosPresupuestales = false;
                     $polizaRegistrada = Poliza::where('cuenta', '=', $dataCuenta['Codigo_cuenta'])
                         ->where('evento', '=', $this->numeroEvento)
+                        ->whereYear('fecha', '=', Carbon::now()->year)
                         ->where('tipo_interaccion', '<>', 'Contable - Abono')
                         ->get();
                     if (!$polizaRegistrada->isEmpty()) {

@@ -363,17 +363,20 @@ class EgresosCapitulo5PagadoTable extends Tabla
             $polizasInicialesEgresosEjercido = Poliza::where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 5')
                 ->where('evento', '=', $this->numeroEvento)
+                ->whereYear('fecha', '=', Carbon::now()->year)
                 ->get();
 
             $polizasInicialesEgresosPagado = Poliza::where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS PAGADO CAPITULO 5')
                 ->where('evento', '=', $this->numeroEvento)
+                ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where('concepto', 'LIKE', '%(Pagado)%')
                 ->get();
 
             $polizasDevengado = Poliza::where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 5')
                 ->where('evento', '=', $this->numeroEvento)
+                ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where('tipo_interaccion', '=', 'Contable - Abono')
                 ->get();
 
@@ -381,6 +384,7 @@ class EgresosCapitulo5PagadoTable extends Tabla
             $polizasPagadoContableCargo =  Poliza::where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS PAGADO CAPITULO 5')
                 ->where('evento', '=', $this->numeroEvento)
+                ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where('tipo_interaccion', '=', 'Contable - Cargo')
                 ->get();
 
@@ -500,6 +504,7 @@ class EgresosCapitulo5PagadoTable extends Tabla
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
                 Poliza::where('evento', '=', $this->numeroEvento)
                     ->whereIn('categoria', ['EGRESOS EJERCIDO CAPITULO 5', 'EGRESOS PAGADO CAPITULO 5'])
+                    ->whereYear('fecha', '=', Carbon::now()->year)
                     ->update(['estatus_evento' => 0]);
             }
             DB::commit();

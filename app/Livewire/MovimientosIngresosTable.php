@@ -155,6 +155,7 @@ class MovimientosIngresosTable extends Tabla
         $this->numeroPolizaRemanente = DB::table('polizas')
         ->where('tipo_poliza', 'IAUX')
         ->where('evento', '=', $this->numeroEvento)
+        ->whereYear('fecha', '=', Carbon::now()->year)
         ->where('id', '>', function($query) use ($numeroPoliza) {
             $query->select('id')
                   ->from('polizas')

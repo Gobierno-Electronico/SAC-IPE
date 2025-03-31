@@ -307,6 +307,7 @@ class EgresosCapitulo5EjercidoTable extends Tabla
             $polizasInicialesEgresosDevengado = Poliza::where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 5')
                 ->where('evento', '=', $this->numeroEvento)
+                ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where(function ($query) {
                     $query->where('concepto', 'LIKE', '%(Devengado)%')
                         ->orwhere('concepto', 'LIKE', '%(Comprometido)%');
@@ -316,6 +317,7 @@ class EgresosCapitulo5EjercidoTable extends Tabla
             $polizasInicialesEgresosEjercido = Poliza::where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 5')
                 ->where('evento', '=', $this->numeroEvento)
+                ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where('concepto', 'LIKE', '%(Ejercido)%')
                 ->get();
             
@@ -384,6 +386,7 @@ class EgresosCapitulo5EjercidoTable extends Tabla
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
                 Poliza::where('evento', '=', $this->numeroEvento)
                     ->whereIn('categoria', ['EGRESOS DEVENGADO CAPITULO 5'])
+                    ->whereYear('fecha', '=', Carbon::now()->year)
                     ->update(['estatus_evento' => false]);
             }
             DB::commit();
