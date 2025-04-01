@@ -206,7 +206,6 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
                 DB::commit();
                 Storage::delete($this->path);
-                $this->dispatch('esconderCargando');
                 $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
             } else {
                 $mensajeError = "Cuentas Faltantes en la guía contabilizadora:<br>";
@@ -216,12 +215,14 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
                 $this->dispatch('mostrarMensaje', mensaje: $mensajeError, tipo: 'error', tiempo: 5000);
             }
-
         }catch (\Exception $e) {
             DB::rollBack();
             Log::error('Ocurrió un error al cargar devengado del capítulo 1000: '. $e->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }finally{
+            $this->dispatch('esconderCargando');
         }
+
     }
 
 
