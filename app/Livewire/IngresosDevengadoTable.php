@@ -10,6 +10,7 @@ use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
 use App\Http\Controllers\BitacoraController;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
 use Log;
 use DB;
 
@@ -212,6 +213,7 @@ class IngresosDevengadoTable extends Tabla
         }
 
         try {
+            $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::select('numero_poliza')
                 ->where('tipo_poliza', '=', 'I')
                 ->whereYear('fecha', '=', Carbon::now()->year)
@@ -258,6 +260,7 @@ class IngresosDevengadoTable extends Tabla
     
                 $polizas = [
                     [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'I',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -290,6 +293,7 @@ class IngresosDevengadoTable extends Tabla
                         $importe = $importe - $movimiento['iva'];
                     }
                     array_push($polizas, [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'I',
                         'numero_poliza' =>  $this->numeroPoliza,

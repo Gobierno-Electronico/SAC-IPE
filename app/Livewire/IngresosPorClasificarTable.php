@@ -14,6 +14,7 @@ use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
 use App\Models\CodigoDepartamento;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
 
 class IngresosPorClasificarTable extends Tabla
 {
@@ -159,6 +160,7 @@ class IngresosPorClasificarTable extends Tabla
         }
 
         try {
+            $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::select('numero_poliza')
                 ->where('tipo_poliza', '=', 'I')
                 ->whereYear('fecha', '=', Carbon::now()->year)
@@ -198,6 +200,7 @@ class IngresosPorClasificarTable extends Tabla
                 $cuentaDerecha = Cuenta::find($interaccionCuentaConceptoDerecha->cuenta_id);
     
                 $poliza = new Poliza([
+                    'idUsuarioRegistrante' => $idUsuarioRegistrante,
                     'area' => $responsable->Codigo_completo,
                     'tipo_poliza' => 'I',
                     'numero_poliza' =>  $this->numeroPoliza,
@@ -216,6 +219,7 @@ class IngresosPorClasificarTable extends Tabla
                     'updated_at' => $fecha
                 ]);
                 $polizaDerecha = new Poliza([
+                    'idUsuarioRegistrante' => $idUsuarioRegistrante,
                     'area' => $responsable->Codigo_completo,
                     'tipo_poliza' => 'I',
                     'numero_poliza' =>  $this->numeroPoliza,
