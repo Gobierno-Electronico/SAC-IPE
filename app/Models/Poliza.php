@@ -10,6 +10,7 @@ class Poliza extends Model
     use HasFactory;
 
     protected $fillable = [
+        'idUsuarioRegistrante',
         'area',
         'tipo_poliza',
         'numero_poliza',
