@@ -141,3 +141,15 @@
     'updated_at' => '2025-04-01T15:37:58.817000Z',
   ),
 )  
+[2025-04-01 12:50:51] local.INFO: array (
+  'id' => 0,
+  'codigoArea' => '5',
+  'observaciones' => 'prueba de registro de usuario ingresos por clasificar',
+  'cuentaId' => '34',
+  'codigoCuenta' => '1.1.1.2.02.03',
+  'descripcionCuenta' => 'BBVA Bancomer 444106237',
+  'mes' => 'Enero',
+  'fechaAfectacion' => '2025-04-01',
+  'importe' => 200.0,
+)  
+[2025-04-01 12:53:00] local.ERROR: Ocurrió un error al finalizarRegistro en devengado previamente recaudado: Undefined variable $idUsuarioRegistrante  
