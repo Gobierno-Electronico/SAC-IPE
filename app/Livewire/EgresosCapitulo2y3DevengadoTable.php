@@ -8,6 +8,7 @@ use Livewire\Attributes\On;
 use App\Livewire\Tabla;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Controllers\BitacoraController;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Poliza;
 use Carbon\Carbon;
 use App\Models\InteraccionCuentaCuenta;
@@ -24,7 +25,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
     public $totalDisponible = 0;
     public $numeroEvento;
     public $numeroPolizaRemanente;
-    
+
     public function render()
     {
         return view('livewire.egresos-capitulo2y3-devengado-table');
@@ -61,13 +62,13 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
     #[On('agregar-registro')]
     public function agregarRegistro($registro)
     {
-        try{
+        try {
             if ($this->total + $registro['importe'] > $registro['montoEvento']) {
                 $this->dispatch('mostrarMensaje', mensaje: 'Monto total del evento superado', tipo: 'error', tiempo: 3000);
                 return;
             }
 
-            if($this->verificarPresupuesto($registro)){
+            if ($this->verificarPresupuesto($registro)) {
                 $nuevoRegistro = [
                     'id' => 0,
                     'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
@@ -75,7 +76,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                     'cuentaContable' => $registro['codigoCuentaContable'] . ' ' . $registro['descripcionCuentaContable'],
                     'mes' => $registro['mes'],
                     'tipoRegistro' => $registro['tipoRegistro'],
-                    'movimiento' => 'DEVENGADO', 
+                    'movimiento' => 'DEVENGADO',
                     'pttoComprometido' => $registro['pttoComprometido'],
                     'importe' => $registro['importe'],
                     'disponibilidad' => $this->totalDisponible,
@@ -84,14 +85,14 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                 array_push($this->dataCompleta, $registro);
                 $this->total = 0;
                 foreach ($this->cacheData as $key => $registro) {
-                    $this->cacheData[$key]['id'] = $key + 1; 
+                    $this->cacheData[$key]['id'] = $key + 1;
                     $this->dataCompleta[$key]['id'] = $key + 1;
                     $this->total += $registro['importe'];
                 }
                 $this->dispatch('cambioTotal', total: $this->total);
             }
-        }catch (\Throwable $th) {
-            Log::error('Ocurrió un error al agregar registro en devengado del capítulo 2 y 3: '. $th->getMessage());
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al agregar registro en devengado del capítulo 2 y 3: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -102,17 +103,17 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
         $this->totalDisponible = $solvencia - $registro['importe'];
         $totalImportes = 0;
 
-        foreach ($this->cacheData as $movimiento){
-            if(str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoPartida']) && $movimiento['mes'] == $registro['mes']){
+        foreach ($this->cacheData as $movimiento) {
+            if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoPartida']) && $movimiento['mes'] == $registro['mes']) {
                 $totalImportes += $movimiento['importe'];
             }
         }
 
-        if($totalImportes > 0){
+        if ($totalImportes > 0) {
             $this->totalDisponible = $solvencia - $totalImportes - $registro['importe'];
         }
 
-        if($this->totalDisponible < 0){
+        if ($this->totalDisponible < 0) {
             $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto comprometido insuficiente', tipo: 'warning', tiempo: 3000);
             return false;
         }
@@ -121,7 +122,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
 
     public function edit($id)
     {
-        try{
+        try {
             $this->recalcularDisponibilidad($id);
             foreach ($this->dataCompleta as $key => $registro) {
                 if ($registro['id'] == $id) {
@@ -131,18 +132,18 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                         'cuentaContable' => $registro['cuentaContableId'],
                         'mes' => $registro['mes'],
                         'importe' => $registro['importe'],
-                        'pttoComprometido' => $registro['pttoComprometido'], 
+                        'pttoComprometido' => $registro['pttoComprometido'],
                         'selectorPagoRetenciones' => $registro['selectorPagoRetenciones'],
                         'tipoRegistro' => $registro['tipoRegistro'],
                     ];
-                    
+
                     unset($this->dataCompleta[$key]);
-                    $this->dataCompleta = array_values($this->dataCompleta );
+                    $this->dataCompleta = array_values($this->dataCompleta);
                     $this->dispatch('llenar-formulario', $datosRegistro);
                     break;
                 }
             }
-    
+
             foreach ($this->cacheData as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->cacheData[$key]);
@@ -150,19 +151,19 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                     break;
                 }
             }
-    
+
             $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
             $this->total = $totalActualizado;
             $this->dispatch('cambioTotal', total: $totalActualizado);
-        }catch (\Throwable $th) {
-            Log::error('Ocurrió un error al editar en devengado del capítulo 2 y 3: '. $th->getMessage());
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al editar en devengado del capítulo 2 y 3: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al editar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 
     public function delete($id)
     {
-        try{
+        try {
             $this->recalcularDisponibilidad($id);
             foreach ($this->cacheData as $key => $registro) {
                 if ($registro['id'] == $id) {
@@ -171,20 +172,20 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                     break;
                 }
             }
-    
+
             foreach ($this->dataCompleta as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->dataCompleta[$key]);
-                    $this->dataCompleta = array_values($this->dataCompleta );
+                    $this->dataCompleta = array_values($this->dataCompleta);
                     break;
                 }
             }
-    
+
             $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
             $this->total = $totalActualizado;
             $this->dispatch('cambioTotal', total: $totalActualizado);
-        }catch (\Throwable $th) {
-            Log::error('Ocurrió un error al eliminar en devengado del capítulo 2 y 3: '. $th->getMessage());
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al eliminar en devengado del capítulo 2 y 3: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al editar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -203,12 +204,12 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
         }
 
         $totalImportes = 0;
-        foreach($this->cacheData as $key => $movimiento) {
-            if($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuentaPartida']) && $movimiento['mes'] == $datosSeleccionado['mes']) {
-                if($totalImportes == 0){
+        foreach ($this->cacheData as $key => $movimiento) {
+            if ($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuentaPartida']) && $movimiento['mes'] == $datosSeleccionado['mes']) {
+                if ($totalImportes == 0) {
                     $movimiento['disponibilidad'] = $movimiento['pttoComprometido'] - $movimiento['importe'];
                     $totalImportes += $movimiento['importe'];
-                }else{
+                } else {
                     $movimiento['disponibilidad'] = $movimiento['pttoComprometido'] - $totalImportes - $movimiento['importe'];
                     $totalImportes += $movimiento['importe'];
                 }
@@ -225,7 +226,8 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
             return;
         }
 
-        try{
+        try {
+            $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::select('numero_poliza')
                 ->where('tipo_poliza', '=', 'E')
                 ->whereYear('fecha', '=', Carbon::now()->year)
@@ -243,40 +245,39 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
             $fecha->year($anioActual);
 
             $bitacora = new BitacoraController();
-            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un devengado del capítulo 2 y 3 con evento: '.$this->numeroEvento, request());
+            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un devengado del capítulo 2 y 3 con evento: ' . $this->numeroEvento, request());
             DB::beginTransaction();
 
-            foreach ($this->dataCompleta as $movimiento)
-            {
+            foreach ($this->dataCompleta as $movimiento) {
                 $movimiento['importe'] = doubleval($movimiento['importe']);
                 $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['partidaId'])->whereIn('concepto_id', [87, 89])
-                ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
+                    ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
 
                 $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
-                ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
-                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
+                    ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+                    ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
 
                 $interaccionCuentaCuentasFiltradas = [];
                 foreach ($interaccionCuentaCuentas as $cuenta) {
                     if ($cuenta['tipo_interaccion'] == 'Contable - Abono') {
                         if ($cuenta['Codigo_cuenta'] == $movimiento['codigoCuentaContable']) {
-                            $interaccionCuentaCuentasFiltradas[] = $cuenta; 
-                            continue; 
+                            $interaccionCuentaCuentasFiltradas[] = $cuenta;
+                            continue;
                         }
-                    }else if($cuenta['tipo_interaccion'] == 'Contable - Cargo'){
-                        if(count($interaccionCuentaCuentas) > 7){
+                    } else if ($cuenta['tipo_interaccion'] == 'Contable - Cargo') {
+                        if (count($interaccionCuentaCuentas) > 7) {
                             $numeroInicialCuenta = explode('.', $cuenta['Codigo_cuenta']);
-                            if($movimiento['tipoRegistro'] == 'Almacen' && $numeroInicialCuenta[0] < 5){
-                                $interaccionCuentaCuentasFiltradas[] = $cuenta; 
-                                continue; 
-                            }else if($movimiento['tipoRegistro'] == 'Gasto' && $numeroInicialCuenta[0] >= 5){
-                                $interaccionCuentaCuentasFiltradas[] = $cuenta; 
-                                continue; 
+                            if ($movimiento['tipoRegistro'] == 'Almacen' && $numeroInicialCuenta[0] < 5) {
+                                $interaccionCuentaCuentasFiltradas[] = $cuenta;
+                                continue;
+                            } else if ($movimiento['tipoRegistro'] == 'Gasto' && $numeroInicialCuenta[0] >= 5) {
+                                $interaccionCuentaCuentasFiltradas[] = $cuenta;
+                                continue;
                             }
-                        }else{
+                        } else {
                             $interaccionCuentaCuentasFiltradas[] = $cuenta;
                         }
-                    }else {
+                    } else {
                         $interaccionCuentaCuentasFiltradas[] = $cuenta;
                     }
                 }
@@ -284,6 +285,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
 
                 $polizas = [
                     [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'E',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -306,6 +308,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
 
                 foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
                     array_push($polizas, [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'E',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -330,28 +333,28 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
             }
 
             $numerosPolizas = Poliza::select('numero_poliza')
-            ->where('tipo_poliza', '=', 'EAUX')
-            ->whereYear('fecha', '=', Carbon::now()->year)
-            ->distinct()
-            ->orderBy('numero_poliza')
-            ->pluck('numero_poliza')
-            ->toArray();
+                ->where('tipo_poliza', '=', 'EAUX')
+                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->distinct()
+                ->orderBy('numero_poliza')
+                ->pluck('numero_poliza')
+                ->toArray();
             sort($numerosPolizas);
             $this->numeroPolizaRemanente = (int)end($numerosPolizas) + 1;
 
             $polizasInicialesEgresosComprometido = Poliza::where('tipo_poliza', '=', 'E')
-            ->where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 2y3')
-            ->where('evento', '=', $this->numeroEvento)
-            ->whereYear('fecha', '=', Carbon::now()->year)
-            ->get();
+                ->where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 2y3')
+                ->where('evento', '=', $this->numeroEvento)
+                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->get();
 
             $polizasInicialesEgresosDevengado = Poliza::where('tipo_poliza', '=', 'E')
-            ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 2y3')
-            ->where('evento', '=', $this->numeroEvento)
-            ->whereYear('fecha', '=', Carbon::now()->year)
-            ->where('concepto', 'LIKE', '%(Devengado)%')
-            ->get();
-            
+                ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 2y3')
+                ->where('evento', '=', $this->numeroEvento)
+                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->where('concepto', 'LIKE', '%(Devengado)%')
+                ->get();
+
             $totalRemanente = DB::select('EXEC ImporteTotalCapitulo2y3Devengado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             if ($totalRemanente > 0) {
                 foreach ($polizasInicialesEgresosComprometido as $polizaImporte) {
@@ -360,6 +363,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                         $resultado[$clave]['total'] += $polizaImporte['total'];
                     } else {
                         $resultado[$clave] = [
+                            'idUsuarioRegistrante' => $idUsuarioRegistrante,
                             'area' => $polizaImporte->area,
                             'tipo_poliza' => 'EAUX',
                             'numero_poliza' =>  $this->numeroPolizaRemanente,
@@ -390,6 +394,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                         }
                     }
                     Poliza::create([
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $polizaInicial['area'],
                         'tipo_poliza' => 'EAUX',
                         'numero_poliza' =>  $this->numeroPolizaRemanente,
@@ -419,17 +424,13 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                     ->update(['estatus_evento' => false]);
             }
             DB::commit();
-            $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente);           
-        }catch (\Throwable $th) {
+            $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente);
+        } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('Ocurrió un error al finalizarRegistro en devengado del capítulo 2 y 3: '. $th->getMessage());
+            Log::error('Ocurrió un error al finalizarRegistro en devengado del capítulo 2 y 3: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 
-    public function changeState($value)
-    {
-
-    }
-
+    public function changeState($value) {}
 }

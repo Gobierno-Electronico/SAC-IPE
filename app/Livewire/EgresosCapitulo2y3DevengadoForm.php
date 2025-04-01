@@ -10,7 +10,6 @@ use App\Models\Poliza;
 use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
 use App\Models\CodigoDepartamento;
-use Illuminate\Support\Collection;
 use Carbon\Carbon;
 use Log;
 use DB;

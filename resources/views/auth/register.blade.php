@@ -16,9 +16,29 @@
                         @csrf
 
                         <div class="row mb-3">
+                            <label for="grado_academico" class="col-md-4 col-form-label text-md-end">{{ __('Grado Académico') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="grado_academico" type="text" class="form-control @error('grado_academico') is-invalid @enderror" name="grado_academico" value="{{ old('grado_academico') }}" required autocomplete="grado_academico" autofocus>
+
+                                @error('grado_academico')
+                                    <script>
+                                        toastr.error('Grado Académico invalido', '', {
+                                            timeOut: 5000
+                                        });
+                                    </script>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+
+                        </div>
+                        <div class="row mb-3">
                             <label for="nombre" class="col-md-4 col-form-label text-md-end">{{ __('Nombre') }}</label>
 
                             <div class="col-md-6">
+                               
                                 <input id="nombre" type="text" class="form-control @error('nombre') is-invalid @enderror" name="nombre" value="{{ old('nombre') }}" required autocomplete="nombre" autofocus>
 
                                 @error('nombre')
