@@ -9,6 +9,7 @@ use App\Models\Cuenta;
 use Log;
 use Illuminate\Support\Collection;
 use App\Http\Controllers\BitacoraController;
+use Illuminate\Support\Facades\Auth;
 use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
 use App\Models\CodigoDepartamento;
@@ -96,44 +97,6 @@ class EgresosCapitulo1EjercidoForm extends Component
         }
     }
 
-    public function agregarRegistro()
-    {
-        try{
-            $this->importe = floatval(str_replace(['$', ','], "", $this->importe));
-            $this->importe = ($this->importe > 0)  ? $this->importe : "";
-            $this->validate();
-
-            $cuenta = Cuenta::find($this->cuenta);
-            $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
-
-            $registro = [
-                'id' => 0,
-                'codigoArea' => $this->selectCodigoArea,
-                'observaciones' => $this->observaciones,
-                'fechaAfectacion' => $this->fechaAfectacion,
-                'evento' => $this->numeroEvento,
-                'areaResponsableId' => $this->selectCodigoAreaResponsable,
-                'codigoAreaResponsable' => $departamento->Codigo_completo,
-                'descripcionAreaResponsable' => $departamento->Nombre,
-                'cuentaId' => $this->cuenta,
-                'codigoCuenta' => $cuenta->Codigo_cuenta,
-                'descripcionCuenta' => $cuenta->Descripcion_cuenta,
-                'mes' => $this->mes,
-                'importe' => $this->importe,
-                'montoEvento' => $this->montoDelEvento,
-                'pttoDevengado' => $this->PTTODevengado
-            ];
-
-            $this->dispatch('agregar-registro', registro: $registro);
-            $this->limpiar();
-        }catch (\Illuminate\Validation\ValidationException $e) {
-            $this->dispatch('mostrarMensaje', mensaje: $e->getMessage(), tipo: 'warning', tiempo: 3000);
-        }catch (\Throwable $th) {
-            Log::error('Ocurrió un error al agregar registro en ejercido del capítulo 4: ' . $th->getMessage());
-            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
-        }
-    }
-
     public function limpiar()
     {
         $this->selectCodigoAreaResponsable = "";
@@ -162,16 +125,8 @@ class EgresosCapitulo1EjercidoForm extends Component
     public function finalizarRegistros()
     {
 
-
-        // $eventos =  Poliza::select('evento', 'descripcion')
-        //         ->whereYear('fecha', '=', Carbon::now()->year)
-        //         ->where('tipo_poliza', '=', 'E')
-        //         ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 1')
-        //         ->where('estatus_evento', '=', true)
-        //         ->distinct()
-        //         ->pluck('descripcion', 'evento');
-
         try {
+            $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::select('numero_poliza')
                 ->where('tipo_poliza', '=', 'E')
                 ->whereYear('fecha', '=', Carbon::now()->year)
@@ -198,37 +153,27 @@ class EgresosCapitulo1EjercidoForm extends Component
                 ->where('categoria','=','EGRESOS DEVENGADO CAPITULO 1')
                 ->where('concepto','LIKE','%(Devengado)%')
                 ->get();
-            // dd($this->numeroEvento);
-            // dd($polizasDevengadas[0]);
             foreach ($polizasDevengadas as $movimiento) {
 
                 $cuentaID = Cuenta::where('Codigo_cuenta', '=', $movimiento['cuenta'])
                     ->first();
-                // dd($movimiento);
-                // dd($cuentaID->id);
                 $movimiento['total'] = doubleval($movimiento['total']);
                 $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $cuentaID->id)->where('concepto_id', [10104])
                     ->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
-                // dd($interaccionCuentaConceptoPrincipal->id);
 
                 $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_2', '=', $interaccionCuentaConceptoPrincipal->id)
                     ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_1')
                     ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->first();
-                // dd($interaccionCuentaCuentas);
-                // dd($movimiento);
-                // $polizaEEjercido = Poliza::where('codigo_cuenta', '=', $interaccionCuentaCuentas['Codigo_cuenta'])
-
-
-
 
                 $polizas = [
                     [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento->area,
                         'tipo_poliza' => 'E',
                         'numero_poliza' =>  $this->numeroPoliza,
                         'fecha' => $this->fechaAfectacion,
-                        'cuenta' => $interaccionCuentaCuentas['Descripcion_cuenta'],
-                        'concepto' => $interaccionCuentaCuentas['Codigo_cuenta'],
+                        'cuenta' => $interaccionCuentaCuentas['Codigo_cuenta'],
+                        'concepto' => $interaccionCuentaCuentas['Descripcion_cuenta'],
                         'total' => abs($movimiento['total']),
                         'mes' => $movimiento['mes'],
                         'descripcion' => $movimiento['descripcion'],
@@ -241,9 +186,33 @@ class EgresosCapitulo1EjercidoForm extends Component
                         'updated_at' => $fecha
                     ]
                 ];
-                // dd($polizas);
 
                 Poliza::insert($polizas);
+
+                $polizas = [
+                    [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
+                        'area' => $movimiento->area,
+                        'tipo_poliza' => 'E',
+                        'numero_poliza' =>  $this->numeroPoliza,
+                        'fecha' => $this->fechaAfectacion,
+                        'cuenta' => $movimiento['cuenta'],
+                        'concepto' => $movimiento['concepto'],
+                        'total' => abs($movimiento['total']),
+                        'mes' => $movimiento['mes'],
+                        'descripcion' => $movimiento['descripcion'],
+                        'evento' => $this->numeroEvento,
+                        'tipo_interaccion' => 'Presupuestal - Abono',
+                        'validado' => false,
+                        'estatus_evento' => true,
+                        'categoria' => 'EGRESOS EJERCIDO CAPITULO 1',
+                        'created_at' => $fecha,
+                        'updated_at' => $fecha
+                    ]
+                ];
+
+                Poliza::insert($polizas);
+
 
             }
             
