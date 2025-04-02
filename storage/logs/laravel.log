@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+[2025-04-02 11:02:34] local.ERROR: Ocurrió un error al finalizarRegistro en ejercido del capítulo 1: SQLSTATE[23000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'area', table 'SAC-IPE.dbo.polizas'; column does not allow nulls. INSERT fails. (Connection: sqlsrv, SQL: insert into [polizas] ([area], [categoria], [concepto], [created_at], [cuenta], [descripcion], [estatus_evento], [evento], [fecha], [mes], [numero_poliza], [tipo_interaccion], [tipo_poliza], [total], [updated_at], [validado]) values (?, EGRESOS EJERCIDO CAPITULO 1, 8.2.6.5.1.1.3.01.01, 2025-04-02 11:02:34.450, Quinquenios (Ejercido), NOMINA 1RA QUICENA DE ENERO 2025, 1, 10, 2025-04-02, ENERO, 27, Presupuestal - Cargo, E, 6680, 2025-04-02 11:02:34.450, 0))  
+[2025-04-02 11:05:12] local.ERROR: Ocurrió un error al finalizarRegistro en ejercido del capítulo 1: SQLSTATE[23000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'area', table 'SAC-IPE.dbo.polizas'; column does not allow nulls. INSERT fails. (Connection: sqlsrv, SQL: insert into [polizas] ([area], [categoria], [concepto], [created_at], [cuenta], [descripcion], [estatus_evento], [evento], [fecha], [mes], [numero_poliza], [tipo_interaccion], [tipo_poliza], [total], [updated_at], [validado]) values (?, EGRESOS EJERCIDO CAPITULO 1, 8.2.6.5.1.1.5.02.01, 2025-04-02 11:05:11.906, Indemnizaciones (Ejercido), NOMINA 1RA QUICENA DE ENERO 2025, 1, 10, 2025-04-02, ENERO, 27, Presupuestal - Cargo, E, 10, 2025-04-02 11:05:11.906, 0))  
+[2025-04-02 11:07:55] local.ERROR: Ocurrió un error al finalizarRegistro en ejercido del capítulo 1: Property [$cdigoArea] not found on component: [egresos-capitulo1-ejercido-form]  
+[2025-04-02 11:08:49] local.ERROR: Ocurrió un error al finalizarRegistro en ejercido del capítulo 1: Property [$codigoArea] not found on component: [egresos-capitulo1-ejercido-form]  
+=======
 [2025-04-01 09:36:27] local.INFO: array (
   0 => 
   array (
@@ -153,3 +159,4 @@
   'importe' => 200.0,
 )  
 [2025-04-01 12:53:00] local.ERROR: Ocurrió un error al finalizarRegistro en devengado previamente recaudado: Undefined variable $idUsuarioRegistrante  
+>>>>>>> 7597015886460d76abc78fe2e5f0b9e1386e7ab7
