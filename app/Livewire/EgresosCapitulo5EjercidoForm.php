@@ -77,6 +77,12 @@ class EgresosCapitulo5EjercidoForm extends Component
     public function cambioEvento(){
         try{
             $this->limpiar();
+            $descripcionEvento = Poliza::select('descripcion')
+            ->where('evento', '=', $this->numeroEvento)
+            ->where('tipo_poliza', '=', 'E')
+            ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 5')
+            ->get()[0]->descripcion;
+            $this->observaciones = $descripcionEvento;
             $this->montoDelEvento = DB::select('EXEC ImporteTotalCapitulo5Ejercido @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             $this->dispatch('formato_importe', id: 'inputMontoEvento', amount: ($this->montoDelEvento > 0) ? $this->montoDelEvento : '');
             $this->dispatch('mostrarMensaje', mensaje: 'Monto del evento cargado', tipo: 'success', tiempo: 1500);
