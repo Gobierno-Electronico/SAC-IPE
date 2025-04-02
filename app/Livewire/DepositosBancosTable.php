@@ -15,6 +15,8 @@ use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
 use App\Models\CodigoDepartamento;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
+
 
 class DepositosBancosTable extends Tabla
 {
@@ -163,7 +165,7 @@ class DepositosBancosTable extends Tabla
             return;
         }
         try {
-
+            $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::select('numero_poliza')
                 ->where('tipo_poliza', '=', 'I')
                 ->whereYear('fecha', '=', Carbon::now()->year)
@@ -203,6 +205,7 @@ class DepositosBancosTable extends Tabla
                 $cuentaDerecha = Cuenta::find($interaccionCuentaConceptoDerecha->cuenta_id);
 
                 $poliza = new Poliza([
+                    'idUsuarioRegistrante' => $idUsuarioRegistrante,
                     'area' => $responsable->Codigo_completo,
                     'tipo_poliza' => 'I',
                     'numero_poliza' =>  $this->numeroPoliza,
@@ -221,6 +224,7 @@ class DepositosBancosTable extends Tabla
                     'updated_at' => $fecha
                 ]);
                 $polizaDerecha = new Poliza([
+                    'idUsuarioRegistrante' => $idUsuarioRegistrante,
                     'area' => $responsable->Codigo_completo,
                     'tipo_poliza' => 'I',
                     'numero_poliza' =>  $this->numeroPoliza,

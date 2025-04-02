@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
 use App\Http\Controllers\BitacoraController;
+use Illuminate\Support\Facades\Auth;
 use Log;
 use DB;
 
@@ -22,7 +23,7 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
     public $dataCompleta = [];
     public $perPage = 6;
     public $total = 0;
-        public $totalDisponible = 0;
+    public $totalDisponible = 0;
     public $totalDisponibleContable = 0;
     public $numeroEvento;
     public $numeroPolizaRemanente;
@@ -31,10 +32,7 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
         return view('livewire.egresos-capitulo2y3-pagado-table');
     }
 
-    public function query(): Builder
-    {
-
-    }
+    public function query(): Builder {}
 
     public function data()
     {
@@ -259,6 +257,7 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
         }
 
         try {
+            $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::select('numero_poliza')
                 ->where('tipo_poliza', '=', 'E')
                 ->whereYear('fecha', '=', Carbon::now()->year)
@@ -288,7 +287,7 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
                     ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
                 $interaccionCuentaCuentasFiltradas = [];
                 foreach ($interaccionCuentaCuentas as $cuenta) {
-                    
+
                     if ($cuenta['tipo_interaccion'] == 'Contable - Cargo') {
                         if ($cuenta['Codigo_cuenta'] == $movimiento['codigoCuentaRetenciones']) {
                             $interaccionCuentaCuentasFiltradas[] = $cuenta;
@@ -308,6 +307,7 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
 
                 $polizas = [
                     [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'E',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -330,6 +330,7 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
 
                 foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
                     array_push($polizas, [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'E',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -393,7 +394,6 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
             $totalRemanente = DB::select('EXEC ImporteTotalCapitulo2y3Pagado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             if ($totalRemanente > 0) {
 
-
                 $remanentesContables = [];
                 foreach ($polizasDevengado as $devengado) {
                     $devengado->matchEncontrado = 0;
@@ -401,16 +401,16 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
                     $conceptoGeneralCuentaDevengada = explode('(', $conceptoCuentaDevengada);
                     $codigoCuentaPagada = Cuenta::where('Descripcion_cuenta', 'LIKE', '%' . $conceptoGeneralCuentaDevengada[0] . '(Pagado)' . '%')->get();
 
-                    if(count($codigoCuentaPagada) > 1){
+                    if (count($codigoCuentaPagada) > 1) {
                         // Obtener los últimos dos segmentos de partidaPresupuestalSeleccionada
                         $codigoPresupuestal = explode('.', $devengado->cuentaRelacionada);
                         $ultimosDosPresupuestal = implode('.', array_slice($codigoPresupuestal, -2, 2));
-            
+
                         // Filtrar partidaDevengado dejando solo la cuenta que coincida en los últimos dos segmentos
                         $codigoCuentaPagada = $codigoCuentaPagada->filter(function ($cuenta) use ($ultimosDosPresupuestal) {
                             $codigoCuenta = explode('.', $cuenta->Codigo_cuenta);
                             $ultimosDosCuenta = implode('.', array_slice($codigoCuenta, -2, 2));
-            
+
                             return $ultimosDosCuenta == $ultimosDosPresupuestal;
                         })->values();
                     }
@@ -426,7 +426,7 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
                             array_push($remanentesContables, $pagado->toArray());
 
                             $polizasPagadoContableCargo->forget($index);
-                        } 
+                        }
                     }
                 }
 
@@ -438,9 +438,47 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
                     }
                 }
 
+                $polizasDevengadoContableCargo = Poliza::where('tipo_poliza', '=', 'E')
+                    ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 2y3')
+                    ->where('evento', '=', $this->numeroEvento)
+                    ->whereYear('fecha', '=', Carbon::now()->year)
+                    ->where('tipo_interaccion', '=', 'Contable - Cargo')
+                    ->get();
+
                 $remanentesContables = array_values(array_filter($remanentesContables, fn($item) => $item['total'] != 0));
+
+                Log::info($remanentesContables);
+                foreach ($remanentesContables as $poliza) {
+                    if ($poliza['tipo_interaccion'] == 'Contable - Abono') {
+                        $codigoCuenta = $poliza['cuenta'];
+                        $descripcion = $poliza['concepto'];
+                        $total = $poliza['total'];
+
+                        // Filtrar y eliminar la coincidencia pero del contable - cargo
+                        $remanentesContables = array_filter($remanentesContables, function ($item) use ($codigoCuenta, $descripcion, $total) {
+                            return !($item['cuenta'] == $codigoCuenta &&
+                                $item['concepto'] == $descripcion &&
+                                $item['total'] == $total &&
+                                $item['tipo_interaccion'] == 'Contable - Cargo');
+                        });
+
+                        //agregar un contable cargo pero de devengado
+                        foreach ($polizasDevengadoContableCargo as $cuentaCargo) {
+                            if ($cuentaCargo->tipo_interaccion == 'Contable - Cargo' && str_contains($poliza['cuentaRelacionada'], $cuentaCargo->cuenta)) {
+                                $cuentaCargo->total = $poliza['total'];
+                                array_push($remanentesContables, $cuentaCargo->toArray());
+                                break;
+                            }
+                        }
+
+                        // Reindexar el array
+                        $remanentesContables = array_values($remanentesContables);
+                    }
+                }
+
                 foreach ($remanentesContables as $remanente) {
                     Poliza::create([
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $remanente['area'],
                         'tipo_poliza' => 'EAUX',
                         'numero_poliza' =>  $this->numeroPolizaRemanente,
@@ -467,6 +505,7 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
                     } else {
                         // Si la clave no existe, agregar el nuevo depósito al resultado
                         $resultado[$clave] = [
+                            'idUsuarioRegistrante' => $idUsuarioRegistrante,
                             'area' => $polizaImporte->area,
                             'tipo_poliza' => 'EAUX',
                             'numero_poliza' =>  $this->numeroPolizaRemanente,
@@ -497,6 +536,7 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
                         }
                     }
                     Poliza::create([
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $polizaInicial['area'],
                         'tipo_poliza' => 'EAUX',
                         'numero_poliza' =>  $this->numeroPolizaRemanente,
