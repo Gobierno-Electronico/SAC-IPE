@@ -10,6 +10,7 @@ use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
 use App\Http\Controllers\BitacoraController;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Log;
 use DB;
@@ -232,7 +233,7 @@ class IngresosRecaudadoTable extends Tabla
         }
 
         try {
-
+            $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::select('numero_poliza')
                 ->where('tipo_poliza', '=', 'I')
                 ->whereYear('fecha', '=', Carbon::now()->year)
@@ -323,6 +324,7 @@ class IngresosRecaudadoTable extends Tabla
                 $interaccionCuentaCuentas = $interaccionCuentaCuentasFiltradas;
                 $polizas = [
                     [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'I',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -343,6 +345,7 @@ class IngresosRecaudadoTable extends Tabla
                 ];
                 foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
                     array_push($polizas, [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'I',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -392,6 +395,7 @@ class IngresosRecaudadoTable extends Tabla
                     } else {
                         // Si la clave no existe, agregar el nuevo depósito al resultado
                         $resultado[$clave] = [
+                            'idUsuarioRegistrante' => $idUsuarioRegistrante,
                             'area' => $polizaImporte->area,
                             'tipo_poliza' => 'IAUX',
                             'numero_poliza' =>  $this->numeroPolizaRemanente,
@@ -419,35 +423,35 @@ class IngresosRecaudadoTable extends Tabla
 
                         if (str_contains($polizaInicial['concepto'], rtrim($conceptoGeneral[0])) !== false && $conceptoGeneral[1] == 'Recaudado)') {
                             $total = $total - $polizaRecaudado['total'];
-                            if(number_format($total, 2) < 0){
+                            if (number_format($total, 2) < 0) {
                                 DB::rollBack();
-                                $this->dispatch('mostrarMensaje', mensaje: 'Se excedió el monto $'. number_format($polizaInicial['total'], 2).' de la cuenta de '.$polizaInicial['concepto'].' con IVA', tipo: 'error', tiempo: 3000);
+                                $this->dispatch('mostrarMensaje', mensaje: 'Se excedió el monto $' . number_format($polizaInicial['total'], 2) . ' de la cuenta de ' . $polizaInicial['concepto'] . ' con IVA', tipo: 'error', tiempo: 3000);
                                 return;
                             }
                         }
                     }
-                    
-                    if(number_format($total, 2) > 0){
-                    Poliza::create([
-                        'area' => $polizaInicial['area'],
-                        'tipo_poliza' => 'IAUX',
-                        'numero_poliza' =>  $this->numeroPolizaRemanente,
-                        'fecha' => $movimiento['fechaAfectacion'],
-                        'cuenta' => $polizaInicial['cuenta'],
-                        'concepto' => $polizaInicial['concepto'],
-                        'total' => $total,
-                        'mes' => $polizaInicial['mes'],
-                        'descripcion' => $polizaInicial['descripcion'],
-                        'evento' => $this->numeroEvento,
-                        'tipo_interaccion' => $polizaInicial['tipo_interaccion'],
-                        'validado' => false,
-                        'estatus_evento' => false,
-                        'categoria' => 'INGRESOS DEVENGADO REMANENTE RECAUDADO',
-                        'created_at' => $fecha,
-                        'updated_at' => $fecha
-                    ]);
-                   
-                }
+
+                    if (number_format($total, 2) > 0) {
+                        Poliza::create([
+                            'idUsuarioRegistrante' => $idUsuarioRegistrante,
+                            'area' => $polizaInicial['area'],
+                            'tipo_poliza' => 'IAUX',
+                            'numero_poliza' =>  $this->numeroPolizaRemanente,
+                            'fecha' => $movimiento['fechaAfectacion'],
+                            'cuenta' => $polizaInicial['cuenta'],
+                            'concepto' => $polizaInicial['concepto'],
+                            'total' => $total,
+                            'mes' => $polizaInicial['mes'],
+                            'descripcion' => $polizaInicial['descripcion'],
+                            'evento' => $this->numeroEvento,
+                            'tipo_interaccion' => $polizaInicial['tipo_interaccion'],
+                            'validado' => false,
+                            'estatus_evento' => false,
+                            'categoria' => 'INGRESOS DEVENGADO REMANENTE RECAUDADO',
+                            'created_at' => $fecha,
+                            'updated_at' => $fecha
+                        ]);
+                    }
                 }
             } else {
                 $this->numeroPolizaRemanente = 0;

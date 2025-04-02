@@ -9,6 +9,7 @@ use App\Livewire\Tabla;
 use Illuminate\Database\Eloquent\Builder;
 use Log;
 use DB;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
@@ -212,6 +213,7 @@ class EgresosCapitulo2y3ComprometidoTable extends Tabla
         }
 
         try{
+            $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::select('numero_poliza')
                 ->where('tipo_poliza', '=', 'E')
                 ->whereYear('fecha', '=', Carbon::now()->year)
@@ -250,6 +252,7 @@ class EgresosCapitulo2y3ComprometidoTable extends Tabla
 
                 $polizas = [
                     [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'E',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -271,6 +274,7 @@ class EgresosCapitulo2y3ComprometidoTable extends Tabla
 
                 foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
                     array_push($polizas, [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'E',
                         'numero_poliza' =>  $this->numeroPoliza,

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Livewire;
+
 use Livewire\Attributes\On;
 use App\Models\Poliza;
 use Illuminate\Database\Eloquent\Builder;
@@ -9,6 +10,7 @@ use App\Http\Controllers\BitacoraController;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Log;
 use DB;
@@ -23,7 +25,8 @@ class CobroEspecieTable extends Tabla
     public $numeroEvento;
     public $numeroPolizaRemanente;
 
-    public function render(){
+    public function render()
+    {
         return view('livewire.cobro-especie-table');
     }
 
@@ -66,12 +69,12 @@ class CobroEspecieTable extends Tabla
                         'importe' => $registro['importe']
                     ];
                     unset($this->dataCompleta[$key]);
-                    $this->dataCompleta = array_values($this->dataCompleta );
+                    $this->dataCompleta = array_values($this->dataCompleta);
                     $this->dispatch('llenar-formulario', $datosRegistro);
                     break;
                 }
             }
-    
+
             foreach ($this->cacheData as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->cacheData[$key]);
@@ -83,7 +86,7 @@ class CobroEspecieTable extends Tabla
             $this->total = $totalActualizado;
             $this->dispatch('cambioTotal', total: $totalActualizado);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al editar en cobro en especie: '. $th->getMessage());
+            Log::error('Ocurrió un error al editar en cobro en especie: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al editar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -99,11 +102,11 @@ class CobroEspecieTable extends Tabla
                     break;
                 }
             }
-    
+
             foreach ($this->dataCompleta as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->dataCompleta[$key]);
-                    $this->dataCompleta = array_values($this->dataCompleta );
+                    $this->dataCompleta = array_values($this->dataCompleta);
                     break;
                 }
             }
@@ -111,7 +114,7 @@ class CobroEspecieTable extends Tabla
             $this->total = $totalActualizado;
             $this->dispatch('cambioTotal', total: $totalActualizado);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al eliminar en cobro en especie: '. $th->getMessage());
+            Log::error('Ocurrió un error al eliminar en cobro en especie: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al eliminar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -131,12 +134,12 @@ class CobroEspecieTable extends Tabla
         }
 
         $totalImportes = 0;
-        foreach($this->cacheData as $key => $movimiento) {
-            if($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuenta']) && $movimiento['mes'] == $datosSeleccionado['mes'] && $movimiento['evento'] == $datosSeleccionado['evento']) {
-                if($totalImportes == 0){
+        foreach ($this->cacheData as $key => $movimiento) {
+            if ($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuenta']) && $movimiento['mes'] == $datosSeleccionado['mes'] && $movimiento['evento'] == $datosSeleccionado['evento']) {
+                if ($totalImportes == 0) {
                     $movimiento['disponibilidad'] = $movimiento['ppto'] - $movimiento['importe'];
                     $totalImportes += $movimiento['importe'];
-                }else{
+                } else {
                     $movimiento['disponibilidad'] = $movimiento['ppto'] - $totalImportes - $movimiento['importe'];
                     $totalImportes += $movimiento['importe'];
                 }
@@ -145,9 +148,7 @@ class CobroEspecieTable extends Tabla
         }
     }
 
-    public function changeState($value)
-    {
-    }
+    public function changeState($value) {}
 
     #[On('agregar-registro')]
     public function agregarRegistro($registro)
@@ -157,37 +158,37 @@ class CobroEspecieTable extends Tabla
                 $this->dispatch('mostrarMensaje', mensaje: 'Monto total del evento superado', tipo: 'error', tiempo: 3000);
                 return;
             }
-            
+
             $anioActual = Carbon::now()->year;
             $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $registro['cuentaId'])
                 ->whereIn('concepto_id', [33])
                 ->where('tipo_interaccion', '=', 'Presupuestal - Abono')
                 ->first();
-    
+
             $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
                 ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')
                 ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
                 ->where('Descripcion_cuenta', 'LIKE', '%(Devengado)%')
                 ->first();
-    
+
             $solvencia = DB::select('EXEC SolvenciaCobroEspecie @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?', array($registro['codigoAreaResponsable'], $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $registro['mes'], $registro['evento']));
             $totalDisponible = $solvencia[0]->Total - $registro['importe'];
             $totalImportes = 0;
             foreach ($this->cacheData as $movimiento) {
-                if(str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoCuenta']) && $movimiento['mes'] == $registro['mes'] && $movimiento['evento'] == $registro['evento']) {
+                if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoCuenta']) && $movimiento['mes'] == $registro['mes'] && $movimiento['evento'] == $registro['evento']) {
                     $totalImportes += $movimiento['importe'];
                 }
             }
 
-            if($totalImportes > 0){
+            if ($totalImportes > 0) {
                 $totalDisponible = $solvencia[0]->Total - $totalImportes - $registro['importe'];
             }
-    
-            if($totalDisponible < 0){
+
+            if ($totalDisponible < 0) {
                 $this->dispatch('mostrarMensaje', mensaje: 'Monto devengado insuficiente', tipo: 'error', tiempo: 3000);
                 return;
             }
-    
+
             $nuevoRegistro = [
                 'id' => 0,
                 'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
@@ -199,18 +200,18 @@ class CobroEspecieTable extends Tabla
                 'importe' => $registro['importe'],
                 'disponibilidad' => $totalDisponible,
             ];
-    
+
             array_push($this->cacheData, $nuevoRegistro);
             array_push($this->dataCompleta, $registro);
             $this->total = 0;
             foreach ($this->cacheData as $key => $registro) {
-                $this->cacheData[$key]['id'] = $key + 1; 
+                $this->cacheData[$key]['id'] = $key + 1;
                 $this->dataCompleta[$key]['id'] = $key + 1;
                 $this->total += $registro['importe'];
             }
             $this->dispatch('cambioTotal', total: $this->total);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al agregar registro en cobro en especie: '. $th->getMessage());
+            Log::error('Ocurrió un error al agregar registro en cobro en especie: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -224,6 +225,7 @@ class CobroEspecieTable extends Tabla
         }
 
         try {
+            $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::select('numero_poliza')
                 ->where('tipo_poliza', '=', 'I')
                 ->whereYear('fecha', '=', Carbon::now()->year)
@@ -243,7 +245,7 @@ class CobroEspecieTable extends Tabla
             $fecha->year($anioActual);
 
             $bitacora = new BitacoraController();
-            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un ingreso recaudado con evento: '.$this->numeroEvento, request());
+            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un ingreso recaudado con evento: ' . $this->numeroEvento, request());
             DB::beginTransaction();
 
             foreach ($this->dataCompleta as $movimiento) {
@@ -257,6 +259,7 @@ class CobroEspecieTable extends Tabla
                     ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
                 $polizas = [
                     [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'I',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -278,6 +281,7 @@ class CobroEspecieTable extends Tabla
 
                 foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
                     array_push($polizas, [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'I',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -300,18 +304,18 @@ class CobroEspecieTable extends Tabla
             }
 
             $numerosPolizas = Poliza::select('numero_poliza')
-            ->where('tipo_poliza', '=', 'IAUX')
-            ->whereYear('fecha', '=', Carbon::now()->year)
-            ->distinct()
-            ->orderBy('numero_poliza')
-            ->pluck('numero_poliza')
-            ->toArray();
+                ->where('tipo_poliza', '=', 'IAUX')
+                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->distinct()
+                ->orderBy('numero_poliza')
+                ->pluck('numero_poliza')
+                ->toArray();
             sort($numerosPolizas);
             $this->numeroPolizaRemanente = (int)end($numerosPolizas) + 1;
             $polizaRecaudadoRecaudado = Poliza::where('tipo_poliza', '=', 'I')
-                ->where(function($query){
+                ->where(function ($query) {
                     $query->where('categoria', '=', 'INGRESOS RECAUDADO')
-                    ->orwhere('categoria', '=', 'INGRESOS COBRO ESPECIE');
+                        ->orwhere('categoria', '=', 'INGRESOS COBRO ESPECIE');
                 })
                 ->where('evento', '=', $this->numeroEvento)->where('concepto', 'LIKE', '%(Recaudado)%')->get();
 
@@ -327,6 +331,7 @@ class CobroEspecieTable extends Tabla
                     } else {
                         // Si la clave no existe, agregar el nuevo depósito al resultado
                         $resultado[$clave] = [
+                            'idUsuarioRegistrante' => $idUsuarioRegistrante,
                             'area' => $polizaImporte->area,
                             'tipo_poliza' => 'IAUX',
                             'numero_poliza' =>  $this->numeroPolizaRemanente,
@@ -356,6 +361,7 @@ class CobroEspecieTable extends Tabla
                         }
                     }
                     Poliza::create([
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $polizaInicial['area'],
                         'tipo_poliza' => 'IAUX',
                         'numero_poliza' =>  $this->numeroPolizaRemanente,
@@ -384,7 +390,7 @@ class CobroEspecieTable extends Tabla
             }
             DB::commit();
             $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente);
-        }catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             DB::rollBack();
             Log::error('Ocurrió un error al finalizarRegistro en Cobro en especie: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
