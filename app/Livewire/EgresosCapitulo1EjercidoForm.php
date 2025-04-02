@@ -8,7 +8,7 @@ use Livewire\Attributes\On;
 use App\Models\Cuenta;
 use Log;
 use Illuminate\Support\Collection;
-
+use App\Http\Controllers\BitacoraController;
 use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
 use App\Models\CodigoDepartamento;
@@ -38,20 +38,9 @@ class EgresosCapitulo1EjercidoForm extends Component
     #[Validate('required', message: 'Área responsable requerida')]
     public $selectCodigoAreaResponsable = "";
 
-    #[Validate('required', message: 'Cuenta requerida')]
-    public $cuenta = "";
-
-    #[Validate('required', message: 'Mes requerido')]
-    public $mes = "";
-
     #[Validate('required', message: 'Monto del evento requerido')]  
     public $montoDelEvento = "";
 
-    #[Validate('required', message: 'Importe requerido')]
-    public $importe;
-
-    public $cambiarCuentaSeleccionada = true;
-    public $partidasPresupuestales = [];
     public $PTTODevengado = 0;
 
     public function render() 
@@ -64,8 +53,6 @@ class EgresosCapitulo1EjercidoForm extends Component
                 ->where('estatus_evento', '=', true)
                 ->distinct()
                 ->pluck('descripcion', 'evento');
-            $this->cambiarCuentaSeleccionada = false;
-            $this->llenarCuentasPresupuestalCargo();
             return view('livewire.egresos-capitulo1-ejercido-form', ['eventos' => $eventos]);
         }catch(\Throwable $th){
             Log::error('Ocurrió un error al cargar cuentas en ejercido: ' . $th->getMessage());
@@ -79,60 +66,15 @@ class EgresosCapitulo1EjercidoForm extends Component
             $this->montoDelEvento = DB::select('EXEC ImporteTotalCapitulo1Ejercido @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             $this->dispatch('formato_importe', id: 'inputMontoEvento', amount: ($this->montoDelEvento > 0) ? $this->montoDelEvento : '');
             $this->dispatch('mostrarMensaje', mensaje: 'Monto del evento cargado', tipo: 'success', tiempo: 1500);
-            $this->llenarCuentasPresupuestalCargo();
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar el evento en ejercido: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 
-    public function llenarCuentasPresupuestalCargo()
-    {
-        try {
-            if ($this->cambiarCuentaSeleccionada) {
-                $this->cuenta = "";
-                $this->cargarPresupuestoDevengado();
-            }
-
-            $this->cambiarCuentaSeleccionada = true;
-
-            $cuentasDevengadas = Poliza::where('evento', '=', $this->numeroEvento)
-                ->where('tipo_poliza', '=', 'E')
-                ->where('concepto', 'LIKE', '%Devengado%')
-                ->get();
-
-            $cuentasEjercidas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-                ->whereIn('interaccion_cuenta_conceptos.concepto_id', [10104])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
-                ->orderBy('cuentas.Codigo_cuenta')->get();
-
-            $cuentasEjercidasAux = new Collection();
-
-            foreach ($cuentasEjercidas as $ejercida) {
-                foreach ($cuentasDevengadas as $comprometida) {
-                    $conceptoComprometida = explode('(', $comprometida->concepto);
-                
-                    if (str_contains($ejercida->Descripcion_cuenta, $conceptoComprometida[0])) {
-                        // Verificamos si $ejercida ya existe en la colección
-                        if (!$cuentasEjercidasAux->contains(function($value) use ($ejercida) {
-                            return $value->Descripcion_cuenta === $ejercida->Descripcion_cuenta;
-                            })) {
-                            // Si no existe, lo agregamos
-                            $cuentasEjercidasAux->push($ejercida);
-                        }
-                    }
-                }
-            }
-            $this->partidasPresupuestales = $cuentasEjercidasAux;     
-        } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al cargar el evento en Ejercido del capítulo 4000: ' . $th->getMessage());
-            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
-        }
-    }
 
     public function cargarPresupuestoDevengado(){
         try{
-            $this->cambiarCuentaSeleccionada = false;
-            $this->llenarCuentasPresupuestalCargo();
 
             if (!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
 
@@ -194,20 +136,14 @@ class EgresosCapitulo1EjercidoForm extends Component
 
     public function limpiar()
     {
-        $this->cuenta = "";
         $this->selectCodigoAreaResponsable = "";
         $this->PTTODevengado = "";
-        $this->importe = "";
-        $this->mes = "";
         $this->dispatch('limpiar');
     }
 
     #[On('llenar-formulario')]
     public function llenarFormulario($datosRegistro)
     {
-        $this->cuenta = $datosRegistro['cuenta'];
-        $this->mes = $datosRegistro['mes'];
-        $this->importe = $datosRegistro['importe'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->PTTODevengado = $datosRegistro['pttoDevengado'];
         $this->dispatch('llenarFormulario', presupuesto: $this->PTTODevengado, importe: $this->importe);
@@ -222,8 +158,110 @@ class EgresosCapitulo1EjercidoForm extends Component
         $this->numeroPolizaRemanente = $numeroPolizaRemanente;
         $this->total = $total;
     }
+#[On('finalizar-registros')]
     public function finalizarRegistros()
     {
-        $this->dispatch('finalizar-registros');
+
+
+        // $eventos =  Poliza::select('evento', 'descripcion')
+        //         ->whereYear('fecha', '=', Carbon::now()->year)
+        //         ->where('tipo_poliza', '=', 'E')
+        //         ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 1')
+        //         ->where('estatus_evento', '=', true)
+        //         ->distinct()
+        //         ->pluck('descripcion', 'evento');
+
+        try {
+            $numerosPolizas = Poliza::select('numero_poliza')
+                ->where('tipo_poliza', '=', 'E')
+                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->distinct()
+                ->orderBy('numero_poliza')
+                ->pluck('numero_poliza')
+                ->toArray();
+            sort($numerosPolizas);
+            $this->numeroPoliza = (int)end($numerosPolizas) + 1;
+
+
+            $anioActual = Carbon::now()->year;
+            $fecha = Carbon::now('America/Mexico_City');
+            $fecha->year($anioActual);
+
+            $bitacora = new BitacoraController();
+            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un ejercido del capítulo 1 con evento: ' . $this->numeroEvento, request());
+            DB::beginTransaction();
+
+            $polizasDevengadas = Poliza::select()
+                ->where('tipo_poliza', '=', 'E')
+                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->where('evento','=',$this->numeroEvento)
+                ->where('categoria','=','EGRESOS DEVENGADO CAPITULO 1')
+                ->where('concepto','LIKE','%(Devengado)%')
+                ->get();
+            // dd($this->numeroEvento);
+            // dd($polizasDevengadas[0]);
+            foreach ($polizasDevengadas as $movimiento) {
+
+                $cuentaID = Cuenta::where('Codigo_cuenta', '=', $movimiento['cuenta'])
+                    ->first();
+                // dd($movimiento);
+                // dd($cuentaID->id);
+                $movimiento['total'] = doubleval($movimiento['total']);
+                $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $cuentaID->id)->where('concepto_id', [10104])
+                    ->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
+                // dd($interaccionCuentaConceptoPrincipal->id);
+
+                $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_2', '=', $interaccionCuentaConceptoPrincipal->id)
+                    ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_1')
+                    ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->first();
+                // dd($interaccionCuentaCuentas);
+                // dd($movimiento);
+                // $polizaEEjercido = Poliza::where('codigo_cuenta', '=', $interaccionCuentaCuentas['Codigo_cuenta'])
+
+
+
+
+                $polizas = [
+                    [
+                        'area' => $movimiento->area,
+                        'tipo_poliza' => 'E',
+                        'numero_poliza' =>  $this->numeroPoliza,
+                        'fecha' => $this->fechaAfectacion,
+                        'cuenta' => $interaccionCuentaCuentas['Descripcion_cuenta'],
+                        'concepto' => $interaccionCuentaCuentas['Codigo_cuenta'],
+                        'total' => abs($movimiento['total']),
+                        'mes' => $movimiento['mes'],
+                        'descripcion' => $movimiento['descripcion'],
+                        'evento' => $this->numeroEvento,
+                        'tipo_interaccion' => $interaccionCuentaCuentas['tipo_interaccion'],
+                        'validado' => false,
+                        'estatus_evento' => true,
+                        'categoria' => 'EGRESOS EJERCIDO CAPITULO 1',
+                        'created_at' => $fecha,
+                        'updated_at' => $fecha
+                    ]
+                ];
+                // dd($polizas);
+
+                Poliza::insert($polizas);
+
+            }
+            
+            $importeTotalEvento = DB::select('EXEC ImporteTotalCapitulo1Ejercido @evento = ?', [$this->numeroEvento]);
+            if ($importeTotalEvento[0]->MontoDelEvento == 0) {
+                Poliza::where('evento', '=', $this->numeroEvento)
+                    ->whereIn('categoria', ['EGRESOS DEVENGADO CAPITULO 1'])
+                    ->whereYear('fecha', '=', Carbon::now()->year)
+                    ->update(['estatus_evento' => false]);
+            }
+            // dd($polizas);
+
+            DB::commit();
+            $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error('Ocurrió un error al finalizarRegistro en ejercido del capítulo 1: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
     }
 }

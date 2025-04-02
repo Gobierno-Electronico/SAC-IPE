@@ -196,16 +196,6 @@
         input.value = partes.length > 1 ? `${numeroEntero}.${partes[1]}` : numeroEntero;
     }
 
-    function keyPress(e, obj) {
-        let isCurrency = $('#' + obj.id).val().search(/[$]/)
-        let texto = $('#' + obj.id).val().replace(/[^0-9.]/g, '');
-        let isDecimal = texto.search(/[.]/)
-        let amount = parseFloat(texto);
-        if (!isNaN(amount) && isDecimal < 0 || isCurrency == 0) {
-            $('#' + obj.id).val(amount.toLocaleString());
-        }
-    }
-
     function formatearImporte(obj, amount = '') {
         amount = (amount) ? amount : $('#' + obj.id).val().replace(/[^0-9.]/g, '');
         amount = parseFloat(amount);
