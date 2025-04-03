@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
 use App\Http\Controllers\BitacoraController;
+use Illuminate\Support\Facades\Auth;
 use Log;
 use DB;
 
@@ -255,6 +256,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
         }
 
         try {
+            $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::select('numero_poliza')
                 ->where('tipo_poliza', '=', 'E')
                 ->whereYear('fecha', '=', Carbon::now()->year)
@@ -305,6 +307,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
 
                 $polizas = [
                     [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'E',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -326,6 +329,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
 
                 foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
                     array_push($polizas, [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'E',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -411,7 +415,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
                             array_push($remanentesContables, $pagado->toArray());
 
                             $polizasPagadoContableCargo->forget($index);
-                        } 
+                        }
                     }
                 }
                 foreach ($polizasDevengado as $devengado) {
@@ -428,6 +432,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
 
                 foreach ($remanentesContables as $remanente) {
                     Poliza::create([
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $remanente['area'],
                         'tipo_poliza' => 'EAUX',
                         'numero_poliza' =>  $this->numeroPolizaRemanente,
@@ -460,6 +465,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
                     } else {
                         // Si la clave no existe, agregar el nuevo depósito al resultado
                         $resultado[$clave] = [
+                            'idUsuarioRegistrante' => $idUsuarioRegistrante,
                             'area' => $polizaImporte->area,
                             'tipo_poliza' => 'EAUX',
                             'numero_poliza' =>  $this->numeroPolizaRemanente,
@@ -491,6 +497,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
                         }
                     }
                     Poliza::create([
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $polizaInicial['area'],
                         'tipo_poliza' => 'EAUX',
                         'numero_poliza' =>  $this->numeroPolizaRemanente,

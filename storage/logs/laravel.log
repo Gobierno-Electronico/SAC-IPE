@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+[2025-04-02 11:02:34] local.ERROR: Ocurrió un error al finalizarRegistro en ejercido del capítulo 1: SQLSTATE[23000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'area', table 'SAC-IPE.dbo.polizas'; column does not allow nulls. INSERT fails. (Connection: sqlsrv, SQL: insert into [polizas] ([area], [categoria], [concepto], [created_at], [cuenta], [descripcion], [estatus_evento], [evento], [fecha], [mes], [numero_poliza], [tipo_interaccion], [tipo_poliza], [total], [updated_at], [validado]) values (?, EGRESOS EJERCIDO CAPITULO 1, 8.2.6.5.1.1.3.01.01, 2025-04-02 11:02:34.450, Quinquenios (Ejercido), NOMINA 1RA QUICENA DE ENERO 2025, 1, 10, 2025-04-02, ENERO, 27, Presupuestal - Cargo, E, 6680, 2025-04-02 11:02:34.450, 0))  
+[2025-04-02 11:05:12] local.ERROR: Ocurrió un error al finalizarRegistro en ejercido del capítulo 1: SQLSTATE[23000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Cannot insert the value NULL into column 'area', table 'SAC-IPE.dbo.polizas'; column does not allow nulls. INSERT fails. (Connection: sqlsrv, SQL: insert into [polizas] ([area], [categoria], [concepto], [created_at], [cuenta], [descripcion], [estatus_evento], [evento], [fecha], [mes], [numero_poliza], [tipo_interaccion], [tipo_poliza], [total], [updated_at], [validado]) values (?, EGRESOS EJERCIDO CAPITULO 1, 8.2.6.5.1.1.5.02.01, 2025-04-02 11:05:11.906, Indemnizaciones (Ejercido), NOMINA 1RA QUICENA DE ENERO 2025, 1, 10, 2025-04-02, ENERO, 27, Presupuestal - Cargo, E, 10, 2025-04-02 11:05:11.906, 0))  
+[2025-04-02 11:07:55] local.ERROR: Ocurrió un error al finalizarRegistro en ejercido del capítulo 1: Property [$cdigoArea] not found on component: [egresos-capitulo1-ejercido-form]  
+[2025-04-02 11:08:49] local.ERROR: Ocurrió un error al finalizarRegistro en ejercido del capítulo 1: Property [$codigoArea] not found on component: [egresos-capitulo1-ejercido-form]  
+=======
 [2025-04-01 09:36:27] local.INFO: array (
   0 => 
   array (
@@ -153,3 +159,49 @@
   'importe' => 200.0,
 )  
 [2025-04-01 12:53:00] local.ERROR: Ocurrió un error al finalizarRegistro en devengado previamente recaudado: Undefined variable $idUsuarioRegistrante  
+>>>>>>> 7597015886460d76abc78fe2e5f0b9e1386e7ab7
+[2025-04-03 07:58:09] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
+[stacktrace]
+#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
+#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
+#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
+#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
+#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
+#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#11 {main}
+"} 
+[2025-04-03 07:58:14] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
+[stacktrace]
+#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
+#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
+#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
+#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
+#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
+#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#11 {main}
+"} 
+[2025-04-03 07:58:17] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php:217)
+[stacktrace]
+#0 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(144): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
+#1 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(79): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
+#2 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\ArgvInput.php(68): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
+#3 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
+#4 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
+#5 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#6 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(1049): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#7 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(318): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\symfony\\console\\Application.php(169): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#9 C:\\xampp\\htdocs\\SAC-IPE\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#10 C:\\xampp\\htdocs\\SAC-IPE\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#11 {main}
+"} 

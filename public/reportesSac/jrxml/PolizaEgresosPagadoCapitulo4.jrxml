@@ -20,6 +20,10 @@
 	<queryString>
 		<![CDATA[EXEC dbo.PolizaEgresosPagadoCapitulo4 @Numero_poliza =  $P{Numero}, @evento =  $P{Evento}]]>
 	</queryString>
+	<field name="nombreUsuario" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombreUsuario"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombreUsuario"/>
+	</field>
 	<field name="area" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="area"/>
 		<property name="com.jaspersoft.studio.field.label" value="area"/>
@@ -546,7 +550,7 @@
 					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["C. ROSA ELVIRA FRANCISCO UNCAL"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{nombreUsuario}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="30" width="110" height="15" uuid="45523d6a-d0bd-45e3-b0d6-22a1b6072ed0">
