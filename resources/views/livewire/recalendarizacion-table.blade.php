@@ -69,8 +69,11 @@
         let parametros = event.__livewire.params
         $('#aumentado').val(parametros.aumento);
         $('#disminuido').val(parametros.disminucion);
-        formatearImporte({id: 'disminuido'})
-        formatearImporte({id: 'aumentado'})
+
+        setTimeout(() => {
+            formatearImporte({ id: 'disminuido' });
+            formatearImporte({ id: 'aumentado' });
+        }, 100);
     });
 
     window.addEventListener('llenarFormulario', event => {
@@ -82,7 +85,27 @@
         $('#inputSolvencia').val(parametros.solvencia);
         $('#inputImporte').val(parametros.importe);
         $("#inputTipoMovimiento option:contains('" + parametros.movimiento + "')").prop("selected", true);
-        formatearImporte({id: 'inputImporte'})
-        formatearImporte({id: 'inputSolvencia'})
+        setTimeout(() => {
+            formatearImporte({id: 'inputImporte'})
+            formatearImporte({id: 'inputSolvencia'})
+        }, 100)
     });
+
+    function formatearImporte(obj) {
+        var amount = $('#' + obj.id).val().replace(/[^0-9.]/g, '');
+        amount = parseFloat(amount);
+        if (!isNaN(amount)) {
+            var formattedAmount = amount.toLocaleString('es-MX', {
+                style: 'currency',
+                currency: 'MXN',
+                minimumFractionDigits: 2,
+            });
+            $('#' + obj.id).val(formattedAmount);
+            console.log("Ejecuta: "+obj);
+        } else {
+            toastr.warning('Ingrese valores numéricos en el campo de importe');
+            $('#' + obj.id).val('');
+        }
+    }
+
 </script>

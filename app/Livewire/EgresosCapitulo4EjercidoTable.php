@@ -12,6 +12,7 @@ use App\Models\Poliza;
 use Carbon\Carbon;
 use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
+use Illuminate\Support\Facades\Auth;
 use Log;
 use DB;
 
@@ -220,6 +221,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
         }
 
         try {
+            $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::select('numero_poliza')
                 ->where('tipo_poliza', '=', 'E')
                 ->whereYear('fecha', '=', Carbon::now()->year)
@@ -251,6 +253,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
 
                 $polizas = [
                     [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'E',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -272,6 +275,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
 
                 foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
                     array_push($polizas, [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'E',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -340,6 +344,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
                     } else {
                         // Si la clave no existe, agregar el nuevo depósito al resultado
                         $resultado[$clave] = [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                             'area' => $polizaImporte['area'],
                             'tipo_poliza' => 'EAUX',
                             'numero_poliza' =>  $this->numeroPolizaRemanente,
@@ -370,6 +375,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
                         }
                     }
                     Poliza::create([
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $polizaInicial['area'],
                         'tipo_poliza' => 'EAUX',
                         'numero_poliza' =>  $this->numeroPolizaRemanente,
