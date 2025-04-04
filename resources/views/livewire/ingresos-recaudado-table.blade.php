@@ -57,7 +57,9 @@
     window.addEventListener('cambioTotal', event => {
         let parametros = event.__livewire.params
         $('#total').val(parametros.total);
-        formatearImporte({id: 'total'})
+        setTimeout(() => {
+            formatearImporte({id: 'total'})
+        }, 100);
     });
 
     window.addEventListener('llenarFormulario', event => {

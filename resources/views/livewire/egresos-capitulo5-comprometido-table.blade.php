@@ -64,7 +64,9 @@
         let parametros = event.__livewire.params
         $('#inputPTTOEjecutar').val(parametros.presupuesto);
         $('#inputImporte').val(parametros.importe);
-        formatearImporte({id: 'inputImporte'})
-        formatearImporte({id: 'inputPTTOEjecutar'})
+        setTimeout(() => {        
+            formatearImporte({id: 'inputImporte'})
+            formatearImporte({id: 'inputPTTOEjecutar'})
+        }, 100);
     });
 </script>
