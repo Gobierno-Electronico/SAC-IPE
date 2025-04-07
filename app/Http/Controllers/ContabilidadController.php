@@ -26,6 +26,11 @@ class ContabilidadController extends Controller
         return view('contabilidad.carga-poliza-inicial');
     }
 
+    public function registroPolizaDiario()
+    {
+        return view('contabilidad.registro-poliza-diario');
+    }
+
     public function consultaPolizaInicial()
     {
         return view('contabilidad.consulta-poliza-inicial');
