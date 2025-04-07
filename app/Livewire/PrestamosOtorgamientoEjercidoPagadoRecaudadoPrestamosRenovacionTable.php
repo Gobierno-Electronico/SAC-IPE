@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Livewire\Tabla;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Clases\Column;
 use Livewire\Attributes\On;
@@ -225,6 +226,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
         }
 
         try {
+            $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::select('numero_poliza')
                 ->where('tipo_poliza', '=', 'D')
                 ->whereYear('fecha', '=', Carbon::now()->year)
@@ -275,6 +277,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
                 if (!$hayRepetidosContables) {
                     $polizas = [
                         [
+                            'idUsuarioRegistrante' => $idUsuarioRegistrante,
                             'area' => $movimiento['codigoAreaResponsable'],
                             'tipo_poliza' => 'D',
                             'numero_poliza' =>  $this->numeroPoliza,
@@ -322,6 +325,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
 
                     if (!$hayRepetidosPresupuestales) {
                         array_push($polizas, [
+                            'idUsuarioRegistrante' => $idUsuarioRegistrante,
                             'area' => $movimiento['codigoAreaResponsable'],
                             'tipo_poliza' => 'D',
                             'numero_poliza' =>  $this->numeroPoliza,
@@ -355,6 +359,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
                         ->toArray();
 
                     array_push($polizas, [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'D',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -375,6 +380,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
 
                     foreach ($interaccionCuentaCuentasAbono as $key => $dataCuenta) {
                         array_push($polizas, [
+                            'idUsuarioRegistrante' => $idUsuarioRegistrante,
                             'area' => $movimiento['codigoAreaResponsable'],
                             'tipo_poliza' => 'D',
                             'numero_poliza' =>  $this->numeroPoliza,
@@ -409,6 +415,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
                         ->toArray();
 
                     array_push($polizas, [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'D',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -429,6 +436,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
 
                     foreach ($interaccionCuentaCuentasAbono as $key => $dataCuenta) {
                         array_push($polizas, [
+                            'idUsuarioRegistrante' => $idUsuarioRegistrante,
                             'area' => $movimiento['codigoAreaResponsable'],
                             'tipo_poliza' => 'D',
                             'numero_poliza' =>  $this->numeroPoliza,

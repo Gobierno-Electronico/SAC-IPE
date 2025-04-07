@@ -75,7 +75,12 @@ class CobroEspecieForm extends Component
     public function cambioEvento()
     {
         try {
-            //code...
+            $descripcionEvento = Poliza::select('descripcion')
+            ->where('evento', '=', $this->numeroEvento)
+            ->where('tipo_poliza', '=', 'I')
+            ->where('categoria', '=', 'INGRESOS DEVENGADO')
+            ->get()[0]->descripcion;
+            $this->observaciones = $descripcionEvento;
             $this->montoDelEvento = DB::select('EXEC ImporteTotalCobroEspecie @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             $this->dispatch('formato_importe', id: 'inputMontoEvento', amount: ($this->montoDelEvento > 0) ? $this->montoDelEvento : '');
             $this->dispatch('mostrarMensaje', mensaje: 'Monto del evento cargado', tipo: 'success', tiempo: 1500);
