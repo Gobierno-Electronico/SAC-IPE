@@ -273,6 +273,12 @@
                                                             {{ __('Póliza inicial') }}
                                                         </a>
                                                     </li>
+                                                    <li>
+                                                        <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                            href="{{ route('registroPolizaDiario') }}" >
+                                                            Póliza diario
+                                                        </a>
+                                                    </li>
                                                 </ul>
                                             </li>
                                         @endcan
