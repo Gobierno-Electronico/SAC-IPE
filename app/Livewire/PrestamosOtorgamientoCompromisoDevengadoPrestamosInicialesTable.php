@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Livewire\Tabla;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Clases\Column;
 use Livewire\Attributes\On;
@@ -216,6 +217,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesTable extends Ta
         }
 
         try{
+            $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::select('numero_poliza')
             ->where('tipo_poliza', '=', 'D')
             ->whereYear('fecha', '=', Carbon::now()->year)
@@ -264,6 +266,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesTable extends Ta
 
                 $polizas = [
                     [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'D',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -284,6 +287,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesTable extends Ta
                 ];
 
                 array_push($polizas, [
+                    'idUsuarioRegistrante' => $idUsuarioRegistrante,
                     'area' => $movimiento['codigoAreaResponsable'],
                     'tipo_poliza' => 'D',
                     'numero_poliza' =>  $this->numeroPoliza,
@@ -308,6 +312,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesTable extends Ta
                         $total = $movimiento['importe'] - $movimiento['importeAbono'];
                     }
                     array_push($polizas, [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'D',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -329,6 +334,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesTable extends Ta
 
                 foreach ($interaccionCuentaCuentasAbono as $key => $dataCuenta) {
                     array_push($polizas, [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'D',
                         'numero_poliza' =>  $this->numeroPoliza,

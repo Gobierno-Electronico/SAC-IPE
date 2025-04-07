@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Livewire\Tabla;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Clases\Column;
 use Livewire\Attributes\On;
@@ -219,6 +220,7 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
         }
 
         try{
+            $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::select('numero_poliza')
             ->where('tipo_poliza', '=', 'D')
             ->whereYear('fecha', '=', Carbon::now()->year)
@@ -301,6 +303,7 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
                 $interaccionCuentaCuentas = $interaccionCuentaCuentasFiltradas;
                 $polizas = [
                     [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'D',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -326,6 +329,7 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
                         $total = $movimiento['importe'];
                     }
                     array_push($polizas, [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'D',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -354,6 +358,7 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
 
             $cuentaPrincipal = Cuenta::where('Codigo_cuenta', '=', '8.1.5.4.1.7.1.02.01')->first();
             array_push($this->polizasFinales, [
+                'idUsuarioRegistrante' => $idUsuarioRegistrante,
                 'area' => $movimiento['codigoAreaResponsable'],
                 'tipo_poliza' => 'D',
                 'numero_poliza' =>  $this->numeroPoliza,
