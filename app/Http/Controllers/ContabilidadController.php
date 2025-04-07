@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Poliza;
 use Illuminate\Support\Carbon;
 use App\Models\Cuenta;
+use Illuminate\Support\Facades\Auth;
 
 class ContabilidadController extends Controller
 {
@@ -268,10 +269,12 @@ class ContabilidadController extends Controller
 
     public function generarPolizasInicial($row, $numeroEvento)
     {
+        $idUsuarioRegistrante = Auth::id();
         $anioActual = Carbon::now()->year;
         $fecha = Carbon::now('America/Mexico_City');
         $fecha->year($anioActual);
         $poliza = new Poliza([
+            'idUsuarioRegistrante' => $idUsuarioRegistrante,
             'area' => '0',
             'tipo_poliza' => 'SI',
             'numero_poliza' => '1',
