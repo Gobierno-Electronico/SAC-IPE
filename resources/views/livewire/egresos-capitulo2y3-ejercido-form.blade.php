@@ -14,7 +14,7 @@
                         </div>
                         <div>
                             <label for="inputObservaciones" class="col-md-12 col-form-label">{{ __('Total') }}</label>
-                            <input value="{{ $total }}" type="text" class="form-control" name="inputAumentado"
+                            <input value="{{  '$' . number_format($total, 2, '.', ',')  }}" type="text" class="form-control" name="inputAumentado"
                                 disabled>
                         </div>
                     </div>

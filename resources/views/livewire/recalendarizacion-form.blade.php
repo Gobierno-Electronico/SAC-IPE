@@ -170,7 +170,9 @@
     window.addEventListener('actualizar-solvencia', event => {
         let parametros = event.__livewire.params
         $('#inputSolvencia').val(parametros.solvencia);
-        formatearImporte({id: "inputSolvencia"})
+        setTimeout(() => {
+            formatearImporte({id: "inputSolvencia"})
+        }, 100);
     })
 
     function keyPress(e, obj){

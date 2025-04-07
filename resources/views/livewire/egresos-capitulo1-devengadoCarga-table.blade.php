@@ -56,15 +56,19 @@
     window.addEventListener('cambioTotal', event => {
         let parametros = event.__livewire.params
         $('#total').val(parametros.total);
-        formatearImporte({id: 'total'})
+        setTimeout(() => {
+            formatearImporte({id: 'total'})
+        }, 100);
     });
 
     window.addEventListener('llenarFormulario', event => {
         let parametros = event.__livewire.params
         $('#inputPTTOEjecutar').val(parametros.presupuesto);
         $('#inputImporte').val(parametros.importe);
-        formatearImporte({id: 'inputImporte'})
-        formatearImporte({id: 'inputPTTOEjecutar'})
+        setTimeout(() => {
+            formatearImporte({id: 'inputImporte'})
+            formatearImporte({id: 'inputPTTOEjecutar'})
+        }, 100);
     });
 
 </script>
