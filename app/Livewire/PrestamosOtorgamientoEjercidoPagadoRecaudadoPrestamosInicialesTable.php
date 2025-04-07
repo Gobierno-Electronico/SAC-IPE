@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Livewire\Tabla;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Clases\Column;
 use Livewire\Attributes\On;
@@ -224,6 +225,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
         }
 
         try {
+            $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::select('numero_poliza')
                 ->where('tipo_poliza', '=', 'D')
                 ->whereYear('fecha', '=', Carbon::now()->year)
@@ -276,6 +278,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
                 if (!$hayRepetidosContables) {
                     $polizas = [
                         [
+                            'idUsuarioRegistrante' => $idUsuarioRegistrante,
                             'area' => $movimiento['codigoAreaResponsable'],
                             'tipo_poliza' => 'D',
                             'numero_poliza' =>  $this->numeroPoliza,
@@ -321,6 +324,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
 
                     if (!$hayRepetidosPresupuestales) {
                         array_push($polizas, [
+                            'idUsuarioRegistrante' => $idUsuarioRegistrante,
                             'area' => $movimiento['codigoAreaResponsable'],
                             'tipo_poliza' => 'D',
                             'numero_poliza' =>  $this->numeroPoliza,
@@ -350,6 +354,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
                         ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
 
                     array_push($polizas, [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'D',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -370,6 +375,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
 
                     foreach ($interaccionCuentaCuentasAbono as $key => $dataCuenta) {
                         array_push($polizas, [
+                            'idUsuarioRegistrante' => $idUsuarioRegistrante,
                             'area' => $movimiento['codigoAreaResponsable'],
                             'tipo_poliza' => 'D',
                             'numero_poliza' =>  $this->numeroPoliza,

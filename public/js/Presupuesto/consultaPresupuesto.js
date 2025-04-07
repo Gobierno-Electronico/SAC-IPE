@@ -1,6 +1,6 @@
 let IP_PORT = window.IP_PORT
 let NOMBRE_REPORTEADOR = window.NOMBRE_REPORTEADOR
-+
+
 function generarPolizaPresupuestalIngresos(btn) {
     let url;
     let btnId = btn.id; //obtenemos el id del boton

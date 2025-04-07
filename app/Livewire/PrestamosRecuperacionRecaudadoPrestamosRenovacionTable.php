@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Livewire\Tabla;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Clases\Column;
 use Livewire\Attributes\On;
@@ -217,6 +218,7 @@ class PrestamosRecuperacionRecaudadoPrestamosRenovacionTable extends Tabla
         }
 
         try {
+            $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::select('numero_poliza')
                 ->where('tipo_poliza', '=', 'D')
                 ->whereYear('fecha', '=', Carbon::now()->year)
@@ -255,6 +257,7 @@ class PrestamosRecuperacionRecaudadoPrestamosRenovacionTable extends Tabla
 
                 $polizas = [
                     [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'D',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -285,6 +288,7 @@ class PrestamosRecuperacionRecaudadoPrestamosRenovacionTable extends Tabla
                     }
                     if($entraPolizas){
                         array_push($polizas, [
+                            'idUsuarioRegistrante' => $idUsuarioRegistrante,
                             'area' => $movimiento['codigoAreaResponsable'],
                             'tipo_poliza' => 'D',
                             'numero_poliza' =>  $this->numeroPoliza,

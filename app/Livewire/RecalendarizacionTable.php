@@ -10,6 +10,7 @@ use App\Models\ClasificadorObjetoGasto;
 use App\Models\CodigoDepartamento;
 use App\Models\Cuenta;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Log;
 use App\Http\Controllers\BitacoraController;
@@ -161,6 +162,7 @@ class RecalendarizacionTable extends Tabla
             $this->dispatch('mostrarMensaje', mensaje: 'Balance erroneo, los totales deben coincidir', tipo: 'warning', tiempo: 3000);
             return;
         }
+        $idUsuarioRegistrante = Auth::id();
         $numerosPolizas = Poliza::select('numero_poliza')
             ->where('tipo_poliza', '=', 'D')
             ->whereYear('fecha', '=', Carbon::now()->year)
@@ -189,6 +191,7 @@ class RecalendarizacionTable extends Tabla
             $responsable = CodigoDepartamento::find($movimiento['areaResponsable']);
             $cuenta = Cuenta::join('CuentasCOG', 'CuentasCOG.codigoCuenta', '=', 'cuentas.Codigo_cuenta')->select('cuentas.*')->where('Descripcion_cuenta', 'like', '%Ejercer%')->where('COG', '=', $movimiento['cog'])->orderBy('COG')->first();
             $poliza = new Poliza([
+                'idUsuarioRegistrante' => $idUsuarioRegistrante,
                 'area' => $responsable->Codigo_completo,
                 'tipo_poliza' => 'D',
                 'numero_poliza' =>  $this->numeroPoliza,
