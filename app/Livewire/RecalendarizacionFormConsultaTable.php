@@ -29,6 +29,7 @@ class RecalendarizacionFormConsultaTable extends Tabla
     public $totalDisminuido = 0;
     public $urlFinalizar = "";
     public $categoriaModulo = "";
+    public $tipoMovimiento;
 
 
 
@@ -102,15 +103,15 @@ class RecalendarizacionFormConsultaTable extends Tabla
             Poliza::searchByYear('fecha', Carbon::now()->year)->where('tipo_poliza', '=', 'D')->where('evento', '=', $this->numeroEvento)->delete();
             // PresupuestoInicial::where('anio', '=', $this->selectedYear)->where('categoria', '=', 'INGRESOS')->where('tipo', '=', 'P')->delete();
             $usuariosController = new BitacoraController();
-            $usuariosController->bitacora('borrar', 'borró o intentó borrar la Reclasificación/Recalendarización con número de evento: ' . $this->numeroEvento, request());
+            $usuariosController->bitacora('borrar', 'borró o intentó borrar el movimiento de ' . $this->categoriaModulo . ' con número de evento: ' . $this->numeroEvento, request());
             $this->validado = true;
             // $this->dispatch('mostrarMensaje', mensaje: 'Se borró el movimiento de Reclasificación/Recalendarización', tipo: 'success', tiempo: 3000);
             $this->dispatch('cancelar-movimiento');
             DB::commit();
-            return redirect('/presupuesto/recalendarizacion')->with(['message' => 'Se borró el movimiento de Reclasificación/Recalendarización', 'message_type' => 'success']);
+            return redirect($this->urlFinalizar)->with(['message' => 'Se borró el movimiento de ' . $this->categoriaModulo, 'message_type' => 'success']);
         } catch (\Throwable $th) {
             DB::rollBack();
-            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al borrar el movimiento de ampliación', tipo: 'error', tiempo: 3000);
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al borrar el movimiento', tipo: 'error', tiempo: 3000);
         }
     }
 
@@ -121,14 +122,14 @@ class RecalendarizacionFormConsultaTable extends Tabla
             Poliza::searchByYear('fecha', Carbon::now()->year)->where('tipo_poliza', '=', 'D')->where('evento', '=', $this->numeroEvento)->update(["validado" => true]);
             // PresupuestoInicial::where('anio', '=', $this->selectedYear)->where('categoria', '=', 'INGRESOS')->where('tipo', '=', 'P')->update(["validado" => true]);
             $usuariosController = new BitacoraController();
-            $usuariosController->bitacora('validarPresupuestoInicial', 'validó o intentó validar la Reclasificación/Recalendarización con número de evento: ' . $this->numeroEvento, request());
+            $usuariosController->bitacora('validarPresupuestoInicial', 'validó o intentó validar el movimiento de ' .  $this->categoriaModulo . ' con número de evento: ' . $this->numeroEvento, request());
             $this->validado = true;
             DB::commit();
-            $this->dispatch('mostrarMensaje', mensaje: 'Se validó la ampliación de ingresos', tipo: 'success', tiempo: 3000);
+            $this->dispatch('mostrarMensaje', mensaje: 'Se validó el movimiento de '. $this->categoriaModulo, tipo: 'success', tiempo: 3000);
         } catch (\Throwable $th) {
             Log::debug($th->getMessage());
             DB::rollBack();
-            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al validar la ampliación', tipo: 'error', tiempo: 3000);
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al validar el movimiento de ' .$this->categoriaModulo, tipo: 'error', tiempo: 3000);
         }
     }
 
@@ -140,8 +141,8 @@ class RecalendarizacionFormConsultaTable extends Tabla
     public function finalizar($tipo)
     {
         $bitacora = new BitacoraController();
-        $bitacora->bitacora('agregarRegistro', 'concluyó o intentó concluir la Reclasificación/Recalendarización con evento : ' . $this->numeroEvento, request());
-        $this->dispatch('mostrarMensaje', mensaje: 'Se realizó la Reclasificación/Recalendarización con éxito', tipo: 'success', tiempo: 5000);
+        $bitacora->bitacora('agregarRegistro', 'concluyó o intentó concluir la Reclasificación/Recalendarización o Póliza diario con evento : ' . $this->numeroEvento, request());
+        $this->dispatch('mostrarMensaje', mensaje: 'Se realizó la Reclasificación/Recalendarización o Póliza diario con éxito', tipo: 'success', tiempo: 5000);
         $this->dispatch('reiniciar');
         $this->numeroEvento = 0;
         $this->numeroPoliza = 0;

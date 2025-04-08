@@ -12,7 +12,7 @@ use Illuminate\Support\Carbon;
 use DB;
 use Log;
 
-class MovimientosReclasificacionTable extends Tabla
+class MovimientosDiarioTable extends Tabla
 {
 
     public $perPage = 10;
@@ -23,33 +23,31 @@ class MovimientosReclasificacionTable extends Tabla
 
     public $data = [];
 
-    public $capituloSeleccionado = '';
-
     public $consultarRegistro = false;
 
     public $numeroEvento;
     public $numeroPoliza;
     public $total;
     public $descripcion;
-    public $tipoMovimiento = "PolizaReclasificacion";
+    public $tipoMovimiento = 'PolizaDiarioDiversosConceptos';
     public $numeroPolizaRemanente;
     public $categoriaModulo;
     public $categoriaRemanente;
 
     public $eventoSeleccionado;
 
+
     public function render()
     {
         $eventos = Poliza::select('evento', 'descripcion')
-            ->whereYear('fecha', '=', Carbon::now()->year)
-            ->where('tipo_poliza', '=', 'D')
-            ->where('categoria', 'LIKE', '%RECALENDARIZACION%')
-            ->orWhere('categoria', 'LIKE', '%RECLASIFICACION%')
-            ->distinct()
-            ->get()
-            ->sortBy(fn($item) => (int) $item->evento) // Ordenar en PHP convirtiendo a número
-            ->pluck('descripcion', 'evento');
-        return view('livewire.movimientos-reclasificacion-table', ['eventos' => $eventos]);
+        ->whereYear('fecha', '=', Carbon::now()->year)
+        ->where('tipo_poliza', '=', 'D')
+        ->where('categoria', '=', 'DIARIO DIVERSOS CONCEPTOS')
+        ->distinct()
+        ->get()
+        ->sortBy(fn($item) => (int) $item->evento) // Ordenar en PHP convirtiendo a número
+        ->pluck('descripcion', 'evento');
+        return view('livewire.movimientos-diario-table', ['eventos' => $eventos]);
     }
 
     public function query(): Builder
@@ -57,10 +55,8 @@ class MovimientosReclasificacionTable extends Tabla
         return Poliza::query();
     }
 
-    public function actualizarFiltros()
-    {
+    public function actualizarEvento(){
         $this->eventoSeleccionado = $this->eventoSeleccionado;
-        $this->capituloSeleccionado = $this->capituloSeleccionado;
     }
 
     public function data()
@@ -69,16 +65,15 @@ class MovimientosReclasificacionTable extends Tabla
         $contador = 0;
         $this->data = array_map(function ($entrada) use (&$contador) {
             $entrada =  (array) $entrada;
-            $entrada['total'] = '$' . number_format($entrada['total'], 2, '.', ',');
+        // Convertir a número y dividir entre 2
+            $entrada['total'] = floatval($entrada['total']);            $entrada['total'] = '$' . number_format($entrada['total'], 2, '.', ',');
             $entrada['id'] = $contador++;
             return $entrada;
-        }, DB::select('EXEC dbo.ConsultaReclasificacionRecalendarizacion @anio = ?', array($anioActual)));
+        }, DB::select('EXEC dbo.ConsultaMovimientoDiarioDiversosConceptos @anio = ?', array($anioActual)));
+
         $collection = collect($this->data);
         if ($this->eventoSeleccionado) {
             $collection = $collection->where('evento', $this->eventoSeleccionado);
-        }
-        if($this->capituloSeleccionado){
-            $collection = $collection->where('capitulo', $this->capituloSeleccionado);
         }
         if ($this->sortBy !== '') {
             if ($this->sortDirection == "asc") {
@@ -102,9 +97,14 @@ class MovimientosReclasificacionTable extends Tabla
 
             return $contains;
         });
+        
 
         $currentItems = array_slice($filtered->toArray(), $this->perPage * ($currentPage - 1), $this->perPage);
         return new LengthAwarePaginator($currentItems, count($filtered), $this->perPage, $currentPage);
+    }
+    public function actualizarFiltros()
+    {
+        $this->eventoSeleccionado = $this->eventoSeleccionado;
     }
 
     public function columns(): array
@@ -112,11 +112,10 @@ class MovimientosReclasificacionTable extends Tabla
         return [
             Column::make('evento', 'Evento'),
             Column::make('numero_poliza', 'Número de Póliza'),
-            Column::make('categoria', 'tipo de Transferencia'),
             Column::make('descripcion', 'Descripción'),
             Column::make('fechaAfectacion', 'Fecha de afectación'),
             Column::make('fechaRegistro', 'Fecha de registro'),
-            Column::make('total', 'Monto del evento'),
+            Column::make('total', 'Total por Póliza'), // NUEVA COLUMNA
             Column::make('estatus_evento', 'Estado del momento contable')->component('columns.estado'),
             Column::make('id', 'Acciones')->component('columns.accionVerMovimiento'),
 
@@ -131,15 +130,21 @@ class MovimientosReclasificacionTable extends Tabla
         $this->total = $this->data[$value]['total'];
         $this->descripcion = $this->data[$value]['descripcion'];
         $this->categoriaModulo = $this->data[$value]['categoria'];
-        $this->numeroPolizaRemanente = 0;
 
         $this->consultarRegistro = true;
+
     }
 
-    public function search() {}
+    public function search()
+    {
+        // $this->resetPage();
+    }
 
 
-    public function edit($value) {}
+    public function edit($value)
+    {
+        // return view('bitacoras.lista');
+    }
 
     public function changeState($value) {}
 }

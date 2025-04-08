@@ -160,7 +160,7 @@ class IngresosRecaudadoForm extends Component
         } catch (\Illuminate\Validation\ValidationException $e) {
             $this->dispatch('mostrarMensaje', mensaje: $e->getMessage(), tipo: 'warning', tiempo: 3000);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al agregar registro en devengado: ' . $th->getMessage());
+            Log::error('Ocurrió un error al agregar registro en recaudado: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }

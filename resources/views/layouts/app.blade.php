@@ -257,6 +257,10 @@
                                                             href="{{ route('consultaPolizaInicial') }}" method="GET">
                                                             {{ __('Póliza inicial') }}
                                                         </a>
+                                                        <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                        href="{{ route('movimientosDiario') }}" method="GET">
+                                                        {{ __('Póliza diario') }}
+                                                    </a>
                                                     </li>
                                                 </ul>
                                             </li>
@@ -271,6 +275,12 @@
                                                         <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                                             href="{{ route('polizaInicial') }}" method="GET">
                                                             {{ __('Póliza inicial') }}
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                            href="{{ route('registroPolizaDiario') }}" >
+                                                            Póliza diario
                                                         </a>
                                                     </li>
                                                 </ul>
