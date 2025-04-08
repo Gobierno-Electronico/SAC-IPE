@@ -29,7 +29,7 @@ class MovimientosDiarioTable extends Tabla
     public $numeroPoliza;
     public $total;
     public $descripcion;
-    public $tipoMovimiento;
+    public $tipoMovimiento = 'PolizaDiarioDiversosConceptos';
     public $numeroPolizaRemanente;
     public $categoriaModulo;
     public $categoriaRemanente;
