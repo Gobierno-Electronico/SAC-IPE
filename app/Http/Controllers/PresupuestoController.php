@@ -12,6 +12,7 @@ use App\Models\Poliza;
 use App\Models\PresupuestoInicial;
 use App\Http\Controllers\BitacoraController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Shuchkin\SimpleXLSX;
 use DB;
@@ -102,7 +103,8 @@ class PresupuestoController extends Controller
     {
         return view('presupuestos.recalendarizacion.recalendarizacion');
     }
-    public function consultarTransferencias(){
+    public function consultarTransferencias()
+    {
         return view('presupuestos.recalendarizacion.consultaRecalendarizacion');
     }
 
@@ -283,7 +285,7 @@ class PresupuestoController extends Controller
                         fwrite($archivo, 'Cuentas Faltantes en el plan de cuentas' . PHP_EOL . '---------------------------------------------------------------------------------------' . PHP_EOL);
 
                         foreach ($cuentasFaltantesPlanCuentas as $cuenta) {
-                            $linea = 'Código de cuenta: ' . $cuenta["Codigo_cuenta"] . PHP_EOL. "Descripción: " . $cuenta["Descripcion_cuenta"];
+                            $linea = 'Código de cuenta: ' . $cuenta["Codigo_cuenta"] . PHP_EOL . "Descripción: " . $cuenta["Descripcion_cuenta"];
                             fwrite($archivo, $linea . PHP_EOL . '---------------------------------------------------------------------------------------' . PHP_EOL);
                         }
 
@@ -414,6 +416,7 @@ class PresupuestoController extends Controller
 
     private function generarPolizasPresupuestoInicialIngresos($presupuesto, &$cuentasEnLaGuiaFaltantes, $numeroPoliza, $numeroEvento)
     {
+        $idUsuarioRegistrante = Auth::id();
         // dd($presupuesto);
         $cuenta = Cuenta::where('Codigo_cuenta', '=', $presupuesto['Cuenta'])->first();
         $interaccionCuentaConceptoIzquierda = InteraccionCuentaConcepto::where('cuenta_id', '=', $cuenta->id)->first();
@@ -445,6 +448,7 @@ class PresupuestoController extends Controller
         $polizaPorEjecutar = [];
         foreach ($meses as $mes) {
             $polizaEstimado[] = [
+                'idUsuarioRegistrante' => $idUsuarioRegistrante,
                 'area' => $presupuesto['Area Recaudadora'],
                 'tipo_poliza' => $presupuesto['TIPO'],
                 'numero_poliza' => $numeroPoliza,
@@ -483,6 +487,7 @@ class PresupuestoController extends Controller
             }
 
             $polizaPorEjecutar[] = [
+                'idUsuarioRegistrante' => $idUsuarioRegistrante,
                 'area' => $presupuesto['Area Recaudadora'],
                 'tipo_poliza' => $presupuesto['TIPO'],
                 'numero_poliza' => $numeroPoliza,
@@ -732,7 +737,7 @@ class PresupuestoController extends Controller
                         ]);
                     }
 
-                
+
                     if (!empty($cuentasFaltantesPlanCuentas)) {
                         // dd($cuentasFaltantesPlanCuentas);
                         DB::rollBack();
@@ -746,7 +751,7 @@ class PresupuestoController extends Controller
                         fwrite($archivo, 'Cuentas Faltantes en el plan de cuentas' . PHP_EOL . '---------------------------------------------------------------------------------------' . PHP_EOL);
 
                         foreach ($cuentasFaltantesPlanCuentas as $cuenta) {
-                            $linea = 'Código de cuenta: ' . $cuenta["Codigo_cuenta"] . PHP_EOL. "Descripción: " . $cuenta["Descripcion_cuenta"];
+                            $linea = 'Código de cuenta: ' . $cuenta["Codigo_cuenta"] . PHP_EOL . "Descripción: " . $cuenta["Descripcion_cuenta"];
                             fwrite($archivo, $linea . PHP_EOL . '---------------------------------------------------------------------------------------' . PHP_EOL);
                         }
 
@@ -895,6 +900,7 @@ class PresupuestoController extends Controller
     private function generarPolizasPresupuestoInicialEgresos($presupuesto, &$cuentasEnLaGuiaFaltantes, $numPoliza, $numeroEvento)
     {
         try {
+            $idUsuarioRegistrante = Auth::id();
             if ($this->cuentaActual == null) {
                 $cuenta = Cuenta::where('Codigo_cuenta', '=', $presupuesto['Cuenta'])->first();
                 $this->cuentaActual = $cuenta;
@@ -993,6 +999,7 @@ class PresupuestoController extends Controller
         foreach ($meses as $mes) {
 
             $polizaEstimado[] = [
+                'idUsuarioRegistrante' => $idUsuarioRegistrante,
                 'area' => $presupuesto['Area Ejecutora'],
                 'tipo_poliza' => $presupuesto['TIPO'],
                 'numero_poliza' => strval($numPoliza),
@@ -1011,6 +1018,7 @@ class PresupuestoController extends Controller
             ];
 
             $polizaPorEjecutar[] = [
+                'idUsuarioRegistrante' => $idUsuarioRegistrante,
                 'area' => $presupuesto['Area Ejecutora'],
                 'tipo_poliza' => $presupuesto['TIPO'],
                 'numero_poliza' => strval($numPoliza),
@@ -1037,7 +1045,7 @@ class PresupuestoController extends Controller
         // }
 
         if (!empty($polizaEstimado)) {
-            $columns = ['area', 'tipo_poliza', 'numero_poliza', 'fecha', 'cuenta', 'concepto', 'total', 'mes', 'descripcion', 'evento', 'tipo_interaccion', 'validado', 'categoria', 'created_at', 'updated_at'];
+            $columns = ['idUsuarioRegistrante', 'area', 'tipo_poliza', 'numero_poliza', 'fecha', 'cuenta', 'concepto', 'total', 'mes', 'descripcion', 'evento', 'tipo_interaccion', 'validado', 'categoria', 'created_at', 'updated_at'];
             $values = [];
             $bindings = [];
 
@@ -1052,7 +1060,7 @@ class PresupuestoController extends Controller
         }
 
         if (!empty($polizaPorEjecutar)) {
-            $columns = ['area', 'tipo_poliza', 'numero_poliza', 'fecha', 'cuenta', 'concepto', 'total', 'mes', 'descripcion', 'evento', 'tipo_interaccion', 'validado', 'categoria', 'created_at', 'updated_at'];
+            $columns = ['idUsuarioRegistrante', 'area', 'tipo_poliza', 'numero_poliza', 'fecha', 'cuenta', 'concepto', 'total', 'mes', 'descripcion', 'evento', 'tipo_interaccion', 'validado', 'categoria', 'created_at', 'updated_at'];
             $values = [];
             $bindings = [];
 

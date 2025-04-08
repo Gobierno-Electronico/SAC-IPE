@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
+<!-- Created with Jaspersoft Studio version 6.20.5.final using JasperReports Library version 6.20.5-3efcf2e67f959db3888d79f73dde2dbd7acb4f8e  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PolizaEgresosComprometidoCapitulo5" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" isFloatColumnFooter="true" uuid="55a8c4bf-9344-4264-a6b2-ecc8cd2fda35">
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -19,6 +19,10 @@
 	<queryString>
 		<![CDATA[EXEC dbo.PolizaEgresosComprometidoCapitulo5 @Numero_poliza =  $P{Numero}, @evento =  $P{Evento}]]>
 	</queryString>
+	<field name="nombreUsuario" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombreUsuario"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombreUsuario"/>
+	</field>
 	<field name="area" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="area"/>
 		<property name="com.jaspersoft.studio.field.label" value="area"/>
@@ -233,7 +237,7 @@
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="30">
+		<band height="20">
 			<staticText>
 				<reportElement x="80" y="0" width="100" height="20" uuid="94a899f8-2502-46bf-a9dc-595d362649b7">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -338,15 +342,15 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="30">
+		<band height="20">
 			<rectangle>
-				<reportElement x="600" y="-10" width="201" height="30" uuid="ce519f0c-b142-4fe1-8b47-acfd8e2d52b3"/>
+				<reportElement x="600" y="0" width="201" height="20" uuid="ce519f0c-b142-4fe1-8b47-acfd8e2d52b3"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</rectangle>
 			<textField>
-				<reportElement x="80" y="-10" width="100" height="30" uuid="463db3c5-421a-4fb8-91ad-715e68f7fa45">
+				<reportElement x="80" y="0" width="100" height="20" uuid="463db3c5-421a-4fb8-91ad-715e68f7fa45">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -366,7 +370,7 @@
 				<textFieldExpression><![CDATA[$F{cuenta}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="180" y="-10" width="420" height="30" uuid="6d772e21-3ae2-4634-9ac0-a2eb168bb5f3">
+				<reportElement x="180" y="0" width="420" height="20" uuid="6d772e21-3ae2-4634-9ac0-a2eb168bb5f3">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="81aece0a-5ee1-42cb-94bf-893494786400"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -384,7 +388,7 @@
 				<textFieldExpression><![CDATA[$F{concepto}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="700" y="-10" width="101" height="30" uuid="218657f9-3739-48d4-b2ad-00bdb0c79626">
+				<reportElement x="700" y="0" width="101" height="20" uuid="218657f9-3739-48d4-b2ad-00bdb0c79626">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Presupuestal - Abono"))]]></printWhenExpression>
@@ -402,7 +406,7 @@
 				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{total_suma})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="700" y="-10" width="101" height="30" uuid="708517df-8336-4f80-baea-8b7f8e723f69">
+				<reportElement x="700" y="0" width="101" height="20" uuid="708517df-8336-4f80-baea-8b7f8e723f69">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Presupuestal - Abono"))]]></printWhenExpression>
@@ -420,7 +424,7 @@
 				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="ScaleFont">
-				<reportElement x="0" y="-10" width="40" height="30" uuid="070d7a9e-ccbb-4214-914b-9af67028d9ed">
+				<reportElement x="0" y="0" width="40" height="20" uuid="070d7a9e-ccbb-4214-914b-9af67028d9ed">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
@@ -431,12 +435,13 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{area}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="ScaleFont">
-				<reportElement x="40" y="-10" width="40" height="30" uuid="5dab1251-6e94-433c-bde9-2ff08968eccd">
+				<reportElement x="40" y="0" width="40" height="20" uuid="5dab1251-6e94-433c-bde9-2ff08968eccd">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
@@ -447,12 +452,13 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Clave}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="600" y="-10" width="100" height="30" uuid="b4f201f0-1738-4e19-8a97-e2aeab6a96a7">
+				<reportElement x="600" y="0" width="100" height="20" uuid="b4f201f0-1738-4e19-8a97-e2aeab6a96a7">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Presupuestal - Cargo"))]]></printWhenExpression>
@@ -470,7 +476,7 @@
 				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="600" y="-10" width="100" height="30" uuid="31974cca-a510-483f-9e0d-303d49106ecd">
+				<reportElement x="600" y="0" width="100" height="20" uuid="31974cca-a510-483f-9e0d-303d49106ecd">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
@@ -559,7 +565,7 @@
 					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["L.A.E. ANAYUTH OSORIO LÓPEZ"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{nombreUsuario}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="30" width="105" height="15" uuid="45523d6a-d0bd-45e3-b0d6-22a1b6072ed0">
@@ -685,7 +691,7 @@
 				<textFieldExpression><![CDATA["REGISTRÓ"]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤#,##0.00;¤-#,##0.00">
-				<reportElement isPrintRepeatedValues="false" x="0" y="-10" width="600" height="20" uuid="a327554d-c0d7-4986-8c60-3ed6f8a50d23">
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="600" height="20" uuid="a327554d-c0d7-4986-8c60-3ed6f8a50d23">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -703,7 +709,7 @@
 				<textFieldExpression><![CDATA["TOTALES"]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤#,##0.00;¤-#,##0.00">
-				<reportElement isPrintRepeatedValues="false" x="600" y="-10" width="100" height="20" uuid="410d311f-8a95-4058-858e-b84168c8bad4">
+				<reportElement isPrintRepeatedValues="false" x="600" y="0" width="100" height="20" uuid="410d311f-8a95-4058-858e-b84168c8bad4">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
@@ -721,7 +727,7 @@
 				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($V{SumaCargo})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement isPrintRepeatedValues="false" x="700" y="-10" width="101" height="20" uuid="7a60849e-452b-4488-94c6-30e141d0b97d">
+				<reportElement isPrintRepeatedValues="false" x="700" y="0" width="101" height="20" uuid="7a60849e-452b-4488-94c6-30e141d0b97d">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>

@@ -14,7 +14,6 @@ use Carbon\Carbon;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Reactive;
 
-
 class AfectacionesIngresosTable extends Tabla
 {
     #[Reactive]

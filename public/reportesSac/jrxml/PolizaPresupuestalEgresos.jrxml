@@ -10,7 +10,7 @@
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SAC-IPE Tierra"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SAC-IPE"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<parameter name="Anio" class="java.lang.String"/>
 	<parameter name="Tipo" class="java.lang.String"/>
@@ -22,6 +22,10 @@
 	<queryString>
 		<![CDATA[EXEC PolizaPresupuestalEgresos @Anio =  $P{Anio}, @Numero_poliza = $P{Numero} , @Orden = $P{Orden}]]>
 	</queryString>
+	<field name="nombreUsuario" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombreUsuario"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombreUsuario"/>
+	</field>
 	<field name="area" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="area"/>
 		<property name="com.jaspersoft.studio.field.label" value="area"/>
@@ -513,7 +517,7 @@
 					<font fontName="Times New Roman" size="10"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["L.A.E. ANAYUTH OSORIO LÓPEZ"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{nombreUsuario}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="40" width="110" height="15" uuid="45523d6a-d0bd-45e3-b0d6-22a1b6072ed0">

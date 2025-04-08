@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
 use App\Http\Controllers\BitacoraController;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Poliza;
 
 class EgresosCapitulo5ComprometidoTable extends Tabla
@@ -214,6 +215,7 @@ class EgresosCapitulo5ComprometidoTable extends Tabla
         }
 
         try{
+            $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::select('numero_poliza')
                 ->where('tipo_poliza', '=', 'E')
                 ->whereYear('fecha', '=', Carbon::now()->year)
@@ -252,6 +254,7 @@ class EgresosCapitulo5ComprometidoTable extends Tabla
 
                 $polizas = [
                     [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'E',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -273,6 +276,7 @@ class EgresosCapitulo5ComprometidoTable extends Tabla
 
                 foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
                     array_push($polizas, [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'E',
                         'numero_poliza' =>  $this->numeroPoliza,

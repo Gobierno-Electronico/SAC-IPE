@@ -12,6 +12,7 @@ use App\Models\Poliza;
 use Carbon\Carbon;
 use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
+use Illuminate\Support\Facades\Auth;
 use Log;
 use DB;
 
@@ -24,7 +25,7 @@ class EgresosCapitulo5EjercidoTable extends Tabla
     public $totalDisponible = 0;
     public $numeroPolizaRemanente;
     public $numeroEvento;
-    
+
     public function render()
     {
         return view('livewire.egresos-capitulo5-ejercido-table');
@@ -59,19 +60,19 @@ class EgresosCapitulo5EjercidoTable extends Tabla
     #[On('agregar-registro')]
     public function agregarRegistro($registro)
     {
-        try{
+        try {
             if ($this->total + $registro['importe'] > $registro['montoEvento']) {
                 $this->dispatch('mostrarMensaje', mensaje: 'Monto total del evento superado', tipo: 'error', tiempo: 3000);
                 return;
             }
 
-            if($this->verificarPresupuesto($registro)){
+            if ($this->verificarPresupuesto($registro)) {
                 $nuevoRegistro = [
                     'id' => 0,
                     'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
                     'cuenta' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
                     'mes' => $registro['mes'],
-                    'movimiento' => 'EJERCIDO', 
+                    'movimiento' => 'EJERCIDO',
                     'pttoDevengado' => $registro['pttoDevengado'],
                     'importe' => $registro['importe'],
                     'disponibilidad' => $this->totalDisponible,
@@ -80,14 +81,14 @@ class EgresosCapitulo5EjercidoTable extends Tabla
                 array_push($this->dataCompleta, $registro);
                 $this->total = 0;
                 foreach ($this->cacheData as $key => $registro) {
-                    $this->cacheData[$key]['id'] = $key + 1; 
+                    $this->cacheData[$key]['id'] = $key + 1;
                     $this->dataCompleta[$key]['id'] = $key + 1;
                     $this->total += $registro['importe'];
                 }
                 $this->dispatch('cambioTotal', total: $this->total);
             }
-        }catch (\Throwable $th) {
-            Log::error('Ocurrió un error al agregar registro en ejercido del capítulo 5: '. $th->getMessage());
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al agregar registro en ejercido del capítulo 5: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -98,17 +99,17 @@ class EgresosCapitulo5EjercidoTable extends Tabla
         $this->totalDisponible = $solvencia - $registro['importe'];
         $totalImportes = 0;
 
-        foreach ($this->cacheData as $movimiento){
-            if(str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['cuenta'], $registro['codigoCuenta']) && $movimiento['mes'] == $registro['mes']){
+        foreach ($this->cacheData as $movimiento) {
+            if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['cuenta'], $registro['codigoCuenta']) && $movimiento['mes'] == $registro['mes']) {
                 $totalImportes += $movimiento['importe'];
             }
         }
 
-        if($totalImportes > 0){
+        if ($totalImportes > 0) {
             $this->totalDisponible = $solvencia - $totalImportes - $registro['importe'];
         }
 
-        if($this->totalDisponible < 0){
+        if ($this->totalDisponible < 0) {
             $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto devengado insuficiente', tipo: 'warning', tiempo: 3000);
             return false;
         }
@@ -130,12 +131,12 @@ class EgresosCapitulo5EjercidoTable extends Tabla
                     ];
 
                     unset($this->dataCompleta[$key]);
-                    $this->dataCompleta = array_values($this->dataCompleta );
+                    $this->dataCompleta = array_values($this->dataCompleta);
                     $this->dispatch('llenar-formulario', $datosRegistro);
                     break;
                 }
             }
-        
+
             foreach ($this->cacheData as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->cacheData[$key]);
@@ -148,7 +149,7 @@ class EgresosCapitulo5EjercidoTable extends Tabla
             $this->total = $totalActualizado;
             $this->dispatch('cambioTotal', total: $totalActualizado);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al editar en ejercido del capitulo 5: '. $th->getMessage());
+            Log::error('Ocurrió un error al editar en ejercido del capitulo 5: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al editar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -164,11 +165,11 @@ class EgresosCapitulo5EjercidoTable extends Tabla
                     break;
                 }
             }
-    
+
             foreach ($this->dataCompleta as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->dataCompleta[$key]);
-                    $this->dataCompleta = array_values($this->dataCompleta );
+                    $this->dataCompleta = array_values($this->dataCompleta);
                     break;
                 }
             }
@@ -177,7 +178,7 @@ class EgresosCapitulo5EjercidoTable extends Tabla
             $this->total = $totalActualizado;
             $this->dispatch('cambioTotal', total: $totalActualizado);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al eliminar en ejercido del capítulo 5: '. $th->getMessage());
+            Log::error('Ocurrió un error al eliminar en ejercido del capítulo 5: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al eliminar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -196,12 +197,12 @@ class EgresosCapitulo5EjercidoTable extends Tabla
         }
 
         $totalImportes = 0;
-        foreach($this->cacheData as $key => $movimiento) {
-            if($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['cuenta'], $datosSeleccionado['codigoCuenta']) && $movimiento['mes'] == $datosSeleccionado['mes']) {
-                if($totalImportes == 0){
+        foreach ($this->cacheData as $key => $movimiento) {
+            if ($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['cuenta'], $datosSeleccionado['codigoCuenta']) && $movimiento['mes'] == $datosSeleccionado['mes']) {
+                if ($totalImportes == 0) {
                     $movimiento['disponibilidad'] = $movimiento['pttoDevengado'] - $movimiento['importe'];
                     $totalImportes += $movimiento['importe'];
-                }else{
+                } else {
                     $movimiento['disponibilidad'] = $movimiento['pttoDevengado'] - $totalImportes - $movimiento['importe'];
                     $totalImportes += $movimiento['importe'];
                 }
@@ -219,6 +220,7 @@ class EgresosCapitulo5EjercidoTable extends Tabla
         }
 
         try {
+            $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::select('numero_poliza')
                 ->where('tipo_poliza', '=', 'E')
                 ->whereYear('fecha', '=', Carbon::now()->year)
@@ -250,6 +252,7 @@ class EgresosCapitulo5EjercidoTable extends Tabla
 
                 $polizas = [
                     [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'E',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -271,6 +274,7 @@ class EgresosCapitulo5EjercidoTable extends Tabla
 
                 foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
                     array_push($polizas, [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'E',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -291,9 +295,8 @@ class EgresosCapitulo5EjercidoTable extends Tabla
                 }
 
                 Poliza::insert($polizas);
-
             }
-            
+
             $numerosPolizas = Poliza::select('numero_poliza')
                 ->where('tipo_poliza', '=', 'EAUX')
                 ->whereYear('fecha', '=', Carbon::now()->year)
@@ -320,7 +323,7 @@ class EgresosCapitulo5EjercidoTable extends Tabla
                 ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where('concepto', 'LIKE', '%(Ejercido)%')
                 ->get();
-            
+
             $totalRemanente = DB::select('EXEC ImporteTotalCapitulo5Ejercido @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             if ($totalRemanente > 0) {
                 foreach ($polizasInicialesEgresosDevengado as $polizaImporte) {
@@ -330,6 +333,7 @@ class EgresosCapitulo5EjercidoTable extends Tabla
                     } else {
                         // Si la clave no existe, agregar el nuevo depósito al resultado
                         $resultado[$clave] = [
+                            'idUsuarioRegistrante' => $idUsuarioRegistrante,
                             'area' => $polizaImporte['area'],
                             'tipo_poliza' => 'EAUX',
                             'numero_poliza' =>  $this->numeroPolizaRemanente,
@@ -360,6 +364,7 @@ class EgresosCapitulo5EjercidoTable extends Tabla
                         }
                     }
                     Poliza::create([
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $polizaInicial['area'],
                         'tipo_poliza' => 'EAUX',
                         'numero_poliza' =>  $this->numeroPolizaRemanente,
@@ -398,8 +403,5 @@ class EgresosCapitulo5EjercidoTable extends Tabla
         }
     }
 
-    public function changeState($value)
-    {
-
-    }
+    public function changeState($value) {}
 }

@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Livewire\Tabla;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Clases\Column;
 use Livewire\Attributes\On;
@@ -214,7 +215,8 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosRenovacionTable extends T
         }
 
         try{
-             $numerosPolizas = Poliza::select('numero_poliza')
+            $idUsuarioRegistrante = Auth::id();
+            $numerosPolizas = Poliza::select('numero_poliza')
             ->where('tipo_poliza', '=', 'D')
             ->whereYear('fecha', '=', Carbon::now()->year)
             ->distinct()
@@ -262,6 +264,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosRenovacionTable extends T
 
                 $polizas = [
                     [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'D',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -282,6 +285,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosRenovacionTable extends T
                 ];
 
                 array_push($polizas, [
+                    'idUsuarioRegistrante' => $idUsuarioRegistrante,
                     'area' => $movimiento['codigoAreaResponsable'],
                     'tipo_poliza' => 'D',
                     'numero_poliza' =>  $this->numeroPoliza,
@@ -306,6 +310,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosRenovacionTable extends T
                         $total = $movimiento['importe'] - $movimiento['importeAbono'];
                     }
                     array_push($polizas, [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'D',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -327,6 +332,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosRenovacionTable extends T
 
                 foreach ($interaccionCuentaCuentasAbono as $key => $dataCuenta) {
                     array_push($polizas, [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'D',
                         'numero_poliza' =>  $this->numeroPoliza,

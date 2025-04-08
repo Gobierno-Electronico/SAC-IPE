@@ -17,6 +17,7 @@ use App\Models\CuentaClasificadorEgreso;
 use App\Models\InteraccionCuentaConcepto;
 use App\Models\InteraccionCuentaCuenta;
 use App\Models\Poliza;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use PhpParser\Node\Stmt\Break_;
@@ -255,6 +256,7 @@ class AfectacionesIngresosForm extends Component
     #[On('finalizarRegistrosIngresos')]
     public function finalizarRegistrosIngresos($registros)
     {
+        $idUsuarioRegistrante = Auth::id();
         $this->total = $this->total;
         $this->total = number_format($this->total, 2, '.', ',');
         $this->total = '$' . $this->total;
@@ -303,6 +305,7 @@ class AfectacionesIngresosForm extends Component
             foreach ($registro as $mes) {
                 if ($mes['Importe'] != 0) {
                     $poliza = new Poliza([
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $mes['area'],
                         'tipo_poliza' => 'D',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -320,6 +323,7 @@ class AfectacionesIngresosForm extends Component
                         'updated_at' => $fecha
                     ]);
                     $polizaModificado = new Poliza([
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $mes['area'],
                         'tipo_poliza' => 'D',
                         'numero_poliza' =>  $this->numeroPoliza,

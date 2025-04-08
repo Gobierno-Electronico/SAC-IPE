@@ -21,6 +21,10 @@
 	<queryString>
 		<![CDATA[EXEC PolizaSaldoInicial @Anio =  $P{Anio}]]>
 	</queryString>
+	<field name="nombreUsuario" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombreUsuario"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombreUsuario"/>
+	</field>
 	<field name="cuenta" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="cuenta"/>
 		<property name="com.jaspersoft.studio.field.label" value="cuenta"/>
@@ -218,7 +222,7 @@
 				<text><![CDATA[Cuenta]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="157" y="0" width="442" height="20" uuid="02f5e553-49db-4359-9c0a-5de1b8cf69aa">
+				<reportElement x="157" y="0" width="443" height="20" uuid="02f5e553-49db-4359-9c0a-5de1b8cf69aa">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -290,7 +294,7 @@
 				<textFieldExpression><![CDATA[$F{cuenta}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="156" y="0" width="442" height="20" uuid="6d772e21-3ae2-4634-9ac0-a2eb168bb5f3">
+				<reportElement x="156" y="0" width="444" height="20" uuid="6d772e21-3ae2-4634-9ac0-a2eb168bb5f3">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="81aece0a-5ee1-42cb-94bf-893494786400"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -450,7 +454,7 @@
 					<font fontName="Times New Roman" size="10"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["C. CÉSAR RASCON POZOS"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{nombreUsuario}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="40" width="100" height="15" uuid="45523d6a-d0bd-45e3-b0d6-22a1b6072ed0">
