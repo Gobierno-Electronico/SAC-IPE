@@ -105,6 +105,8 @@ Route::get('/contabilidad/plantilla-poliza-inicial', [ContabilidadController::cl
 Route::get('/contabilidad/consulta-poliza-inicial', [ContabilidadController::class, 'consultaPolizaInicial'])->name('consultaPolizaInicial')->middleware('can:acceso-contabilidad-consultar-carga');
 Route::post('/contabilidad/cargar-poliza-inicial', [ContabilidadController::class, 'cargarPolizaInicial'])->name('cargarPolizaInicial')->middleware('can:acceso-contabilidad-consultar-carga');
 Route::get('/contabilidad/registro-poliza-diario', [ContabilidadController::class, 'registroPolizaDiario'])->name('registroPolizaDiario')->middleware('can:acceso-contabilidad-consultar-carga');
+Route::get("/movimientos-diario", [ContabilidadController::class, 'movimientosDiario'])->name('movimientosDiario')->middleware('can:acceso-contabilidad-consultar-carga');
+
 
 //Tipos de presupuesto
 Route::get("/tiposPresupuesto", [PresupuestoController::class, 'tiposPresupuesto'])->name('tiposPresupuesto')->middleware('can:acceso-presupuesto');
