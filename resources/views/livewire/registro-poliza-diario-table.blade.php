@@ -44,9 +44,13 @@
             {{ $this->data()->links() }}
         </div>
         <div class="d-flex justify-content-end">
+            <div class="me-3">
+                <label for="totalCargo">Total Cargo</label>
+                <input type="text" name="totalCargo" id="totalCargo" class="form-control" disabled wire:model.live="totalCargo">
+            </div>
             <div>
-                <label for="total">Total</label>
-                <input type="text" name="total" id="total" class="form-control" disabled wire:model.live="total">
+                <label for="totalAbono">Total Abono</label>
+                <input type="text" name="totalAbono" id="totalAbono" class="form-control" disabled wire:model.live="totalAbono">
             </div>
         </div>
     </div>
@@ -55,15 +59,19 @@
 <script>
     window.addEventListener('cambioTotal', event => {
         let parametros = event.__livewire.params
-        $('#total').val(parametros.total);
+
+        $('#totalCargo').val(parametros.totalCargo);
+        $('#totalAbono').val(parametros.totalAbono);
         setTimeout(() => {
-            formatearImporte({id: 'total'})
+            formatearImporte({id: 'totalCargo'})
+            formatearImporte({id: 'totalAbono'})
         }, 100);
     });
     window.addEventListener('llenarFormulario', event => {
         let parametros = event.__livewire.params
-        $("#selectCuentaContable option:contains('" + parametros.cuenta + "')").prop("selected", true);
+        $("#selectCuenta option:contains('" + parametros.cuenta + "')").prop("selected", true);
         $("#selectMes option:contains('" + parametros.mes + "')").prop("selected", true);
+        $("#selectTipoInteraccion option:contains('" + parametros.tipoInteraccion + "')").prop("selected", true);
         $('#inputImporte').val(parametros.importe);
         setTimeout(() => {
             formatearImporte({id: 'inputImporte'})

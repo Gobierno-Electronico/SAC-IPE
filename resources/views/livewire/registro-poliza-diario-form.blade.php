@@ -1,4 +1,11 @@
 <div class="mt-5">
+    <!-- CSS de Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <!-- JS de jQuery y Select2 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     @if ($consultarRegistro)
         <div>
             <h4>Resumen de movimientos por registrar</h4>
@@ -23,9 +30,9 @@
 
             </div>
         </div>
-{{--         <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaIngresosPorClasificar" urlFinalizar="/ingresos-por-clasificar" tipoPoliza="I"
-            categoriaModulo='INGRESOS POR CLASIFICAR' /> --}}
+        {{--         <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+            tipoMovimiento="PolizaDiarioDiversosConceptos" urlFinalizar="/poliza-diario" tipoPoliza="D"
+            categoriaModulo='REGISTRO DE DIVERSOS CONCEPTOS' /> --}}
     @else
         <div>
             <label for="selectArea" class="form-label">Área solicitante</label>
@@ -54,26 +61,29 @@
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
         <div class="row">
             <div class="col-3">
-                <label for="selectCuentaCargo" class="form-label">Cuenta cargo</label>
-                <select name="selectCuentaCargo" id="selectCuentaCargo" class="form-select mb-3"
-                    wire:model="cuentaCargo">
-                    <option value="" @if ($this->cuentaCargo == "") selected @endif selected>Seleccionar
+                <label for="selectCuenta" class="form-label">Cuenta</label>
+                <select name="selectCuenta" id="selectCuenta" class="form-select mb-3"
+                    wire:model="cuenta">
+                    <option value="" @if ($this->cuenta == '') selected @endif selected>Seleccionar
                         cuenta...</option>
                     @foreach ($cuentas as $cuenta)
-                        <option value="{{ $cuenta->cuenta_id }}">
+                        <option value="{{ $cuenta->id }}">
                             {{ $cuenta->Codigo_cuenta . ' ' . $cuenta->Descripcion_cuenta }}</option>
                     @endforeach
                 </select>
-                <label for="selectCuentaAbono" class="form-label">Cuenta abono</label>
-                <select name="selectCuentaAbono" id="selectCuentaAbono" class="form-select mb-3"
-                    wire:model="cuentaAbono">
-                    <option value="" @if ($this->cuentaAbono == "") selected @endif selected>Seleccionar
-                        cuenta...</option>
-                    @foreach ($cuentas as $cuenta)
-                        <option value="{{ $cuenta->cuenta_id }}">
-                            {{ $cuenta->Codigo_cuenta . ' ' . $cuenta->Descripcion_cuenta }}</option>
-                    @endforeach
+
+                <label for="selectTipoInteraccion" class="form-label">Tipo de interaccción</label>
+                <select name="selectTipoInteraccion" id="selectTipoInteraccion" class="form-select mb-3" wire:model="tipoInteraccion">
+                    <option value="" selected disabled>Seleccionar tipo de interaccción...</option>
+                    <option value="Contable - Cargo">Contable - Cargo</option>
+                    <option value="Contable - Abono">Contable - Abono</option>
                 </select>
+
+                <label for="inputImporte" class="form-label">Importe</label>
+                <input type="text" name="inputImporte" id="inputImporte" class="form-control mb-3"
+                    wire:model="importe" onkeyup="validarDecimales(this)" onchange="formatearImporte(this)">
+                
+
                 <label for="selectMes" class="form-label">Mes de afectación</label>
                 <select name="selectMes" id="selectMes" class="form-select mb-3" wire:model="mes">
                     <option value="" @if ($this->mes == '') selected @endif>Seleccionar mes...</option>
@@ -86,9 +96,6 @@
                     @endforeach
                 </select>
 
-                <label for="inputImporte" class="form-label">Importe</label>
-                <input type="text" name="inputImporte" id="inputImporte" class="form-control mb-3"
-                    wire:model="importe" onkeyup="validarDecimales(this)" onchange="formatearImporte(this)">
 
             </div>
             <div class="col">
@@ -149,7 +156,7 @@
     }
 
     function limpiar() {
-        $('#selectCuentaContable').val('');
+        $('#selectCuenta').val('');
         $('#inputImporte').val('');
     }
 </script>
