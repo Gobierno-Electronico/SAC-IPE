@@ -115,8 +115,7 @@ class MovimientosDiarioTable extends Tabla
             Column::make('descripcion', 'Descripción'),
             Column::make('fechaAfectacion', 'Fecha de afectación'),
             Column::make('fechaRegistro', 'Fecha de registro'),
-            Column::make('total', 'Total por Póliza'), // NUEVA COLUMNA
-            Column::make('estatus_evento', 'Estado del momento contable')->component('columns.estado'),
+            Column::make('total', 'Total por Póliza'), 
             Column::make('id', 'Acciones')->component('columns.accionVerMovimiento'),
 
         ];
