@@ -73,6 +73,15 @@
         limpiar()
     })
 
+    window.addEventListener('esconderCargando', event => {
+            esconderCargando()
+        })
+
+        function esconderCargando() {
+            $('#loadingScreen').prop('hidden', true);
+            toastr.clear();
+        }
+
     function formatearImporte(obj, amount = '') {
         amount = (amount) ? amount : $('#' + obj.id).val().replace(/[^0-9.]/g, '');
         amount = parseFloat(amount);
