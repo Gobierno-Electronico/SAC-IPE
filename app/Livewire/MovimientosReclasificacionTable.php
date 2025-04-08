@@ -31,7 +31,7 @@ class MovimientosReclasificacionTable extends Tabla
     public $numeroPoliza;
     public $total;
     public $descripcion;
-    public $tipoMovimiento;
+    public $tipoMovimiento = "PolizaReclasificacion";
     public $numeroPolizaRemanente;
     public $categoriaModulo;
     public $categoriaRemanente;

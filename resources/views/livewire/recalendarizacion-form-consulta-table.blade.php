@@ -83,6 +83,7 @@
     <button id="botonHora" value='{{ $hora }}' hidden></button>
     <button id="botonNumeroPoliza" value='{{ $numeroPoliza }}' hidden></button>
     <button id="botonEvento" value='{{ $numeroEvento }}' hidden></button>
+    <button id="botonMovimiento" value="{{ $tipoMovimiento }}" hidden></button>
 
 
     <div class="mt-4">

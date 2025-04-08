@@ -40,7 +40,7 @@ class RegistroPolizaDiarioForm extends Component
     public $numeroPoliza;
     public $totalCargo;
     public $totalAbono;
-    public $tipoMovimiento;
+    public $total;
 
     public function render()
     {
@@ -106,8 +106,7 @@ class RegistroPolizaDiarioForm extends Component
         $this->consultarRegistro = true;
         $this->numeroEvento = $numeroEvento;
         $this->numeroPoliza = $numeroPoliza;
-        $this->totalCargo = $totalCargo;
-        $this->totalAbono = $totalAbono;
+        $this->total = $totalCargo + $totalAbono;
     }
 
     #[On('llenar-formulario')]

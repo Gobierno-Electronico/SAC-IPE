@@ -15,7 +15,7 @@ function generarPolizaReclasificacion(btn){
     $("#" + btnId + "").prop("disabled", true);
     $('#loadingScreen').prop('hidden', false);
 
-    nombrereporte = "PolizaPresupuestal";
+    nombrereporte = $('#botonMovimiento').val();
     var orden = 'IZQUIERDO';
     var capitulo = $('#capitulo').val()
     // switch (capitulo) {
@@ -28,7 +28,7 @@ function generarPolizaReclasificacion(btn){
     //     default:
     //         break;
     // }
-    const wsUrl = "http://"+PORT+"/"+REPORTEADOR+"/webresources/service/report?name=PolizaReclasificacion&params="
+    const wsUrl = "http://"+PORT+"/"+REPORTEADOR+"/webresources/service/report?name="+nombrereporte+"&params="
     url = `${wsUrl}Fecha;${$('#botonFecha').val()},Hora;${$('#botonHora').val()},Numero;${$('#botonNumeroPoliza').val()},Evento;${$('#botonEvento').val()}`;
     let mensajeEdoSolicitud = toastr.info("Procesando solicitud, espere un momento por favor . . .", "", { timeOut: "0" });
     console.log("url ", url);

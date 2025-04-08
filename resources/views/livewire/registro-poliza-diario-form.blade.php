@@ -1,11 +1,4 @@
 <div class="mt-5">
-    <!-- CSS de Select2 -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
-    <!-- JS de jQuery y Select2 -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
     @if ($consultarRegistro)
         <div>
             <h4>Resumen de movimientos por registrar</h4>
@@ -30,9 +23,9 @@
 
             </div>
         </div>
-        {{--         <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaDiarioDiversosConceptos" urlFinalizar="/poliza-diario" tipoPoliza="D"
-            categoriaModulo='REGISTRO DE DIVERSOS CONCEPTOS' /> --}}
+        <livewire:recalendarizacion-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+            tipoMovimiento="PolizaDiarioDiversosConceptos" urlFinalizar="/contabilidad/registro-poliza-diario" tipoPoliza="D"
+            categoriaModulo='DIARIO DIVERSOS CONCEPTOS' />
     @else
         <div>
             <label for="selectArea" class="form-label">Área solicitante</label>
@@ -62,8 +55,7 @@
         <div class="row">
             <div class="col-3">
                 <label for="selectCuenta" class="form-label">Cuenta</label>
-                <select name="selectCuenta" id="selectCuenta" class="form-select mb-3"
-                    wire:model="cuenta">
+                <select name="selectCuenta" id="selectCuenta" class="form-select mb-3" wire:model="cuenta">
                     <option value="" @if ($this->cuenta == '') selected @endif selected>Seleccionar
                         cuenta...</option>
                     @foreach ($cuentas as $cuenta)
@@ -73,7 +65,8 @@
                 </select>
 
                 <label for="selectTipoInteraccion" class="form-label">Tipo de interaccción</label>
-                <select name="selectTipoInteraccion" id="selectTipoInteraccion" class="form-select mb-3" wire:model="tipoInteraccion">
+                <select name="selectTipoInteraccion" id="selectTipoInteraccion" class="form-select mb-3"
+                    wire:model="tipoInteraccion">
                     <option value="" selected disabled>Seleccionar tipo de interaccción...</option>
                     <option value="Contable - Cargo">Contable - Cargo</option>
                     <option value="Contable - Abono">Contable - Abono</option>
@@ -82,7 +75,7 @@
                 <label for="inputImporte" class="form-label">Importe</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control mb-3"
                     wire:model="importe" onkeyup="validarDecimales(this)" onchange="formatearImporte(this)">
-                
+
 
                 <label for="selectMes" class="form-label">Mes de afectación</label>
                 <select name="selectMes" id="selectMes" class="form-select mb-3" wire:model="mes">
