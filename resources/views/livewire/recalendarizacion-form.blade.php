@@ -25,7 +25,7 @@
                         </div>
                     </div>
                     <div class="mt-3">
-                        <livewire:recalendarizacion-form-consulta-table :$numeroPoliza :$numeroEvento :$totalAumentado :$totalDisminuido/>
+                        <livewire:recalendarizacion-form-consulta-table :$numeroPoliza :$numeroEvento :$totalAumentado :$totalDisminuido urlFinalizar="/presupuesto/recalendarizacion" tipoPoliza="D" tipoMovimiento="PolizaReclasificacion" categoriaModulo='RECLASIFICACIÓN O RECALENDARIZACIÓN'/>
 
                     </div>
 
@@ -34,7 +34,7 @@
             </div>
         </div>
 
-
+        
 
         @else
         <div class="col-2">

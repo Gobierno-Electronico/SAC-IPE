@@ -174,16 +174,76 @@ class RegistroPolizaDiarioTable extends Tabla
     }
 
     #[On('finalizar-registros')]
-    public function finalizarRegistros() {
+    public function finalizarRegistros()
+    {
         if (empty($this->cacheData)) {
             $this->dispatch('mostrarMensaje', mensaje: 'Tabla sin registros', tipo: 'error', tiempo: 3000);
             return;
         }
+        if ($this->totalCargo != $this->totalAbono) {
+            $this->dispatch('mostrarMensaje', mensaje: 'Los totales Cargo y Abono deben estar balanceados', tipo: 'error', tiempo: 3000);
+            return;
+        }
 
         try {
-            
+            $idUsuarioRegistrante = Auth::id();
+            $numerosPolizas = Poliza::select('numero_poliza')
+                ->where('tipo_poliza', '=', 'D')
+                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->distinct()
+                ->orderBy('numero_poliza')
+                ->pluck('numero_poliza')
+                ->toArray();
+            sort($numerosPolizas);
+            $this->numeroPoliza = (int)end($numerosPolizas) + 1;
+
+            $numerosEvento = Poliza::select('evento')
+                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->distinct()
+                ->orderBy('evento')
+                ->pluck('evento')
+                ->toArray();
+            sort($numerosEvento);
+            $this->numeroEvento = (int)end($numerosEvento) + 1;
+
+            $bitacora = new BitacoraController();
+            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar una poliza diario con evento: ' . $this->numeroEvento, request());
+
+            DB::beginTransaction();
+
+            $anioActual = Carbon::now()->year;
+            $fecha = Carbon::now('America/Mexico_City');
+            $fecha->year($anioActual);
+
+            $polizas = [];
+            foreach ($this->dataCompleta as $movimiento) {
+                array_push($polizas, [
+                    'idUsuarioRegistrante' => $idUsuarioRegistrante,
+                    'area' => $movimiento['codigoAreaResponsable'],
+                    'tipo_poliza' => 'D',
+                    'numero_poliza' =>  $this->numeroPoliza,
+                    'fecha' => $movimiento['fechaAfectacion'],
+                    'cuenta' => $movimiento['codigoCuenta'],
+                    'concepto' => $movimiento['descripcionCuenta'],
+                    'total' => abs($movimiento['importe']),
+                    'mes' => $movimiento['mes'],
+                    'descripcion' => $movimiento['observaciones'],
+                    'evento' => $this->numeroEvento,
+                    'tipo_interaccion' => $movimiento['tipoInteraccion'],
+                    'validado' => false,
+                    'estatus_evento' => true,
+                    'categoria' => 'DIARIO DIVERSOS CONCEPTOS',
+                    'created_at' => $fecha,
+                    'updated_at' => $fecha
+                ]);
+            }
+            Poliza::insert($polizas);
+            DB::commit();
+            $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->totalCargo, $this->totalAbono);
         } catch (\Throwable $th) {
-            
+            DB::rollBack();
+            Log::error('Ocurrió un error al finalizarRegistro en Poliza Diario: '. $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 }
