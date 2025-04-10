@@ -16,6 +16,7 @@ function generarPolizaReclasificacion(btn){
     $('#loadingScreen').prop('hidden', false);
 
     nombrereporte = $('#botonMovimiento').val();
+    console.log(nombrereporte)
     var orden = 'IZQUIERDO';
     var capitulo = $('#capitulo').val()
     // switch (capitulo) {
