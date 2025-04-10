@@ -280,7 +280,7 @@ class EgresosCapitulo2y3PagadoForm extends Component
         $codigoCuentaContableSeleccionada = Cuenta::where('id', $this->cuentaDeRetenciones)->value('Codigo_cuenta');
 
         $partidaPagadoSeleccionada = Cuenta::find($this->partidaPresupuestal);
-        $conceptoGeneralPartidaPagado = explode('(', $partidaPagadoSeleccionada->Descripcion_cuenta);
+        $conceptoGeneralPartidaPagado = explode('(Pagado', $partidaPagadoSeleccionada->Descripcion_cuenta);
         $partidaDevengado = Cuenta::where('Descripcion_cuenta', 'LIKE', '%' . $conceptoGeneralPartidaPagado[0] . '(Devengado)' . '%')->get();
 
         //este bloque filtra codigoCuentaPagada en base a su codigo cuenta debido a que puede haber cuentas que compartan descripcion o sean similares
