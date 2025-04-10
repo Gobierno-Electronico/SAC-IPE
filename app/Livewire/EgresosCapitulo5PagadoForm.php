@@ -210,7 +210,7 @@ class EgresosCapitulo5PagadoForm extends Component
                 $this->cuentaDeRetenciones = "";
             }
             $partidaPresupuestalSeleccionada = Cuenta::find($this->partidaPresupuestal);
-            $conceptoGeneralPartidaSeleccionada = explode('(', $partidaPresupuestalSeleccionada->Descripcion_cuenta);
+            $conceptoGeneralPartidaSeleccionada = explode('(Pagado', $partidaPresupuestalSeleccionada->Descripcion_cuenta);
             // dd($conceptoGeneralPartidaPagado[0]);
             $partidaDevengado = Cuenta::where('Descripcion_cuenta', 'LIKE', '%' . $conceptoGeneralPartidaSeleccionada[0] . '(Devengado)' . '%')->get();
 
@@ -266,7 +266,7 @@ class EgresosCapitulo5PagadoForm extends Component
         $codigoCuentaContableSeleccionada = Cuenta::where('id', $this->cuentaDeRetenciones)->value('Codigo_cuenta');
 
         $partidaPagadoSeleccionada = Cuenta::find($this->partidaPresupuestal);
-        $conceptoGeneralPartidaPagado = explode('(', $partidaPagadoSeleccionada->Descripcion_cuenta);
+        $conceptoGeneralPartidaPagado = explode('(Pagado', $partidaPagadoSeleccionada->Descripcion_cuenta);
         $partidaDevengado = Cuenta::where('Descripcion_cuenta', 'LIKE', '%' . $conceptoGeneralPartidaPagado[0] . '(Devengado)' . '%')->get();
         $solvenciaContable = DB::select('EXEC SolvenciaDevengadoCuentaContableCapitulo5 @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?, @partidaPagado = ?, @partidaDevengado = ?', array($codigoDepartamento->Codigo_completo, $codigoCuentaContableSeleccionada, $anioActual, $this->mes, $this->numeroEvento, $partidaPagadoSeleccionada->Codigo_cuenta, $partidaDevengado[0]['Codigo_cuenta']))[0]->Total;
 

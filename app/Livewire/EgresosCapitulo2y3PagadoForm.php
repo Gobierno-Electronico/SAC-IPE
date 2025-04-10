@@ -210,7 +210,7 @@ class EgresosCapitulo2y3PagadoForm extends Component
             $partidaPresupuestalSeleccionada = Cuenta::find($this->partidaPresupuestal);
 
 
-            $conceptoGeneralPartidaSeleccionada = explode('(', $partidaPresupuestalSeleccionada->Descripcion_cuenta);
+            $conceptoGeneralPartidaSeleccionada = explode('(Pagado', $partidaPresupuestalSeleccionada->Descripcion_cuenta);
             $partidaDevengado = Cuenta::where('Descripcion_cuenta', 'LIKE', '%' . $conceptoGeneralPartidaSeleccionada[0] . '(Devengado)' . '%')->get();
 
             if(count($partidaDevengado) > 1){
@@ -265,7 +265,7 @@ class EgresosCapitulo2y3PagadoForm extends Component
                 $this->cuentaDeRetenciones = $this->cuentasRetenciones[0]['id'];
             }
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al cargar las cuentas de retenciones en pagado capítulo 2000 y 3000: ' . $th->getMessage());
+            Log::error('Ocurrió un error al cargar las cuentas de retenciones en pagado capítulo 2000 y 3000: ' . $th->getMessage() . ' En La línea: ' . $th->getLine()) ;
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas de retenciones, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -280,7 +280,7 @@ class EgresosCapitulo2y3PagadoForm extends Component
         $codigoCuentaContableSeleccionada = Cuenta::where('id', $this->cuentaDeRetenciones)->value('Codigo_cuenta');
 
         $partidaPagadoSeleccionada = Cuenta::find($this->partidaPresupuestal);
-        $conceptoGeneralPartidaPagado = explode('(', $partidaPagadoSeleccionada->Descripcion_cuenta);
+        $conceptoGeneralPartidaPagado = explode('(Pagado', $partidaPagadoSeleccionada->Descripcion_cuenta);
         $partidaDevengado = Cuenta::where('Descripcion_cuenta', 'LIKE', '%' . $conceptoGeneralPartidaPagado[0] . '(Devengado)' . '%')->get();
 
         //este bloque filtra codigoCuentaPagada en base a su codigo cuenta debido a que puede haber cuentas que compartan descripcion o sean similares
