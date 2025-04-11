@@ -1,7 +1,208 @@
-[2025-04-10 11:00:18] local.ERROR: Ocurrió un error al cargar las cuentas de retenciones en pagado capítulo 2000 y 3000: Undefined array key 0  
-[2025-04-10 11:00:18] local.ERROR: Ocurrió un error al cargar las cuentas de retenciones en pagado capítulo 2000 y 3000: Undefined array key 0  
-[2025-04-10 11:00:48] local.ERROR: Ocurrió un error al cargar las cuentas de retenciones en pagado capítulo 2000 y 3000: Undefined array key 01780  
-[2025-04-10 11:00:48] local.ERROR: Ocurrió un error al cargar las cuentas de retenciones en pagado capítulo 2000 y 3000: Undefined array key 01780  
-[2025-04-10 11:01:44] local.ERROR: Ocurrió un error al cargar las cuentas de retenciones en pagado capítulo 2000 y 3000: Undefined array key 0 En La línea: 1780  
-[2025-04-10 11:01:44] local.ERROR: Ocurrió un error al cargar las cuentas de retenciones en pagado capítulo 2000 y 3000: Undefined array key 0 En La línea: 1780  
-[2025-04-10 11:23:09] local.ERROR: Ocurrió un error al cargar presupuesto ejercido en pagado del capítulo 2000 y 3000: Undefined array key 0  
+[2025-04-10 14:20:52] local.INFO: Hola  
+[2025-04-10 17:11:18] local.INFO: evento  
+[2025-04-10 18:30:51] local.INFO: evento  
+[2025-04-10 18:40:40] local.INFO: evento  
+[2025-04-10 18:52:06] local.INFO: evento  
+[2025-04-10 19:20:24] local.INFO: evento  
+[2025-04-10 19:28:33] local.INFO: evento  
+[2025-04-10 19:47:25] local.INFO: evento  
+[2025-04-10 19:57:38] local.ERROR: Trying to access array offset on null {"view":{"view":"/var/www/html/resources/views/livewire/recalendarizacion-form.blade.php","data":[]},"userId":10061,"exception":"[object] (Spatie\\LaravelIgnition\\Exceptions\\ViewException(code: 0): Trying to access array offset on null at /var/www/html/app/Livewire/RecalendarizacionFormConsultaTable.php:45)
+[stacktrace]
+#0 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(256): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Trying to acces...', '/var/www/html/a...', 45)
+#1 /var/www/html/app/Livewire/RecalendarizacionFormConsultaTable.php(45): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Trying to acces...', '/var/www/html/a...', 45)
+#2 /var/www/html/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): App\\Livewire\\RecalendarizacionFormConsultaTable->render()
+#3 /var/www/html/vendor/laravel/framework/src/Illuminate/Container/Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#4 /var/www/html/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#5 /var/www/html/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#6 /var/www/html/vendor/livewire/livewire/src/Wrapped.php(23): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array)
+#7 /var/www/html/vendor/livewire/livewire/src/Mechanisms/HandleComponents/HandleComponents.php(270): Livewire\\Wrapped->__call('render', Array)
+#8 /var/www/html/vendor/livewire/livewire/src/Mechanisms/HandleComponents/HandleComponents.php(230): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->getView(Object(App\\Livewire\\RecalendarizacionFormConsultaTable))
+#9 /var/www/html/vendor/livewire/livewire/src/Mechanisms/HandleComponents/HandleComponents.php(53): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->render(Object(App\\Livewire\\RecalendarizacionFormConsultaTable), '<div></div>')
+#10 /var/www/html/vendor/livewire/livewire/src/LivewireManager.php(72): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->mount('recalendarizaci...', Array, 'lw-2150367832-0')
+#11 /var/www/html/resources/views/livewire/recalendarizacion-form.blade.php(23): Livewire\\LivewireManager->mount('recalendarizaci...', Array, 'lw-2150367832-0', Array, Array)
+#12 /var/www/html/vendor/livewire/livewire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(37): include('/var/www/html/s...')
+#13 /var/www/html/vendor/livewire/livewire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(38): App\\Livewire\\RecalendarizacionForm->Livewire\\Mechanisms\\ExtendBlade\\{closure}()
+#14 /var/www/html/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(73): Livewire\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine->evaluatePath('/var/www/html/s...', Array)
+#15 /var/www/html/vendor/livewire/livewire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(16): Illuminate\\View\\Engines\\CompilerEngine->get('/var/www/html/r...', Array)
+#16 /var/www/html/vendor/laravel/framework/src/Illuminate/View/View.php(208): Livewire\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine->get('/var/www/html/r...', Array)
+#17 /var/www/html/vendor/laravel/framework/src/Illuminate/View/View.php(191): Illuminate\\View\\View->getContents()
+#18 /var/www/html/vendor/laravel/framework/src/Illuminate/View/View.php(160): Illuminate\\View\\View->renderContents()
+#19 /var/www/html/vendor/livewire/livewire/src/Mechanisms/HandleComponents/HandleComponents.php(240): Illuminate\\View\\View->render(Object(Closure))
+#20 /var/www/html/vendor/livewire/livewire/src/Mechanisms/HandleComponents/HandleComponents.php(284): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->Livewire\\Mechanisms\\HandleComponents\\{closure}()
+#21 /var/www/html/vendor/livewire/livewire/src/Mechanisms/HandleComponents/HandleComponents.php(232): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->trackInRenderStack(Object(App\\Livewire\\RecalendarizacionForm), Object(Closure))
+#22 /var/www/html/vendor/livewire/livewire/src/Mechanisms/HandleComponents/HandleComponents.php(103): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->render(Object(App\\Livewire\\RecalendarizacionForm))
+#23 /var/www/html/vendor/livewire/livewire/src/LivewireManager.php(96): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->update(Array, Array, Array)
+#24 /var/www/html/vendor/livewire/livewire/src/Mechanisms/HandleRequests/HandleRequests.php(89): Livewire\\LivewireManager->update(Array, Array, Array)
+#25 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): Livewire\\Mechanisms\\HandleRequests\\HandleRequests->handleUpdate()
+#26 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Route.php(260): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(Livewire\\Mechanisms\\HandleRequests\\HandleRequests), 'handleUpdate')
+#27 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Route.php(206): Illuminate\\Routing\\Route->runController()
+#28 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php(806): Illuminate\\Routing\\Route->run()
+#29 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#30 /var/www/html/app/Http/Middleware/ResetPassword.php(23): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#31 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): App\\Http\\Middleware\\ResetPassword->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#32 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#33 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#34 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php(88): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#35 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#36 /var/www/html/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#37 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#38 /var/www/html/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#39 /var/www/html/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#40 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#41 /var/www/html/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#42 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#43 /var/www/html/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(75): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#44 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#45 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#46 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php(805): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#47 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#48 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php(748): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#49 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#50 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#51 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#52 /var/www/html/vendor/livewire/livewire/src/Features/SupportDisablingBackButtonCache/DisableBackButtonCacheMiddleware.php(19): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#53 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Livewire\\Features\\SupportDisablingBackButtonCache\\DisableBackButtonCacheMiddleware->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#54 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#55 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#56 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(47): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#57 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#58 /var/www/html/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#59 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#60 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(110): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#61 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#62 /var/www/html/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#63 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#64 /var/www/html/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#65 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#66 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#67 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#68 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#69 /var/www/html/public/index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#70 {main}
+
+[previous exception] [object] (ErrorException(code: 0): Trying to access array offset on null at /var/www/html/app/Livewire/RecalendarizacionFormConsultaTable.php:45)
+[stacktrace]
+#0 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(256): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Trying to acces...', '/var/www/html/a...', 45)
+#1 /var/www/html/app/Livewire/RecalendarizacionFormConsultaTable.php(45): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Trying to acces...', '/var/www/html/a...', 45)
+#2 /var/www/html/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): App\\Livewire\\RecalendarizacionFormConsultaTable->render()
+#3 /var/www/html/vendor/laravel/framework/src/Illuminate/Container/Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#4 /var/www/html/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#5 /var/www/html/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#6 /var/www/html/vendor/livewire/livewire/src/Wrapped.php(23): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array)
+#7 /var/www/html/vendor/livewire/livewire/src/Mechanisms/HandleComponents/HandleComponents.php(270): Livewire\\Wrapped->__call('render', Array)
+#8 /var/www/html/vendor/livewire/livewire/src/Mechanisms/HandleComponents/HandleComponents.php(230): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->getView(Object(App\\Livewire\\RecalendarizacionFormConsultaTable))
+#9 /var/www/html/vendor/livewire/livewire/src/Mechanisms/HandleComponents/HandleComponents.php(53): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->render(Object(App\\Livewire\\RecalendarizacionFormConsultaTable), '<div></div>')
+#10 /var/www/html/vendor/livewire/livewire/src/LivewireManager.php(72): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->mount('recalendarizaci...', Array, 'lw-2150367832-0')
+#11 /var/www/html/storage/framework/views/594770c8ad9b4bd784b6634eea73e89b.php(34): Livewire\\LivewireManager->mount('recalendarizaci...', Array, 'lw-2150367832-0', Array, Array)
+#12 /var/www/html/vendor/livewire/livewire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(37): include('/var/www/html/s...')
+#13 /var/www/html/vendor/livewire/livewire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(38): App\\Livewire\\RecalendarizacionForm->Livewire\\Mechanisms\\ExtendBlade\\{closure}()
+#14 /var/www/html/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(73): Livewire\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine->evaluatePath('/var/www/html/s...', Array)
+#15 /var/www/html/vendor/livewire/livewire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(16): Illuminate\\View\\Engines\\CompilerEngine->get('/var/www/html/r...', Array)
+#16 /var/www/html/vendor/laravel/framework/src/Illuminate/View/View.php(208): Livewire\\Mechanisms\\ExtendBlade\\ExtendedCompilerEngine->get('/var/www/html/r...', Array)
+#17 /var/www/html/vendor/laravel/framework/src/Illuminate/View/View.php(191): Illuminate\\View\\View->getContents()
+#18 /var/www/html/vendor/laravel/framework/src/Illuminate/View/View.php(160): Illuminate\\View\\View->renderContents()
+#19 /var/www/html/vendor/livewire/livewire/src/Mechanisms/HandleComponents/HandleComponents.php(240): Illuminate\\View\\View->render(Object(Closure))
+#20 /var/www/html/vendor/livewire/livewire/src/Mechanisms/HandleComponents/HandleComponents.php(284): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->Livewire\\Mechanisms\\HandleComponents\\{closure}()
+#21 /var/www/html/vendor/livewire/livewire/src/Mechanisms/HandleComponents/HandleComponents.php(232): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->trackInRenderStack(Object(App\\Livewire\\RecalendarizacionForm), Object(Closure))
+#22 /var/www/html/vendor/livewire/livewire/src/Mechanisms/HandleComponents/HandleComponents.php(103): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->render(Object(App\\Livewire\\RecalendarizacionForm))
+#23 /var/www/html/vendor/livewire/livewire/src/LivewireManager.php(96): Livewire\\Mechanisms\\HandleComponents\\HandleComponents->update(Array, Array, Array)
+#24 /var/www/html/vendor/livewire/livewire/src/Mechanisms/HandleRequests/HandleRequests.php(89): Livewire\\LivewireManager->update(Array, Array, Array)
+#25 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): Livewire\\Mechanisms\\HandleRequests\\HandleRequests->handleUpdate()
+#26 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Route.php(260): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(Livewire\\Mechanisms\\HandleRequests\\HandleRequests), 'handleUpdate')
+#27 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Route.php(206): Illuminate\\Routing\\Route->runController()
+#28 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php(806): Illuminate\\Routing\\Route->run()
+#29 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#30 /var/www/html/app/Http/Middleware/ResetPassword.php(23): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#31 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): App\\Http\\Middleware\\ResetPassword->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#32 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#33 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#34 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php(88): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#35 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#36 /var/www/html/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#37 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#38 /var/www/html/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#39 /var/www/html/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#40 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#41 /var/www/html/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#42 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#43 /var/www/html/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(75): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#44 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#45 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#46 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php(805): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#47 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#48 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php(748): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#49 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#50 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#51 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#52 /var/www/html/vendor/livewire/livewire/src/Features/SupportDisablingBackButtonCache/DisableBackButtonCacheMiddleware.php(19): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#53 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Livewire\\Features\\SupportDisablingBackButtonCache\\DisableBackButtonCacheMiddleware->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#54 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#55 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#56 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(47): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#57 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#58 /var/www/html/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#59 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#60 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(110): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#61 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#62 /var/www/html/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#63 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#64 /var/www/html/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#65 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#66 /var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#67 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#68 /var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#69 /var/www/html/public/index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#70 {main}
+"} 
+[2025-04-11 09:47:23] local.INFO: array (
+  0 => 
+  array (
+    'id' => 1490829,
+    'idUsuarioRegistrante' => '10061     ',
+    'area' => '1.4.07',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '155',
+    'fecha' => '2025-01-27 00:00:00.000',
+    'cuenta' => '2.1.1.7.01.03',
+    'cuentaRelacionada' => '8.2.5.5.1.2.2.01.02',
+    'concepto' => 'ISR 1.25% sobre RESICO',
+    'total' => '12.6600000000',
+    'tipo_interaccion' => 'Contable - Abono',
+    'mes' => 'Enero',
+    'descripcion' => 'SA/DRH/CAI/013/2025 Reposición de Fondo Fijo del 16 al 24 de enero',
+    'evento' => '52',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 2y3',
+    'validado' => '1',
+    'estatus_evento' => '0',
+    'created_at' => '2025-04-10T00:47:30.567000Z',
+    'updated_at' => '2025-04-10T00:49:27.527000Z',
+    'matchEncontrado' => 0,
+  ),
+  1 => 
+  array (
+    'id' => 1490829,
+    'idUsuarioRegistrante' => '10061     ',
+    'area' => '1.4.07',
+    'tipo_poliza' => 'E',
+    'numero_poliza' => '155',
+    'fecha' => '2025-01-27 00:00:00.000',
+    'cuenta' => '2.1.1.7.01.03',
+    'cuentaRelacionada' => '8.2.5.5.1.2.2.01.02',
+    'concepto' => 'ISR 1.25% sobre RESICO',
+    'total' => '12.6600000000',
+    'tipo_interaccion' => 'Contable - Cargo',
+    'mes' => 'Enero',
+    'descripcion' => 'SA/DRH/CAI/013/2025 Reposición de Fondo Fijo del 16 al 24 de enero',
+    'evento' => '52',
+    'categoria' => 'EGRESOS DEVENGADO CAPITULO 2y3',
+    'validado' => '1',
+    'estatus_evento' => '0',
+    'created_at' => '2025-04-10T00:47:30.567000Z',
+    'updated_at' => '2025-04-10T00:49:27.527000Z',
+    'matchEncontrado' => 0,
+  ),
+)  
+[2025-04-11 10:25:42] local.INFO: evento  
+[2025-04-11 13:30:30] local.INFO: evento  
+[2025-04-11 14:20:50] local.INFO: evento  
+[2025-04-11 14:38:44] local.INFO: evento  
