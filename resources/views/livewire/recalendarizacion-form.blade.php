@@ -136,7 +136,7 @@
             </div>
             <div class="mb-3">
                 <label for="inputImporte">Importe</label>
-                <input type="text" name="inputImporte" id="inputImporte" class="form-control"  onchange="formatearImporte(this)" onkeyup="keyPress(event, this)" wire:model.live="importe">
+                <input type="text" name="inputImporte" id="inputImporte" class="form-control"  onchange="formatearImporte(this)" onkeyup="validarDecimales(this)" wire:model.live="importe">
             </div>
             <div class="mb-4">
                 <label for="inputTipoMovimiento">Tipo de movimiento</label>
@@ -186,8 +186,39 @@
         }
     }
 
-    function formatearImporte(obj) {
-        var amount = $('#' + obj.id).val().replace(/[^0-9.]/g, '');
+    function validarDecimales(input) {
+        // Obtener solo números y un punto decimal permitido
+        let valor = input.value.replace(/[^0-9.]/g, '') // Elimina caracteres no numéricos
+                           .replace(/(\..*)\./g, '$1') // Evita más de un punto decimal
+                           .replace(/^0+(\d)/, '$1') // Elimina ceros iniciales
+                           .replace(/^(\d+)(\.\d{0,2})?.*$/, '$1$2'); // Máximo 2 decimales
+
+        // Si el valor es solo un punto, permitirlo sin formatear
+        if (valor === ".") {
+            input.value = valor;
+            return;
+        }
+
+        // Convertir a número para formateo
+        let partes = valor.split('.');
+        let numeroEntero = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Agrega comas a los miles
+
+        // Reconstruir con decimales si existen
+        input.value = partes.length > 1 ? `${numeroEntero}.${partes[1]}` : numeroEntero;
+    }
+
+    function keyPress(e, obj) {
+        let isCurrency = $('#' + obj.id).val().search(/[$]/)
+        let texto = $('#' + obj.id).val().replace(/[^0-9.]/g, '');
+        let isDecimal = texto.search(/[.]/)
+        let amount = parseFloat(texto);
+        if (!isNaN(amount) && isDecimal < 0 || isCurrency == 0) {
+            $('#' + obj.id).val(amount.toLocaleString());
+        }
+    }
+
+    function formatearImporte(obj, amount = '') {
+        amount = (amount) ? amount : $('#' + obj.id).val().replace(/[^0-9.]/g, '');
         amount = parseFloat(amount);
         if (!isNaN(amount)) {
             var formattedAmount = amount.toLocaleString('es-MX', {
@@ -196,7 +227,7 @@
                 minimumFractionDigits: 2,
             });
             $('#' + obj.id).val(formattedAmount);
-            console.log("Ejecuta: "+obj);
+            console.log("Ejecuta: " + obj);
         } else {
             toastr.warning('Ingrese valores numéricos en el campo de importe');
             $('#' + obj.id).val('');
