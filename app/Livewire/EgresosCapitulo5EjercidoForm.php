@@ -204,7 +204,6 @@ class EgresosCapitulo5EjercidoForm extends Component
     public function limpiar()
     {
         $this->cuenta = "";
-        $this->selectCodigoAreaResponsable = "";
         $this->cuentas = [];
         $this->PTTODevengado = "";
         $this->importe = "";

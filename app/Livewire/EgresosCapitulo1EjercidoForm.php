@@ -99,7 +99,6 @@ class EgresosCapitulo1EjercidoForm extends Component
 
     public function limpiar()
     {
-        $this->selectCodigoAreaResponsable = "";
         $this->PTTODevengado = "";
         $this->dispatch('limpiar');
     }

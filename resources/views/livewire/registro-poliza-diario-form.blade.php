@@ -55,7 +55,7 @@
         <div class="row">
             <div class="col-3">
                 <label for="selectCuenta" class="form-label">Cuenta</label>
-                <select name="selectCuenta" id="selectCuenta" class="form-select mb-3" wire:model="cuenta">
+                <select name="selectCuenta" id="selectCuenta" class="form-select mb-3" wire:model="cuenta" wire:change="calcularSolvencia()">
                     <option value="" @if ($this->cuenta == '') selected @endif selected>Seleccionar
                         cuenta...</option>
                     @foreach ($cuentas as $cuenta)
@@ -63,6 +63,9 @@
                             {{ $cuenta->Codigo_cuenta . ' ' . $cuenta->Descripcion_cuenta }}</option>
                     @endforeach
                 </select>
+
+                <label for="inputSolvencia" class="form-label">Solvencia disponible</label>
+                <input type="text" class="form-control mb-3" id="inputSolvencia" name="inputSolvencia" wire:model="solvencia" disabled>
 
                 <label for="selectTipoInteraccion" class="form-label">Tipo de interaccción</label>
                 <select name="selectTipoInteraccion" id="selectTipoInteraccion" class="form-select mb-3"
@@ -109,6 +112,15 @@
     window.addEventListener('limpiar', event => {
         limpiar()
     })
+
+    window.addEventListener('formato_importe', event => {
+        let params = event.__livewire.params
+        setTimeout(() => {  
+            formatearImporte({
+                    id: params.id
+                }, params.amount)
+            })
+        }, 100);
 
     function validarDecimales(input) {
         // Obtener solo números y un punto decimal permitido
