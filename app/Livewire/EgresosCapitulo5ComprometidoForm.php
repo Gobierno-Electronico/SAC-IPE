@@ -123,7 +123,6 @@ class EgresosCapitulo5ComprometidoForm extends Component
     public function limpiar()
     {
         $this->cuenta = "";
-        $this->selectCodigoAreaResponsable = "";
         $this->mes = "";
         $this->PTTOEjecutar = 0;
         $this->importe = "";
