@@ -47,7 +47,8 @@ class RegistroPolizaDiarioTable extends Tabla
         return [
             Column::make('cuenta', 'Cuenta'),
             Column::make('tipoInteraccion', 'Tipo de interacción'),
-            Column::make('importe', 'Importe')->component('columns.importe'),
+            Column::make('importeCargo', 'Importe cargo')->component('columns.importe'),
+            Column::make('importeAbono', 'Importe abono')->component('columns.importe'),
             Column::make('mes', 'Mes'),
             Column::make('id', 'Acciones')->component('columns.accionesIngresos')
         ];
@@ -142,6 +143,14 @@ class RegistroPolizaDiarioTable extends Tabla
     public function agregarRegistro($registro)
     {
         try {
+
+            $importeCargo = 0;
+            $importeAbono = 0;
+            if($registro['tipoInteraccion'] == 'Contable - Cargo'){
+                $importeCargo = $registro['importe'];
+            }else{
+                $importeAbono = $registro['importe'];
+            }
             $nuevoRegistro = [
                 'id' => 0,
                 'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
@@ -150,7 +159,8 @@ class RegistroPolizaDiarioTable extends Tabla
                 'mes' => $registro['mes'],
                 'movimiento' => 'DIVERSOS CONCEPTOS',
                 'importe' => $registro['importe'],
-
+                'importeCargo' => $importeCargo,
+                'importeAbono' => $importeAbono
             ];
 
             array_push($this->cacheData, $nuevoRegistro);
