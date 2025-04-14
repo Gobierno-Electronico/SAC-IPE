@@ -23,6 +23,9 @@ class RecalendarizacionForm extends Component
 
     #[Validate('required', message: 'Observaciones requeridas')]
     public $observaciones = "";
+    
+    #[Validate('required', message: 'Fecha de afectaciónrequerida')]
+    public $fechaAfectacion = "";
 
     #[Validate('required', message: 'Área responsable requerida')]
     public $areaResponsable = "";
@@ -90,6 +93,7 @@ class RecalendarizacionForm extends Component
                 'descripcionArea' => $this->selectDescripcionArea,
                 'codigoArea' => $this->selectCodigoArea,
                 'observaciones' => $this->observaciones,
+                'fechaAfectacion' => $this->fechaAfectacion,
                 'areaResponsable' => $this->areaResponsable,
                 'cog' => $this->cog,
                 'mes' => $this->mes,
