@@ -93,18 +93,39 @@ class EgresosCapitulo2y3PagadoForm extends Component
     {
         try {
             $this->limpiar();
-            $descripcionEvento = Poliza::select('descripcion')
-            ->where('evento', '=', $this->numeroEvento)
-            ->where('tipo_poliza', '=', 'E')
-            ->where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 2y3')
-            ->get()[0]->descripcion;
-            $this->observaciones = $descripcionEvento;
+            $this->llenarCamposEspecificos();
             $this->montoDelEvento = DB::select('EXEC ImporteTotalCapitulo2y3Pagado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             $this->dispatch('formato_importe', id: 'inputMontoEvento', amount: ($this->montoDelEvento > 0) ? $this->montoDelEvento : '');
             $this->dispatch('mostrarMensaje', mensaje: 'Monto del evento cargado', tipo: 'success', tiempo: 1500);
             $this->llenarPartidasPresupuestales();
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar el evento en Pagado del capítulo 2000 y 3000: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
+    }
+
+    public function llenarCamposEspecificos(){
+        try{      
+            $descripcionEvento = Poliza::select('descripcion')
+            ->where('evento', '=', $this->numeroEvento)
+            ->where('tipo_poliza', '=', 'E')
+            ->where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 2y3')
+            ->get()[0]->descripcion;
+        
+            $areaEvento = Poliza::select('area')
+                ->where('evento', '=', $this->numeroEvento)
+                ->where('tipo_poliza', '=', 'E')
+                ->where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 2y3')
+                ->get()[0]->area;
+        
+            $idArea = CodigoDepartamento::select('id')
+                ->where('Codigo_completo', '=', $areaEvento)
+                ->get()[0]->id; 
+        
+            $this->observaciones = $descripcionEvento;
+            $this->selectCodigoAreaResponsable = $idArea;   
+        }catch (\Throwable $th) {
+            Log::error('Ocurrió un error al llenar campos específicos en Pagado del capítulo 2 y 3: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
