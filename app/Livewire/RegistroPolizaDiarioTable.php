@@ -25,6 +25,8 @@ class RegistroPolizaDiarioTable extends Tabla
     public $numeroPoliza;
     public $numeroEvento;
 
+    public $totalDisponible = 0;
+
     public function render()
     {
         return view('livewire.registro-poliza-diario-table');
@@ -49,6 +51,7 @@ class RegistroPolizaDiarioTable extends Tabla
             Column::make('tipoInteraccion', 'Tipo de interacción'),
             Column::make('importeCargo', 'Importe cargo')->component('columns.importe'),
             Column::make('importeAbono', 'Importe abono')->component('columns.importe'),
+            Column::make('disponibilidad', 'Disponibilidad')->component('columns.importe'),
             Column::make('mes', 'Mes'),
             Column::make('id', 'Acciones')->component('columns.accionesIngresos')
         ];
@@ -57,13 +60,15 @@ class RegistroPolizaDiarioTable extends Tabla
     public function edit($id)
     {
         try {
+            $this->recalcularDisponibilidad($id);
             foreach ($this->dataCompleta as $key => $registro) {
                 if ($registro['id'] == $id) {
                     $datosRegistro = [
                         'cuenta' => $registro['idCuenta'],
                         'tipoInteraccion' => $registro['tipoInteraccion'],
                         'mes' => $registro['mes'],
-                        'importe' => $registro['importe']
+                        'importe' => $registro['importe'],
+                        'solvencia' => $registro['solvencia']
                     ];
                     unset($this->dataCompleta[$key]);
                     $this->dataCompleta = array_values($this->dataCompleta);
@@ -102,6 +107,7 @@ class RegistroPolizaDiarioTable extends Tabla
     public function delete($id)
     {
         try {
+            $this->recalcularDisponibilidad($id);
             foreach ($this->cacheData as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->cacheData[$key]);
@@ -143,7 +149,6 @@ class RegistroPolizaDiarioTable extends Tabla
     public function agregarRegistro($registro)
     {
         try {
-
             $importeCargo = 0;
             $importeAbono = 0;
             if($registro['tipoInteraccion'] == 'Contable - Cargo'){
@@ -151,35 +156,94 @@ class RegistroPolizaDiarioTable extends Tabla
             }else{
                 $importeAbono = $registro['importe'];
             }
-            $nuevoRegistro = [
-                'id' => 0,
-                'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
-                'cuenta' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
-                'tipoInteraccion' => $registro['tipoInteraccion'],
-                'mes' => $registro['mes'],
-                'movimiento' => 'DIVERSOS CONCEPTOS',
-                'importe' => $registro['importe'],
-                'importeCargo' => $importeCargo,
-                'importeAbono' => $importeAbono
-            ];
-
-            array_push($this->cacheData, $nuevoRegistro);
-            array_push($this->dataCompleta, $registro);
-            $this->totalCargo = 0;
-            $this->totalAbono = 0;
-            foreach ($this->cacheData as $key => $registro) {
-                $this->cacheData[$key]['id'] = $key + 1; // El ID comienza en 1
-                $this->dataCompleta[$key]['id'] = $key + 1;
-                if ($registro['tipoInteraccion'] == 'Contable - Cargo') {
-                    $this->totalCargo += $registro['importe'];
-                } else {
-                    $this->totalAbono += $registro['importe'];
+            if($this->verificarPresupuesto($registro)){
+                $nuevoRegistro = [
+                    'id' => 0,
+                    'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
+                    'cuenta' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
+                    'tipoInteraccion' => $registro['tipoInteraccion'],
+                    'mes' => $registro['mes'],
+                    'movimiento' => 'DIVERSOS CONCEPTOS',
+                    'importe' => $registro['importe'],
+                    'importeCargo' => $importeCargo,
+                    'solvencia' => $registro['solvencia'],
+                    'importeAbono' => $importeAbono,
+                    'disponibilidad' => $this->totalDisponible
+                ];
+    
+                array_push($this->cacheData, $nuevoRegistro);
+                array_push($this->dataCompleta, $registro);
+                $this->totalCargo = 0;
+                $this->totalAbono = 0;
+                foreach ($this->cacheData as $key => $registro) {
+                    $this->cacheData[$key]['id'] = $key + 1; // El ID comienza en 1
+                    $this->dataCompleta[$key]['id'] = $key + 1;
+                    if ($registro['tipoInteraccion'] == 'Contable - Cargo') {
+                        $this->totalCargo += $registro['importe'];
+                    } else {
+                        $this->totalAbono += $registro['importe'];
+                    }
                 }
+                $this->dispatch('cambioTotal', totalCargo: $this->totalCargo, totalAbono: $this->totalAbono);
             }
-            $this->dispatch('cambioTotal', totalCargo: $this->totalCargo, totalAbono: $this->totalAbono);
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al agregar registro en poliza diario: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
+    }
+
+    public function verificarPresupuesto($registro)
+    {
+        $solvencia = $registro['solvencia'];
+        if($registro['tipoInteraccion'] == 'Contable - Abono'){
+            $this->totalDisponible = $solvencia + $registro['importe'];
+            return true;
+        }
+
+        $this->totalDisponible = $solvencia - $registro['importe'];
+        $totalImportes = 0;
+
+
+        foreach ($this->cacheData as $movimiento) {
+            if (str_contains($movimiento['cuenta'], $registro['codigoCuenta'])) {
+                $totalImportes += $movimiento['importe'];
+            }
+        }
+
+        if ($totalImportes > 0) {
+            $this->totalDisponible = bcsub(bcsub($solvencia, $totalImportes, 2), $registro['importe'], 2);
+        }
+
+        if ($this->totalDisponible < 0) {
+            $this->dispatch('mostrarMensaje', mensaje: 'Solvencia insuficiente', tipo: 'warning', tiempo: 3000);
+            return false;
+        }
+        return true;
+    }
+
+    public function recalcularDisponibilidad($id)
+    {
+        $datosSeleccionado = [];
+        foreach ($this->dataCompleta as $key => $registro) {
+            if ($registro['id'] == $id) {
+                $datosSeleccionado = [
+                    'codigoCuenta' => $registro['codigoCuenta']
+                ];
+            }
+        }
+
+        $totalImportes = 0;
+        foreach ($this->cacheData as $key => $movimiento) {
+            if ($movimiento['id'] != $id && str_contains($movimiento['cuenta'], $datosSeleccionado['codigoCuenta'])) {
+                if ($totalImportes == 0) {
+                    $movimiento['disponibilidad'] = $movimiento['solvencia'] - $movimiento['importe'];
+                    $totalImportes += $movimiento['importe'];
+                } else {
+                    $movimiento['disponibilidad'] = bcsub(bcsub($movimiento['solvencia'], $totalImportes, 2), $movimiento['importe'], 2);
+                    $totalImportes += $movimiento['importe'];
+                }
+                $this->cacheData[$key] = $movimiento;
+            }
         }
     }
 
