@@ -78,7 +78,18 @@
         <div class="col">
             <input type="text" class="form-control" wire:model.live="observaciones" id="observaciones">
         </div>
+
     </div>
+    
+    <div class="row mt-2">
+        <div class="col-2">
+            <label for="inputFechaAfectacion" class="form-label fs-5">Fecha de afectación</label>
+        </div>
+        <div class="col">
+            <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control" max="{{ now()->toDateString() }}"
+                wire:model="fechaAfectacion">
+        </div>
+    </div>   
 
     <h3 class="mt-5 mb-2">Selección de movimientos</h3>
     <div class="d-flex ">

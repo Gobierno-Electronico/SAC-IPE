@@ -190,12 +190,13 @@ class RecalendarizacionTable extends Tabla
         foreach ($this->dataCompleta as $movimiento) {
             $responsable = CodigoDepartamento::find($movimiento['areaResponsable']);
             $cuenta = Cuenta::join('CuentasCOG', 'CuentasCOG.codigoCuenta', '=', 'cuentas.Codigo_cuenta')->select('cuentas.*')->where('Descripcion_cuenta', 'like', '%Ejercer%')->where('COG', '=', $movimiento['cog'])->orderBy('COG')->first();
+           Log::info($movimiento['fechaAfectacion']);
             $poliza = new Poliza([
                 'idUsuarioRegistrante' => $idUsuarioRegistrante,
                 'area' => $responsable->Codigo_completo,
                 'tipo_poliza' => 'D',
                 'numero_poliza' =>  $this->numeroPoliza,
-                'fecha' => $fecha,
+                'fecha' => $movimiento['fechaAfectacion'],
                 'cuenta' => $cuenta->Codigo_cuenta,
                 'concepto' => $cuenta->Descripcion_cuenta,
                 'total' => abs($movimiento['importe']),
