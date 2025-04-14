@@ -9,6 +9,7 @@ use App\Models\Cuenta;
 use App\Models\CodigoDepartamento;
 use Carbon\Carbon;
 use Log;
+use DB;
 
 
 class RegistroPolizaDiarioForm extends Component
@@ -36,6 +37,7 @@ class RegistroPolizaDiarioForm extends Component
 
 
     public $consultarRegistro = false;
+    public $solvencia;
     public $numeroEvento;
     public $numeroPoliza;
     public $totalCargo;
@@ -84,6 +86,27 @@ class RegistroPolizaDiarioForm extends Component
             Log::error('Ocurrió un error al agregar registro en poliza diario: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
+    }
+
+    public function calcularSolvencia(){
+        try {
+            if(!$this->cuenta){
+                return;
+            }
+            $cuentaSeleccionada = Cuenta::where('id', '=', $this->cuenta)->first();
+            $anioActual = Carbon::now()->year;
+
+            $solvencia = DB::select('EXEC SolvenciaCuentasContables @cuenta = ?, @anio = ?', array($cuentaSeleccionada->Codigo_cuenta, $anioActual));
+            $this->solvencia = ($solvencia[0]->Solvencia > 0) ? floatval($solvencia[0]->Solvencia) : 0;
+
+            $this->dispatch('formato_importe', id: 'inputSolvencia', amount: "{$this->solvencia}");
+            $this->dispatch('mostrarMensaje', mensaje: 'Solvencia cargada', tipo: 'success', tiempo: 1500);
+
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al cargar la solvencia en registro de poliza diario: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar presupuesto, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
+
     }
 
     public function limpiar()

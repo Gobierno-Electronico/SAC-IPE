@@ -102,7 +102,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
         $solvencia = $registro['pttoComprometido'];
         $this->totalDisponible = $solvencia - $registro['importe'];
         $totalImportes = 0;
-
+        Log::info($solvencia);
         foreach ($this->cacheData as $movimiento) {
             if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoPartida']) && $movimiento['mes'] == $registro['mes']) {
                 $totalImportes += $movimiento['importe'];
@@ -110,13 +110,15 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
         }
 
         if ($totalImportes > 0) {
-            $this->totalDisponible = $solvencia - $totalImportes - $registro['importe'];
+            $this->totalDisponible = bcsub(bcsub($solvencia, $totalImportes, 2), $registro['importe'], 2);
         }
 
+        Log::info("Ultimo Log: " . $this->totalDisponible . " " . $totalImportes);
         if ($this->totalDisponible < 0) {
             $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto comprometido insuficiente', tipo: 'warning', tiempo: 3000);
             return false;
         }
+
         return true;
     }
 
