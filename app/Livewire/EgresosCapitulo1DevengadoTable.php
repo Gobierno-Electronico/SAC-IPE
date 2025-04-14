@@ -108,7 +108,7 @@ class EgresosCapitulo1DevengadoTable extends Tabla
         }
 
         if ($totalImportes > 0) {
-            $this->importeRestante = $registro['importe'] - $totalImportes - $registro['importeAbono'];
+            $this->importeRestante = bcsub(bcsub($registro['importe'], $totalImportes, 2), $registro['importeAbono'], 2);
         }
 
         if ($this->importeRestante < 0) {
@@ -232,10 +232,10 @@ class EgresosCapitulo1DevengadoTable extends Tabla
         foreach ($this->cacheData as $key => $movimiento) {
             if ($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuentaPartida']) && $movimiento['mes'] == $datosSeleccionado['mes']) {
                 if ($totalImportes == 0) {
-                    $movimiento['disponibilidad'] = $movimiento['pttoComprometido'] - $movimiento['importe'];
+                    $movimiento['disponibilidad'] = bcsub($movimiento['pttoComprometido'], $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 } else {
-                    $movimiento['disponibilidad'] = $movimiento['pttoComprometido'] - $totalImportes - $movimiento['importe'];
+                    $movimiento['dispibilidad'] = bcsub(bcsub($movimiento['pttoComprometido'], $totalImportes, 2), $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 }
                 $this->cacheData[$key] = $movimiento;

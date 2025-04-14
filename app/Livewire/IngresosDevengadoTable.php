@@ -141,10 +141,10 @@ class IngresosDevengadoTable extends Tabla
         foreach($this->cacheData as $key => $movimiento) {
             if($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuenta']) && $movimiento['mes'] == $datosSeleccionado['mes']) {
                 if($totalImportes == 0){
-                    $movimiento['disponibilidad'] = $movimiento['ejecutar'] - $movimiento['importe'];
+                    $movimiento['disponibilidad'] = bcsub($movimiento['ejecutar'], $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 }else{
-                    $movimiento['disponibilidad'] = $movimiento['ejecutar'] - $totalImportes - $movimiento['importe'];
+                    $movimiento['dispibilidad'] = bcsub(bcsub($movimiento['ejecutar'], $totalImportes, 2), $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 }
                 $this->cacheData[$key] = $movimiento;
@@ -171,7 +171,7 @@ class IngresosDevengadoTable extends Tabla
     
             }
             if($totalImportes > 0){
-                $totalDisponible = $solvencia - $totalImportes - $registro['importe'];
+                $totalDisponible = bcsub(bcsub($solvencia, $totalImportes, 2), $registro['importe'], 2);
             }
 
             if($totalDisponible < 0){

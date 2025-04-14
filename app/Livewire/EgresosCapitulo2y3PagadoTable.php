@@ -109,7 +109,7 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
         }
 
         if ($totalImportes > 0) {
-            $this->totalDisponible = $solvencia - $totalImportes - $registro['importe'];
+            $this->totalDisponible = bcsub(bcsub($solvencia, $totalImportes, 2), $registro['importe'], 2);
         }
 
 
@@ -136,7 +136,7 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
         }
 
         if ($totalImportes > 0) {
-            $this->totalDisponibleContable = $solvenciaContable - $totalImportes - $registro['importe'];
+            $this->totalDisponibleContable = bcsub(bcsub($solvenciaContable, $totalImportes, 2), $registro['importe'], 2);
         }
 
 
@@ -235,10 +235,10 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
         foreach ($this->cacheData as $key => $movimiento) {
             if ($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuentaPartida']) && $movimiento['mes'] == $datosSeleccionado['mes']) {
                 if ($totalImportes == 0) {
-                    $movimiento['disponibilidad'] = $movimiento['pttoEjercido'] - $movimiento['importe'];
+                    $movimiento['disponibilidad'] = bcsub($movimiento['pttoEjercido'], $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 } else {
-                    $movimiento['disponibilidad'] = $movimiento['pttoEjercido'] - $totalImportes - $movimiento['importe'];
+                    $movimiento['dispibilidad'] = bcsub(bcsub($movimiento['pttoEjercido'], $totalImportes, 2), $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 }
                 $this->cacheData[$key] = $movimiento;

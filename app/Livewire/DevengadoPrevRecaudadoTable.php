@@ -149,10 +149,10 @@ class DevengadoPrevRecaudadoTable extends Tabla
         foreach ($this->cacheData as $key => $movimiento) {
             if ($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuenta']) && $movimiento['mes'] == $datosSeleccionado['mes'] && $movimiento['evento'] == $datosSeleccionado['evento']) {
                 if ($totalImportes == 0) {
-                    $movimiento['disponibilidad'] = $movimiento['ejecutar'] - $movimiento['importe'];
+                    $movimiento['disponibilidad'] = bcsub($movimiento['ejecutar'], $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 } else {
-                    $movimiento['disponibilidad'] = $movimiento['ejecutar'] - $totalImportes - $movimiento['importe'];
+                    $movimiento['dispibilidad'] = bcsub(bcsub($movimiento['ejecutar'], $totalImportes, 2), $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 }
                 $this->cacheData[$key] = $movimiento;
@@ -195,7 +195,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
             }
 
             if ($totalImportes > 0) {
-                $totalDisponible = $solvencia[0]->Solvencia - $totalImportes - $registro['importe'];
+                $totalDisponible = bcsub(bcsub($solvencia[0]->Solvencia, $totalImportes, 2), $registro['importe'], 2);
             }
 
             if ($totalDisponible < 0) {

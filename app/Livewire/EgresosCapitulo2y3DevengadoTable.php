@@ -102,7 +102,6 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
         $solvencia = $registro['pttoComprometido'];
         $this->totalDisponible = $solvencia - $registro['importe'];
         $totalImportes = 0;
-        Log::info($solvencia);
         foreach ($this->cacheData as $movimiento) {
             if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoPartida']) && $movimiento['mes'] == $registro['mes']) {
                 $totalImportes += $movimiento['importe'];
@@ -113,7 +112,6 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
             $this->totalDisponible = bcsub(bcsub($solvencia, $totalImportes, 2), $registro['importe'], 2);
         }
 
-        Log::info("Ultimo Log: " . $this->totalDisponible . " " . $totalImportes);
         if ($this->totalDisponible < 0) {
             $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto comprometido insuficiente', tipo: 'warning', tiempo: 3000);
             return false;
@@ -209,10 +207,10 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
         foreach ($this->cacheData as $key => $movimiento) {
             if ($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuentaPartida']) && $movimiento['mes'] == $datosSeleccionado['mes']) {
                 if ($totalImportes == 0) {
-                    $movimiento['disponibilidad'] = $movimiento['pttoComprometido'] - $movimiento['importe'];
+                    $movimiento['disponibilidad'] = bcsub($movimiento['pttoComprometido'], $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 } else {
-                    $movimiento['disponibilidad'] = $movimiento['pttoComprometido'] - $totalImportes - $movimiento['importe'];
+                    $movimiento['dispibilidad'] = bcsub(bcsub($movimiento['pttoComprometido'], $totalImportes, 2), $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 }
                 $this->cacheData[$key] = $movimiento;
