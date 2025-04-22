@@ -25,6 +25,13 @@
         <div class="d-flex flex-row">
             <input type="text" class="input_busqueda rounded-1 shadow-sm border-0 w-25" placeholder='Buscar...'
                 wire:model.live="searchTerm">
+            <select class="select_presupuesto rounded-1 shadow-sm border-0 w-20 ms-5" name="selectCOG" id="selectCOG" wire:change='selectCOG()'' wire:model.live="selectedCOG">
+                <option value="" selected>Seleccione el COG a consultar
+                </option>
+                @foreach ($COGS as $COG)
+                    <option value="{{$COG->COG}}">{{$COG->COG}}</option>
+                @endforeach
+            </select>
             <select class="select_presupuesto rounded-1 shadow-sm border-0 w-25 ms-5" name="Anio" id="Anio"
                 wire:model.live='selectedYear' wire:change='selectYear()'>
                 @php

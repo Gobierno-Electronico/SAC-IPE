@@ -105,7 +105,7 @@ class EgresosCapitulo5DevengadoTable extends Tabla
         }
 
         if ($totalImportes > 0) {
-            $this->totalDisponible = $solvencia - $totalImportes - $registro['importe'];
+            $this->totalDisponible = bcsub(bcsub($solvencia, $totalImportes, 2), $registro['importe'], 2);
         }
 
         if ($this->totalDisponible < 0) {

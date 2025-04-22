@@ -77,6 +77,7 @@ class RegistroPolizaDiarioForm extends Component
                 'descripcionCuenta' => $cuenta->Descripcion_cuenta,
                 'mes' => $this->mes,
                 'importe' => $this->importe,
+                'solvencia' => $this->solvencia
             ];
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
@@ -113,6 +114,7 @@ class RegistroPolizaDiarioForm extends Component
     {
         $this->cuenta = "";
         $this->mes = "";
+        $this->solvencia = "";
         $this->importe = "";
         $this->tipoInteraccion = "";
         $this->dispatch('limpiar');
@@ -138,6 +140,7 @@ class RegistroPolizaDiarioForm extends Component
         $this->mes = $datosRegistro['mes'];
         $this->importe = $datosRegistro['importe'];
         $this->tipoInteraccion = $datosRegistro['tipoInteraccion'];
-        $this->dispatch('llenarFormulario', cuenta: $datosRegistro['cuenta'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe'], tipoInteraccion: $datosRegistro['tipoInteraccion']);
+        $this->solvencia = $datosRegistro['solvencia'];
+        $this->dispatch('llenarFormulario', cuenta: $datosRegistro['cuenta'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe'], tipoInteraccion: $datosRegistro['tipoInteraccion'], solvencia: $datosRegistro['solvencia']);
     }
 }

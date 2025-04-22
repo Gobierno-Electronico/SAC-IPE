@@ -73,8 +73,10 @@
         $("#selectMes option:contains('" + parametros.mes + "')").prop("selected", true);
         $("#selectTipoInteraccion option:contains('" + parametros.tipoInteraccion + "')").prop("selected", true);
         $('#inputImporte').val(parametros.importe);
+        $('inputSolvencia').val(parametros.solvencia);
         setTimeout(() => {
             formatearImporte({id: 'inputImporte'})
+            formatearImporte({id: 'inputSolvencia'})
         }, 100);
     });
 </script>

@@ -338,15 +338,15 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="20">
+		<band height="21">
 			<rectangle>
-				<reportElement x="600" y="0" width="201" height="20" uuid="ce519f0c-b142-4fe1-8b47-acfd8e2d52b3"/>
+				<reportElement x="600" y="0" width="201" height="21" uuid="ce519f0c-b142-4fe1-8b47-acfd8e2d52b3"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</rectangle>
 			<textField>
-				<reportElement x="80" y="0" width="100" height="20" uuid="463db3c5-421a-4fb8-91ad-715e68f7fa45">
+				<reportElement x="80" y="0" width="100" height="21" uuid="463db3c5-421a-4fb8-91ad-715e68f7fa45">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="613d94ab-b505-455b-94d9-dae950b61195"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -364,7 +364,7 @@
 				<textFieldExpression><![CDATA[$F{cuenta}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="180" y="0" width="420" height="20" uuid="6d772e21-3ae2-4634-9ac0-a2eb168bb5f3">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="180" y="0" width="420" height="21" uuid="6d772e21-3ae2-4634-9ac0-a2eb168bb5f3">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="81aece0a-5ee1-42cb-94bf-893494786400"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
@@ -381,7 +381,7 @@
 				<textFieldExpression><![CDATA[$F{concepto}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="700" y="0" width="101" height="20" uuid="218657f9-3739-48d4-b2ad-00bdb0c79626">
+				<reportElement x="700" y="0" width="101" height="21" uuid="218657f9-3739-48d4-b2ad-00bdb0c79626">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Presupuestal - Abono"))]]></printWhenExpression>
@@ -399,7 +399,7 @@
 				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{total_suma})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="600" y="0" width="100" height="20" uuid="b4f201f0-1738-4e19-8a97-e2aeab6a96a7">
+				<reportElement x="600" y="0" width="100" height="21" uuid="b4f201f0-1738-4e19-8a97-e2aeab6a96a7">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Presupuestal - Cargo"))]]></printWhenExpression>
@@ -417,7 +417,7 @@
 				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="700" y="0" width="101" height="20" uuid="708517df-8336-4f80-baea-8b7f8e723f69">
+				<reportElement x="700" y="0" width="101" height="21" uuid="708517df-8336-4f80-baea-8b7f8e723f69">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Presupuestal - Abono"))]]></printWhenExpression>
@@ -435,7 +435,7 @@
 				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="600" y="0" width="100" height="20" uuid="31974cca-a510-483f-9e0d-303d49106ecd">
+				<reportElement x="600" y="0" width="100" height="21" uuid="31974cca-a510-483f-9e0d-303d49106ecd">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Presupuestal - Cargo"))]]></printWhenExpression>
@@ -453,7 +453,7 @@
 				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{total_suma})]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="ScaleFont">
-				<reportElement x="40" y="0" width="40" height="20" uuid="285f894c-0279-4d42-8f32-c8297e5c1b47">
+				<reportElement x="40" y="0" width="40" height="21" uuid="285f894c-0279-4d42-8f32-c8297e5c1b47">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
 				<box>
@@ -468,7 +468,7 @@
 				<textFieldExpression><![CDATA[$F{Clave}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="ScaleFont">
-				<reportElement x="0" y="0" width="40" height="20" uuid="ff862e1e-3e32-4e6a-9dbf-93a68c2ad4cc">
+				<reportElement x="0" y="0" width="40" height="21" uuid="ff862e1e-3e32-4e6a-9dbf-93a68c2ad4cc">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
 				<box>
