@@ -64,7 +64,7 @@ class EgresosCapitulo5PagadoTable extends Tabla
     {
 
         try {
-            if ($this->total + $registro['importe'] > $registro['montoEvento']) {
+            if (bccomp((string)($this->total + $registro['importe']), (string)$registro['montoEvento'], 2) == 1) {
                 $this->dispatch('mostrarMensaje', mensaje: 'Monto total del evento superado', tipo: 'error', tiempo: 3000);
                 return;
             }
