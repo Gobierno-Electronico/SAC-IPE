@@ -63,10 +63,11 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
     public function agregarRegistro($registro)
     {
         try {
-            if ($this->total + $registro['importe'] > $registro['montoEvento']) {
+            if (bccomp((string)($this->total + $registro['importe']), (string)$registro['montoEvento'], 2) == 1) {
                 $this->dispatch('mostrarMensaje', mensaje: 'Monto total del evento superado', tipo: 'error', tiempo: 3000);
                 return;
             }
+            
 
             if ($this->verificarPresupuesto($registro)) {
                 $nuevoRegistro = [
@@ -113,7 +114,6 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
             $this->totalDisponible = bcsub(bcsub($solvencia, $totalImportes, 2), $registro['importe'], 2);
         }
 
-        Log::info("Ultimo Log: " . $this->totalDisponible . " " . $totalImportes);
         if ($this->totalDisponible < 0) {
             $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto comprometido insuficiente', tipo: 'warning', tiempo: 3000);
             return false;

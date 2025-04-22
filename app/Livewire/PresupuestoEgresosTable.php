@@ -27,6 +27,8 @@ class PresupuestoEGRESOSTable extends Tabla
     public $selectedYear = '';
 
     public $selectedChapter = '';
+    
+    public $selectedCOG = '';
 
     public $cuentaSeleccionada = '';
 
@@ -44,8 +46,16 @@ class PresupuestoEGRESOSTable extends Tabla
 
     public function render()
     {
+        $COGS = Poliza::join('cuenta_clasificadores_egreso as ce', 'ce.codigoCuenta', '=', 'polizas.cuenta')
+        ->where('tipo_poliza', 'P')
+        ->whereYear('fecha', '=', Carbon::now()->year)
+        ->where('categoria', 'LIKE', '%INICIAL%')
+        ->select('ce.COG')
+        ->groupBy('ce.COG')
+        ->orderBy('ce.COG')
+        ->get();    
         // $this->selectedYear = Carbon::now()->year + 1;
-        return view('livewire.presupuesto-egresos-table');
+        return view('livewire.presupuesto-egresos-table', ['COGS' => $COGS]);
     }
     public function query(): Builder
     {
@@ -91,6 +101,9 @@ class PresupuestoEGRESOSTable extends Tabla
             ->when($this->selectedChapter !== '', function ($query) {
                 $query->where('cuenta_capitulos.capitulo', '=', $this->selectedChapter);
             })
+            ->when($this->selectedCOG !== '', function ($query){
+                $query->where('cuenta_clasificadores_egreso.COG', '=', $this->selectedCOG);
+            })
             ->where('tipo_poliza', '=', 'P')
             ->paginate($this->perPage);
     }
@@ -122,6 +135,14 @@ class PresupuestoEGRESOSTable extends Tabla
 
     public function selectYear()
     {
+        $poliza = $this->data()->first();
+        $this->validado = ($poliza) ? boolval($poliza->validado) : true;
+        $this->fecha = ($poliza) ? Carbon::createFromFormat('Y-m-d H:i:s', $poliza->created_at)->format('d/m/Y') : '01/01/' . Carbon::now()->year;
+        $this->hora = ($poliza) ? Carbon::createFromFormat('Y-m-d H:i:s', $poliza->created_at)->format('H:i:s') : '11:00:00';
+        $this->numeroPoliza = ($poliza) ? $poliza->numero_poliza : 0;
+    }
+
+    public function selectCOG(){
         $poliza = $this->data()->first();
         $this->validado = ($poliza) ? boolval($poliza->validado) : true;
         $this->fecha = ($poliza) ? Carbon::createFromFormat('Y-m-d H:i:s', $poliza->created_at)->format('d/m/Y') : '01/01/' . Carbon::now()->year;
