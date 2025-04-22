@@ -675,7 +675,7 @@
 				<textFieldExpression><![CDATA["REGISTRÓ"]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤#,##0.00;¤-#,##0.00">
-				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="599" height="20" uuid="a327554d-c0d7-4986-8c60-3ed6f8a50d23">
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="600" height="20" uuid="a327554d-c0d7-4986-8c60-3ed6f8a50d23">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
