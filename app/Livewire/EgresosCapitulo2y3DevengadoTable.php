@@ -103,7 +103,6 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
         $solvencia = $registro['pttoComprometido'];
         $this->totalDisponible = $solvencia - $registro['importe'];
         $totalImportes = 0;
-        Log::info($solvencia);
         foreach ($this->cacheData as $movimiento) {
             if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoPartida']) && $movimiento['mes'] == $registro['mes']) {
                 $totalImportes += $movimiento['importe'];
