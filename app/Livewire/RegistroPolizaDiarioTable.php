@@ -195,7 +195,14 @@ class RegistroPolizaDiarioTable extends Tabla
     public function verificarPresupuesto($registro)
     {
         $solvencia = $registro['solvencia'];
-        if($registro['tipoInteraccion'] == 'Contable - Abono'){
+        $inicioCodigoCuenta = explode('.', $registro['codigoCuenta']);
+
+        if($registro['tipoInteraccion'] == 'Contable - Cargo' && in_array($inicioCodigoCuenta[0], ['1', '5'])){
+            $this->totalDisponible = $solvencia + $registro['importe'];
+            return true;
+        }
+
+        if($registro['tipoInteraccion'] == 'Contable - Abono' && in_array($inicioCodigoCuenta[0], ['2', '3', '4'])){
             $this->totalDisponible = $solvencia + $registro['importe'];
             return true;
         }
