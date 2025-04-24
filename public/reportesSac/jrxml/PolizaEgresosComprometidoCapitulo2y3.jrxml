@@ -125,7 +125,7 @@
 				<textFieldExpression><![CDATA["NO."]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="604" y="40" width="132" height="20" uuid="59c4e039-3aa3-466e-a691-8b348888c71b">
+				<reportElement x="604" y="60" width="133" height="20" uuid="59c4e039-3aa3-466e-a691-8b348888c71b">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -215,7 +215,7 @@
 				<textFieldExpression><![CDATA[$P{Hora}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="604" y="60" width="132" height="20" uuid="005c3e28-c60f-4821-8ca6-608d48f1bfbb">
+				<reportElement x="604" y="40" width="133" height="20" uuid="005c3e28-c60f-4821-8ca6-608d48f1bfbb">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
