@@ -606,6 +606,45 @@
 
                             </li>
 
+                            <li class="nav-item dropdown">
+                                @if ($haySaldosIniciales)
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                        data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
+                                        aria-expanded="false" v-pre>
+                                        {{ __('Deudores') }}
+                                    </a>
+                                @else
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle disabled" href="#"
+                                        role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                        aria-haspopup="true" aria-expanded="false" v-pre disabled>
+                                        {{ __('Deudores') }}
+                                    </a>
+                                @endif
+
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('otorgamientoAnticipo') }}"
+                                            method="GET" onclick="mostrarCargando()">
+                                            Otorgamiento de anticipo/Viaticos/Fondo Fijo
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('capitulo5Pagado') }}"
+                                            method="GET" onclick="mostrarCargando()">
+                                            Reintegro de anticipo/Viaticos/Fondo Fijo
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('capitulo5Pagado') }}"
+                                            method="GET" onclick="mostrarCargando()">
+                                            Comprobación de anticipo/Viaticos/Cancelación de Fondo Fijo
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
                             <style>
                                 .dropdown-item.active,
                                 .dropdown-item.show {

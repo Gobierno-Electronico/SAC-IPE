@@ -10,6 +10,7 @@ use App\Http\Controllers\ReportesController;
 use App\Http\Controllers\ContabilidadController;
 use App\Http\Controllers\IngresosController;
 use App\Http\Controllers\EgresosController;
+use App\Http\Controllers\DeudoresController;
 use Illuminate\Support\Facades\Route;
 USE App\Http\Controllers\HomeController;
 use App\Http\Middleware\ResetPassword;
@@ -159,6 +160,11 @@ Route::get("/capitulo7-otorgamiento-ejercido-pagado-recaudado-prestamosRenovacio
 Route::get("/capitulo7-recuperacion-recaudado-prestamosIniciales", [PrestamosController::class, 'capitulo7RecaudadoPrestamosIniciales'])->name('capitulo7RecaudadoPrestamosIniciales')->middleware('role:Administrador');
 Route::get("/capitulo7-recuperacion-recaudado-prestamosRenovacion", [PrestamosController::class, 'capitulo7RecaudadoPrestamosRenovacion'])->name('capitulo7RecaudadoPrestamosRenovacion')->middleware('role:Administrador');
 Route::get("/movimientos-prestamos", [PrestamosController::class, 'consultarMovimientos'])->name('movimientosPrestamos')->middleware('role:Administrador');
+
+//Deudores
+Route::get("/deudores-otorgamiento-anticipo", [DeudoresController::class, 'otorgamientoAnticipo'])->name('otorgamientoAnticipo')->middleware('role:Administrador');
+Route::get("/deudores-reintegro-anticipo", [DeudoresController::class, 'reintegroAnticipo'])->name('reintegroAnticipo')->middleware('role:Administrador');
+Route::get("/deudores-comprobacion-anticipo", [DeudoresController::class, 'comprobacionAnticipo'])->name('comprobacionAnticipo')->middleware('role:Administrador');
 
 //ruta de prueba
 Route::get("/bancos", [IngresosController::class, 'bancos'])->name('bancos')->middleware('role:Administrador');
