@@ -53,6 +53,19 @@
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
         <div class="row">
             <div class="col-3">
+                <label for="inputSeguimientoEvento" class="form-label mt-3">Número de seguimiento de evento</label>
+                <select name="selectSeguimientoEvento" id="selectSeguimientoEvento" class="form-select"
+                    wire:model="numeroEvento" wire:change="cambioEvento">
+                    <option value="" disabled>
+                        Seleccionar un evento
+                    </option>
+                    @foreach ($eventos as $evento => $descripcion)
+                        <option value="{{ $evento }}">
+                            {{ $evento }} - {{ $descripcion }}
+                        </option>
+                    @endforeach
+                </select>
+
                 <label for="selectAreaResponsable" class="form-label mt-3">Área responsable</label>
                 <select name="selectAreaResponsable" id="selectAreaResponsable" class="form-select"
                     wire:model="selectCodigoAreaResponsable" wire:change="cargarPresupuestoComprometido">
@@ -78,6 +91,17 @@
                     @endforeach
                 </select>
 
+                <label for="selectCuentaCargo" class="form-label mt-2">Cuenta Cargo</label>
+                <select name="selectCuentaCargo" id="selectCuentaCargo" class="form-select mb-3" wire:model.live="cuentaCargo">
+                    <option value="" @if ($this->cuenta == '') selected @endif selected>Seleccionar
+                        cuenta...</option>
+                    @foreach ($cuentasCargo as $cuenta)
+                        <option value="{{ $cuenta->cuenta_id }}">
+                            {{ $cuenta->Codigo_cuenta . ' ' . $cuenta->Descripcion_cuenta }}</option>
+                    @endforeach
+                </select>
+
+
                 <label for="selectMes" class="form-label">Mes de afectación</label>
                 <select name="selectMes" id="selectMes" class="form-select mb-3" wire:model.live="mes">
                     <option value="" @if ($this->mes == '') selected @endif>Seleccionar mes...</option>
@@ -89,7 +113,7 @@
                         </option>
                     @endforeach
                 </select>
-                
+
                 <label for="inputSolvencia" class="form-label">Solvencia disponible</label>
                 <input type="text" class="form-control mb-3" id="inputSolvencia" name="inputSolvencia"
                     wire:model="solvencia" disabled>
@@ -100,7 +124,7 @@
 
             </div>
             <div class="col">
-                <livewire:deudores-otorgamiento-anticipo-table />
+                <livewire:deudores-reintegro-anticipo-table />
             </div>
             <div class="row pt-4">
                 <div class="col">

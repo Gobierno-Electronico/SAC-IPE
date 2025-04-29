@@ -630,7 +630,7 @@
                                     </li>
 
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('capitulo5Pagado') }}"
+                                        <a class="dropdown-item" href="{{ route('reintegroAnticipo') }}"
                                             method="GET" onclick="mostrarCargando()">
                                             Reintegro de anticipo/Viaticos/Fondo Fijo
                                         </a>
