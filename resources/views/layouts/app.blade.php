@@ -637,7 +637,7 @@
                                     </li>
 
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('capitulo5Pagado') }}"
+                                        <a class="dropdown-item" href="{{ route('comprobacionAnticipo') }}"
                                             method="GET" onclick="mostrarCargando()">
                                             Comprobación de anticipo/Viaticos/Cancelación de Fondo Fijo
                                         </a>
