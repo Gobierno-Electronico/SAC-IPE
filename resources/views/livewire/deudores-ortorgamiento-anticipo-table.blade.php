@@ -62,11 +62,13 @@
     });
     window.addEventListener('llenarFormulario', event => {
         let parametros = event.__livewire.params
-        $("#selectCuentaContable option:contains('" + parametros.cuenta + "')").prop("selected", true);
+        $("#selectCuenta option:contains('" + parametros.cuenta + "')").prop("selected", true);
         $("#selectMes option:contains('" + parametros.mes + "')").prop("selected", true);
         $('#inputImporte').val(parametros.importe);
+        $('inputSolvencia').val(parametros.solvencia);
         setTimeout(() => {
             formatearImporte({id: 'inputImporte'})
+            formatearImporte({id: 'inputSolvencia'})
         }, 100);
     });
 </script>

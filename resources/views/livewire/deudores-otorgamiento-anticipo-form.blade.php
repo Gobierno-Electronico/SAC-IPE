@@ -23,8 +23,9 @@
 
             </div>
         </div>
-        <livewire: :$numeroPoliza :$numeroEvento :$total tipoMovimiento="" urlFinalizar="/" tipoPoliza=""
-            categoriaModulo='' />
+        <livewire:recalendarizacion-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+        tipoMovimiento="PolizaAnticiposOtorgamiento" urlFinalizar="/deudores-otorgamiento-anticipo" tipoPoliza="D"
+        categoriaModulo='DEUDORES OTORGAMIENTO ANTICIPOS' />
     @else
         <div>
             <label for="selectArea" class="form-label">Área solicitante</label>
@@ -53,23 +54,9 @@
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
         <div class="row">
             <div class="col-3">
-                <label for="selectAreaResponsable" class="form-label mt-3">Área responsable</label>
-                <select name="selectAreaResponsable" id="selectAreaResponsable" class="form-select"
-                    wire:model="selectCodigoAreaResponsable" wire:change="cargarPresupuestoComprometido">
-                    <option value="" @if ($this->selectCodigoAreaResponsable == '') selected @endif disabled>
-                        Seleccionar un área
-                    </option>
-                    @foreach (\App\Models\CodigoDepartamento::all() as $departamento)
-                        @if (strlen($departamento->Codigo_completo) >= 5)
-                            <option value="{{ $departamento->id }}" @if ($this->selectCodigoAreaResponsable == $departamento->id) selected @endif>
-                                {{ $departamento->Codigo_completo . ' ' . $departamento->Nombre }}
-                            </option>
-                        @endif
-                    @endforeach
-                </select>
 
-                <label for="selectCuenta" class="form-label mt-3">Cuenta</label>
-                <select name="selectCuenta" id="selectCuenta" class="form-select mb-3" wire:model.live="cuenta">
+                <label for="selectCuenta" class="form-label">Cuenta</label>
+                <select name="selectCuenta" id="selectCuenta" class="form-select mb-3" wire:model.live="cuenta" wire:change="obtenerSolvencia">
                     <option value="" @if ($this->cuenta == '') selected @endif selected>Seleccionar
                         cuenta...</option>
                     @foreach ($cuentas as $cuenta)
@@ -78,8 +65,12 @@
                     @endforeach
                 </select>
 
+                <label for="inputSolvencia" class="form-label">Solvencia disponible</label>
+                <input type="text" class="form-control mb-3" id="inputSolvencia" name="inputSolvencia"
+                    wire:model="solvencia" disabled>
+
                 <label for="selectMes" class="form-label">Mes de afectación</label>
-                <select name="selectMes" id="selectMes" class="form-select mb-3" wire:model.live="mes">
+                <select name="selectMes" id="selectMes" class="form-select mb-3" wire:model.live="mes" >
                     <option value="" @if ($this->mes == '') selected @endif>Seleccionar mes...</option>
                     @foreach (range(1, 12) as $mes)
                         @php
@@ -89,11 +80,7 @@
                         </option>
                     @endforeach
                 </select>
-                
-                <label for="inputSolvencia" class="form-label">Solvencia disponible</label>
-                <input type="text" class="form-control mb-3" id="inputSolvencia" name="inputSolvencia"
-                    wire:model="solvencia" disabled>
-
+                         
                 <label for="inputImporte" class="form-label">Importe</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control mb-3"
                     wire:model.live="importe" onkeyup="validarDecimales(this)" onchange="formatearImporte(this)">
@@ -157,7 +144,9 @@
     }
 
     function limpiar() {
-        $('#selectCuentaContable').val('');
+        $('#selectCuenta').val('');
+        $('#inputSolvencia').val('');
+        $('#selectMes').val('');
         $('#inputImporte').val('');
     }
 </script>
