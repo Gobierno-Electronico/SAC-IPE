@@ -16,7 +16,7 @@ class DeudoresController extends Controller
         return view('deudores.deudores-ortorgamiento-anticipo');
     }
 
- /*    public function reintegroAnticipo()
+    public function reintegroAnticipo()
     {
         return view('deudores.deudores-reintegro-anticipo');
     }
