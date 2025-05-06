@@ -66,21 +66,6 @@
                     @endforeach
                 </select>
 
-                <label for="selectAreaResponsable" class="form-label mt-3">Área responsable</label>
-                <select name="selectAreaResponsable" id="selectAreaResponsable" class="form-select"
-                    wire:model="selectCodigoAreaResponsable" wire:change="cargarPresupuestoComprometido">
-                    <option value="" @if ($this->selectCodigoAreaResponsable == '') selected @endif disabled>
-                        Seleccionar un área
-                    </option>
-                    @foreach (\App\Models\CodigoDepartamento::all() as $departamento)
-                        @if (strlen($departamento->Codigo_completo) >= 5)
-                            <option value="{{ $departamento->id }}" @if ($this->selectCodigoAreaResponsable == $departamento->id) selected @endif>
-                                {{ $departamento->Codigo_completo . ' ' . $departamento->Nombre }}
-                            </option>
-                        @endif
-                    @endforeach
-                </select>
-
                 <label for="selectCuenta" class="form-label mt-3">Cuenta</label>
                 <select name="selectCuenta" id="selectCuenta" class="form-select mb-3" wire:model.live="cuenta">
                     <option value="" @if ($this->cuenta == '') selected @endif selected>Seleccionar
