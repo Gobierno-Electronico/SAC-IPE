@@ -100,13 +100,31 @@ class RecalendarizacionFormConsultaTable extends Tabla
             if ($this->validado)
                 return;
             // dd($this->numeroEvento);
-            Poliza::searchByYear('fecha', Carbon::now()->year)->where('tipo_poliza', '=', 'D')->where('evento', '=', $this->numeroEvento)->delete();
+            Poliza::searchByYear('fecha', Carbon::now()->year)->where('tipo_poliza', '=', 'D')->where('evento', '=', $this->numeroEvento)
+            ->where('categoria', '=', $this->categoriaModulo)
+            ->delete();
             // PresupuestoInicial::where('anio', '=', $this->selectedYear)->where('categoria', '=', 'INGRESOS')->where('tipo', '=', 'P')->delete();
             $usuariosController = new BitacoraController();
             $usuariosController->bitacora('borrar', 'borró o intentó borrar el movimiento de ' . $this->categoriaModulo . ' con número de evento: ' . $this->numeroEvento, request());
             $this->validado = true;
             // $this->dispatch('mostrarMensaje', mensaje: 'Se borró el movimiento de Reclasificación/Recalendarización', tipo: 'success', tiempo: 3000);
             $this->dispatch('cancelar-movimiento');
+
+            switch($this->categoriaModulo){
+                case 'DEUDORES REINTEGRO ANTICIPOS':
+                    Poliza::where('categoria', '=', 'DEUDORES OTORGAMIENTO ANTICIPOS')
+                        ->where('evento', '=', $this->numeroEvento)
+                        ->whereYear('fecha', '=', Carbon::now()->year)
+                        ->update(['estatus_evento' => true]);
+                    break;
+                case 'DEUDORES COMPROBACION ANTICIPOS':
+                    Poliza::where('categoria', '=', 'DEUDORES REINTEGRO ANTICIPOS')
+                        ->where('evento', '=', $this->numeroEvento)
+                        ->whereYear('fecha', '=', Carbon::now()->year)
+                        ->update(['estatus_evento' => true]);
+                    break;
+            }
+
             DB::commit();
             return redirect($this->urlFinalizar)->with(['message' => 'Se borró el movimiento de ' . $this->categoriaModulo, 'message_type' => 'success']);
         } catch (\Throwable $th) {

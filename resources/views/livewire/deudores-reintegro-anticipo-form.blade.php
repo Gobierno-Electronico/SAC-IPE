@@ -23,8 +23,9 @@
 
             </div>
         </div>
-        <livewire: :$numeroPoliza :$numeroEvento :$total tipoMovimiento="" urlFinalizar="/" tipoPoliza=""
-            categoriaModulo='' />
+        <livewire:recalendarizacion-form-consulta-table :$numeroPoliza :$numeroEvento :$total tipoMovimiento="PolizaAnticiposReintegro" 
+            urlFinalizar="/deudores-reintegro-anticipo" tipoPoliza="D"
+            categoriaModulo='DEUDORES REINTEGRO ANTICIPOS' />
     @else
         <div>
             <label for="selectArea" class="form-label">Área solicitante</label>
@@ -66,21 +67,6 @@
                     @endforeach
                 </select>
 
-                <label for="selectAreaResponsable" class="form-label mt-3">Área responsable</label>
-                <select name="selectAreaResponsable" id="selectAreaResponsable" class="form-select"
-                    wire:model="selectCodigoAreaResponsable" wire:change="cargarPresupuestoComprometido">
-                    <option value="" @if ($this->selectCodigoAreaResponsable == '') selected @endif disabled>
-                        Seleccionar un área
-                    </option>
-                    @foreach (\App\Models\CodigoDepartamento::all() as $departamento)
-                        @if (strlen($departamento->Codigo_completo) >= 5)
-                            <option value="{{ $departamento->id }}" @if ($this->selectCodigoAreaResponsable == $departamento->id) selected @endif>
-                                {{ $departamento->Codigo_completo . ' ' . $departamento->Nombre }}
-                            </option>
-                        @endif
-                    @endforeach
-                </select>
-
                 <label for="selectCuenta" class="form-label mt-3">Cuenta</label>
                 <select name="selectCuenta" id="selectCuenta" class="form-select mb-3" wire:model.live="cuenta">
                     <option value="" @if ($this->cuenta == '') selected @endif selected>Seleccionar
@@ -92,7 +78,7 @@
                 </select>
 
                 <label for="selectCuentaCargo" class="form-label mt-2">Cuenta Cargo</label>
-                <select name="selectCuentaCargo" id="selectCuentaCargo" class="form-select mb-3" wire:model.live="cuentaCargo">
+                <select name="selectCuentaCargo" id="selectCuentaCargo" class="form-select mb-3" wire:model="cuentaCargo" wire:change="cargarPresupuesto">
                     <option value="" @if ($this->cuenta == '') selected @endif selected>Seleccionar
                         cuenta...</option>
                     @foreach ($cuentasCargo as $cuenta)
@@ -102,8 +88,8 @@
                 </select>
 
 
-                <label for="selectMes" class="form-label">Mes de afectación</label>
-                <select name="selectMes" id="selectMes" class="form-select mb-3" wire:model.live="mes">
+                <label for="selectMes" class="form-label mt-2">Mes de afectación</label>
+                <select name="selectMes" id="selectMes" class="form-select mb-3" wire:model.live="mes" wire:change="cargarPresupuesto">
                     <option value="" @if ($this->mes == '') selected @endif>Seleccionar mes...</option>
                     @foreach (range(1, 12) as $mes)
                         @php
@@ -114,7 +100,10 @@
                     @endforeach
                 </select>
 
-                <label for="inputSolvencia" class="form-label">Solvencia disponible</label>
+                <label for="inputMontoEvento" class="form-label mt-2">Monto del evento</label>
+                <input type="text" name="inputMontoEvento" id="inputMontoEvento" class="form-control" disabled>
+
+                <label for="inputSolvencia" class="form-label mt-2">Solvencia disponible</label>
                 <input type="text" class="form-control mb-3" id="inputSolvencia" name="inputSolvencia"
                     wire:model="solvencia" disabled>
 
@@ -142,6 +131,13 @@
         limpiar()
     })
 
+    window.addEventListener('formato_importe', event => {
+        let params = event.__livewire.params
+        formatearImporte({
+            id: params.id
+        }, params.amount)
+    })
+
     function validarDecimales(input) {
         // Obtener solo números y un punto decimal permitido
         let valor = input.value.replace(/[^0-9.]/g, '') // Elimina caracteres no numéricos
@@ -163,8 +159,8 @@
         input.value = partes.length > 1 ? `${numeroEntero}.${partes[1]}` : numeroEntero;
     }
 
-    function formatearImporte(obj) {
-        var amount = $('#' + obj.id).val().replace(/[^0-9.]/g, '');
+    function formatearImporte(obj, amount = '') {
+        amount = (amount) ? amount : $('#' + obj.id).val().replace(/[^0-9.]/g, '');
         amount = parseFloat(amount);
         if (!isNaN(amount)) {
             var formattedAmount = amount.toLocaleString('es-MX', {
@@ -180,8 +176,10 @@
         }
     }
 
+
     function limpiar() {
         $('#selectCuentaContable').val('');
         $('#inputImporte').val('');
+        $('#inputSolvencia').val('');
     }
 </script>
