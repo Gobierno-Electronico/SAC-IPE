@@ -141,12 +141,10 @@ class RecalendarizacionFormConsultaTable extends Tabla
     public function finalizar($tipo)
     {
         $bitacora = new BitacoraController();
-        $bitacora->bitacora('agregarRegistro', 'concluyó o intentó concluir la Reclasificación/Recalendarización o Póliza diario con evento : ' . $this->numeroEvento, request());
-        $this->dispatch('mostrarMensaje', mensaje: 'Se realizó la Reclasificación/Recalendarización o Póliza diario con éxito', tipo: 'success', tiempo: 5000);
-        $this->dispatch('reiniciar');
+        $bitacora->bitacora('agregarRegistro', 'concluyó o intentó concluir el registro de' . $this->categoriaModulo . ' con evento : ' . $this->numeroEvento, request());
         $this->numeroEvento = 0;
         $this->numeroPoliza = 0;
-        return redirect($this->urlFinalizar)->with(['message' => 'Se realizó el registro del ingreso de ' . $this->categoriaModulo . ' con éxito', 'message_type' => 'success']);
+        return redirect($this->urlFinalizar)->with(['message' => 'Se realizó el registro de ' . $this->categoriaModulo . ' con éxito', 'message_type' => 'success']);
     }
     public function regresar()
     {
