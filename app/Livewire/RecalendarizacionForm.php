@@ -138,6 +138,8 @@ class RecalendarizacionForm extends Component
         }
         $cuenta = Cuenta::join('CuentasCOG', 'CuentasCOG.codigoCuenta', '=', 'cuentas.Codigo_cuenta')->select('cuentas.*', 'CuentasCOG.*')->where('Descripcion_cuenta', 'like', '%Ejercer%')->where('COG', '=', $this->cog)->orderBy('COG')->first();
 
+        dd($cuenta);
+
         $area = CodigoDepartamento::find($this->areaResponsable);
         // dd($area->Codigo_completo, $cuenta->codigoCuenta, Carbon::now()->year, $this->mes);
         $data = DB::select('EXEC SolvenciaCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($area->Codigo_completo, $cuenta->codigoCuenta, Carbon::now()->year, $this->mes));
