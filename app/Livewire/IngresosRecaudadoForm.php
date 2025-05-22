@@ -13,6 +13,7 @@ use App\Models\Poliza;
 use Carbon\Carbon;
 use Log;
 use DB;
+use App\Enums\EstatusEvento;
 
 class IngresosRecaudadoForm extends Component
 
@@ -68,7 +69,7 @@ class IngresosRecaudadoForm extends Component
                 ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where('tipo_poliza', '=', 'I')
                 ->where('categoria', '=', 'INGRESOS DEVENGADO')
-                ->where('estatus_evento', '=', true)
+                ->where('estatus_evento', '=', EstatusEvento::ACTIVO->value)
                 ->distinct()
                 ->pluck('descripcion', 'evento');
             $this->cambiarCuentaPagoSeleccionada = false;

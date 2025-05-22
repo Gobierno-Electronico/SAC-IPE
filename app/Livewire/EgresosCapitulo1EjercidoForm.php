@@ -16,6 +16,7 @@ use App\Models\CodigoDepartamento;
 use App\Models\Poliza;
 use Carbon\Carbon;
 use DB;
+use App\Enums\EstatusEvento;
 
 class EgresosCapitulo1EjercidoForm extends Component
 {
@@ -51,7 +52,7 @@ class EgresosCapitulo1EjercidoForm extends Component
                 ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 1')
-                ->where('estatus_evento', '=', true)
+                ->where('estatus_evento', '=', EstatusEvento::ACTIVO->value)
                 ->distinct()
                 ->pluck('descripcion', 'evento');
             return view('livewire.egresos-capitulo1-ejercido-form', ['eventos' => $eventos]);
@@ -179,7 +180,7 @@ class EgresosCapitulo1EjercidoForm extends Component
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $interaccionCuentaCuentas['tipo_interaccion'],
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS EJERCIDO CAPITULO 1',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -203,7 +204,7 @@ class EgresosCapitulo1EjercidoForm extends Component
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => 'Presupuestal - Abono',
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS EJERCIDO CAPITULO 1',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -220,7 +221,7 @@ class EgresosCapitulo1EjercidoForm extends Component
                 Poliza::where('evento', '=', $this->numeroEvento)
                     ->whereIn('categoria', ['EGRESOS DEVENGADO CAPITULO 1'])
                     ->whereYear('fecha', '=', Carbon::now()->year)
-                    ->update(['estatus_evento' => false]);
+                    ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
             }
             // dd($polizas);
 

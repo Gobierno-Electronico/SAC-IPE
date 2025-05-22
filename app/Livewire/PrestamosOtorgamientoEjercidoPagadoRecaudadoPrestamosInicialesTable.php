@@ -15,6 +15,7 @@ use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
 use App\Http\Controllers\BitacoraController;
 use App\Models\Poliza;
+use App\Enums\EstatusEvento;
 
 class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extends Tabla
 {
@@ -291,7 +292,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
                             'evento' => $this->numeroEvento,
                             'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                             'validado' => false,
-                            'estatus_evento' => true,
+                            'estatus_evento' => EstatusEvento::ACTIVO->value,
                             'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS INICIALES',
                             'created_at' => $fecha,
                             'updated_at' => $fecha
@@ -337,7 +338,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
                             'evento' => $this->numeroEvento,
                             'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                             'validado' => false,
-                            'estatus_evento' => true,
+                            'estatus_evento' => EstatusEvento::ACTIVO->value,
                             'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS INICIALES',
                             'created_at' => $fecha,
                             'updated_at' => $fecha
@@ -367,7 +368,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $interaccionCuentaConceptoAbono->tipo_interaccion,
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS INICIALES',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -388,7 +389,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
                             'evento' => $this->numeroEvento,
                             'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                             'validado' => false,
-                            'estatus_evento' => true,
+                            'estatus_evento' => EstatusEvento::ACTIVO->value,
                             'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS INICIALES',
                             'created_at' => $fecha,
                             'updated_at' => $fecha

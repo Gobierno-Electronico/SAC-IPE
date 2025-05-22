@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Log;
 use DB;
+use App\Enums\EstatusEvento;
 
 class IngresosRecaudadoTable extends Tabla
 {
@@ -337,7 +338,7 @@ class IngresosRecaudadoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'INGRESOS RECAUDADO',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -358,7 +359,7 @@ class IngresosRecaudadoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'INGRESOS RECAUDADO',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -408,7 +409,7 @@ class IngresosRecaudadoTable extends Tabla
                             'evento' => $this->numeroEvento,
                             'tipo_interaccion' => $polizaImporte->tipo_interaccion,
                             'validado' => false,
-                            'estatus_evento' => false,
+                            'estatus_evento' => EstatusEvento::FINALIZADO->value,
                             'categoria' => 'INGRESOS DEVENGADO REMANENTE RECAUDADO',
                             'created_at' => $fecha,
                             'updated_at' => $fecha
@@ -446,7 +447,7 @@ class IngresosRecaudadoTable extends Tabla
                             'evento' => $this->numeroEvento,
                             'tipo_interaccion' => $polizaInicial['tipo_interaccion'],
                             'validado' => false,
-                            'estatus_evento' => false,
+                            'estatus_evento' => EstatusEvento::FINALIZADO->value,
                             'categoria' => 'INGRESOS DEVENGADO REMANENTE RECAUDADO',
                             'created_at' => $fecha,
                             'updated_at' => $fecha
@@ -461,7 +462,7 @@ class IngresosRecaudadoTable extends Tabla
                 Poliza::where('evento', '=', $this->numeroEvento)
                     ->whereYear('fecha', '=', Carbon::now()->year)
                     ->whereIn('categoria', ['INGRESOS DEVENGADO', 'INGRESOS RECAUDADO', 'INGRESOS COBRO ESPECIE'])
-                    ->update(['estatus_evento' => false]);
+                    ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
             }
             DB::commit();
             $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente);

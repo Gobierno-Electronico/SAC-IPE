@@ -15,6 +15,7 @@ use App\Models\InteraccionCuentaConcepto;
 use App\Http\Controllers\BitacoraController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Poliza;
+use App\Enums\EstatusEvento;
 
 
 class EgresosCapitulo4ComprometidoTable extends Tabla
@@ -267,7 +268,7 @@ class EgresosCapitulo4ComprometidoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 4',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -289,7 +290,7 @@ class EgresosCapitulo4ComprometidoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 4',
                         'created_at' => $fecha,
                         'updated_at' => $fecha

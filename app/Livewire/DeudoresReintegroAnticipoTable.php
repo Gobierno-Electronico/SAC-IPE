@@ -15,6 +15,7 @@ use App\Models\InteraccionCuentaConcepto;
 use App\Models\CodigoDepartamento;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
+use App\Enums\EstatusEvento;
 
 class DeudoresReintegroAnticipoTable extends Tabla
 {
@@ -277,7 +278,7 @@ class DeudoresReintegroAnticipoTable extends Tabla
                     'evento' => $this->numeroEvento,
                     'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                     'validado' => false,
-                    'estatus_evento' => true,
+                    'estatus_evento' => EstatusEvento::ACTIVO->value,
                     'categoria' => 'DEUDORES REINTEGRO ANTICIPOS',
                     'created_at' => $fecha,
                     'updated_at' => $fecha
@@ -299,7 +300,7 @@ class DeudoresReintegroAnticipoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'DEUDORES REINTEGRO ANTICIPOS',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -316,7 +317,7 @@ class DeudoresReintegroAnticipoTable extends Tabla
                 Poliza::where('evento', '=', $this->numeroEvento)
                     ->whereIn('categoria', ['DEUDORES OTORGAMIENTO ANTICIPOS'])
                     ->whereYear('fecha', '=', Carbon::now()->year)
-                    ->update(['estatus_evento' => false]);
+                    ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
             }
 
             $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);

@@ -15,6 +15,7 @@ use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
 use App\Http\Controllers\BitacoraController;
 use App\Models\Poliza;
+use App\Enums\EstatusEvento;
 
 class PrestamosOtorgamientoCompromisoDevengadoPrestamosRenovacionTable extends Tabla
 {
@@ -277,7 +278,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosRenovacionTable extends T
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'OTORGAMIENTO COMPROMISO DEVENGADO PRESTAMOS RENOVACION',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -298,7 +299,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosRenovacionTable extends T
                     'evento' => $this->numeroEvento,
                     'tipo_interaccion' => $interaccionCuentaConceptoAbono->tipo_interaccion,
                     'validado' => false,
-                    'estatus_evento' => true,
+                    'estatus_evento' => EstatusEvento::ACTIVO->value,
                     'categoria' => 'OTORGAMIENTO COMPROMISO DEVENGADO PRESTAMOS RENOVACION',
                     'created_at' => $fecha,
                     'updated_at' => $fecha
@@ -323,7 +324,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosRenovacionTable extends T
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'OTORGAMIENTO COMPROMISO DEVENGADO PRESTAMOS RENOVACION',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -345,7 +346,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosRenovacionTable extends T
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'OTORGAMIENTO COMPROMISO DEVENGADO PRESTAMOS RENOVACION',
                         'created_at' => $fecha,
                         'updated_at' => $fecha

@@ -11,6 +11,7 @@ use App\Http\Controllers\BitacoraController;
 use Livewire\Attributes\Reactive;
 use Carbon\Carbon;
 use Log;
+use App\Enums\EstatusEvento;
 
 class IngresosFormConsultaTable extends Tabla
 {
@@ -121,21 +122,21 @@ class IngresosFormConsultaTable extends Tabla
                     Poliza::where('categoria', '=', 'INGRESOS POR CLASIFICAR')
                         ->where('evento', '=', $this->numeroEvento)
                         ->whereYear('fecha', '=', Carbon::now()->year)
-                        ->update(['estatus_evento' => true]);
+                        ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
 
                 case 'INGRESOS RECAUDADO':
                     Poliza::where('categoria', '=', 'INGRESOS DEVENGADO')
                         ->where('evento', '=', $this->numeroEvento)
                         ->whereYear('fecha', '=', Carbon::now()->year)
-                        ->update(['estatus_evento' => true]);
+                        ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
 
                 case 'INGRESOS COBRO ESPECIE':
                     Poliza::where('categoria', '=', 'INGRESOS DEVENGADO')
                         ->where('evento', '=', $this->numeroEvento)
                         ->whereYear('fecha', '=', Carbon::now()->year)
-                        ->update(['estatus_evento' => true]);
+                        ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
             }
 

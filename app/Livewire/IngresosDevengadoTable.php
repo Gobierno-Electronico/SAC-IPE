@@ -13,6 +13,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Log;
 use DB;
+use App\Enums\EstatusEvento;
 
 class IngresosDevengadoTable extends Tabla
 {
@@ -273,7 +274,7 @@ class IngresosDevengadoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'INGRESOS DEVENGADO',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -306,7 +307,7 @@ class IngresosDevengadoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'INGRESOS DEVENGADO',
                         'created_at' => $fecha,
                         'updated_at' => $fecha

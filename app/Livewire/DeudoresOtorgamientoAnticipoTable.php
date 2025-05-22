@@ -15,6 +15,7 @@ use App\Models\InteraccionCuentaConcepto;
 use App\Models\CodigoDepartamento;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
+use App\Enums\EstatusEvento;
 
 class DeudoresOtorgamientoAnticipoTable extends Tabla
 {
@@ -268,7 +269,7 @@ class DeudoresOtorgamientoAnticipoTable extends Tabla
                     'evento' => $this->numeroEvento,
                     'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                     'validado' => false,
-                    'estatus_evento' => true,
+                    'estatus_evento' => EstatusEvento::ACTIVO->value,
                     'categoria' => 'DEUDORES OTORGAMIENTO ANTICIPOS',
                     'created_at' => $fecha,
                     'updated_at' => $fecha
@@ -289,7 +290,7 @@ class DeudoresOtorgamientoAnticipoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'DEUDORES OTORGAMIENTO ANTICIPOS',
                         'created_at' => $fecha,
                         'updated_at' => $fecha

@@ -16,6 +16,7 @@ use App\Models\Cuenta;
 use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
 use App\Models\CodigoDepartamento;
+use App\Enums\EstatusEvento;
 
 class DevengadoPrevRecaudadoTable extends Tabla
 {
@@ -297,7 +298,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'INGRESOS DEVENGADO PREVIAMENTE RECAUDADO',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -331,7 +332,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'INGRESOS DEVENGADO PREVIAMENTE RECAUDADO',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -409,7 +410,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
                             'evento' => $this->numeroEvento,
                             'tipo_interaccion' => $ingreso->tipo_interaccion,
                             'validado' => false,
-                            'estatus_evento' => false,
+                            'estatus_evento' => EstatusEvento::FINALIZADO->value,
                             'categoria' => 'INGRESOS POR CLASIFICAR REMANENTE DEVENGADO PREVIAMENTE RECAUDADO',
                             'created_at' => $fecha,
                             'updated_at' => $fecha,
@@ -476,7 +477,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
                 Poliza::where('evento', '=', $this->numeroEvento)
                     ->whereIn('categoria', ['INGRESOS POR CLASIFICAR', 'INGRESOS DEVENGADO PREVIAMENTE RECAUDADO'])
-                    ->update(['estatus_evento' => false]);
+                    ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
             }
             DB::commit();
             $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente);

@@ -13,7 +13,7 @@ use App\Models\CodigoDepartamento;
 use Carbon\Carbon;
 use Log;
 use DB;
-
+use App\Enums\EstatusEvento;
 
 class DeudoresReintegroAnticipoForm extends Component
 {
@@ -57,7 +57,7 @@ class DeudoresReintegroAnticipoForm extends Component
             ->whereYear('fecha', '=', Carbon::now()->year)
             ->where('tipo_poliza', '=', 'D')
             ->where('categoria', '=', 'DEUDORES OTORGAMIENTO ANTICIPOS')
-            ->where('estatus_evento', '=', true)
+            ->where('estatus_evento', '=', EstatusEvento::ACTIVO->value)
             ->distinct()
             ->pluck('descripcion', 'evento');
 

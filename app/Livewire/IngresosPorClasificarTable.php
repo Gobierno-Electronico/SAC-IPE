@@ -15,6 +15,7 @@ use App\Models\InteraccionCuentaConcepto;
 use App\Models\CodigoDepartamento;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
+use App\Enums\EstatusEvento;
 
 class IngresosPorClasificarTable extends Tabla
 {
@@ -213,7 +214,7 @@ class IngresosPorClasificarTable extends Tabla
                     'evento' => $this->numeroEvento,
                     'tipo_interaccion' => $interaccionCuentaConceptoIzquierda->tipo_interaccion,
                     'validado' => false,
-                    'estatus_evento' => true,
+                    'estatus_evento' => EstatusEvento::ACTIVO->value,
                     'categoria' => 'INGRESOS POR CLASIFICAR',
                     'created_at' => $fecha,
                     'updated_at' => $fecha
@@ -232,7 +233,7 @@ class IngresosPorClasificarTable extends Tabla
                     'evento' => $this->numeroEvento,
                     'tipo_interaccion' => $interaccionCuentaConceptoDerecha->tipo_interaccion,
                     'validado' => false,
-                    'estatus_evento' => true,
+                    'estatus_evento' => EstatusEvento::ACTIVO->value,
                     'categoria' => 'INGRESOS POR CLASIFICAR',
                     'created_at' => $fecha,
                     'updated_at' => $fecha

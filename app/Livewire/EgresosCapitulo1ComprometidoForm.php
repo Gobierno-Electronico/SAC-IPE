@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use Log;
 use DB;
 use Illuminate\Support\Facades\Storage;
+use App\Enums\EstatusEvento;
 
 use function PHPUnit\Framework\isNull;
 
@@ -215,7 +216,7 @@ class EgresosCapitulo1ComprometidoForm extends Component
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 1',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -239,7 +240,7 @@ class EgresosCapitulo1ComprometidoForm extends Component
                             'evento' => $this->numeroEvento,
                             'tipo_interaccion' => $polizaPorEjercer['tipo_interaccion'],
                             'validado' => false,
-                            'estatus_evento' => true,
+                            'estatus_evento' => EstatusEvento::ACTIVO->value,
                             'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 1',
                             'created_at' => $fecha,
                             'updated_at' => $fecha
