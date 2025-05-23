@@ -44,6 +44,10 @@
 		<property name="com.jaspersoft.studio.field.name" value="evento"/>
 		<property name="com.jaspersoft.studio.field.label" value="evento"/>
 	</field>
+	<field name="estatus_evento" class="java.lang.Short">
+		<property name="com.jaspersoft.studio.field.name" value="estatus_evento"/>
+		<property name="com.jaspersoft.studio.field.label" value="estatus_evento"/>
+	</field>
 	<field name="FechaRegistro" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="FechaRegistro"/>
 		<property name="com.jaspersoft.studio.field.label" value="FechaRegistro"/>
@@ -231,6 +235,15 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FechaRegistro}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="231" y="70" width="340" height="20" forecolor="#FF0905" uuid="884690ce-6986-4927-974e-183c4a8930f5">
+					<printWhenExpression><![CDATA[$F{estatus_evento} == 9]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CANCELADO]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<columnHeader>
