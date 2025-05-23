@@ -15,6 +15,7 @@ use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
 use App\Http\Controllers\BitacoraController;
 use App\Models\Poliza;
+use App\Enums\EstatusEvento;
 
 class PrestamosRecuperacionRecaudadoPrestamosRenovacionTable extends Tabla
 {
@@ -270,7 +271,7 @@ class PrestamosRecuperacionRecaudadoPrestamosRenovacionTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'RECUPERACION RECAUDADO PRESTAMOS RENOVACION',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -301,7 +302,7 @@ class PrestamosRecuperacionRecaudadoPrestamosRenovacionTable extends Tabla
                             'evento' => $this->numeroEvento,
                             'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                             'validado' => false,
-                            'estatus_evento' => true,
+                            'estatus_evento' => EstatusEvento::ACTIVO->value,
                             'categoria' => 'RECUPERACION RECAUDADO PRESTAMOS RENOVACION',
                             'created_at' => $fecha,
                             'updated_at' => $fecha

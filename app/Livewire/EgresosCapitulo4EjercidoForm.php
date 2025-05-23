@@ -15,6 +15,7 @@ use App\Models\CodigoDepartamento;
 use App\Models\Poliza;
 use Carbon\Carbon;
 use DB;
+use App\Enums\EstatusEvento;
 
 class EgresosCapitulo4EjercidoForm extends Component
 {
@@ -61,7 +62,7 @@ class EgresosCapitulo4EjercidoForm extends Component
                 ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 4')
-                ->where('estatus_evento', '=', true)
+                ->where('estatus_evento', '=', EstatusEvento::ACTIVO->value)
                 ->distinct()
                 ->pluck('descripcion', 'evento');
             $this->cambiarCuentaSeleccionada = false;

@@ -11,6 +11,7 @@ use App\Http\Controllers\BitacoraController;
 use Livewire\Attributes\Reactive;
 use Carbon\Carbon;
 use Log;
+use App\Enums\EstatusEvento;
 
 class RecalendarizacionFormConsultaTable extends Tabla
 {
@@ -115,13 +116,13 @@ class RecalendarizacionFormConsultaTable extends Tabla
                     Poliza::where('categoria', '=', 'DEUDORES OTORGAMIENTO ANTICIPOS')
                         ->where('evento', '=', $this->numeroEvento)
                         ->whereYear('fecha', '=', Carbon::now()->year)
-                        ->update(['estatus_evento' => true]);
+                        ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
                 case 'DEUDORES COMPROBACION ANTICIPOS':
                     Poliza::where('categoria', '=', 'DEUDORES REINTEGRO ANTICIPOS')
                         ->where('evento', '=', $this->numeroEvento)
                         ->whereYear('fecha', '=', Carbon::now()->year)
-                        ->update(['estatus_evento' => true]);
+                        ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
             }
 

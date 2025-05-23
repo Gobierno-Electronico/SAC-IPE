@@ -14,6 +14,7 @@ use Illuminate\Support\Collection;
 use Log;
 use DB;
 use Carbon\Carbon;
+use App\Enums\EstatusEvento;
 
 class EgresosCapitulo2y3PagadoForm extends Component
 {
@@ -72,7 +73,7 @@ class EgresosCapitulo2y3PagadoForm extends Component
                 ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 2y3')
-                ->where('estatus_evento', '=', true)
+                ->where('estatus_evento', '=', EstatusEvento::ACTIVO->value)
                 ->distinct()
                 ->pluck('descripcion', 'evento');
 

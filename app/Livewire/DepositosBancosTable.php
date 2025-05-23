@@ -16,7 +16,7 @@ use App\Models\InteraccionCuentaConcepto;
 use App\Models\CodigoDepartamento;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
-
+use App\Enums\EstatusEvento;
 
 class DepositosBancosTable extends Tabla
 {
@@ -218,7 +218,7 @@ class DepositosBancosTable extends Tabla
                     'evento' => $this->numeroEvento,
                     'tipo_interaccion' => $interaccionCuentaConceptoIzquierda->tipo_interaccion,
                     'validado' => false,
-                    'estatus_evento' => false,
+                    'estatus_evento' => EstatusEvento::FINALIZADO->value,
                     'categoria' => 'INGRESOS DEPOSITOS EN BANCOS',
                     'created_at' => $fecha,
                     'updated_at' => $fecha
@@ -237,7 +237,7 @@ class DepositosBancosTable extends Tabla
                     'evento' => $this->numeroEvento,
                     'tipo_interaccion' => $interaccionCuentaConceptoDerecha->tipo_interaccion,
                     'validado' => false,
-                    'estatus_evento' => false,
+                    'estatus_evento' => EstatusEvento::FINALIZADO->value,
                     'categoria' => 'INGRESOS DEPOSITOS EN BANCOS',
                     'created_at' => $fecha,
                     'updated_at' => $fecha

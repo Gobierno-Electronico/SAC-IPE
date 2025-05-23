@@ -49,6 +49,8 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
     private function descomprometerRecurso($numeroDeEvento, $anioActual)
     {
         try {
+                    set_time_limit(30000);
+        ini_set('max_execution_time', 30000);
             $usuariosController = new BitacoraController();
             $usuariosController->bitacora('descomprometerRecurso', 'se descomprometió o intentó descomprometer el recurso del evento ' . $numeroDeEvento, request());
 
@@ -85,6 +87,8 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
     private function comprometerRecursoConNuevasSolvencias($eventoAnterior)
     {
+                set_time_limit(30000);
+        ini_set('max_execution_time', 30000);
         $anioActual = Carbon::now()->year;
         $polizasComprometidoCanceladas = Poliza::where('tipo_poliza', 'E')
             ->where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 1')
@@ -171,7 +175,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
         $nuevoNumeroEvento = end($numerosEvento) + 1;
 
 
-        $polizasComprometidoCanceladas->chunk(60)->each(function (Collection $chunk) use ($nuevoNumeroEvento, $nuevoNumeroPoliza) {
+        $polizasComprometidoCanceladas->chunk(100)->each(function (Collection $chunk) use ($nuevoNumeroEvento, $nuevoNumeroPoliza) {
             $datos = $chunk->map(function ($poliza) use ($nuevoNumeroEvento, $nuevoNumeroPoliza) {
                 $poliza->evento = $nuevoNumeroEvento;
                 $poliza->numero_poliza = $nuevoNumeroPoliza;
@@ -205,7 +209,8 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
     private function buscarSolvencia($areaPresupuestalSolicitante, $areaDeBusqueda,  $cuenta, $mes, &$solvenciaRequerida, $evento)
     {
-        set_time_limit(300);
+        set_time_limit(30000);
+        ini_set('max_execution_time', 30000);
         $criteriosDeBusqueda = [
             function () use (&$solvenciaRequerida, $areaPresupuestalSolicitante, $areaDeBusqueda, $cuenta, $mes, $evento) {
                 return $this->buscarEnMesesAnteriores($areaPresupuestalSolicitante, $areaDeBusqueda, $cuenta, $cuenta, $mes, $solvenciaRequerida, $evento);
@@ -235,6 +240,8 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
     private function buscarEnMesesAnteriores($areaPresupuestalSolicitante, $areaDeBusqueda, $cuentaCargo, $cuentaAbono, $mes, &$solvenciaRequerida, $evento)
     {
+                set_time_limit(30000);
+        ini_set('max_execution_time', 30000);
         if (strtoupper($mes) == 'ENERO') {
             return;
         }
@@ -288,6 +295,8 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
     private function buscarEnMesesPosteriores($areaPresupuestalSolicitante, $areaDeBusqueda, $cuentaCargo, $cuentaAbono, $mes, &$solvenciaRequerida, $evento)
     {
+                set_time_limit(30000);
+        ini_set('max_execution_time', 30000);
 
         if (strtoupper($mes) == 'DICIEMBRE') {
             return;
@@ -343,6 +352,8 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
     private function buscarEnMismaCuentaDeAreaDistinta($areaPresupuestalSolicitante, $cuenta, $mes, &$solvenciaRequerida, $evento)
     {
+                set_time_limit(30000);
+        ini_set('max_execution_time', 30000);
         $anioActual = Carbon::now()->year;
         $solvenciaCuentaAreasDistintas = DB::select('exec SolvenciaCuentaEnAreasDistitas @cuenta = ?, @anio = ?, @mes = ?, @area = ?', array($cuenta->Codigo_cuenta, $anioActual, $mes, $areaPresupuestalSolicitante));
 
@@ -373,6 +384,8 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
     private function buscarEnGruposPorJerarquia($areaPresupuestalSolicitante, $areaDeBusqueda, $cuenta, $mes, &$solvenciaRequerida, $evento, $nivel = 1)
     {
+                set_time_limit(30000);
+        ini_set('max_execution_time', 30000);
 
         $gruposPorJerarquia = [
             1 => '16',
@@ -448,6 +461,8 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
     private function buscarEnCuentasDeAreaDistinta($areaPresupuestalSolicitante, $cuenta, $mes, &$solvenciaRequerida, $evento)
     {
+                set_time_limit(30000);
+        ini_set('max_execution_time', 30000);
 
         $anioActual = Carbon::now()->year;
         $areasConSolvencia = DB::select('exec SolvenciaAreas @anio = ?, @area = ?', array($anioActual, $areaPresupuestalSolicitante));
@@ -521,7 +536,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
             'descripcion' => 'Reclasificación presupuestal automática del capítulo 1000',
             'evento' => $evento,
             'tipo_interaccion' => 'Presupuestal - Cargo',
-            'validado' => true,
+            'validado' => false,
             'estatus_evento' => EstatusEvento::FINALIZADO->value,
             'categoria' => 'RECALENDARIZACION DISMINUCION',
             'created_at' => $fechaActual,
@@ -542,7 +557,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
             'descripcion' => 'Reclasificación presupuestal automática del capítulo 1000',
             'evento' => $evento,
             'tipo_interaccion' => 'Presupuestal - Abono',
-            'validado' => true,
+            'validado' => false,
             'estatus_evento' => EstatusEvento::FINALIZADO->value,
             'categoria' => 'RECALENDARIZACION AUMENTO',
             'created_at' => $fechaActual,
@@ -553,6 +568,8 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
     public function cargarDevengado()
     {
+                set_time_limit(30000);
+        ini_set('max_execution_time', 30000);
         $solvenciaRequerida = 0;
         $seDescomprometioRecurso = false;
         try {
@@ -636,10 +653,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
                                 ini_set('memory_limit', '1024M');
                                 $this->buscarSolvencia($dato['AREA EJECUTORA'], $dato['AREA EJECUTORA'], $cuentaPresupuestal, $dato['MES'], $solvenciaRequerida, $this->numeroEvento);
-                            } else {
-                                DB::rollback();
-                                $this->dispatch('mostrarMensaje', mensaje: 'No fue posible descomprometer el recurso, contacté al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
-                            }
+                            } 
                         }
                     }
                 }
@@ -903,8 +917,8 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
     public function consultarRegistros($numeroEvento, $numeroPoliza, $total)
     {
         $this->consultarRegistro = true;
-        $this->numeroEvento = $numeroEvento;
-        $this->numeroPoliza = $numeroPoliza;
+        $this->numeroEvento = $numeroEvento + 1;
+        $this->numeroPoliza = $numeroPoliza + 1;
         $this->total = $total;
     }
 }

@@ -16,6 +16,7 @@ use App\Http\Controllers\BitacoraController;
 use Illuminate\Support\Facades\Auth;
 use Log;
 use DB;
+use App\Enums\EstatusEvento;
 
 class EgresosCapitulo2y3PagadoTable extends Tabla
 {
@@ -321,7 +322,7 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS PAGADO CAPITULO 2y3',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -344,7 +345,7 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS PAGADO CAPITULO 2y3',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -491,7 +492,7 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $remanente['tipo_interaccion'],
                         'validado' => false,
-                        'estatus_evento' => false,
+                        'estatus_evento' => EstatusEvento::FINALIZADO->value,
                         'categoria' => 'EGRESOS EJERCIDO CAPITULO 2y3 REMANENTE PAGADO',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -518,7 +519,7 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
                             'evento' => $this->numeroEvento,
                             'tipo_interaccion' => $polizaImporte->tipo_interaccion,
                             'validado' => false,
-                            'estatus_evento' => false,
+                            'estatus_evento' => EstatusEvento::FINALIZADO->value,
                             'categoria' => 'EGRESOS EJERCIDO CAPITULO 2y3 REMANENTE PAGADO',
                             'created_at' => $fecha,
                             'updated_at' => $fecha
@@ -549,7 +550,7 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $polizaInicial['tipo_interaccion'],
                         'validado' => false,
-                        'estatus_evento' => false,
+                        'estatus_evento' => EstatusEvento::FINALIZADO->value,
                         'categoria' => 'EGRESOS EJERCIDO CAPITULO 2y3 REMANENTE PAGADO',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -563,7 +564,7 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
                 Poliza::where('evento', '=', $this->numeroEvento)
                     ->whereIn('categoria', ['EGRESOS EJERCIDO CAPITULO 2y3', 'EGRESOS PAGADO CAPITULO 2y3'])
-                    ->update(['estatus_evento' => 0]);
+                    ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
             }
             DB::commit();
             $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente);

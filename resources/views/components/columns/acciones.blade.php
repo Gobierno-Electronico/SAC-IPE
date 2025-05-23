@@ -1,7 +1,7 @@
 @props(['value', 'state'])
 
 <div>
-    <x-acciones.editar :value="$value" mensaje="Editar cuenta"></x-acciones.editar>
+{{--     <x-acciones.editar :value="$value" mensaje="Editar cuenta"></x-acciones.editar> --}}
     @if ($state == 1)
         <x-acciones.toggleOn :value="$value" mensaje="Desactivar cuenta"></x-acciones.toggleOn>
     @else

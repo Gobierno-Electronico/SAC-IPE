@@ -120,7 +120,7 @@ class MovimientosEgresosTable extends Tabla
             ->where('evento', '=', $item['evento'])
             ->where('tipo_poliza', '=', 'E')
             ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')
-            ->where('categoria', 'like', '%COMPROMETIDO%') // Filtra categoría que contenga 'comprometido'
+            ->where('categoria', 'like', '%EGRESOS COMPROMETIDO CAPITULO%') // Filtra categoría que contenga 'comprometido'
             ->get();
         
             

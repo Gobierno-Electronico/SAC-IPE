@@ -14,6 +14,7 @@ use App\Models\Cuenta;
 use App\Models\CodigoDepartamento;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
+use App\Enums\EstatusEvento;
 
 class RegistroPolizaDiarioTable extends Tabla
 {
@@ -312,7 +313,7 @@ class RegistroPolizaDiarioTable extends Tabla
                     'evento' => $this->numeroEvento,
                     'tipo_interaccion' => $movimiento['tipoInteraccion'],
                     'validado' => false,
-                    'estatus_evento' => true,
+                    'estatus_evento' => EstatusEvento::ACTIVO->value,
                     'categoria' => 'DIARIO DIVERSOS CONCEPTOS',
                     'created_at' => $fecha,
                     'updated_at' => $fecha

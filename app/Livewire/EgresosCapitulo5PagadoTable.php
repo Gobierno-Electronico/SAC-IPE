@@ -17,6 +17,7 @@ use App\Http\Controllers\BitacoraController;
 use Illuminate\Support\Facades\Auth;
 use Log;
 use DB;
+use App\Enums\EstatusEvento;
 
 class EgresosCapitulo5PagadoTable extends Tabla
 {
@@ -322,7 +323,7 @@ class EgresosCapitulo5PagadoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS PAGADO CAPITULO 5',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -345,7 +346,7 @@ class EgresosCapitulo5PagadoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS PAGADO CAPITULO 5',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -439,7 +440,7 @@ class EgresosCapitulo5PagadoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $remanente['tipo_interaccion'],
                         'validado' => false,
-                        'estatus_evento' => false,
+                        'estatus_evento' => EstatusEvento::FINALIZADO->value,
                         'categoria' => 'EGRESOS EJERCIDO CAPITULO 5 REMANENTE PAGADO',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -466,7 +467,7 @@ class EgresosCapitulo5PagadoTable extends Tabla
                             'evento' => $this->numeroEvento,
                             'tipo_interaccion' => $polizaImporte->tipo_interaccion,
                             'validado' => false,
-                            'estatus_evento' => false,
+                            'estatus_evento' => EstatusEvento::FINALIZADO->value,
                             'categoria' => 'EGRESOS EJERCIDO CAPITULO 5 REMANENTE PAGADO',
                             'created_at' => $fecha,
                             'updated_at' => $fecha
@@ -497,7 +498,7 @@ class EgresosCapitulo5PagadoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $polizaInicial['tipo_interaccion'],
                         'validado' => false,
-                        'estatus_evento' => false,
+                        'estatus_evento' => EstatusEvento::FINALIZADO->value,
                         'categoria' => 'EGRESOS EJERCIDO CAPITULO 5 REMANENTE PAGADO',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -512,7 +513,7 @@ class EgresosCapitulo5PagadoTable extends Tabla
                 Poliza::where('evento', '=', $this->numeroEvento)
                     ->whereIn('categoria', ['EGRESOS EJERCIDO CAPITULO 5', 'EGRESOS PAGADO CAPITULO 5'])
                     ->whereYear('fecha', '=', Carbon::now()->year)
-                    ->update(['estatus_evento' => 0]);
+                    ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
             }
             DB::commit();
             $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente);
