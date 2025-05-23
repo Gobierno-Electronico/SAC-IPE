@@ -16,6 +16,7 @@ use App\Enums\EstatusEvento;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Collection;
 use Log;
 use DB;
 
@@ -82,31 +83,153 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
         }
     }
 
+    private function comprometerRecursoConNuevasSolvencias($eventoAnterior)
+    {
+        $anioActual = Carbon::now()->year;
+        $polizasComprometidoCanceladas = Poliza::where('tipo_poliza', 'E')
+            ->where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 1')
+            ->where('evento', $eventoAnterior)
+            ->whereYear('fecha', $anioActual)
+            ->get();
+
+        $polizasRecalendarizacion = Poliza::where('tipo_poliza', 'D')
+            ->where('evento', $eventoAnterior)
+            ->whereYear('fecha', $anioActual)
+            ->get();
+
+        foreach ($polizasRecalendarizacion as $poliza) {
+            if ($poliza->categoria == 'RECALENDARIZACION AUMENTO') {
+                $coincidenciaCuentaPorEjercer = $polizasComprometidoCanceladas->first(function ($p) use ($poliza) {
+                    return $p->area == $poliza->area &&
+                        $p->cuenta == $poliza->cuenta &&
+                        $p->mes == $poliza->mes;
+                });
+
+                if ($coincidenciaCuentaPorEjercer) {
+                    $coincidenciaCuentaPorEjercer->total = bcadd($coincidenciaCuentaPorEjercer->total, $poliza->total, 2);
+                }
+
+                $coincidenciaCuentaComprometida = $polizasComprometidoCanceladas->first(function ($polizaCompromiso) use ($coincidenciaCuentaPorEjercer) {
+                    $conceptoGeneralCuentaPorEjercer = explode('(Por ejercer)', $coincidenciaCuentaPorEjercer->concepto);
+                    return $polizaCompromiso->area == $coincidenciaCuentaPorEjercer->area &&
+                        str_contains($polizaCompromiso->concepto, $conceptoGeneralCuentaPorEjercer[0]) &&
+                        $polizaCompromiso->tipo_interaccion == 'Presupuestal - Cargo' &&
+                        $polizaCompromiso->mes == $coincidenciaCuentaPorEjercer->mes;
+                });
+
+
+
+                if ($coincidenciaCuentaComprometida) {
+                    $coincidenciaCuentaComprometida->total = $coincidenciaCuentaPorEjercer->total;
+                }
+
+            }
+
+            if ($poliza->categoria == 'RECALENDARIZACION DISMINUCION') {
+                $coincidenciaCuentaPorEjercer = $polizasComprometidoCanceladas->first(function ($p) use ($poliza) {
+                    return $p->area == $poliza->area &&
+                        $p->cuenta == $poliza->cuenta &&
+                        $p->mes == $poliza->mes;
+                });
+
+                if ($coincidenciaCuentaPorEjercer) {
+                    $coincidenciaCuentaPorEjercer->total = bcsub($coincidenciaCuentaPorEjercer->total, $poliza->total, 2);
+                }
+
+                $coincidenciaCuentaComprometida = $polizasComprometidoCanceladas->first(function ($polizaCompromiso) use ($coincidenciaCuentaPorEjercer) {
+                    $conceptoGeneralCuentaPorEjercer = explode('(Por ejercer)', $coincidenciaCuentaPorEjercer->concepto);
+                    return $polizaCompromiso->area == $coincidenciaCuentaPorEjercer->area &&
+                        str_contains($polizaCompromiso->concepto, $conceptoGeneralCuentaPorEjercer[0]) &&
+                        $polizaCompromiso->tipo_interaccion == 'Presupuestal - Cargo' &&
+                        $polizaCompromiso->mes == $coincidenciaCuentaPorEjercer->mes;
+                });
+
+                if ($coincidenciaCuentaComprometida) {
+                    $coincidenciaCuentaComprometida->total = $coincidenciaCuentaPorEjercer->total;
+                }
+
+            }
+        }
+
+        $numerosPolizas = Poliza::select('numero_poliza')
+            ->where('tipo_poliza', '=', 'E')
+            ->whereYear('fecha', '=', $anioActual)
+            ->distinct()
+            ->orderBy('numero_poliza')
+            ->pluck('numero_poliza')
+            ->toArray();
+
+        $numerosEvento = Poliza::select('evento')
+            ->distinct()
+            ->whereYear('fecha', '=', $anioActual)
+            ->orderBy('evento')
+            ->pluck('evento')
+            ->toArray();
+
+        $ultimoNumero = end($numerosPolizas);
+        $nuevoNumeroPoliza = ($ultimoNumero) ? $ultimoNumero + 1 : 1;
+        $nuevoNumeroEvento = end($numerosEvento) + 1;
+
+
+        $polizasComprometidoCanceladas->chunk(60)->each(function (Collection $chunk) use ($nuevoNumeroEvento, $nuevoNumeroPoliza) {
+            $datos = $chunk->map(function ($poliza) use ($nuevoNumeroEvento, $nuevoNumeroPoliza) {
+                $poliza->evento = $nuevoNumeroEvento;
+                $poliza->numero_poliza = $nuevoNumeroPoliza;
+                $poliza->estatus_evento = EstatusEvento::FINALIZADO->value;
+                $poliza->fecha = Carbon::now('America/Mexico_City');
+                $poliza->created_at = Carbon::now('America/Mexico_City');
+                $poliza->updated_at = Carbon::now('America/Mexico_City');
+
+                $array = $poliza->toArray();
+
+                // Quitar la columna 'id' para evitar errores al insertar
+                unset($array['id']);
+
+
+                // Formatear fechas correctamente
+                $array['created_at'] = now('America/Mexico_City')->format('Y-m-d H:i:s');
+                $array['updated_at'] = now('America/Mexico_City')->format('Y-m-d H:i:s');
+                $array['fecha'] = now('America/Mexico_City')->format('Y-m-d H:i:s');
+
+
+                return $array;
+            })->toArray();
+
+
+            // Inserta el bloque procesado sin la columna 'id'
+            Poliza::insert($datos);
+
+        });
+    }
+
+
     private function buscarSolvencia($areaPresupuestalSolicitante, $areaDeBusqueda,  $cuenta, $mes, &$solvenciaRequerida, $evento)
     {
+        set_time_limit(300);
         $criteriosDeBusqueda = [
-            // function () use (&$solvenciaRequerida, $areaPresupuestalSolicitante, $areaDeBusqueda, $cuenta, $mes, $evento) {
-            //     return $this->buscarEnMesesAnteriores($areaPresupuestalSolicitante, $areaDeBusqueda, $cuenta, $cuenta, $mes, $solvenciaRequerida, $evento);
-            // },
-            // function () use (&$solvenciaRequerida, $areaPresupuestalSolicitante, $areaDeBusqueda, $cuenta, $mes, $evento) {
-            //     return $this->buscarEnMesesPosteriores($areaPresupuestalSolicitante, $areaDeBusqueda, $cuenta, $cuenta, $mes, $solvenciaRequerida, $evento);
-            // },
-            // function () use (&$solvenciaRequerida, $areaPresupuestalSolicitante, $areaDeBusqueda, $cuenta, $mes, $evento) {
-            //     return $this->buscarEnGruposPorJerarquia($areaPresupuestalSolicitante, $areaDeBusqueda, $cuenta, $mes, $solvenciaRequerida, $evento);
-            // },
-            // function () use (&$solvenciaRequerida, $areaPresupuestalSolicitante, $cuenta, $mes, $evento) {
-            //     return $this->buscarEnMismaCuentaDeAreaDistinta($areaPresupuestalSolicitante, $cuenta, $mes, $solvenciaRequerida, $evento);
-            // },
+            function () use (&$solvenciaRequerida, $areaPresupuestalSolicitante, $areaDeBusqueda, $cuenta, $mes, $evento) {
+                return $this->buscarEnMesesAnteriores($areaPresupuestalSolicitante, $areaDeBusqueda, $cuenta, $cuenta, $mes, $solvenciaRequerida, $evento);
+            },
+            function () use (&$solvenciaRequerida, $areaPresupuestalSolicitante, $areaDeBusqueda, $cuenta, $mes, $evento) {
+                return $this->buscarEnMesesPosteriores($areaPresupuestalSolicitante, $areaDeBusqueda, $cuenta, $cuenta, $mes, $solvenciaRequerida, $evento);
+            },
+            function () use (&$solvenciaRequerida, $areaPresupuestalSolicitante, $areaDeBusqueda, $cuenta, $mes, $evento) {
+                return $this->buscarEnGruposPorJerarquia($areaPresupuestalSolicitante, $areaDeBusqueda, $cuenta, $mes, $solvenciaRequerida, $evento);
+            },
+            function () use (&$solvenciaRequerida, $areaPresupuestalSolicitante, $cuenta, $mes, $evento) {
+                return $this->buscarEnMismaCuentaDeAreaDistinta($areaPresupuestalSolicitante, $cuenta, $mes, $solvenciaRequerida, $evento);
+            },
             function () use (&$solvenciaRequerida, $areaPresupuestalSolicitante, $cuenta, $mes, $evento) {
                 return $this->buscarEnCuentasDeAreaDistinta($areaPresupuestalSolicitante, $cuenta, $mes, $solvenciaRequerida, $evento);
             },
-
-
         ];
 
         foreach ($criteriosDeBusqueda as $criterio) {
-            if ($solvenciaRequerida <= 0) break;
-            $criterio();
+            if ($solvenciaRequerida == 0) {
+                break;
+            } else {
+                $criterio();
+            }
         }
     }
 
@@ -165,6 +288,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
     private function buscarEnMesesPosteriores($areaPresupuestalSolicitante, $areaDeBusqueda, $cuentaCargo, $cuentaAbono, $mes, &$solvenciaRequerida, $evento)
     {
+
         if (strtoupper($mes) == 'DICIEMBRE') {
             return;
         }
@@ -324,7 +448,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
     private function buscarEnCuentasDeAreaDistinta($areaPresupuestalSolicitante, $cuenta, $mes, &$solvenciaRequerida, $evento)
     {
-   
+
         $anioActual = Carbon::now()->year;
         $areasConSolvencia = DB::select('exec SolvenciaAreas @anio = ?, @area = ?', array($anioActual, $areaPresupuestalSolicitante));
 
@@ -342,32 +466,30 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                     ->orderByRaw("CASE WHEN cuenta = ? THEN 0 ELSE 1 END, cuenta", $cuenta->Codigo_cuenta)
                     ->get();
 
-                    foreach($cuentasConSolvencia as $cuentaConSolvencia){
-                        Log::info('BUsque en meses anteriores');
-                        $this->buscarEnMesesAnteriores($areaPresupuestalSolicitante, $area->area, $cuentaConSolvencia, $cuenta, $mes, $solvenciaRequerida, $evento);
+                foreach ($cuentasConSolvencia as $cuentaConSolvencia) {
+                    Log::info('BUsque en meses anteriores');
+                    $this->buscarEnMesesAnteriores($areaPresupuestalSolicitante, $area->area, $cuentaConSolvencia, $cuenta, $mes, $solvenciaRequerida, $evento);
 
-                        if($solvenciaRequerida == 0){
-                            return;
-                        }
-
-                        Log::info('BUsque en meses posteriores');
-                        $this->buscarEnMesesPosteriores($areaPresupuestalSolicitante, $area->area, $cuentaConSolvencia, $cuenta, $mes, $solvenciaRequerida, $evento);
-                        
-                        if($solvenciaRequerida == 0){
-                            return;
-                        }
-
-                        Log::info('Busque por jerarquía');
-                        $this->buscarEnGruposPorJerarquia($areaPresupuestalSolicitante, $area->area, $cuentaConSolvencia, $cuenta, $mes, $solvenciaRequerida, $evento);
-                        
+                    if ($solvenciaRequerida == 0) {
+                        return;
                     }
+
+                    Log::info('BUsque en meses posteriores');
+                    $this->buscarEnMesesPosteriores($areaPresupuestalSolicitante, $area->area, $cuentaConSolvencia, $cuenta, $mes, $solvenciaRequerida, $evento);
+
+                    if ($solvenciaRequerida == 0) {
+                        return;
+                    }
+
+                    Log::info('Busque por jerarquía');
+                    $this->buscarEnGruposPorJerarquia($areaPresupuestalSolicitante, $area->area, $cuentaConSolvencia, $cuenta, $mes, $solvenciaRequerida, $evento);
+                }
             }
         }
 
-        if($solvenciaRequerida > 0){
+        if ($solvenciaRequerida > 0) {
             Log::info('NO SE SOLVENTÓ TODO EL PRESUPUESTO');
         }
-
     }
 
     private function crearPolizaDeReclasificacion(array &$polizas, $areaPresupuestalSolicitante, $areaDeBusqueda, $cuentaCargo, $cuentaAbono, $total, $mesCargo, $mesAbono, $evento)
@@ -431,6 +553,8 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
     public function cargarDevengado()
     {
+        $solvenciaRequerida = 0;
+        $seDescomprometioRecurso = false;
         try {
             $idUsuarioRegistrante = Auth::id();
             $datosExcelAsociados = $this->leerArchivoExcel();
@@ -453,8 +577,6 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
             $numerosEvento = Poliza::select('evento')
                 ->distinct()
-                ->where('tipo_poliza', '=', 'E')
-                ->where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 1')
                 ->whereYear('fecha', '=', $anioActual)
                 ->orderBy('evento')
                 ->pluck('evento')
@@ -498,12 +620,13 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
                         $totalSinFormato = (float) str_replace([',', '$', ' '], '', $dato['CARGO']);
                         if ($totalSinFormato > $solvencia) {
-                            $this->dispatch('mostrarMensaje', mensaje: 'Sin Solvencia, Descomprometiendo recurso...', tipo: 'warning', tiempo: 3000);
-
-                            //Cancelar el compromiso y descomprometerlo
-                            $resultadoDescomprometerRecurso = $this->descomprometerRecurso($this->numeroEvento, $anioActual);
+                           
+                            if($seDescomprometioRecurso == false){
+                                //Cancelar el compromiso y descomprometerlo
+                                $resultadoDescomprometerRecurso = $this->descomprometerRecurso($this->numeroEvento, $anioActual);
+                            }
                             if ($resultadoDescomprometerRecurso['rows_afectadas'] > 0 && $resultadoDescomprometerRecurso['rows_insertadas'] > 0) {
-                                $this->dispatch('mostrarMensaje', mensaje: 'Recurso descomprometido. Buscando solvencia en las cuentas...', tipo: 'success', tiempo: 3000);
+                                $seDescomprometioRecurso = true;
 
 
                                 $solvenciaRequerida = bcsub($totalSinFormato, $solvencia, 2);
@@ -511,6 +634,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                                 $descripcionCuentaPresupuestal = $conceptoGeneralCuenta[0] . '(Por ejercer)';
                                 $cuentaPresupuestal = Cuenta::where('Descripcion_cuenta', '=', $descripcionCuentaPresupuestal)->first();
 
+                                ini_set('memory_limit', '1024M');
                                 $this->buscarSolvencia($dato['AREA EJECUTORA'], $dato['AREA EJECUTORA'], $cuentaPresupuestal, $dato['MES'], $solvenciaRequerida, $this->numeroEvento);
                             } else {
                                 DB::rollback();
@@ -519,8 +643,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                         }
                     }
                 }
-                DB::commit();
-                dd("ALTO");
+
 
                 if (str_contains($dato["DESCRIPCION"], "(Devengado)")) {
 
@@ -558,14 +681,14 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                         'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $dato['AREA EJECUTORA'],
                         'tipo_poliza' => 'E',
-                        'numero_poliza' =>  $this->numeroPoliza,
+                        'numero_poliza' =>  $this->numeroPoliza + 1,
                         'fecha' => $this->fechaAfectacion,
                         'cuenta' => $dato['CUENTA'],
                         'concepto' => $dato['DESCRIPCION'],
                         'total' => floatval(str_replace([',', '$', ' '], ['', '', ''], $dato['CARGO'])),
                         'mes' => $dato['MES'],
                         'descripcion' => $dato['CONCEPTO'],
-                        'evento' => $this->numeroEvento,
+                        'evento' => $this->numeroEvento + 1,
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
                         'estatus_evento' => true,
@@ -580,14 +703,14 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                             'idUsuarioRegistrante' => $idUsuarioRegistrante,
                             'area' => $dato['AREA EJECUTORA'],
                             'tipo_poliza' => 'E',
-                            'numero_poliza' =>  $this->numeroPoliza,
+                            'numero_poliza' =>  $this->numeroPoliza + 1,
                             'fecha' => $this->fechaAfectacion,
                             'cuenta' => $dataCuenta['Codigo_cuenta'],
                             'concepto' => $dataCuenta['Descripcion_cuenta'],
                             'total' => floatval(str_replace([',', '$', ' '], ['', '', ''], $dato['CARGO'])),
                             'mes' => $dato['MES'],
                             'descripcion' => $dato['CONCEPTO'],
-                            'evento' => $this->numeroEvento,
+                            'evento' => $this->numeroEvento + 1,
                             'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                             'validado' => false,
                             'estatus_evento' => true,
@@ -602,14 +725,14 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                         'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $dato['AREA EJECUTORA'],
                         'tipo_poliza' => 'E',
-                        'numero_poliza' =>  $this->numeroPoliza,
+                        'numero_poliza' =>  $this->numeroPoliza + 1,
                         'fecha' => $this->fechaAfectacion,
                         'cuenta' => $dato['CUENTA'],
                         'concepto' => $dato['DESCRIPCION'],
                         'total' => floatval(str_replace([',', '$', ' '], ['', '', ''], $dato['ABONO'])),
                         'mes' => $dato['MES'],
                         'descripcion' => $dato['CONCEPTO'],
-                        'evento' => $this->numeroEvento,
+                        'evento' => $this->numeroEvento + 1,
                         'tipo_interaccion' => 'Contable - Abono',
                         'validado' => false,
                         'estatus_evento' => true,
@@ -618,6 +741,10 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                         'updated_at' => $fecha
                     ]);
                 }
+            }
+
+            if ($solvenciaRequerida == 0 && $seDescomprometioRecurso) {
+                $this->comprometerRecursoConNuevasSolvencias($this->numeroEvento);
             }
 
             if (!empty($cuentasFaltantesPlanCuentas)) {
