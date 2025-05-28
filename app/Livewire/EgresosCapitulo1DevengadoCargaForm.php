@@ -46,7 +46,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
         }
     }
 
-    private function descomprometerRecurso($numeroDeEvento, $anioActual)
+    private function descomprometerRecurso($numeroDeEvento, $anioActual, $conceptoDeCarga)
     {
         try {
                     set_time_limit(30000);
@@ -72,7 +72,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                 ->update([
                     'estatus_evento' => EstatusEvento::CANCELADO->value
                 ]);
-            $resultado = DB::select('EXEC RegistroCancelacionCompromiso1000 @evento = ?, @anio = ?, @numeroPoliza = ?', array($numeroDeEvento, $anioActual, $ultimoNumeroPolizaTipoD));
+            $resultado = DB::select('EXEC RegistroCancelacionCompromiso1000 @evento = ?, @anio = ?, @numeroPoliza = ?, @conceptoDeRegistro = ?', array($numeroDeEvento, $anioActual, $ultimoNumeroPolizaTipoD, $conceptoDeCarga));
             $rowsInsertadas =  $resultado[0]->filas_insertadas ?? 0;
 
             return [
@@ -568,7 +568,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
     public function cargarDevengado()
     {
-                set_time_limit(30000);
+        set_time_limit(30000);
         ini_set('max_execution_time', 30000);
         $solvenciaRequerida = 0;
         $seDescomprometioRecurso = false;
@@ -640,7 +640,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                            
                             if($seDescomprometioRecurso == false){
                                 //Cancelar el compromiso y descomprometerlo
-                                $resultadoDescomprometerRecurso = $this->descomprometerRecurso($this->numeroEvento, $anioActual);
+                                $resultadoDescomprometerRecurso = $this->descomprometerRecurso($this->numeroEvento, $anioActual, $dato['CONCEPTO']);
                             }
                             if ($resultadoDescomprometerRecurso['rows_afectadas'] > 0 && $resultadoDescomprometerRecurso['rows_insertadas'] > 0) {
                                 $seDescomprometioRecurso = true;

@@ -31,6 +31,10 @@ class EgresosController extends Controller
         return view('egresos.egresos-capitulo1-pagado');
     }
 
+    public function capitulo1Cancelaciones(){
+        return view ('egresos.movimientos-cancelaciones');
+    }
+
     public function capitulo2y3Comprometido()
     {
         return view('egresos.egresos-capitulo2y3-comprometido');
