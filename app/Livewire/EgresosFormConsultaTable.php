@@ -12,6 +12,7 @@ use Livewire\Attributes\Reactive;
 use Carbon\Carbon;
 use App\Livewire\Tabla;
 use Log;
+use App\Enums\EstatusEvento;
 
 class EgresosFormConsultaTable extends Tabla
 {
@@ -170,7 +171,7 @@ class EgresosFormConsultaTable extends Tabla
             Poliza::where('categoria', 'LIKE', '%'.'EGRESOS COMPROMETIDO CAPITULO'.'%')
                 ->where('evento', '=', $this->numeroEvento)
                 ->whereYear('fecha', '=', Carbon::now()->year)
-                ->update(['estatus_evento' => false]);
+                ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
             
             $this->validar();
 
@@ -217,19 +218,19 @@ class EgresosFormConsultaTable extends Tabla
                     Poliza::where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 1')
                         ->where('evento', '=', $this->numeroEvento)
                         ->whereYear('fecha', '=', Carbon::now()->year)
-                        ->update(['estatus_evento' => true]);
+                        ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
                 case "EGRESOS EJERCIDO CAPITULO 1":
                     Poliza::where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 1')
                         ->where('evento', '=', $this->numeroEvento)
                         ->whereYear('fecha', '=', Carbon::now()->year)
-                        ->update(['estatus_evento' => true]);
+                        ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
                 case "EGRESOS PAGADO CAPITULO 1":
                     Poliza::where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 1')
                         ->where('evento', '=', $this->numeroEvento)
                         ->whereYear('fecha', '=', Carbon::now()->year)
-                        ->update(['estatus_evento' => true]);
+                        ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
 
 
@@ -237,19 +238,19 @@ class EgresosFormConsultaTable extends Tabla
                     Poliza::where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 2y3')
                         ->where('evento', '=', $this->numeroEvento)
                         ->whereYear('fecha', '=', Carbon::now()->year)
-                        ->update(['estatus_evento' => true]);
+                        ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
                 case "EGRESOS EJERCIDO CAPITULO 2y3":
                     Poliza::where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 2y3')
                         ->where('evento', '=', $this->numeroEvento)
                         ->whereYear('fecha', '=', Carbon::now()->year)
-                        ->update(['estatus_evento' => true]);
+                        ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
                 case "EGRESOS PAGADO CAPITULO 2y3":
                     Poliza::where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 2y3')
                         ->where('evento', '=', $this->numeroEvento)
                         ->whereYear('fecha', '=', Carbon::now()->year)
-                        ->update(['estatus_evento' => true]);
+                        ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
 
 
@@ -257,19 +258,19 @@ class EgresosFormConsultaTable extends Tabla
                     Poliza::where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 4')
                         ->where('evento', '=', $this->numeroEvento)
                         ->whereYear('fecha', '=', Carbon::now()->year)
-                        ->update(['estatus_evento' => true]);
+                        ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
                 case "EGRESOS EJERCIDO CAPITULO 4":
                     Poliza::where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 4')
                         ->where('evento', '=', $this->numeroEvento)
                         ->whereYear('fecha', '=', Carbon::now()->year)
-                        ->update(['estatus_evento' => true]);
+                        ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
                 case "EGRESOS PAGADO CAPITULO 4":
                     Poliza::where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 4')
                         ->where('evento', '=', $this->numeroEvento)
                         ->whereYear('fecha', '=', Carbon::now()->year)
-                        ->update(['estatus_evento' => true]);
+                        ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
 
 
@@ -277,19 +278,19 @@ class EgresosFormConsultaTable extends Tabla
                     Poliza::where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 5')
                         ->where('evento', '=', $this->numeroEvento)
                         ->whereYear('fecha', '=', Carbon::now()->year)
-                        ->update(['estatus_evento' => true]);
+                        ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
                 case "EGRESOS EJERCIDO CAPITULO 5":
                     Poliza::where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 5')
                         ->where('evento', '=', $this->numeroEvento)
                         ->whereYear('fecha', '=', Carbon::now()->year)
-                        ->update(['estatus_evento' => true]);
+                        ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
                 case "EGRESOS PAGADO CAPITULO 5":
                     Poliza::where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 5')
                         ->where('evento', '=', $this->numeroEvento)
                         ->whereYear('fecha', '=', Carbon::now()->year)
-                        ->update(['estatus_evento' => true]);
+                        ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
 
 
@@ -297,19 +298,19 @@ class EgresosFormConsultaTable extends Tabla
                     Poliza::where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 7')
                         ->where('evento', '=', $this->numeroEvento)
                         ->whereYear('fecha', '=', Carbon::now()->year)
-                        ->update(['estatus_evento' => true]);
+                        ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
                 case "EGRESOS EJERCIDO CAPITULO 7":
                     Poliza::where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 7')
                         ->where('evento', '=', $this->numeroEvento)
                         ->whereYear('fecha', '=', Carbon::now()->year)
-                        ->update(['estatus_evento' => true]);
+                        ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
                 case "EGRESOS PAGADO CAPITULO 7":
                     Poliza::where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 7')
                         ->where('evento', '=', $this->numeroEvento)
                         ->whereYear('fecha', '=', Carbon::now()->year)
-                        ->update(['estatus_evento' => true]);
+                        ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
             }
             // PresupuestoInicial::where('anio', '=', $this->selectedYear)->where('categoria', '=', 'INGRESOS')->where('tipo', '=', 'P')->delete();

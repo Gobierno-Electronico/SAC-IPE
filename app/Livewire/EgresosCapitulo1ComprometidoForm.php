@@ -13,9 +13,11 @@ use App\Models\Poliza;
 use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Log;
 use DB;
 use Illuminate\Support\Facades\Storage;
+use App\Enums\EstatusEvento;
 
 use function PHPUnit\Framework\isNull;
 
@@ -113,6 +115,7 @@ class EgresosCapitulo1ComprometidoForm extends Component
                 return;
             }
 
+            $idUsuarioRegistrante = Auth::id();
             $usuariosController = new BitacoraController();
             $usuariosController->bitacora('cargarComprometido', 'cargó o intentó cargar el comprometido del capítulo 1000 de egresos', request());
             DB::beginTransaction();
@@ -203,6 +206,7 @@ class EgresosCapitulo1ComprometidoForm extends Component
                     $dato[$mes] = str_replace(',', '', $dato[$mes]);
                     $this->total = $this->total + $dato[$mes];
                     array_push($polizas, [
+                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $dato['Area Ejecutora'],
                         'tipo_poliza' => 'E',
                         'numero_poliza' =>  $this->numeroPoliza,
@@ -215,7 +219,7 @@ class EgresosCapitulo1ComprometidoForm extends Component
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 1',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -227,6 +231,7 @@ class EgresosCapitulo1ComprometidoForm extends Component
                         $dato[$mes] = str_replace(',', '', $dato[$mes]);
                         $this->total = $this->total + $dato[$mes];
                         array_push($polizas, [
+                            'idUsuarioRegistrante' => $idUsuarioRegistrante,
                             'area' => $dato['Area Ejecutora'],
                             'tipo_poliza' => 'E',
                             'numero_poliza' =>  $this->numeroPoliza,
@@ -239,7 +244,7 @@ class EgresosCapitulo1ComprometidoForm extends Component
                             'evento' => $this->numeroEvento,
                             'tipo_interaccion' => $polizaPorEjercer['tipo_interaccion'],
                             'validado' => false,
-                            'estatus_evento' => true,
+                            'estatus_evento' => EstatusEvento::ACTIVO->value,
                             'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 1',
                             'created_at' => $fecha,
                             'updated_at' => $fecha

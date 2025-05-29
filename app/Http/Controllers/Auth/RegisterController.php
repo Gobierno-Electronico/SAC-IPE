@@ -55,14 +55,17 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
-            'usuario' => ['required', 'string', 'max:255', 'unique:users'],
-            'numero_de_personal' => ['required', 'numeric', 'unique:users'],
-            'nombre' => ['required', 'string', 'max:255'],
-            'apellido_paterno' => ['required', 'string', 'max:255'],
-            'apellido_materno' => ['required', 'string', 'max:255'],
-            'rol' => ['required', 'string', 'max:255']
-        ]);
+
+    return Validator::make($data, [
+        'usuario' => ['required', 'string', 'max:255', 'unique:users'],
+        'numero_de_personal' => ['required', 'numeric', 'unique:users'],
+        'grado_academico' => ['required', 'string', 'max:255', 'regex:/^[\pL\s\-]+$/u'],
+        'nombre' => ['required', 'string', 'max:255', 'regex:/^[\pL\s\-]+$/u'],
+        'apellido_paterno' => ['required', 'string', 'max:255', 'regex:/^[\pL\s\-]+$/u'],
+        'apellido_materno' => ['required', 'string', 'max:255', 'regex:/^[\pL\s\-]+$/u'],
+        'rol' => ['required', 'string', 'max:255']
+    ]);
+
     }
 
     /**

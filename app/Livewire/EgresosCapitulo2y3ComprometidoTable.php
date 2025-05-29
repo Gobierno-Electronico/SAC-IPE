@@ -15,6 +15,7 @@ use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
 use App\Http\Controllers\BitacoraController;
 use App\Models\Poliza;
+use App\Enums\EstatusEvento;
 
 class EgresosCapitulo2y3ComprometidoTable extends Tabla
 {
@@ -99,7 +100,7 @@ class EgresosCapitulo2y3ComprometidoTable extends Tabla
         }
 
         if($totalImportes > 0){
-            $this->totalDisponible = $solvencia - $totalImportes - $registro['importe'];
+            $this->totalDisponible = bcsub(bcsub($solvencia, $totalImportes, 2), $registro['importe'], 2);
         }
 
         if($this->totalDisponible < 0){
@@ -193,10 +194,10 @@ class EgresosCapitulo2y3ComprometidoTable extends Tabla
         foreach($this->cacheData as $key => $movimiento) {
             if($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuenta']) && $movimiento['mes'] == $datosSeleccionado['mes']) {
                 if($totalImportes == 0){
-                    $movimiento['disponibilidad'] = $movimiento['pttoEjecutar'] - $movimiento['importe'];
+                    $movimiento['disponibilidad'] = bcsub($movimiento['pttoEjecutar'], $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 }else{
-                    $movimiento['disponibilidad'] = $movimiento['pttoEjecutar'] - $totalImportes - $movimiento['importe'];
+                    $movimiento['dispibilidad'] = bcsub(bcsub($movimiento['pttoEjecutar'], $totalImportes, 2), $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 }
                 $this->cacheData[$key] = $movimiento;
@@ -265,7 +266,7 @@ class EgresosCapitulo2y3ComprometidoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 2y3',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -287,7 +288,7 @@ class EgresosCapitulo2y3ComprometidoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 2y3',
                         'created_at' => $fecha,
                         'updated_at' => $fecha

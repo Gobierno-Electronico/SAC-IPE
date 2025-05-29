@@ -10,6 +10,7 @@ use App\Http\Controllers\ReportesController;
 use App\Http\Controllers\ContabilidadController;
 use App\Http\Controllers\IngresosController;
 use App\Http\Controllers\EgresosController;
+use App\Http\Controllers\DeudoresController;
 use Illuminate\Support\Facades\Route;
 USE App\Http\Controllers\HomeController;
 use App\Http\Middleware\ResetPassword;
@@ -134,6 +135,8 @@ Route::get("/capitulo1-devengado", [EgresosController::class, 'capitulo1Devengad
 Route::get("/capitulo1-devengadoCarga", [EgresosController::class, 'capitulo1DevengadoCarga'])->name('capitulo1DevengadoCarga')->middleware('role:Administrador');
 Route::get("/capitulo1-ejercido", [EgresosController::class, 'capitulo1Ejercido'])->name('capitulo1Ejercido')->middleware('role:Administrador');
 Route::get("/capitulo1-pagado", [EgresosController::class, 'capitulo1Pagado'])->name('capitulo1Pagado')->middleware('role:Administrador');
+Route::get("/capitulo1-cancelaciones", [EgresosController::class, 'capitulo1Cancelaciones'])->name('capitulo1Cancelaciones')->middleware('role:Administrador');
+
 Route::get("/capitulo2y3-comprometido", [EgresosController::class, 'capitulo2y3Comprometido'])->name('capitulo2y3Comprometido')->middleware('role:Administrador');
 Route::get("/capitulo2y3-devengado", [EgresosController::class, 'capitulo2y3Devengado'])->name('capitulo2y3Devengado')->middleware('role:Administrador');
 Route::get("/capitulo2y3-ejercido", [EgresosController::class, 'capitulo2y3Ejercido'])->name('capitulo2y3Ejercido')->middleware('role:Administrador');
@@ -159,6 +162,11 @@ Route::get("/capitulo7-otorgamiento-ejercido-pagado-recaudado-prestamosRenovacio
 Route::get("/capitulo7-recuperacion-recaudado-prestamosIniciales", [PrestamosController::class, 'capitulo7RecaudadoPrestamosIniciales'])->name('capitulo7RecaudadoPrestamosIniciales')->middleware('role:Administrador');
 Route::get("/capitulo7-recuperacion-recaudado-prestamosRenovacion", [PrestamosController::class, 'capitulo7RecaudadoPrestamosRenovacion'])->name('capitulo7RecaudadoPrestamosRenovacion')->middleware('role:Administrador');
 Route::get("/movimientos-prestamos", [PrestamosController::class, 'consultarMovimientos'])->name('movimientosPrestamos')->middleware('role:Administrador');
+
+//Deudores
+Route::get("/deudores-otorgamiento-anticipo", [DeudoresController::class, 'otorgamientoAnticipo'])->name('otorgamientoAnticipo')->middleware('role:Administrador');
+Route::get("/deudores-reintegro-anticipo", [DeudoresController::class, 'reintegroAnticipo'])->name('reintegroAnticipo')->middleware('role:Administrador');
+Route::get("/deudores-comprobacion-anticipo", [DeudoresController::class, 'comprobacionAnticipo'])->name('comprobacionAnticipo')->middleware('role:Administrador');
 
 //ruta de prueba
 Route::get("/bancos", [IngresosController::class, 'bancos'])->name('bancos')->middleware('role:Administrador');

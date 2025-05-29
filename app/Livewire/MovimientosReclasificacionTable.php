@@ -112,6 +112,9 @@ class MovimientosReclasificacionTable extends Tabla
         return [
             Column::make('evento', 'Evento'),
             Column::make('numero_poliza', 'Número de Póliza'),
+            Column::make('area', 'Área'),
+            Column::make('cuenta', 'Cuenta'),
+            Column::make('mes', 'Mes'),
             Column::make('categoria', 'tipo de Transferencia'),
             Column::make('descripcion', 'Descripción'),
             Column::make('fechaAfectacion', 'Fecha de afectación'),

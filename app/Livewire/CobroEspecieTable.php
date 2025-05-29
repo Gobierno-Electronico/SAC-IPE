@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Log;
 use DB;
+use App\Enums\EstatusEvento;
 
 class CobroEspecieTable extends Tabla
 {
@@ -137,10 +138,10 @@ class CobroEspecieTable extends Tabla
         foreach ($this->cacheData as $key => $movimiento) {
             if ($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuenta']) && $movimiento['mes'] == $datosSeleccionado['mes'] && $movimiento['evento'] == $datosSeleccionado['evento']) {
                 if ($totalImportes == 0) {
-                    $movimiento['disponibilidad'] = $movimiento['ppto'] - $movimiento['importe'];
+                    $movimiento['disponibilidad'] = bcsub($movimiento['ppto'], $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 } else {
-                    $movimiento['disponibilidad'] = $movimiento['ppto'] - $totalImportes - $movimiento['importe'];
+                    $movimiento['dispibilidad'] = bcsub(bcsub($movimiento['ppto'], $totalImportes, 2), $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 }
                 $this->cacheData[$key] = $movimiento;
@@ -154,7 +155,7 @@ class CobroEspecieTable extends Tabla
     public function agregarRegistro($registro)
     {
         try {
-            if ($this->total + $registro['importe'] > $registro['montoEvento']) {
+            if (bccomp((string)($this->total + $registro['importe']), (string)$registro['montoEvento'], 2) == 1) {
                 $this->dispatch('mostrarMensaje', mensaje: 'Monto total del evento superado', tipo: 'error', tiempo: 3000);
                 return;
             }
@@ -181,7 +182,7 @@ class CobroEspecieTable extends Tabla
             }
 
             if ($totalImportes > 0) {
-                $totalDisponible = $solvencia[0]->Total - $totalImportes - $registro['importe'];
+                $totalDisponible = bcsub(bcsub($solvencia[0]->Total, $totalImportes, 2), $registro['importe'], 2);
             }
 
             if ($totalDisponible < 0) {
@@ -272,7 +273,7 @@ class CobroEspecieTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'INGRESOS COBRO ESPECIE',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -294,7 +295,7 @@ class CobroEspecieTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'INGRESOS COBRO ESPECIE',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -386,7 +387,7 @@ class CobroEspecieTable extends Tabla
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
                 Poliza::where('evento', '=', $this->numeroEvento)
                     ->whereIn('categoria', ['INGRESOS DEVENGADO', 'INGRESOS RECAUDADO', 'INGRESOS COBRO ESPECIE'])
-                    ->update(['estatus_evento' => false]);
+                    ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
             }
             DB::commit();
             $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente);

@@ -15,6 +15,7 @@ use App\Models\InteraccionCuentaConcepto;
 use Illuminate\Support\Facades\Auth;
 use Log;
 use DB;
+use App\Enums\EstatusEvento;
 
 class EgresosCapitulo4EjercidoTable extends Tabla
 {
@@ -61,7 +62,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
     public function agregarRegistro($registro)
     {
         try {
-            if ($this->total + $registro['importe'] > $registro['montoEvento']) {
+            if (bccomp((string)($this->total + $registro['importe']), (string)$registro['montoEvento'], 2) == 1) {
                 $this->dispatch('mostrarMensaje', mensaje: 'Monto total del evento superado', tipo: 'error', tiempo: 3000);
                 return;
             }
@@ -106,7 +107,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
         }
 
         if ($totalImportes > 0) {
-            $this->totalDisponible = $solvencia - $totalImportes - $registro['importe'];
+            $this->totalDisponible = bcsub(bcsub($solvencia, $totalImportes, 2), $registro['importe'], 2);
         }
 
         if ($this->totalDisponible < 0) {
@@ -200,10 +201,10 @@ class EgresosCapitulo4EjercidoTable extends Tabla
         foreach ($this->cacheData as $key => $movimiento) {
             if ($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['cuenta'], $datosSeleccionado['codigoCuenta']) && $movimiento['mes'] == $datosSeleccionado['mes']) {
                 if ($totalImportes == 0) {
-                    $movimiento['disponibilidad'] = $movimiento['pttoDevengado'] - $movimiento['importe'];
+                    $movimiento['disponibilidad'] = bcsub($movimiento['pttoDevengado'], $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 } else {
-                    $movimiento['disponibilidad'] = $movimiento['pttoDevengado'] - $totalImportes - $movimiento['importe'];
+                    $movimiento['dispibilidad'] = bcsub(bcsub($movimiento['pttoDevengado'], $totalImportes, 2), $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 }
                 $this->cacheData[$key] = $movimiento;
@@ -266,7 +267,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS EJERCIDO CAPITULO 4',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -288,7 +289,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS EJERCIDO CAPITULO 4',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -357,7 +358,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
                             'evento' => $this->numeroEvento,
                             'tipo_interaccion' => $polizaImporte['tipo_interaccion'],
                             'validado' => false,
-                            'estatus_evento' => false,
+                            'estatus_evento' => EstatusEvento::FINALIZADO->value,
                             'categoria' => 'EGRESOS DEVENGADO CAPITULO 4 REMANENTE EJERCIDO',
                             'created_at' => $fecha,
                             'updated_at' => $fecha
@@ -388,7 +389,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $polizaInicial['tipo_interaccion'],
                         'validado' => false,
-                        'estatus_evento' => false,
+                        'estatus_evento' => EstatusEvento::FINALIZADO->value,
                         'categoria' => 'EGRESOS DEVENGADO CAPITULO 4 REMANENTE EJERCIDO',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -404,7 +405,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
                 Poliza::where('evento', '=', $this->numeroEvento)
                     ->whereIn('categoria', ['EGRESOS DEVENGADO CAPITULO 4'])
                     ->whereYear('fecha', '=', Carbon::now()->year)
-                    ->update(['estatus_evento' => false]);
+                    ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
             }
             DB::commit();
             $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente);

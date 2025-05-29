@@ -12,6 +12,8 @@ use Illuminate\Support\Collection;
 use Carbon\Carbon;
 use Log;
 use DB;
+use App\Enums\EstatusEvento;
+
 class EgresosCapitulo4DevengadoForm extends Component
 {
     public $consultarRegistro = false;
@@ -53,7 +55,7 @@ class EgresosCapitulo4DevengadoForm extends Component
                 ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 4')
-                ->where('estatus_evento', '=', true)
+                ->where('estatus_evento', '=', EstatusEvento::ACTIVO->value)
                 ->distinct()
                 ->pluck('descripcion', 'evento');
             $this->cambiarPartidaPresupuestalSeleccionada = false;

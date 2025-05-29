@@ -16,6 +16,7 @@ use App\Models\InteraccionCuentaConcepto;
 use App\Http\Controllers\BitacoraController;
 use App\Models\Poliza;
 use App\Models\Cuenta;
+use App\Enums\EstatusEvento;
 class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
 {
     public $cacheData = [];
@@ -316,7 +317,7 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'RECUPERACION RECAUDADO PRESTAMOS INICIALES',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -342,7 +343,7 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'RECUPERACION RECAUDADO PRESTAMOS INICIALES',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -371,7 +372,7 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesTable extends Tabla
                 'evento' => $this->numeroEvento,
                 'tipo_interaccion' => 'Presupuestal - Abono',
                 'validado' => false,
-                'estatus_evento' => true,
+                'estatus_evento' => EstatusEvento::ACTIVO->value,
                 'categoria' => 'RECUPERACION RECAUDADO PRESTAMOS INICIALES',
                 'created_at' => $fecha,
                 'updated_at' => $fecha

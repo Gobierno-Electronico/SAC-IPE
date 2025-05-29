@@ -13,6 +13,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Log;
 use DB;
+use App\Enums\EstatusEvento;
 
 class IngresosDevengadoTable extends Tabla
 {
@@ -141,10 +142,10 @@ class IngresosDevengadoTable extends Tabla
         foreach($this->cacheData as $key => $movimiento) {
             if($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuenta']) && $movimiento['mes'] == $datosSeleccionado['mes']) {
                 if($totalImportes == 0){
-                    $movimiento['disponibilidad'] = $movimiento['ejecutar'] - $movimiento['importe'];
+                    $movimiento['disponibilidad'] = bcsub($movimiento['ejecutar'], $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 }else{
-                    $movimiento['disponibilidad'] = $movimiento['ejecutar'] - $totalImportes - $movimiento['importe'];
+                    $movimiento['dispibilidad'] = bcsub(bcsub($movimiento['ejecutar'], $totalImportes, 2), $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 }
                 $this->cacheData[$key] = $movimiento;
@@ -171,7 +172,7 @@ class IngresosDevengadoTable extends Tabla
     
             }
             if($totalImportes > 0){
-                $totalDisponible = $solvencia - $totalImportes - $registro['importe'];
+                $totalDisponible = bcsub(bcsub($solvencia, $totalImportes, 2), $registro['importe'], 2);
             }
 
             if($totalDisponible < 0){
@@ -273,7 +274,7 @@ class IngresosDevengadoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'INGRESOS DEVENGADO',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -306,7 +307,7 @@ class IngresosDevengadoTable extends Tabla
                         'evento' => $this->numeroEvento,
                         'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'INGRESOS DEVENGADO',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
