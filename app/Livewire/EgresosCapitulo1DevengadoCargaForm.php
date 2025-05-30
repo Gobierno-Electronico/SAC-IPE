@@ -55,7 +55,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
             $usuariosController = new BitacoraController();
             $usuariosController->bitacora('descomprometerRecurso', 'se descomprometió o intentó descomprometer el recurso del evento ' . $numeroDeEvento, request());
 
-            $numerosPolizas = Poliza::select('numero_poliza')
+            $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) AS numero_poliza')
                 ->where('tipo_poliza', '=', 'D')
                 ->whereYear('fecha', '=', $anioActual)
                 ->distinct()
@@ -154,7 +154,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
             }
         }
 
-        $numerosPolizas = Poliza::select('numero_poliza')
+        $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) AS numero_poliza')
             ->where('tipo_poliza', '=', 'E')
             ->whereYear('fecha', '=', $anioActual)
             ->distinct()
@@ -162,7 +162,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
             ->pluck('numero_poliza')
             ->toArray();
 
-        $numerosEvento = Poliza::select('evento')
+        $numerosEvento = Poliza::selectRaw('CAST(evento AS INT) AS evento')
             ->distinct()
             ->whereYear('fecha', '=', $anioActual)
             ->orderBy('evento')
@@ -510,7 +510,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
         $fechaActual = Carbon::now('America/Mexico_City');
         $idUsuarioRegistrante = Auth::id();
 
-        $numerosPolizas = Poliza::select('numero_poliza')
+        $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) AS numero_poliza')
             ->where('tipo_poliza', '=', 'D')
             ->whereYear('fecha', '=', Carbon::now()->year)
             ->distinct()
@@ -582,7 +582,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
             $fecha = Carbon::now('America/Mexico_City');
             $fecha->year($anioActual);
 
-            $numerosPolizas = Poliza::select('numero_poliza')
+            $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'E')
                 ->whereYear('fecha', '=', $anioActual)
                 ->distinct()
@@ -590,7 +590,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                 ->pluck('numero_poliza')
                 ->toArray();
 
-            $numerosEvento = Poliza::select('evento')
+            $numerosEvento = Poliza::selectRaw('CAST(evento AS INT) AS evento')
                 ->distinct()
                 ->whereYear('fecha', '=', $anioActual)
                 ->orderBy('evento')
@@ -774,7 +774,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                 }); // divide $polizas en partes pequeñas (chunks) de 120 elementos. Esto evita la sobrecarga de memoria al hacer inserciones en la base.
 
 
-                // $numerosPolizas = Poliza::select('numero_poliza')
+                // $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 //     ->where('tipo_poliza', '=', 'EAUX')
                 //     ->whereYear('fecha', '=', Carbon::now()->year)
                 //     ->distinct()

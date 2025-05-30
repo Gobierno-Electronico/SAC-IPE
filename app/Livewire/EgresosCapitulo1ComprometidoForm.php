@@ -47,7 +47,7 @@ class EgresosCapitulo1ComprometidoForm extends Component
 
     public function cargarComprometido()
     {
-         set_time_limit(3000);
+        set_time_limit(3000);
         ini_set('max_execution_time', 3000);
         try {
             $this->dispatch('mostrarCargando');
@@ -146,19 +146,21 @@ class EgresosCapitulo1ComprometidoForm extends Component
                 $datosExcelAsociados[] = $filaAsociativa;
             }
 
-            $numerosPolizas = Poliza::select('numero_poliza')
+            $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'E')
                 ->whereYear('fecha', '=', $anioActual)
                 ->distinct()
                 ->orderBy('numero_poliza')
                 ->pluck('numero_poliza')
                 ->toArray();
-            $numerosEvento = Poliza::select('evento')
+
+            $numerosEvento = Poliza::selectRaw('CAST(evento AS INT) as evento')
+                ->whereYear('fecha', $anioActual)
                 ->distinct()
-                ->whereYear('fecha', '=', $anioActual)
                 ->orderBy('evento')
                 ->pluck('evento')
                 ->toArray();
+
             $ultimoNumero = end($numerosPolizas);
             $this->numeroPoliza = ($ultimoNumero) ? $ultimoNumero + 1 : 1;
             $this->numeroEvento = end($numerosEvento) + 1;
@@ -289,7 +291,7 @@ class EgresosCapitulo1ComprometidoForm extends Component
             Log::error("Error al procesar el archivo en carga de comprometido del 1000: " . $e->getMessage() . ' ' . $e->getLine());
             Storage::delete($path); // Asegurar que el archivo se borre en caso de error
             $this->dispatch('mostrarMensaje', mensaje: 'Hubo un error al procesar el archivo.', tipo: 'error', tiempo: 3000);
-        }finally{
+        } finally {
             $this->dispatch('esconderCargando');
         }
     }
