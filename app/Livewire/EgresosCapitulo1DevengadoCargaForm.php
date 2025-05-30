@@ -49,6 +49,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
     private function descomprometerRecurso($numeroDeEvento, $anioActual, $conceptoDeCarga)
     {
+        Log::info('DEscomprometiendo recurso...');
         try {
             set_time_limit(30000);
             ini_set('max_execution_time', 30000);
@@ -91,122 +92,17 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
         set_time_limit(30000);
         ini_set('max_execution_time', 30000);
         $anioActual = Carbon::now()->year;
-        $polizasComprometidoCanceladas = Poliza::where('tipo_poliza', 'E')
-            ->where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 1')
-            ->where('evento', $eventoAnterior)
-            ->whereYear('fecha', $anioActual)
-            ->get();
+        $fechaActual = Carbon::now('America/Mexico_City');
+        $estatusEvento = EstatusEvento::ACTIVO->value;
 
-        $polizasRecalendarizacion = Poliza::where('tipo_poliza', 'D')
-            ->where('evento', $eventoAnterior)
-            ->whereYear('fecha', $anioActual)
-            ->get();
-
-        foreach ($polizasRecalendarizacion as $poliza) {
-            if ($poliza->categoria == 'RECALENDARIZACION AUMENTO') {
-                $coincidenciaCuentaPorEjercer = $polizasComprometidoCanceladas->first(function ($p) use ($poliza) {
-                    return $p->area == $poliza->area &&
-                        $p->cuenta == $poliza->cuenta &&
-                        $p->mes == $poliza->mes;
-                });
-
-                if ($coincidenciaCuentaPorEjercer) {
-                    $coincidenciaCuentaPorEjercer->total = bcadd($coincidenciaCuentaPorEjercer->total, $poliza->total, 2);
-                }
-
-                $coincidenciaCuentaComprometida = $polizasComprometidoCanceladas->first(function ($polizaCompromiso) use ($coincidenciaCuentaPorEjercer) {
-                    $conceptoGeneralCuentaPorEjercer = explode('(Por ejercer)', $coincidenciaCuentaPorEjercer->concepto);
-                    return $polizaCompromiso->area == $coincidenciaCuentaPorEjercer->area &&
-                        str_contains($polizaCompromiso->concepto, $conceptoGeneralCuentaPorEjercer[0]) &&
-                        $polizaCompromiso->tipo_interaccion == 'Presupuestal - Cargo' &&
-                        $polizaCompromiso->mes == $coincidenciaCuentaPorEjercer->mes;
-                });
-
-
-
-                if ($coincidenciaCuentaComprometida) {
-                    $coincidenciaCuentaComprometida->total = $coincidenciaCuentaPorEjercer->total;
-                }
-            }
-
-            if ($poliza->categoria == 'RECALENDARIZACION DISMINUCION') {
-                $coincidenciaCuentaPorEjercer = $polizasComprometidoCanceladas->first(function ($p) use ($poliza) {
-                    return $p->area == $poliza->area &&
-                        $p->cuenta == $poliza->cuenta &&
-                        $p->mes == $poliza->mes;
-                });
-
-                if ($coincidenciaCuentaPorEjercer) {
-                    $coincidenciaCuentaPorEjercer->total = bcsub($coincidenciaCuentaPorEjercer->total, $poliza->total, 2);
-                }
-
-                $coincidenciaCuentaComprometida = $polizasComprometidoCanceladas->first(function ($polizaCompromiso) use ($coincidenciaCuentaPorEjercer) {
-                    $conceptoGeneralCuentaPorEjercer = explode('(Por ejercer)', $coincidenciaCuentaPorEjercer->concepto);
-                    return $polizaCompromiso->area == $coincidenciaCuentaPorEjercer->area &&
-                        str_contains($polizaCompromiso->concepto, $conceptoGeneralCuentaPorEjercer[0]) &&
-                        $polizaCompromiso->tipo_interaccion == 'Presupuestal - Cargo' &&
-                        $polizaCompromiso->mes == $coincidenciaCuentaPorEjercer->mes;
-                });
-
-                if ($coincidenciaCuentaComprometida) {
-                    $coincidenciaCuentaComprometida->total = $coincidenciaCuentaPorEjercer->total;
-                }
-            }
-        }
-
-        $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) AS numero_poliza')
-            ->where('tipo_poliza', '=', 'E')
-            ->whereYear('fecha', '=', $anioActual)
-            ->distinct()
-            ->orderBy('numero_poliza')
-            ->pluck('numero_poliza')
-            ->toArray();
-
-        $numerosEvento = Poliza::selectRaw('CAST(evento AS INT) AS evento')
-            ->distinct()
-            ->whereYear('fecha', '=', $anioActual)
-            ->orderBy('evento')
-            ->pluck('evento')
-            ->toArray();
-
-        $ultimoNumero = end($numerosPolizas);
-        $nuevoNumeroPoliza = ($ultimoNumero) ? $ultimoNumero + 1 : 1;
-        $nuevoNumeroEvento = end($numerosEvento) + 1;
-
-
-        $polizasComprometidoCanceladas->chunk(100)->each(function (Collection $chunk) use ($nuevoNumeroEvento, $nuevoNumeroPoliza) {
-            $datos = $chunk->map(function ($poliza) use ($nuevoNumeroEvento, $nuevoNumeroPoliza) {
-                $poliza->evento = $nuevoNumeroEvento;
-                $poliza->numero_poliza = $nuevoNumeroPoliza;
-                $poliza->estatus_evento = EstatusEvento::FINALIZADO->value;
-                $poliza->fecha = Carbon::now('America/Mexico_City');
-                $poliza->created_at = Carbon::now('America/Mexico_City');
-                $poliza->updated_at = Carbon::now('America/Mexico_City');
-
-                $array = $poliza->toArray();
-
-                // Quitar la columna 'id' para evitar errores al insertar
-                unset($array['id']);
-
-
-                // Formatear fechas correctamente
-                $array['created_at'] = now('America/Mexico_City')->format('Y-m-d H:i:s');
-                $array['updated_at'] = now('America/Mexico_City')->format('Y-m-d H:i:s');
-                $array['fecha'] = now('America/Mexico_City')->format('Y-m-d H:i:s');
-
-
-                return $array;
-            })->toArray();
-
-
-            // Inserta el bloque procesado sin la columna 'id'
-            Poliza::insert($datos);
-        });
+        Log::info('Comprometiendo recurso...');
+        DB::statement('EXEC comprometerRecursoConReclasificaciones @eventoAnterior = ?, @anioActual = ?, @fechaActual = ?, @estatusEvento = ?', array($eventoAnterior, $anioActual, $fechaActual, $estatusEvento));
     }
 
 
     private function buscarSolvencia($areaPresupuestalSolicitante, $areaDeBusqueda,  $cuenta, $mes, &$solvenciaRequerida, $evento)
     {
+        Log::info('Buscando Solvencia...');
         set_time_limit(30000);
         ini_set('max_execution_time', 30000);
         $criteriosDeBusqueda = [
@@ -501,12 +397,13 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
         }
 
         if ($solvenciaRequerida > 0) {
-            Log::info('NO SE SOLVENTÓ TODO EL PRESUPUESTO');
+            dd('NO SE SOLVENTÓ TODO EL PRESUPUESTO');
         }
     }
 
     private function crearPolizaDeReclasificacion(array &$polizas, $areaPresupuestalSolicitante, $areaDeBusqueda, $cuentaCargo, $cuentaAbono, $total, $mesCargo, $mesAbono, $evento)
     {
+        Log::info('Creando poliza de reclasificación...');
         $fechaActual = Carbon::now('America/Mexico_City');
         $idUsuarioRegistrante = Auth::id();
 
@@ -769,6 +666,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
             }
 
             if (empty($cuentasEnLaGuiaFaltantes)) {
+                Log::info('Devengando recurso...');
                 collect($polizas)->chunk(120)->each(function ($chunk) {
                     Poliza::insert($chunk->toArray());
                 }); // divide $polizas en partes pequeñas (chunks) de 120 elementos. Esto evita la sobrecarga de memoria al hacer inserciones en la base.
@@ -866,6 +764,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
                 DB::commit();
                 Storage::delete($this->path);
+                Log::info('Ya hice commit...');
                 $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente);
             } else {
                 $mensajeError = "Cuentas Faltantes en la guía contabilizadora:<br>";
