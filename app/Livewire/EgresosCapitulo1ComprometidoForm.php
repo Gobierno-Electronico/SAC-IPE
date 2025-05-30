@@ -146,20 +146,20 @@ class EgresosCapitulo1ComprometidoForm extends Component
                 $datosExcelAsociados[] = $filaAsociativa;
             }
 
-            $numerosPolizas = Poliza::select('numero_poliza')
+            $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'E')
                 ->whereYear('fecha', '=', $anioActual)
                 ->distinct()
                 ->orderBy('numero_poliza')
                 ->pluck('numero_poliza')
                 ->toArray();
-            $numerosEvento = Poliza::select('evento')
+
+            $numerosEvento = Poliza::selectRaw('CAST(evento AS INT) as evento')
+                ->whereYear('fecha', $anioActual)
                 ->distinct()
-                ->whereYear('fecha', '=', $anioActual)
-                ->orderByRaw('CAST(evento AS UNSIGNED)')
+                ->orderBy('evento')
                 ->pluck('evento')
                 ->toArray();
-
 
             $ultimoNumero = end($numerosPolizas);
             $this->numeroPoliza = ($ultimoNumero) ? $ultimoNumero + 1 : 1;
