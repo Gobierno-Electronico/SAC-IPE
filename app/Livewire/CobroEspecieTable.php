@@ -141,7 +141,7 @@ class CobroEspecieTable extends Tabla
                     $movimiento['disponibilidad'] = bcsub($movimiento['ppto'], $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 } else {
-                    $movimiento['dispibilidad'] = bcsub(bcsub($movimiento['ppto'], $totalImportes, 2), $movimiento['importe'], 2);
+                    $movimiento['disponibilidad'] = bcsub(bcsub($movimiento['ppto'], $totalImportes, 2), $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 }
                 $this->cacheData[$key] = $movimiento;

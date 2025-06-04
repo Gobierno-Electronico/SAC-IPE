@@ -204,7 +204,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
                     $movimiento['disponibilidad'] = bcsub($movimiento['pttoDevengado'], $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 } else {
-                    $movimiento['dispibilidad'] = bcsub(bcsub($movimiento['pttoDevengado'], $totalImportes, 2), $movimiento['importe'], 2);
+                    $movimiento['disponibilidad'] = bcsub(bcsub($movimiento['pttoDevengado'], $totalImportes, 2), $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 }
                 $this->cacheData[$key] = $movimiento;
