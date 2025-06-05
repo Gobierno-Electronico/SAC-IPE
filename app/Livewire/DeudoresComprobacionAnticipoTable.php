@@ -9,6 +9,7 @@ use App\Http\Controllers\BitacoraController;
 use Carbon\Carbon;
 use Log;
 use DB;
+use App\Livewire\Tabla;
 use App\Models\Cuenta;
 use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
@@ -248,6 +249,263 @@ class DeudoresComprobacionAnticipoTable extends Tabla
     #[On('finalizar-registros')]
     public function finalizarRegistros()
     {
-        
+        if (empty($this->cacheData)) {
+            $this->dispatch('mostrarMensaje', mensaje: 'Tabla sin registros', tipo: 'error', tiempo: 3000);
+            return;
+        }
+
+        try{
+            $idUsuarioRegistrante = Auth::id();
+            
+            $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
+                ->where('tipo_poliza', '=', 'D')
+                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->distinct()
+                ->orderBy('numero_poliza')
+                ->pluck('numero_poliza')
+                ->toArray();
+            sort($numerosPolizas);
+            $this->numeroPoliza = (int)end($numerosPolizas) + 1;
+
+            $this->numeroEvento = $this->dataCompleta[0]['evento'];
+
+            $anioActual = Carbon::now()->year;
+            $fecha = Carbon::now('America/Mexico_City');
+            $fecha->year($anioActual);
+
+            $bitacora = new BitacoraController();
+            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un devengado del capítulo 2 y 3 con evento: ' . $this->numeroEvento, request());
+            DB::beginTransaction();
+
+            $montoRetenciones = 0;
+            $polizas = [];
+            foreach ($this->dataCompleta as $movimiento) {
+
+                $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaId'])->whereIn('concepto_id', [10109])
+                    ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
+
+                $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
+                    ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+                    ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
+
+                if($movimiento['selectorPagoRetenciones'] == 'NO') {
+                    $interaccionCuentasCuentasFiltradas = [];
+
+                    foreach ($interaccionCuentaCuentas as $cuenta) {
+                        if ($cuenta['tipo_interaccion'] == 'Contable - Cargo') {
+                            if (count($interaccionCuentaCuentas) > 11) {
+                                $numeroInicialCuenta = explode('.', $cuenta['Codigo_cuenta']);
+                                if($numeroInicialCuenta[0] == 1) {
+                                    $interaccionCuentaCuentasFiltradas[] = $cuenta;
+                                    continue;
+                                }
+
+                                if ($movimiento['tipoRegistro'] == 'Almacen' && $numeroInicialCuenta[0] < 5) {
+                                    $interaccionCuentaCuentasFiltradas[] = $cuenta;
+                                    continue;
+                                } else if ($movimiento['tipoRegistro'] == 'Gasto' && $numeroInicialCuenta[0] >= 5) {
+                                    $interaccionCuentaCuentasFiltradas[] = $cuenta;
+                                    continue;
+                                }
+                            }else {
+                                $interaccionCuentaCuentasFiltradas[] = $cuenta;
+                            }
+                        }else {
+                            $interaccionCuentaCuentasFiltradas[] = $cuenta;
+                        }
+                    }
+                    $interaccionCuentaCuentas = $interaccionCuentaCuentasFiltradas;
+
+                    $polizas = [
+                        [
+                            'idUsuarioRegistrante' => $idUsuarioRegistrante,
+                            'area' => $movimiento['codigoAreaResponsable'],
+                            'tipo_poliza' => 'D',
+                            'numero_poliza' =>  $this->numeroPoliza,
+                            'fecha' => $movimiento['fechaAfectacion'],
+                            'cuenta' => $movimiento['codigoCuenta'],
+                            'concepto' => $movimiento['descripcionCuenta'],
+                            'total' => abs($movimiento['importe']),
+                            'mes' => $movimiento['mes'],
+                            'descripcion' => $movimiento['observaciones'],
+                            'evento' => $this->numeroEvento,
+                            'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
+                            'validado' => false,
+                            'estatus_evento' => EstatusEvento::ACTIVO->value,
+                            'categoria' => 'DEUDORES COMPROBACION ANTICIPOS',
+                            'created_at' => $fecha,
+                            'updated_at' => $fecha
+                        ]
+                    ];
+
+                    foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
+                        array_push($polizas, [
+                            'idUsuarioRegistrante' => $idUsuarioRegistrante,
+                            'area' => $movimiento['codigoAreaResponsable'],
+                            'tipo_poliza' => 'D',
+                            'numero_poliza' =>  $this->numeroPoliza,
+                            'fecha' => $movimiento['fechaAfectacion'],
+                            'cuenta' => $dataCuenta['Codigo_cuenta'],
+                            'concepto' => $dataCuenta['Descripcion_cuenta'],
+                            'total' => $movimiento['importe'],
+                            'mes' => $movimiento['mes'],
+                            'descripcion' => $movimiento['observaciones'],
+                            'evento' => $this->numeroEvento,
+                            'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
+                            'validado' => false,
+                            'estatus_evento' => EstatusEvento::ACTIVO->value,
+                            'categoria' => 'DEUDORES COMPROBACION ANTICIPOS',
+                            'created_at' => $fecha,
+                            'updated_at' => $fecha
+                        ]);
+                    }
+                    Poliza::insert($polizas);
+                }else{
+                    $interaccionCuentaCuentasFiltradas = [];
+
+                    foreach ($interaccionCuentaCuentas as $cuenta) {
+                        if ($cuenta['tipo_interaccion'] == 'Contable - Cargo') {
+                            if (count($interaccionCuentaCuentas) > 11) {
+                                $numeroInicialCuenta = explode('.', $cuenta['Codigo_cuenta']);
+                                if($numeroInicialCuenta[0] == 2) {
+                                    $interaccionCuentaCuentasFiltradas[] = $cuenta;
+                                    continue;
+                                }
+
+                                if ($movimiento['tipoRegistro'] == 'Almacen' && $numeroInicialCuenta[0] == 1) {
+                                    $interaccionCuentaCuentasFiltradas[] = $cuenta;
+                                    continue;
+                                } else if ($movimiento['tipoRegistro'] == 'Gasto' && $numeroInicialCuenta[0] >= 5) {
+                                    $interaccionCuentaCuentasFiltradas[] = $cuenta;
+                                    continue;
+                                }
+                            }else {
+                                $interaccionCuentaCuentasFiltradas[] = $cuenta;
+                            }
+                        }else {
+                            $interaccionCuentaCuentasFiltradas[] = $cuenta;
+                        }
+                    }
+                    $interaccionCuentaCuentas = $interaccionCuentaCuentasFiltradas;
+
+                    if(str_contains($movimiento['codigoCuentaContable'], '2.1.1.7.01.')){
+                        $polizas = [
+                            [
+                                'idUsuarioRegistrante' => $idUsuarioRegistrante,
+                                'area' => $movimiento['codigoAreaResponsable'],
+                                'tipo_poliza' => 'D',
+                                'numero_poliza' =>  $this->numeroPoliza,
+                                'fecha' => $movimiento['fechaAfectacion'],
+                                'cuenta' => $movimiento['codigoCuentaContable'],
+                                'concepto' => $movimiento['descripcionCuentaContable'],
+                                'total' => abs($movimiento['importe']),
+                                'mes' => $movimiento['mes'],
+                                'descripcion' => $movimiento['observaciones'],
+                                'evento' => $this->numeroEvento,
+                                'tipo_interaccion' => 'Contable - Abono',
+                                'validado' => false,
+                                'estatus_evento' => EstatusEvento::ACTIVO->value,
+                                'categoria' => 'DEUDORES COMPROBACION ANTICIPOS',
+                                'created_at' => $fecha,
+                                'updated_at' => $fecha
+                            ]
+                        ];
+
+
+                        foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
+                            if (!str_contains($dataCuenta['Descripcion_cuenta'], 'Responsabilidad de Funcionarios y Empleados Ejercicio Actual')) {
+                                if($dataCuenta['tipo_interaccion'] == 'Presupuestal - Abono' && str_contains($dataCuenta['Descripcion_cuenta'], '(Ejercido)')){
+                                    continue;
+                                }else{
+                                    array_push($polizas, [
+                                        'idUsuarioRegistrante' => $idUsuarioRegistrante,
+                                        'area' => $movimiento['codigoAreaResponsable'],
+                                        'tipo_poliza' => 'D',
+                                        'numero_poliza' =>  $this->numeroPoliza,
+                                        'fecha' => $movimiento['fechaAfectacion'],
+                                        'cuenta' => $dataCuenta['Codigo_cuenta'],
+                                        'concepto' => $dataCuenta['Descripcion_cuenta'],
+                                        'total' => $movimiento['importe'],
+                                        'mes' => $movimiento['mes'],
+                                        'descripcion' => $movimiento['observaciones'],
+                                        'evento' => $this->numeroEvento,
+                                        'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
+                                        'validado' => false,
+                                        'estatus_evento' => EstatusEvento::ACTIVO->value,
+                                        'categoria' => 'DEUDORES COMPROBACION ANTICIPOS',
+                                        'created_at' => $fecha,
+                                        'updated_at' => $fecha
+                                    ]);
+                                }
+                            }
+                        }
+
+                        Poliza::insert($polizas);
+
+                    }else{
+                        
+                        $polizas = [
+                            [
+                                'idUsuarioRegistrante' => $idUsuarioRegistrante,
+                                'area' => $movimiento['codigoAreaResponsable'],
+                                'tipo_poliza' => 'D',
+                                'numero_poliza' =>  $this->numeroPoliza,
+                                'fecha' => $movimiento['fechaAfectacion'],
+                                'cuenta' => $movimiento['codigoCuenta'],
+                                'concepto' => $movimiento['descripcionCuenta'],
+                                'total' => abs($movimiento['importe']),
+                                'mes' => $movimiento['mes'],
+                                'descripcion' => $movimiento['observaciones'],
+                                'evento' => $this->numeroEvento,
+                                'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
+                                'validado' => false,
+                                'estatus_evento' => EstatusEvento::ACTIVO->value,
+                                'categoria' => 'DEUDORES COMPROBACION ANTICIPOS',
+                                'created_at' => $fecha,
+                                'updated_at' => $fecha
+                            ]
+                        ];
+
+                        foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
+                            array_push($polizas, [
+                                'idUsuarioRegistrante' => $idUsuarioRegistrante,
+                                'area' => $movimiento['codigoAreaResponsable'],
+                                'tipo_poliza' => 'D',
+                                'numero_poliza' =>  $this->numeroPoliza,
+                                'fecha' => $movimiento['fechaAfectacion'],
+                                'cuenta' => $dataCuenta['Codigo_cuenta'],
+                                'concepto' => $dataCuenta['Descripcion_cuenta'],
+                                'total' => $movimiento['importe'],
+                                'mes' => $movimiento['mes'],
+                                'descripcion' => $movimiento['observaciones'],
+                                'evento' => $this->numeroEvento,
+                                'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
+                                'validado' => false,
+                                'estatus_evento' => EstatusEvento::ACTIVO->value,
+                                'categoria' => 'DEUDORES COMPROBACION ANTICIPOS',
+                                'created_at' => $fecha,
+                                'updated_at' => $fecha
+                            ]);
+                        }
+
+                        Poliza::insert($polizas);
+                    }
+
+                }
+            }
+            DB::commit();
+            $importeTotalEvento = DB::select('EXEC ImporteTotalComprobacionAnticipo @evento = ?', [$this->numeroEvento]);
+            if ($importeTotalEvento[0]->MontoDelEvento == 0) {
+                Poliza::where('evento', '=', $this->numeroEvento)
+                    ->whereIn('categoria', ['DEUDORES REINTEGRO ANTICIPOS'])
+                    ->whereYear('fecha', '=', Carbon::now()->year)
+                    ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
+            }
+            $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
+        }catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error('Ocurrió un error al finalizarRegistro en deudores comprobación de anticipo: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
     }
 }

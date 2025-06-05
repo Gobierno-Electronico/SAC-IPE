@@ -21,7 +21,7 @@
                 </div>
             </div>
         </div>
-        <livewire:recalendarizacion-form-consulta-table :$numeroPoliza :$numeroEvento :$total :$numeroPolizaRemanente
+        <livewire:recalendarizacion-form-consulta-table :$numeroPoliza :$numeroEvento :$total
             tipoMovimiento="PolizaAnticiposComprobacion" urlFinalizar="/deudores-comprobacion-anticipo" tipoPoliza="D"
             categoriaModulo='DEUDORES COMPROBACION ANTICIPOS' />
     @else
