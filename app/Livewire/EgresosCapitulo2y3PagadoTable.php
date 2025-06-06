@@ -239,7 +239,7 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
                     $movimiento['disponibilidad'] = bcsub($movimiento['pttoEjercido'], $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 } else {
-                    $movimiento['dispibilidad'] = bcsub(bcsub($movimiento['pttoEjercido'], $totalImportes, 2), $movimiento['importe'], 2);
+                    $movimiento['disponibilidad'] = bcsub(bcsub($movimiento['pttoEjercido'], $totalImportes, 2), $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 }
                 $this->cacheData[$key] = $movimiento;
