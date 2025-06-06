@@ -62,11 +62,13 @@
     });
     window.addEventListener('llenarFormulario', event => {
         let parametros = event.__livewire.params
-        $("#selectCuentaContable option:contains('" + parametros.cuenta + "')").prop("selected", true);
-        $("#selectMes option:contains('" + parametros.mes + "')").prop("selected", true);
+        $('#inputPTTOEjercer').val(parametros.presupuesto);
         $('#inputImporte').val(parametros.importe);
+        $('#inputImporteBancos').val(parametros.importeBanco);
         setTimeout(() => {
             formatearImporte({id: 'inputImporte'})
+            formatearImporte({id: 'inputPTTOComprometido'})
+            formatearImporte({id: 'inputImporteBancos'})
         }, 100);
     });
 </script>

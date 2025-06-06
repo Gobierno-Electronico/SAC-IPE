@@ -1,8 +1,8 @@
 <div>
     @if ($estado == 'INGRESOS')
-        <h4>Consulta de ingresos por registrar</h4>
+        <h4>Consulta de ingresos registrados</h4>
     @else
-        <h4>Consulta de egresos por registrar</h4>
+        <h4>Consulta de egresos registrados</h4>
     @endif
     <div class="row mt-4">
         <div class="row mb-3">

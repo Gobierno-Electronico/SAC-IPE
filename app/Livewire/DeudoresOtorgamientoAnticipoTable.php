@@ -139,7 +139,7 @@ class DeudoresOtorgamientoAnticipoTable extends Tabla
                     $movimiento['disponibilidad'] = bcsub($movimiento['solvencia'], $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 }else{
-                    $movimiento['dispibilidad'] = bcsub(bcsub($movimiento['solvencia'], $totalImportes, 2), $movimiento['importe'], 2);
+                    $movimiento['disponibilidad'] = bcsub(bcsub($movimiento['solvencia'], $totalImportes, 2), $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 }
                 $this->cacheData[$key] = $movimiento;

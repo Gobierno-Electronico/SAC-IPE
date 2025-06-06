@@ -210,7 +210,6 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
                 } else {
                     $movimiento['disponibilidad'] = $movimiento['pttoEjecutar'] - $totalImportes - $movimiento['importe'];
                     $totalImportes += $movimiento['importe'];
-                    dd('Entre aquí');
                 }
                 $this->cacheData[$key] = $movimiento;
             }
