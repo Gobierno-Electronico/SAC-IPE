@@ -160,7 +160,7 @@ class PagoReintegroTable extends Tabla
         }
 
         try{
-            $numerosPolizas = Poliza::select('numero_poliza')
+            $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
             ->where('tipo_poliza', '=', 'I')
             ->whereYear('fecha', '=', Carbon::now()->year)
             ->distinct()

@@ -217,7 +217,7 @@ class DeudoresReintegroAnticipoTable extends Tabla
 
         try{
             $idUsuarioRegistrante = Auth::id();
-            $numerosPolizas = Poliza::select('numero_poliza')
+            $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'D')
                 ->whereYear('fecha', '=', Carbon::now()->year)
                 ->distinct()
