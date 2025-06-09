@@ -260,6 +260,9 @@
                                                         <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                                         href="{{ route('movimientosDiario') }}" method="GET">
                                                         {{ __('Póliza diario') }}
+                                                        <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                        href="{{ route('movimientosDeudores') }}" method="GET">
+                                                        {{ __('Deudores') }}
                                                     </a>
                                                     </li>
                                                 </ul>
