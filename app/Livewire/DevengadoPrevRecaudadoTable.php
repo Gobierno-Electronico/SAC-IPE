@@ -251,7 +251,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
 
         try {
             $idUsuarioRegistrante = Auth::id();
-            $numerosPolizas = Poliza::select('numero_poliza')
+            $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'I')
                 ->whereYear('fecha', '=', Carbon::now()->year)
                 ->distinct()
@@ -342,7 +342,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
             }
 
 
-            $numerosPolizas = Poliza::select('numero_poliza')
+            $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'IAUX')
                 ->whereYear('fecha', '=', Carbon::now()->year)
                 ->distinct()

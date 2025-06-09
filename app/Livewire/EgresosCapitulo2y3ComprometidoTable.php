@@ -215,7 +215,7 @@ class EgresosCapitulo2y3ComprometidoTable extends Tabla
 
         try{
             $idUsuarioRegistrante = Auth::id();
-            $numerosPolizas = Poliza::select('numero_poliza')
+            $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'E')
                 ->whereYear('fecha', '=', Carbon::now()->year)
                 ->distinct()
@@ -224,8 +224,9 @@ class EgresosCapitulo2y3ComprometidoTable extends Tabla
                 ->toArray();
             sort($numerosPolizas);
             $this->numeroPoliza = (int)end($numerosPolizas) + 1;
+            
 
-            $numerosEvento = Poliza::select('evento')
+            $numerosEvento = Poliza::selectRaw('CAST(evento AS INT) as evento')
                 ->whereYear('fecha', '=', Carbon::now()->year)
                 ->distinct()
                 ->orderBy('evento')

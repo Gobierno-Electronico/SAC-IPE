@@ -258,7 +258,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
 
         try {
             $idUsuarioRegistrante = Auth::id();
-            $numerosPolizas = Poliza::select('numero_poliza')
+            $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'E')
                 ->whereYear('fecha', '=', Carbon::now()->year)
                 ->distinct()
@@ -353,7 +353,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
                 Poliza::insert($polizas);
             }
 
-            $numerosPolizas = Poliza::select('numero_poliza')
+            $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'EAUX')
                 ->whereYear('fecha', '=', Carbon::now()->year)
                 ->distinct()
