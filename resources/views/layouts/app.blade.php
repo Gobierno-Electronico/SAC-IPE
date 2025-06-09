@@ -642,6 +642,14 @@
                                             Comprobación de anticipo/Viáticos/Cancelación de Fondo Fijo
                                         </a>
                                     </li>
+
+                                    
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('comprobacionAnticipo') }}"
+                                            method="GET" onclick="mostrarCargando()">
+                                            Pago de retenciones
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
 
