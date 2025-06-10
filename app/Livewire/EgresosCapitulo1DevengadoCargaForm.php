@@ -36,6 +36,8 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
     public $observaciones = '';
     public $path = "";
     public $numeroPolizaRemanente = 0;
+    private $yaHayNumeroPoliza = false;
+    private $ultimoNumeroPolizaTipoD = 0;
 
     public function render()
     {
@@ -74,6 +76,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                 ->update([
                     'estatus_evento' => EstatusEvento::CANCELADO->value
                 ]);
+
             $resultado = DB::select('EXEC RegistroCancelacionCompromiso1000 @evento = ?, @anio = ?, @numeroPoliza = ?, @conceptoDeRegistro = ?', array($numeroDeEvento, $anioActual, $ultimoNumeroPolizaTipoD, $conceptoDeCarga));
             $rowsInsertadas =  $resultado[0]->filas_insertadas ?? 0;
 
@@ -93,10 +96,50 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
         ini_set('max_execution_time', 30000);
         $anioActual = Carbon::now()->year;
         $fechaActual = Carbon::now('America/Mexico_City');
-        $estatusEvento = EstatusEvento::ACTIVO->value;
 
         Log::info('Comprometiendo recurso...');
-        DB::statement('EXEC comprometerRecursoConReclasificaciones @eventoAnterior = ?, @anioActual = ?, @fechaActual = ?, @estatusEvento = ?', array($eventoAnterior, $anioActual, $fechaActual, $estatusEvento));
+        $polizasCompromisoConReclasificacion = DB::select('EXEC comprometerRecursoConReclasificaciones @eventoAnterior = ?, @anioActual = ?', array($eventoAnterior, $anioActual));
+
+        $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) AS numero_poliza')
+            ->where('tipo_poliza', '=', 'E')
+            ->whereYear('fecha', '=', $anioActual)
+            ->distinct()
+            ->orderBy('numero_poliza')
+            ->pluck('numero_poliza')
+            ->toArray();
+
+        $numerosEvento = Poliza::selectRaw('CAST(evento AS INT) AS evento')
+            ->distinct()
+            ->whereYear('fecha', '=', $anioActual)
+            ->orderBy('evento')
+            ->pluck('evento')
+            ->toArray();
+
+        $ultimoNumero = end($numerosPolizas);
+        $nuevoNumeroPoliza = ($ultimoNumero) ? $ultimoNumero + 1 : 1;
+        $nuevoNumeroEvento = end($numerosEvento) + 1;
+
+        $datos = collect();
+
+        foreach ($polizasCompromisoConReclasificacion as $poliza) {
+            $array = (array) $poliza;
+
+            unset($array['id']);
+
+            $array['evento'] = $nuevoNumeroEvento;
+            $array['numero_poliza'] = $nuevoNumeroPoliza;
+            $array['estatus_evento'] = EstatusEvento::ACTIVO->value;
+            $array['fecha'] = $fechaActual;
+            $array['created_at'] = $fechaActual;
+            $array['updated_at'] = $fechaActual;
+
+            $datos->push($array);
+        }
+
+        $datos->chunk(100)->each(function ($chunk) {
+            // $chunk es una Illuminate\Support\Collection
+            Poliza::insert($chunk->toArray());
+        });
     }
 
 
@@ -407,22 +450,25 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
         $fechaActual = Carbon::now('America/Mexico_City');
         $idUsuarioRegistrante = Auth::id();
 
-        $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) AS numero_poliza')
-            ->where('tipo_poliza', '=', 'D')
-            ->whereYear('fecha', '=', Carbon::now()->year)
-            ->distinct()
-            ->orderBy('numero_poliza')
-            ->pluck('numero_poliza')
-            ->toArray();
-        $ultimoNumero = end($numerosPolizas);
-        $ultimoNumeroPolizaTipoD = ($ultimoNumero) ? $ultimoNumero + 1 : 1;
+        if(!$this->yaHayNumeroPoliza){
+            $this->yaHayNumeroPoliza = true;
+            $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) AS numero_poliza')
+                ->where('tipo_poliza', '=', 'D')
+                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->distinct()
+                ->orderBy('numero_poliza')
+                ->pluck('numero_poliza')
+                ->toArray();
+            $ultimoNumero = end($numerosPolizas);
+            $this->ultimoNumeroPolizaTipoD = ($ultimoNumero) ? $ultimoNumero + 1 : 1;
+        }
 
         //crear poliza cargo
         array_push($polizas, [
             'idUsuarioRegistrante' => $idUsuarioRegistrante,
             'area' => $areaDeBusqueda,
             'tipo_poliza' => 'D',
-            'numero_poliza' =>  $ultimoNumeroPolizaTipoD,
+            'numero_poliza' =>  $this->ultimoNumeroPolizaTipoD,
             'fecha' => $fechaActual,
             'cuenta' => $cuentaCargo->Codigo_cuenta,
             'concepto' => $cuentaCargo->Descripcion_cuenta,
@@ -443,7 +489,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
             'idUsuarioRegistrante' => $idUsuarioRegistrante,
             'area' => $areaPresupuestalSolicitante,
             'tipo_poliza' => 'D',
-            'numero_poliza' =>  $ultimoNumeroPolizaTipoD,
+            'numero_poliza' =>  $this->ultimoNumeroPolizaTipoD,
             'fecha' => $fechaActual,
             'cuenta' => $cuentaAbono->Codigo_cuenta,
             'concepto' => $cuentaAbono->Descripcion_cuenta,
