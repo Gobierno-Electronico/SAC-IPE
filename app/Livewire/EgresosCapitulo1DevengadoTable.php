@@ -257,7 +257,7 @@ class EgresosCapitulo1DevengadoTable extends Tabla
         }
 
         try {
-            $numerosPolizas = Poliza::select('numero_poliza')
+            $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'E')
                 ->whereYear('fecha', '=', Carbon::now()->year)
                 ->distinct()

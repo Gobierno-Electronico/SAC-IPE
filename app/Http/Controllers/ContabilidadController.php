@@ -21,6 +21,11 @@ class ContabilidadController extends Controller
         $this->middleware('auth');
     }
 
+    public function movimientosDeudores()
+    {
+        return view('contabilidad.movimientos-deudores');
+    }
+
     public function movimientosDiario()
     {
         return view('contabilidad.movimientos-diario');
