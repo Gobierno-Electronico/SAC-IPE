@@ -38,6 +38,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
     public $numeroPolizaRemanente = 0;
     private $yaHayNumeroPoliza = false;
     private $ultimoNumeroPolizaTipoD = 0;
+    private $polizasComprometidasReclasificadas = [];
 
     public function render()
     {
@@ -99,6 +100,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
         Log::info('Comprometiendo recurso...');
         $polizasCompromisoConReclasificacion = DB::select('EXEC comprometerRecursoConReclasificaciones @eventoAnterior = ?, @anioActual = ?', array($eventoAnterior, $anioActual));
+        $this->polizasComprometidasReclasificadas = $polizasCompromisoConReclasificacion;
 
         $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) AS numero_poliza')
             ->where('tipo_poliza', '=', 'E')
@@ -807,6 +809,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                 //         ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
                 // }
 
+                $this->liberarRemanente($polizas);
 
                 DB::commit();
                 Storage::delete($this->path);
@@ -826,6 +829,54 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         } finally {
             $this->dispatch('esconderCargando');
+        }
+    }
+
+    private function liberarRemanente($polizasDevengadas){
+
+        $polizasCompromiso = Poliza::where('evento', '=', $this->numeroEvento + 1)
+            ->where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 1')
+            ->get();
+
+        $polizasDevengado = Poliza::where('evento', '=', $this->numeroEvento + 1)
+            ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 1')
+            ->where('concepto', 'LIKE', '%Devengado%')
+            ->get();
+
+        foreach ($polizasCompromiso as $key => $item) {
+            $item->coincidencia = false;
+        }
+
+        foreach($polizasDevengado as $polizaDevengada){
+            $conceptoDevengado = explode('(', $polizaDevengada['concepto']);
+
+            foreach($polizasCompromiso as $polizaComprometida){
+                $conceptoComprometido = explode('(', $polizaComprometida->concepto);
+
+                if($polizaComprometida->area == $polizaDevengada->area && (trim($conceptoComprometido[0]) == trim($conceptoDevengado[0])) && $polizaComprometida->mes == $polizaDevengada->mes){
+                    $polizaComprometida->coincidencia = true;
+
+                    if($polizaDevengada->total < $polizaComprometida->total){
+                        $polizaComprometida->total = $polizaDevengada->total;
+                    }
+                }
+            }
+        }
+
+        foreach($polizasCompromiso as $polizaComprometida){
+            if(!$polizaComprometida->coincidencia){
+                Poliza::where('id', $polizaComprometida->id)
+                    ->update([
+                        'evento' => $polizaComprometida->evento + 1,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
+                    ]);
+            }else{
+                Poliza::where('id', $polizaComprometida->id)
+                    ->update([
+                        'total' => $polizaComprometida->total,
+                        'estatus_evento' => EstatusEvento::FINALIZADO->value,
+                    ]);
+            }
         }
     }
 
