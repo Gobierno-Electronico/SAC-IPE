@@ -15,4 +15,9 @@ export default defineConfig({
         }),
     ],
 
+    server: {
+        host: '10.0.2.62',
+        port: 8003,
+        strictPort: true
+    }
 });
