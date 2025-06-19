@@ -136,6 +136,23 @@
         }, params.amount)
     })
 
+     function formatearImporte(obj, amount = '') {
+        amount = (amount) ? amount : $('#' + obj.id).val().replace(/[^0-9.]/g, '');
+        amount = parseFloat(amount);
+        if (!isNaN(amount)) {
+            var formattedAmount = amount.toLocaleString('es-MX', {
+                style: 'currency',
+                currency: 'MXN',
+                minimumFractionDigits: 2,
+            });
+            $('#' + obj.id).val(formattedAmount);
+            console.log("Ejecuta: " + obj);
+        } else {
+            toastr.warning('Ingrese valores numéricos en el campo de importe');
+            $('#' + obj.id).val('');
+        }
+    }
+
     window.addEventListener('limpiar', event => {
         limpiar()
     })
