@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+
 
 
 class EgresosController extends Controller
@@ -100,14 +102,7 @@ class EgresosController extends Controller
         return view ('egresos.movimientos-egresos');
     }
     public function plantillaCargaComprometidoCapitulo1000(){
-        $validator = Validator::make(request()->all(), [
-            'type' => ['required', 'string', 'max:255'],
-        ]);
-        if ($validator->fails()) {
-            abort(404);
-        }
-        $formFields = $validator->getData();
-        $rutaArchivo = public_path('plantillas/formatoCargaComprometido1000' . $formFields['type'] . '.xlsx');
+        $rutaArchivo = public_path('plantillas/formatoCargaComprometido1000' . '.xlsx');
         // dd($rutaArchivo);
         // Verificar si el archivo existe
         if (file_exists($rutaArchivo)) {
