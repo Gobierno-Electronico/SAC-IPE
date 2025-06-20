@@ -22,7 +22,7 @@
             </div>
         </div>
         <livewire:prestamos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaOtorgamientoRecaudadoPrestamosIniciales" 
+            tipoMovimiento="PolizaRecuperacionRecaudadoPrestamosIniciales" 
             urlFinalizar="/capitulo7-recuperacion-recaudado-prestamosIniciales" tipoPoliza="D" 
             categoriaModulo='OTORGAMIENTO COMPROMISO RECAUDADO PRESTAMOS INICIALES' />
     @else
