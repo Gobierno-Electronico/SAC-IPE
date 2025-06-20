@@ -81,7 +81,7 @@ class PrestamosRecuperacionRecaudadoPrestamosRenovacionForm extends Component
                 ->where('cuentas.Descripcion_cuenta', 'LIKE', '%'. '(Devengado)' .'%')
                 ->get()
                 ->toArray();                
-            $solvencia = DB::select('EXEC SolvenciaRecuperacionRecaudadoPrestamosRenovacion @cuenta = ?, @anio = ?, @mes = ?', array($cuentaPresupuesto['Codigo_cuenta'] , $anioActual, $this->mes))[0]->Total;
+            $solvencia = DB::select('EXEC SolvenciaRecuperacionRecaudadoPrestamosIniciales @cuenta = ?, @anio = ?, @mes = ?', array($cuentaPresupuesto['Codigo_cuenta'] , $anioActual, $this->mes))[0]->Total;
             $this->PTTOEjecutar = ($solvencia > 0) ? floatval($solvencia) : 0;
 
             $this->dispatch('formato_importe', id: 'inputPTTOEjecutar', amount: "{$this->PTTOEjecutar}");
