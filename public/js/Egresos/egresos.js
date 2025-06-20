@@ -203,3 +203,49 @@ function descargarPlantilla(btn, tipo) {
         }
     });
 }
+
+function descargarPlantillaDevengado(btn){
+    let btnId = btn.id; //obtenemos el id del boton
+    let btnHtml = $('#' + btnId + '').html(); //obtenemos el contenido html de mi boton
+    let spinner =
+        '<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>';
+    $('#' + btnId + '').html(spinner);
+    $('#' + btnId + '').prop('disabled', true);
+    $('#loadingScreen').prop('hidden', false);
+    let mensajeEdoSolicitud = toastr.info("Procesando solicitud, espere un momento por favor . . .", "", { timeOut: "0" });
+
+    $.ajaxSetup({
+        xhrFields: {
+            responseType: 'blob'
+        }
+    });
+    $.ajax({
+        type: 'GET',
+        url: '/capitulo1/plantillaDevengado1000',
+        success: function (data) {
+            var blob = new Blob([data], {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            });
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download =
+                `formatoCargaDevengado1000.xlsx`; // Reemplaza 'nombre_del_archivo.xlsx' con el nombre de tu archivo
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            $('#' + btnId + '').prop('disabled', false); //desbloqueamos el botón
+            $('#' + btnId + '').html(btnHtml); // regresamos el contenido html original al botón
+            mensajeEdoSolicitud.remove()
+            $('#loadingScreen').prop('hidden', true);
+
+        },
+        error: function () {
+            toastr.error('Error al descargar la plantilla.');
+            $('#loadingScreen').prop('hidden', true);
+
+            $('#' + btnId + '').prop('disabled', false); //desbloqueamos el botón
+            $('#' + btnId + '').html(btnHtml); // regresamos el contenido html original al botón
+        }
+    });
+}

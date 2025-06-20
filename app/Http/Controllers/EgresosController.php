@@ -116,4 +116,19 @@ class EgresosController extends Controller
             abort(404);
         }
     }
+    public function plantillaCargaDevengado1000(){
+         $rutaArchivo = public_path('plantillas/formatoCargaDevengado1000' . '.xlsx');
+        // dd($rutaArchivo);
+        // Verificar si el archivo existe
+        if (file_exists($rutaArchivo)) {
+            // Descargar el archivo Excel
+            $usuariosController = new BitacoraController();
+            $usuariosController->bitacora('plantillaCargaDevengadoCapitulo1000', 'descargó la plantilla de carga de devengado del capítulo 1000', request());
+            return response()->download($rutaArchivo, 'formatoCargaComprometido1000.xlsx', [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            ]);
+        } else {
+            abort(404);
+        }
+    }
 }
