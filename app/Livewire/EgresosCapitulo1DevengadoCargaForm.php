@@ -832,7 +832,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
         }
     }
 
-    private function liberarRemanente($polizasDevengadas){
+    /* private function liberarRemanente($polizasDevengadas){
 
         $polizasCompromiso = Poliza::where('evento', '=', $this->numeroEvento + 1)
             ->where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 1')
@@ -842,6 +842,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
             ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 1')
             ->where('concepto', 'LIKE', '%Devengado%')
             ->get();
+
 
         foreach ($polizasCompromiso as $key => $item) {
             $item->coincidencia = false;
@@ -877,6 +878,66 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                         'estatus_evento' => EstatusEvento::FINALIZADO->value,
                     ]);
             }
+        }
+    }
+ */
+
+    private function liberarRemanente($polizasDevengadas){
+        $eventoActual = $this->numeroEvento + 1;
+
+        $polizasCompromiso = Poliza::where('evento', $eventoActual)
+            ->where('categoria', 'EGRESOS COMPROMETIDO CAPITULO 1')
+            ->get();
+
+        $polizasDevengado = Poliza::where('evento', $eventoActual)
+            ->where('categoria', 'EGRESOS DEVENGADO CAPITULO 1')
+            ->where('concepto', 'LIKE', '%Devengado%')
+            ->get();
+
+        $indexDevengado = [];
+        foreach ($polizasDevengado as $polizaDevengado) {
+            $concepto = trim(explode('(', $polizaDevengado->concepto)[0]);
+            $key = $polizaDevengado->area . '|' . $polizaDevengado->mes . '|' . $concepto;
+            $indexDevengado[$key] = $polizaDevengado;
+        }
+
+        $updatesFinalizado = [];
+        $updatesActivo = [];
+
+        foreach ($polizasCompromiso as $polizaComprometida) {
+            $concepto = trim(explode('(', $polizaComprometida->concepto)[0]);
+            $key = $polizaComprometida->area . '|' . $polizaComprometida->mes . '|' . $concepto;
+
+            if (isset($indexDevengado[$key])) {
+                $dev = $indexDevengado[$key];
+                $nuevoTotal = min($dev->total, $polizaComprometida->total);
+
+                $updatesFinalizado[] = [
+                    'id' => $polizaComprometida->id,
+                    'total' => $nuevoTotal,
+                    'estatus_evento' => EstatusEvento::FINALIZADO->value,
+                ];
+            } else {
+                $updatesActivo[] = [
+                    'id' => $polizaComprometida->id,
+                    'evento' => $polizaComprometida->evento + 1,
+                    'estatus_evento' => EstatusEvento::ACTIVO->value,
+                ];
+            }
+        }
+
+        foreach ($updatesFinalizado as $data) {
+            Poliza::where('id', $data['id'])->update([
+                'total' => $data['total'],
+                'estatus_evento' => $data['estatus_evento'],
+            ]);
+        }
+
+        foreach ($updatesActivo as $data) {
+            Poliza::where('id', $data['id'])->update([
+                'evento' => $data['evento'],
+                'estatus_evento' => $data['estatus_evento'],
+            ]);
         }
     }
 
