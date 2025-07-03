@@ -115,6 +115,13 @@
         @endif
         <div class="d-flex gap-3">
 
+            @if($categoriaModulo == 'EGRESOS COMPROMETIDO CAPITULO 1')
+                <button id="botonPoliza" onclick="generarPolizaExcel(this, 'X')" type="button"
+                    class="btn btn-success shadow border-1 mt-3 mt-md-0">
+                    Visualizar póliza en excel
+                </button>
+            @endif
+
             @if (!$validado)
 
                 <button id="botonPoliza" onclick="generarPoliza(this)" type="button"
