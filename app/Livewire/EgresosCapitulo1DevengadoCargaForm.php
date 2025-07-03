@@ -737,7 +737,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                 }); // divide $polizas en partes pequeñas (chunks) de 120 elementos. Esto evita la sobrecarga de memoria al hacer inserciones en la base.
 
 
-                $this->liberarRemanente($polizas);
+                $this->liberarRemanente();
 
                 DB::commit();
                 Storage::delete($this->path);
@@ -760,7 +760,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
         }
     }
 
-    private function liberarRemanente($polizasDevengadas)
+    private function liberarRemanente()
     {
         $eventoActual = $this->numeroEvento + 1;
 
