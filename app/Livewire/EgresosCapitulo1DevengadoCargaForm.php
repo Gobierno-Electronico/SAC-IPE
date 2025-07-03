@@ -809,7 +809,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                 //         ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
                 // }
 
-                $this->liberarRemanente($polizas);
+                $this->liberarRemanente();
 
                 DB::commit();
                 Storage::delete($this->path);
@@ -882,7 +882,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
     }
  */
 
-    private function liberarRemanente($polizasDevengadas){
+    private function liberarRemanente(){
         $eventoActual = $this->numeroEvento + 1;
 
         $polizasCompromiso = Poliza::where('evento', $eventoActual)

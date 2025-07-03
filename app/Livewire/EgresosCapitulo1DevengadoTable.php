@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Http\Controllers\BitacoraController;
 use App\Models\Poliza;
 use Carbon\Carbon;
+use App\Enums\EstatusEvento;
 use App\Models\InteraccionCuentaCuenta;
 use App\Models\InteraccionCuentaConcepto;
 use Log;
@@ -246,7 +247,9 @@ class EgresosCapitulo1DevengadoTable extends Tabla
     #[On('finalizar-registros')]
     public function finalizarRegistros()
     {
-
+        set_time_limit(30000);
+        ini_set('max_execution_time', 30000);
+        
         if(!$this->verificarBalance()){
             return;
         };
@@ -470,6 +473,9 @@ class EgresosCapitulo1DevengadoTable extends Tabla
                     ->whereIn('categoria', ['EGRESOS COMPROMETIDO CAPITULO 1'])
                     ->update(['estatus_evento' => false]);
             } */
+
+            $this->liberarRemanente();
+
             DB::commit();
             $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente); 
          } catch (\Throwable $th) {
@@ -478,6 +484,69 @@ class EgresosCapitulo1DevengadoTable extends Tabla
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         } 
     }
+
+     private function liberarRemanente(){
+        set_time_limit(30000);
+        ini_set('max_execution_time', 30000);
+        $eventoActual = $this->numeroEvento;
+
+        $polizasCompromiso = Poliza::where('evento', $eventoActual)
+            ->where('categoria', 'EGRESOS COMPROMETIDO CAPITULO 1')
+            ->get();
+
+        $polizasDevengado = Poliza::where('evento', $eventoActual)
+            ->where('categoria', 'EGRESOS DEVENGADO CAPITULO 1')
+            ->where('concepto', 'LIKE', '%Devengado%')
+            ->get();
+
+        $indexDevengado = [];
+        foreach ($polizasDevengado as $polizaDevengado) {
+            $concepto = trim(explode('(', $polizaDevengado->concepto)[0]);
+            $key = $polizaDevengado->area . '|' . $polizaDevengado->mes . '|' . $concepto;
+            $indexDevengado[$key] = $polizaDevengado;
+        }
+
+        $updatesFinalizado = [];
+        $updatesActivo = [];
+
+        foreach ($polizasCompromiso as $polizaComprometida) {
+            $concepto = trim(explode('(', $polizaComprometida->concepto)[0]);
+            $key = $polizaComprometida->area . '|' . $polizaComprometida->mes . '|' . $concepto;
+
+            if (isset($indexDevengado[$key])) {
+                $dev = $indexDevengado[$key];
+                $nuevoTotal = min($dev->total, $polizaComprometida->total);
+
+                $updatesFinalizado[] = [
+                    'id' => $polizaComprometida->id,
+                    'total' => $nuevoTotal,
+                    'estatus_evento' => EstatusEvento::FINALIZADO->value,
+                ];
+            } else {
+                $updatesActivo[] = [
+                    'id' => $polizaComprometida->id,
+                    'evento' => $polizaComprometida->evento + 1,
+                    'estatus_evento' => EstatusEvento::ACTIVO->value,
+                ];
+            }
+        }
+
+        foreach ($updatesFinalizado as $data) {
+            Poliza::where('id', $data['id'])->update([
+                'total' => $data['total'],
+                'estatus_evento' => $data['estatus_evento'],
+            ]);
+        }
+
+        foreach ($updatesActivo as $data) {
+            Poliza::where('id', $data['id'])->update([
+                'evento' => $data['evento'],
+                'estatus_evento' => $data['estatus_evento'],
+            ]);
+        }
+    }
+
+
 
     public function changeState($value) {}
 }
