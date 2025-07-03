@@ -203,3 +203,96 @@ function descargarPlantilla(btn, tipo) {
         }
     });
 }
+
+function descargarPlantillaDevengado(btn){
+    let btnId = btn.id; //obtenemos el id del boton
+    let btnHtml = $('#' + btnId + '').html(); //obtenemos el contenido html de mi boton
+    let spinner =
+        '<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>';
+    $('#' + btnId + '').html(spinner);
+    $('#' + btnId + '').prop('disabled', true);
+    $('#loadingScreen').prop('hidden', false);
+    let mensajeEdoSolicitud = toastr.info("Procesando solicitud, espere un momento por favor . . .", "", { timeOut: "0" });
+
+    $.ajaxSetup({
+        xhrFields: {
+            responseType: 'blob'
+        }
+    });
+    $.ajax({
+        type: 'GET',
+        url: '/capitulo1/plantillaDevengado1000',
+        success: function (data) {
+            var blob = new Blob([data], {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            });
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download =
+                `formatoCargaDevengado1000.xlsx`; // Reemplaza 'nombre_del_archivo.xlsx' con el nombre de tu archivo
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            $('#' + btnId + '').prop('disabled', false); //desbloqueamos el botón
+            $('#' + btnId + '').html(btnHtml); // regresamos el contenido html original al botón
+            mensajeEdoSolicitud.remove()
+            $('#loadingScreen').prop('hidden', true);
+
+        },
+        error: function () {
+            toastr.error('Error al descargar la plantilla.');
+            $('#loadingScreen').prop('hidden', true);
+
+            $('#' + btnId + '').prop('disabled', false); //desbloqueamos el botón
+            $('#' + btnId + '').html(btnHtml); // regresamos el contenido html original al botón
+        }
+    });
+}
+
+function generarPolizaExcel(btn, formato = 'X') {
+    let url;
+    let btnId = btn.id; //obtenemos el id del boton
+    let btnHtml = $("#" + btnId + "").html(); //obtenemos el contenido html de mi boton
+    let spinner =
+        '<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>';
+    $("#" + btnId + "").html(spinner);
+    $("#" + btnId + "").prop("disabled", true);
+    $('#loadingScreen').prop('hidden', false);
+
+    nombrereporte = $('#botonMovimiento').val();
+    console.log(nombrereporte)
+    const wsUrl = "http://"+IP_PORT+"/"+NOMBRE_REPORTEADOR+"/webresources/service/report?name="+nombrereporte+"&params="
+    url = `${wsUrl}Fecha;${$('#botonFecha').val()},Hora;${$('#botonHora').val()},Numero;${$('#botonNumeroPoliza').val()},Evento;${$('#botonEvento').val()}&formato=${formato}`;
+    let mensajeEdoSolicitud = toastr.info("Procesando solicitud, espere un momento por favor . . .", "", { timeOut: "0" });
+    fetch(url, {
+        method: "GET",
+    })
+        .then((response) => {
+            if (!response.ok) {
+                toastr.error(
+                    "Problemas al procesar la solicutd, por favor inténtelo más tarde"
+                );
+                mensajeEdoSolicitud.remove();
+            } else {
+                response.text().then((PolizaPresupuestal) => {
+                    window.open(PolizaPresupuestal);
+                    mensajeEdoSolicitud.remove();
+                });
+            }
+            $("#" + btnId + "").prop("disabled", false); //desbloqueamos el botón
+            $("#" + btnId + "").html(btnHtml); // regresamos el contenido html original al botón
+            $('#loadingScreen').prop('hidden', true);
+
+        })
+        .catch((error) => {
+            mensajeEdoSolicitud.remove();
+            $("#" + btnId + "").prop("disabled", false); //desbloqueamos el botón
+            $("#" + btnId + "").html(btnHtml); // regresamos el contenido html original al botón
+            $('#loadingScreen').prop('hidden', true);
+
+            toastr.error(
+                "Problemas al procesar la soliciutd, por favor inténtelo más tarde"
+            );
+        });
+}

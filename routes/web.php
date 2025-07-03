@@ -151,6 +151,8 @@ Route::get("/capitulo5-ejercido", [EgresosController::class, 'capitulo5Ejercido'
 Route::get("/capitulo5-pagado", [EgresosController::class, 'capitulo5Pagado'])->name('capitulo5Pagado')->middleware('role:Administrador');
 Route::get("/movimientos-egresos", [EgresosController::class, 'consultarMovimientos'])->name('movimientosEgresos')->middleware('role:Administrador');
 Route::get("capitulo1/plantillaCompromiso1000", [EgresosController::class, 'plantillaCargaComprometidoCapitulo1000'])->name('plantillaCompromiso1000')->middleware('role:Administrador');
+Route::get("/capitulo1/plantillaDevengado1000", [EgresosController::class, 'plantillaCargaDevengado1000'])->name('plantillaCompromiso1000')->middleware('role:Administrador');
+
 
 //Prestamos
 Route::get("/capitulo7-otorgamiento-compromiso-devengado-prestamosIniciales", [PrestamosController::class, 'capitulo7CompromisoDevengadoPrestamosIniciales'])->name('capitulo7CompromisoDevengadoPrestamosIniciales')->middleware('role:Administrador');

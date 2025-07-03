@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+
 
 
 class EgresosController extends Controller
@@ -100,20 +102,28 @@ class EgresosController extends Controller
         return view ('egresos.movimientos-egresos');
     }
     public function plantillaCargaComprometidoCapitulo1000(){
-        $validator = Validator::make(request()->all(), [
-            'type' => ['required', 'string', 'max:255'],
-        ]);
-        if ($validator->fails()) {
-            abort(404);
-        }
-        $formFields = $validator->getData();
-        $rutaArchivo = public_path('plantillas/formatoCargaComprometido1000' . $formFields['type'] . '.xlsx');
+        $rutaArchivo = public_path('plantillas/formatoCargaComprometido1000' . '.xlsx');
         // dd($rutaArchivo);
         // Verificar si el archivo existe
         if (file_exists($rutaArchivo)) {
             // Descargar el archivo Excel
             $usuariosController = new BitacoraController();
             $usuariosController->bitacora('plantillaCargaComprometidoCapitulo1000', 'descargó la plantilla de carga de compromiso del capítulo 1000', request());
+            return response()->download($rutaArchivo, 'formatoCargaComprometido1000.xlsx', [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            ]);
+        } else {
+            abort(404);
+        }
+    }
+    public function plantillaCargaDevengado1000(){
+         $rutaArchivo = public_path('plantillas/formatoCargaDevengado1000' . '.xlsx');
+        // dd($rutaArchivo);
+        // Verificar si el archivo existe
+        if (file_exists($rutaArchivo)) {
+            // Descargar el archivo Excel
+            $usuariosController = new BitacoraController();
+            $usuariosController->bitacora('plantillaCargaDevengadoCapitulo1000', 'descargó la plantilla de carga de devengado del capítulo 1000', request());
             return response()->download($rutaArchivo, 'formatoCargaComprometido1000.xlsx', [
                 'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             ]);
