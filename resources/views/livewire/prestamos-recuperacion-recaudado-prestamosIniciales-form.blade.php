@@ -24,7 +24,7 @@
         <livewire:prestamos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
             tipoMovimiento="PolizaRecuperacionRecaudadoPrestamosIniciales" 
             urlFinalizar="/capitulo7-recuperacion-recaudado-prestamosIniciales" tipoPoliza="D" 
-            categoriaModulo='OTORGAMIENTO COMPROMISO RECAUDADO PRESTAMOS INICIALES' />
+            categoriaModulo='RECUPERACION RECAUDADO PRESTAMOS INICIAlES' />
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
