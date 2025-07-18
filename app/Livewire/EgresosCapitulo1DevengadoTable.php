@@ -249,7 +249,7 @@ class EgresosCapitulo1DevengadoTable extends Tabla
     {
         set_time_limit(30000);
         ini_set('max_execution_time', 30000);
-        
+
         if(!$this->verificarBalance()){
             return;
         };

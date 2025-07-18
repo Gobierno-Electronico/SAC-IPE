@@ -522,7 +522,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
             ->where('estatus_evento', '=', EstatusEvento::ACTIVO->value)
             ->orderBy('evento')
             ->value('evento');
-
+        
         if ($this->numeroDeEventoCompromiso == NULL) {
             $this->dispatch('mostrarMensaje', mensaje: 'No existe un compromiso activo, para poder hacer un devengo, primero debe haber un compromiso', tipo: 'error', tiempo: 3000);
             $this->dispatch('esconderCargando');
@@ -597,7 +597,6 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
                         $totalSinFormato = (float) str_replace([',', '$', ' '], '', $dato['CARGO']);
                         if ($totalSinFormato > $solvencia) {
-
                             if ($seDescomprometioRecurso == false) {
                                 //Cancelar el compromiso y descomprometerlo
                                 $resultadoDescomprometerRecurso = $this->descomprometerRecurso($this->numeroDeEventoCompromiso, $anioActual, $dato['CONCEPTO']);
@@ -665,7 +664,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                         'evento' => $this->numeroEvento + 1,
                         'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS DEVENGADO CAPITULO 1',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -687,7 +686,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                             'evento' => $this->numeroEvento + 1,
                             'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
                             'validado' => false,
-                            'estatus_evento' => true,
+                            'estatus_evento' => EstatusEvento::ACTIVO->value,
                             'categoria' => 'EGRESOS DEVENGADO CAPITULO 1',
                             'created_at' => $fecha,
                             'updated_at' => $fecha
@@ -709,7 +708,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                         'evento' => $this->numeroEvento + 1,
                         'tipo_interaccion' => 'Contable - Abono',
                         'validado' => false,
-                        'estatus_evento' => true,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS DEVENGADO CAPITULO 1',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
@@ -760,16 +759,24 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
         }
     }
 
-    private function liberarRemanente()
-    {
-        $eventoActual = $this->numeroEvento + 1;
+ private function liberarRemanente(){
+        set_time_limit(30000);
+        ini_set('max_execution_time', 30000);
+        $anioActual = Carbon::now()->year;
+        $ultimoEvento = Poliza::where('categoria', 'EGRESOS COMPROMETIDO CAPITULO 1')
+            ->where('tipo_poliza', '=', 'E')
+            ->whereYear('fecha', '=', $anioActual)
+            ->max('evento');
 
-        $polizasCompromiso = Poliza::where('evento', $eventoActual)
+
+        $polizasCompromiso = Poliza::where('evento', $ultimoEvento)
             ->where('categoria', 'EGRESOS COMPROMETIDO CAPITULO 1')
+            ->whereYear('fecha', '=', $anioActual)
             ->get();
-
-        $polizasDevengado = Poliza::where('evento', $eventoActual)
+        
+        $polizasDevengado = Poliza::where('evento', $ultimoEvento)
             ->where('categoria', 'EGRESOS DEVENGADO CAPITULO 1')
+            ->whereYear('fecha', '=', $anioActual)
             ->where('concepto', 'LIKE', '%Devengado%')
             ->get();
 
@@ -782,6 +789,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
         $updatesFinalizado = [];
         $updatesActivo = [];
+        $idsAEliminar = [];
 
         foreach ($polizasCompromiso as $polizaComprometida) {
             $concepto = trim(explode('(', $polizaComprometida->concepto)[0]);
@@ -796,12 +804,24 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                     'total' => $nuevoTotal,
                     'estatus_evento' => EstatusEvento::FINALIZADO->value,
                 ];
+
+                if (bccomp($polizaComprometida->total, $dev->total, 2) === 1) {
+                    $updatesActivo[] = [
+                        'id' => $polizaComprometida->id,
+                        'evento' => $polizaComprometida->evento + 1,
+                        'estatus_evento' => EstatusEvento::ACTIVO->value,
+                        'total' => bcsub($polizaComprometida->total, $dev->total, 2),
+                    ];
+                }
+
             } else {
                 $updatesActivo[] = [
                     'id' => $polizaComprometida->id,
                     'evento' => $polizaComprometida->evento + 1,
                     'estatus_evento' => EstatusEvento::ACTIVO->value,
+                    'total' => $polizaComprometida->total,
                 ];
+                $idsAEliminar[] = $polizaComprometida->id;
             }
         }
 
@@ -813,12 +833,38 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
         }
 
         foreach ($updatesActivo as $data) {
-            Poliza::where('id', $data['id'])->update([
-                'evento' => $data['evento'],
-                'estatus_evento' => $data['estatus_evento'],
-            ]);
+            $polizaOriginal = Poliza::find($data['id']);
+
+            if ($polizaOriginal) {
+                Poliza::create([
+                    'area' => $polizaOriginal->area,
+                    'mes' => $polizaOriginal->mes,
+                    'concepto' => $polizaOriginal->concepto,
+                    'categoria' => $polizaOriginal->categoria, 
+                    'evento' => $data['evento'],
+                    'estatus_evento' => $data['estatus_evento'],
+                    'total' => $data['total'],
+                    'idUsuarioRegistrante' => $polizaOriginal->idUsuarioRegistrante,
+                    'tipo_poliza' => 'E',
+                    'numero_poliza' => $this->numeroPoliza + 2,
+                    'fecha' => $this->fechaAfectacion,
+                    'cuenta' => $polizaOriginal->cuenta,
+                    'descripcion' => $polizaOriginal->descripcion,
+                    'tipo_interaccion' => $polizaOriginal->tipo_interaccion,
+                    'validado' => false,
+                    'estatus_evento' =>  EstatusEvento::ACTIVO->value,
+                    'created_at' => Carbon::now('America/Mexico_City'),
+                    'updated_at' => Carbon::now('America/Mexico_City')
+                ]);
+            }
         }
+
+        foreach ($idsAEliminar as $id) {
+            Poliza::where('id', $id)->delete();
+        }
+
     }
+
 
 
     public function leerArchivoExcel()
