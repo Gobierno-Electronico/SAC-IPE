@@ -760,7 +760,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
         }
     }
 
-    private function liberarRemanente($polizasDevengadas)
+    private function liberarRemanente()
     {
         $eventoActual = $this->numeroEvento + 1;
 
@@ -804,7 +804,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                 ];
             }
         }
-
+        
         foreach ($updatesFinalizado as $data) {
             Poliza::where('id', $data['id'])->update([
                 'total' => $data['total'],
