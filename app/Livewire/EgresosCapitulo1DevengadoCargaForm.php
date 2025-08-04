@@ -759,15 +759,9 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
         }
     }
 
- private function liberarRemanente(){
-        set_time_limit(30000);
-        ini_set('max_execution_time', 30000);
-        $anioActual = Carbon::now()->year;
-        $ultimoEvento = Poliza::where('categoria', 'EGRESOS COMPROMETIDO CAPITULO 1')
-            ->where('tipo_poliza', '=', 'E')
-            ->whereYear('fecha', '=', $anioActual)
-            ->max('evento');
-
+    private function liberarRemanente()
+    {
+        $eventoActual = $this->numeroEvento + 1;
 
         $polizasCompromiso = Poliza::where('evento', $ultimoEvento)
             ->where('categoria', 'EGRESOS COMPROMETIDO CAPITULO 1')
@@ -824,7 +818,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                 $idsAEliminar[] = $polizaComprometida->id;
             }
         }
-
+        
         foreach ($updatesFinalizado as $data) {
             Poliza::where('id', $data['id'])->update([
                 'total' => $data['total'],
