@@ -762,13 +762,14 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
     private function liberarRemanente()
     {
         $eventoActual = $this->numeroEvento + 1;
+         $anioActual = Carbon::now()->year;
 
-        $polizasCompromiso = Poliza::where('evento', $ultimoEvento)
+        $polizasCompromiso = Poliza::where('evento', $eventoActual)
             ->where('categoria', 'EGRESOS COMPROMETIDO CAPITULO 1')
             ->whereYear('fecha', '=', $anioActual)
             ->get();
         
-        $polizasDevengado = Poliza::where('evento', $ultimoEvento)
+        $polizasDevengado = Poliza::where('evento', $eventoActual)
             ->where('categoria', 'EGRESOS DEVENGADO CAPITULO 1')
             ->whereYear('fecha', '=', $anioActual)
             ->where('concepto', 'LIKE', '%Devengado%')
