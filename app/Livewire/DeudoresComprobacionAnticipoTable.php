@@ -289,7 +289,7 @@ class DeudoresComprobacionAnticipoTable extends Tabla
                     ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
 
                 if($movimiento['selectorPagoRetenciones'] == 'NO') {
-                    $interaccionCuentasCuentasFiltradas = [];
+                    $interaccionCuentaCuentasFiltradas = [];
 
                     foreach ($interaccionCuentaCuentas as $cuenta) {
                         if ($cuenta['tipo_interaccion'] == 'Contable - Cargo') {
