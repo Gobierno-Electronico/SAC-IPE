@@ -30,10 +30,10 @@ return [
     */
 
     'env' => env('APP_ENV', 'production'),
-    'ip_port' => env('IP_PORT', '10.0.2.62:8080'),
-    // 'ip_port' => env('IP_PORT' = '10.0.0.12:8080'),
-    'nombre_reporteador' => env('NOMBRE_REPORTEADOR', 'Reporteador'),
-    //'nombre_reporteador' => env('NOMBRE_REPORTEADOR', 'ReporteadorSAC-IPE')
+    //'ip_port' => env('IP_PORT', '10.0.2.62:8080'),
+    'ip_port' => env('IP_PORT', '10.0.0.12:8080'),
+    //'nombre_reporteador' => env('NOMBRE_REPORTEADOR', 'Reporteador'),
+    'nombre_reporteador' => env('NOMBRE_REPORTEADOR', 'ReporteadorSAC-IPE'),
 
 
 
