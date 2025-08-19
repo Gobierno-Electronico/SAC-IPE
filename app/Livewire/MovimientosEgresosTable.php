@@ -120,12 +120,8 @@ class MovimientosEgresosTable extends Tabla
             ->where('evento', '=', $item['evento'])
             ->where('tipo_poliza', '=', 'E')
             ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')
-            ->where('categoria', 'like', '%EGRESOS COMPROMETIDO CAPITULO%') // Filtra categoría que contenga 'comprometido'
             ->get();
         
-            
-            // $sumaTotal = $totalesPolizas->sum('total');
-            // dd($totalesPolizas);
             $sumaTotal = $totalesPolizas->sum('total'); // NUEVO: Sumar los valores del atributo 'total'
     
             $item['total_evento'] = '$' . number_format($sumaTotal, 2, '.', ','); // NUEVO: Formatear el total
