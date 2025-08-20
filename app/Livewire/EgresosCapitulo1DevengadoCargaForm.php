@@ -212,7 +212,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
         if (count($solvenciaMesesAnteriores) > 0) {
             $polizas = [];
 
-            foreach ($solvenciaMesesAnteriores as $solvencia) {
+            foreach ($solvenciaMesesAnteriores as $solvencia) { 
                 if (empty($solvencia->Solvencia) || $solvencia->Solvencia <= 0) {
                     continue;
                 }
@@ -481,7 +481,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
             'mes' => $mesCargo,
             'descripcion' => 'Reclasificación presupuestal automática del capítulo 1000',
             'evento' => $evento,
-            'tipo_interaccion' => 'Presupuestal - Cargo',
+            'tipo_interaccion' => 'Cargo',
             'validado' => false,
             'estatus_evento' => EstatusEvento::FINALIZADO->value,
             'categoria' => 'RECALENDARIZACION DISMINUCION',
@@ -502,7 +502,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
             'mes' => $mesAbono,
             'descripcion' => 'Reclasificación presupuestal automática del capítulo 1000',
             'evento' => $evento,
-            'tipo_interaccion' => 'Presupuestal - Abono',
+            'tipo_interaccion' => 'Abono',
             'validado' => false,
             'estatus_evento' => EstatusEvento::FINALIZADO->value,
             'categoria' => 'RECALENDARIZACION AUMENTO',
@@ -522,7 +522,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
             ->where('estatus_evento', '=', EstatusEvento::ACTIVO->value)
             ->orderBy('evento')
             ->value('evento');
-        
+
         if ($this->numeroDeEventoCompromiso == NULL) {
             $this->dispatch('mostrarMensaje', mensaje: 'No existe un compromiso activo, para poder hacer un devengo, primero debe haber un compromiso', tipo: 'error', tiempo: 3000);
             $this->dispatch('esconderCargando');
@@ -761,18 +761,21 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
     private function liberarRemanente()
     {
+        $anioActual = Carbon::now()->year;
         $eventoActual = $this->numeroEvento + 1;
 
-        $polizasCompromiso = Poliza::where('evento', $ultimoEvento)
+        $polizasCompromiso = Poliza::where('evento', $eventoActual)
             ->where('categoria', 'EGRESOS COMPROMETIDO CAPITULO 1')
             ->whereYear('fecha', '=', $anioActual)
             ->get();
-        
-        $polizasDevengado = Poliza::where('evento', $ultimoEvento)
+
+
+        $polizasDevengado = Poliza::where('evento', $eventoActual)
             ->where('categoria', 'EGRESOS DEVENGADO CAPITULO 1')
             ->whereYear('fecha', '=', $anioActual)
             ->where('concepto', 'LIKE', '%Devengado%')
             ->get();
+
 
         $indexDevengado = [];
         foreach ($polizasDevengado as $polizaDevengado) {
@@ -791,7 +794,20 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
             if (isset($indexDevengado[$key])) {
                 $dev = $indexDevengado[$key];
+
+                // if ($dev->total > $polizaComprometida->total) {
+                //     $compromisosMenores[] = [
+                //         'cuentaDev' => $dev->cuenta,
+                //         'nombreDev' => $dev->concepto,
+                //         'totalDev' => $dev->total,
+                //         'cuentaCom' => $polizaComprometida->cuenta,
+                //         'nombreCom' => $polizaComprometida->concepto,
+                //         'totalCom' => $polizaComprometida->total
+
+                //     ];
+                // }
                 $nuevoTotal = min($dev->total, $polizaComprometida->total);
+
 
                 $updatesFinalizado[] = [
                     'id' => $polizaComprometida->id,
@@ -807,7 +823,6 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                         'total' => bcsub($polizaComprometida->total, $dev->total, 2),
                     ];
                 }
-
             } else {
                 $updatesActivo[] = [
                     'id' => $polizaComprometida->id,
@@ -818,7 +833,27 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                 $idsAEliminar[] = $polizaComprometida->id;
             }
         }
-        
+
+        // dd($compromisosMenores);
+        // dd('ALTO');
+
+        // $coincidencias = [];
+
+        // foreach ($updatesFinalizado as $final) {
+        //     foreach ($updatesActivo as $activo) {
+        //         if ($final['id'] === $activo['id']) {
+        //             $coincidencias[] = [
+        //                 'id' => $final['id'],
+        //                 'total_finalizado' => $final['total'],
+        //                 'total_activo' => $activo['total'],
+        //             ];
+        //         }
+        //     }
+        // }
+
+
+
+
         foreach ($updatesFinalizado as $data) {
             Poliza::where('id', $data['id'])->update([
                 'total' => $data['total'],
@@ -834,7 +869,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                     'area' => $polizaOriginal->area,
                     'mes' => $polizaOriginal->mes,
                     'concepto' => $polizaOriginal->concepto,
-                    'categoria' => $polizaOriginal->categoria, 
+                    'categoria' => $polizaOriginal->categoria,
                     'evento' => $data['evento'],
                     'estatus_evento' => $data['estatus_evento'],
                     'total' => $data['total'],
@@ -856,7 +891,6 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
         foreach ($idsAEliminar as $id) {
             Poliza::where('id', $id)->delete();
         }
-
     }
 
 

@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .  # Usando el directorio actual donde está docker-compose.yml
+      dockerfile: Dockerfile  # Nombre de tu Dockerfile (por defecto sería "Dockerfile")
+    container_name: SAC_IPE_BETA
+    restart: unless-stopped
+    volumes:
+      - .:/var/www/html  # Monta el directorio actual (SAC-IPE) dentro del contenedor
+      - ./storage:/var/www/html/storage  # Sincroniza el directorio de storage
+    ports:
+      - "8088:80"  # Mapea el puerto del contenedor al puerto local
+    environment:
+      - APP_KEY=${APP_KEY}  # Puedes agregar otras variables de entorno si es necesario
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
