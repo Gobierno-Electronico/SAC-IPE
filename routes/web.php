@@ -100,6 +100,9 @@ Route::get('/mayor', [ReportesController::class, 'mayor'])->name('libroMayor')->
 //Libro Diario
 Route::get('/diario', [ReportesController::class, 'diario'])->name('libroDiario')->middleware('can:acceso-contabilidad-reportes');
 
+//Estado de cuenta
+Route::get('/estado-cuenta', [ReportesController::class, 'estadoCuenta'])->name('estadoCuenta')->middleware('can:acceso-contabilidad-reportes');
+
 //Carga contabilidad
 Route::get('/contabilidad/poliza-inicial', [ContabilidadController::class, 'polizaInicial'])->name('polizaInicial')->middleware('can:acceso-contabilidad-consultar-carga');
 Route::get('/contabilidad/plantilla-poliza-inicial', [ContabilidadController::class, 'plantillaPolizaInicial'])->name('plantillaActivos')->middleware('can:acceso-contabilidad-consultar-carga');
