@@ -100,6 +100,9 @@ Route::get('/mayor', [ReportesController::class, 'mayor'])->name('libroMayor')->
 //Libro Diario
 Route::get('/diario', [ReportesController::class, 'diario'])->name('libroDiario')->middleware('can:acceso-contabilidad-reportes');
 
+//Estado de cuenta
+Route::get('/estado-cuenta', [ReportesController::class, 'estadoCuenta'])->name('estadoCuenta')->middleware('can:acceso-contabilidad-reportes');
+
 //Carga contabilidad
 Route::get('/contabilidad/poliza-inicial', [ContabilidadController::class, 'polizaInicial'])->name('polizaInicial')->middleware('can:acceso-contabilidad-consultar-carga');
 Route::get('/contabilidad/plantilla-poliza-inicial', [ContabilidadController::class, 'plantillaPolizaInicial'])->name('plantillaActivos')->middleware('can:acceso-contabilidad-consultar-carga');
@@ -151,7 +154,7 @@ Route::get("/capitulo5-ejercido", [EgresosController::class, 'capitulo5Ejercido'
 Route::get("/capitulo5-pagado", [EgresosController::class, 'capitulo5Pagado'])->name('capitulo5Pagado')->middleware('role:Administrador');
 Route::get("/movimientos-egresos", [EgresosController::class, 'consultarMovimientos'])->name('movimientosEgresos')->middleware('role:Administrador');
 Route::get("capitulo1/plantillaCompromiso1000", [EgresosController::class, 'plantillaCargaComprometidoCapitulo1000'])->name('plantillaCompromiso1000')->middleware('role:Administrador');
-Route::get("/capitulo1/plantillaDevengado1000", [EgresosController::class, 'plantillaCargaDevengado1000'])->name('plantillaCompromiso1000')->middleware('role:Administrador');
+Route::get("/capitulo1/plantillaDevengado1000", [EgresosController::class, 'plantillaCargaDevengado1000'])->name('plantillaDevengado1000')->middleware('role:Administrador');
 
 
 //Prestamos

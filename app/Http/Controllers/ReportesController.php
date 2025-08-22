@@ -21,4 +21,8 @@ class ReportesController extends Controller
     public function diario(){
         return view('reportes.diario');
     }
+
+    public function estadoCuenta(){
+        return view('reportes.estadoCuenta');
+    }
 }

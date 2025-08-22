@@ -25,7 +25,7 @@
         window.IP_PORT = @json(config('app.ip_port'));
         window.NOMBRE_REPORTEADOR = @json(config('app.nombre_reporteador'));
     </script>
-    
+
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     @vite(['resources/css/layouts/app.css', 'resources/css/layouts/loading.css', 'resources/css/layouts/loadingDots.css'])
 
@@ -149,8 +149,8 @@
                                                 </li>
                                                 <li>
                                                     <a class="dropdown-item" id="" onclick="mostrarCargando()"
-                                                        wire:navigate.hover
-                                                        href="{{ route('consultaTransferencias') }}" method="GET">
+                                                        wire:navigate.hover href="{{ route('consultaTransferencias') }}"
+                                                        method="GET">
                                                         {{ __('Consultar tranferencias') }}
                                                     </a>
                                                 </li>
@@ -243,6 +243,12 @@
                                                             {{ __('Libro diario') }}
                                                         </a>
                                                     </li>
+                                                    <li>
+                                                        <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                            href="{{ route('estadoCuenta') }}" method="GET">
+                                                            {{ __('Estado de cuenta') }}
+                                                        </a>
+                                                    </li>
                                                 </ul>
                                             </li>
                                         @endcan
@@ -258,12 +264,12 @@
                                                             {{ __('Póliza inicial') }}
                                                         </a>
                                                         <a class="dropdown-item" id="" onclick="mostrarCargando()"
-                                                        href="{{ route('movimientosDiario') }}" method="GET">
-                                                        {{ __('Póliza diario') }}
-                                                        <a class="dropdown-item" id="" onclick="mostrarCargando()"
-                                                        href="{{ route('movimientosDeudores') }}" method="GET">
-                                                        {{ __('Deudores') }}
-                                                    </a>
+                                                            href="{{ route('movimientosDiario') }}" method="GET">
+                                                            {{ __('Póliza diario') }}
+                                                            <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                                href="{{ route('movimientosDeudores') }}" method="GET">
+                                                                {{ __('Deudores') }}
+                                                            </a>
                                                     </li>
                                                 </ul>
                                             </li>
@@ -282,7 +288,7 @@
                                                     </li>
                                                     <li>
                                                         <a class="dropdown-item" id="" onclick="mostrarCargando()"
-                                                            href="{{ route('registroPolizaDiario') }}" >
+                                                            href="{{ route('registroPolizaDiario') }}">
                                                             Póliza diario
                                                         </a>
                                                     </li>
@@ -427,8 +433,8 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" href="capitulo1Pagado"
-                                                    method="GET" onclick="mostrarCargando()">
+                                                <a class="dropdown-item" href="capitulo1Pagado" method="GET"
+                                                    onclick="mostrarCargando()">
                                                     Pagado
                                                 </a>
                                             </li>
@@ -532,11 +538,11 @@
 
                             </li>
 
-                            <li class="nav-item dropdown">          
+                            <li class="nav-item dropdown">
                                 @if ($haySaldosIniciales)
-                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                        data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
-                                        aria-expanded="false" v-pre>
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#"
+                                        role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                        aria-haspopup="true" aria-expanded="false" v-pre>
                                         {{ __('Préstamos') }}
                                     </a>
                                 @else
@@ -553,13 +559,15 @@
                                             data-bs-toggle="dropdown">Otorgamiento (Compromiso-Devengado)</a>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <a class="dropdown-item" href="{{ route('capitulo7CompromisoDevengadoPrestamosIniciales') }}"
+                                                <a class="dropdown-item"
+                                                    href="{{ route('capitulo7CompromisoDevengadoPrestamosIniciales') }}"
                                                     method="GET" onclick="mostrarCargando()">
                                                     Préstamos Iniciales
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" href="{{ route('capitulo7CompromisoDevengadoPrestamosRenovacion') }}"
+                                                <a class="dropdown-item"
+                                                    href="{{ route('capitulo7CompromisoDevengadoPrestamosRenovacion') }}"
                                                     method="GET" onclick="mostrarCargando()">
                                                     Préstamos con Renovación
                                                 </a>
@@ -572,13 +580,15 @@
                                             data-bs-toggle="dropdown">Otorgamiento (Ejercido-Pagado-Recaudado)</a>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <a class="dropdown-item" href="{{ route('capitulo7EjercidoPagadoRecaudadoPrestamosIniciales') }}"
+                                                <a class="dropdown-item"
+                                                    href="{{ route('capitulo7EjercidoPagadoRecaudadoPrestamosIniciales') }}"
                                                     method="GET" onclick="mostrarCargando()">
                                                     Préstamos Iniciales
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" href="{{ route('capitulo7EjercidoPagadoRecaudadoPrestamosRenovacion') }}"
+                                                <a class="dropdown-item"
+                                                    href="{{ route('capitulo7EjercidoPagadoRecaudadoPrestamosRenovacion') }}"
                                                     method="GET" onclick="mostrarCargando()">
                                                     Préstamos con Renovación
                                                 </a>
@@ -591,29 +601,31 @@
                                             data-bs-toggle="dropdown">Recuperación (Recaudado)</a>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <a class="dropdown-item" href="{{ route('capitulo7RecaudadoPrestamosIniciales') }}"
+                                                <a class="dropdown-item"
+                                                    href="{{ route('capitulo7RecaudadoPrestamosIniciales') }}"
                                                     method="GET" onclick="mostrarCargando()">
                                                     Préstamos Iniciales
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" href="{{ route('capitulo7RecaudadoPrestamosRenovacion') }}"
+                                                <a class="dropdown-item"
+                                                    href="{{ route('capitulo7RecaudadoPrestamosRenovacion') }}"
                                                     method="GET" onclick="mostrarCargando()">
                                                     Préstamos con Renovación
                                                 </a>
                                             </li>
                                         </ul>
                                     </li>
-                                        
-                                </ul>    
+
+                                </ul>
 
                             </li>
 
                             <li class="nav-item dropdown">
                                 @if ($haySaldosIniciales)
-                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                        data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
-                                        aria-expanded="false" v-pre>
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#"
+                                        role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                        aria-haspopup="true" aria-expanded="false" v-pre>
                                         {{ __('Deudores') }}
                                     </a>
                                 @else
@@ -633,8 +645,8 @@
                                     </li>
 
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('reintegroAnticipo') }}"
-                                            method="GET" onclick="mostrarCargando()">
+                                        <a class="dropdown-item" href="{{ route('reintegroAnticipo') }}" method="GET"
+                                            onclick="mostrarCargando()">
                                             Reintegro de anticipo/Viáticos/Fondo Fijo
                                         </a>
                                     </li>
@@ -646,7 +658,7 @@
                                         </a>
                                     </li>
 
-                                    
+
                                     <li>
                                         <a class="dropdown-item" href="{{ route('comprobacionAnticipo') }}"
                                             method="GET" onclick="mostrarCargando()">
@@ -770,4 +782,3 @@
 </script>
 
 </html>
-

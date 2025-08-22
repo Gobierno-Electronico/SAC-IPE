@@ -22,7 +22,7 @@ class EgresosCapitulo2y3ComprometidoForm extends Component
     #[Validate('required', message: 'Observaciones requeridas')]
     public $observaciones = "";
 
-    #[Validate('required', message: 'Fecha de afectaciónrequerida')]
+    #[Validate('required', message: 'Fecha de afectación requerida')]
     public $fechaAfectacion = "";
 
     #[Validate('required', message: 'Área responsable requerida')]
