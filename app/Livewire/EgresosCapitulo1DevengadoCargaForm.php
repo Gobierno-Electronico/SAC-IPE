@@ -99,9 +99,13 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
         $anioActual = Carbon::now()->year;
         $fechaActual = Carbon::now('America/Mexico_City');
 
-        Log::info('Comprometiendo recurso...');
+        // Log::info('Comprometiendo recurso...');
         $polizasCompromisoConReclasificacion = DB::select('EXEC comprometerRecursoConReclasificaciones @eventoAnterior = ?, @anioActual = ?', array($eventoAnterior, $anioActual));
         $this->polizasComprometidasReclasificadas = $polizasCompromisoConReclasificacion;
+
+        // $polizasCompromisoConReclasificacion = collect($polizasCompromisoConReclasificacion)->where('area', '1.5.01')->where('mes', 'ENERO')->where('concepto', 'like', '%Prima de Antigüedad%');
+
+        // dd($polizasCompromisoConReclasificacion);       
 
         $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) AS numero_poliza')
             ->where('tipo_poliza', '=', 'E')
@@ -120,7 +124,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
         $ultimoNumero = end($numerosPolizas);
         $nuevoNumeroPoliza = ($ultimoNumero) ? $ultimoNumero + 1 : 1;
-        $nuevoNumeroEvento = end($numerosEvento) + 1;
+        $nuevoNumeroEvento = end($numerosEvento);
 
         $datos = collect();
 
@@ -146,7 +150,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
     }
 
 
-    private function buscarSolvencia($areaPresupuestalSolicitante, $areaDeBusqueda,  $cuenta, $mes, &$solvenciaRequerida, $evento)
+    private function buscarSolvencia($areaPresupuestalSolicitante, $areaDeBusqueda,  $cuenta, $mes, &$solvenciaRequerida, $evento, $polizasDevengado)
     {
         Log::info('Buscando Solvencia...');
         set_time_limit(30000);
@@ -158,14 +162,14 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
             function () use (&$solvenciaRequerida, $areaPresupuestalSolicitante, $areaDeBusqueda, $cuenta, $mes, $evento) {
                 return $this->buscarEnMesesPosteriores($areaPresupuestalSolicitante, $areaDeBusqueda, $cuenta, $cuenta, $mes, $solvenciaRequerida, $evento);
             },
-            function () use (&$solvenciaRequerida, $areaPresupuestalSolicitante, $areaDeBusqueda, $cuenta, $mes, $evento) {
-                return $this->buscarEnGruposPorJerarquia($areaPresupuestalSolicitante, $areaDeBusqueda, $cuenta, $mes, $solvenciaRequerida, $evento);
+            function () use (&$solvenciaRequerida, $areaPresupuestalSolicitante, $cuenta, $mes, $evento, $polizasDevengado) {
+                return $this->buscarEnMismaCuentaDeAreaDistinta($areaPresupuestalSolicitante, $cuenta, $mes, $solvenciaRequerida, $evento, $polizasDevengado);
             },
-            function () use (&$solvenciaRequerida, $areaPresupuestalSolicitante, $cuenta, $mes, $evento) {
-                return $this->buscarEnMismaCuentaDeAreaDistinta($areaPresupuestalSolicitante, $cuenta, $mes, $solvenciaRequerida, $evento);
+            function () use (&$solvenciaRequerida, $areaPresupuestalSolicitante, $areaDeBusqueda, $cuenta, $mes, $evento, $polizasDevengado) {
+                return $this->buscarEnGruposPorJerarquia($areaPresupuestalSolicitante, $areaDeBusqueda, $cuenta, $mes, $solvenciaRequerida, $evento, $polizasDevengado);
             },
-            function () use (&$solvenciaRequerida, $areaPresupuestalSolicitante, $cuenta, $mes, $evento) {
-                return $this->buscarEnCuentasDeAreaDistinta($areaPresupuestalSolicitante, $cuenta, $mes, $solvenciaRequerida, $evento);
+            function () use (&$solvenciaRequerida, $areaPresupuestalSolicitante, $cuenta, $mes, $evento, $polizasDevengado) {
+                return $this->buscarEnCuentasDeAreaDistinta($areaPresupuestalSolicitante, $cuenta, $mes, $solvenciaRequerida, $evento, $polizasDevengado);
             },
         ];
 
@@ -180,6 +184,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
     private function buscarEnMesesAnteriores($areaPresupuestalSolicitante, $areaDeBusqueda, $cuentaCargo, $cuentaAbono, $mes, &$solvenciaRequerida, $evento)
     {
+        Log::info('Meses anteriores...');
         set_time_limit(30000);
         ini_set('max_execution_time', 30000);
         if (strtoupper($mes) == 'ENERO') {
@@ -212,7 +217,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
         if (count($solvenciaMesesAnteriores) > 0) {
             $polizas = [];
 
-            foreach ($solvenciaMesesAnteriores as $solvencia) { 
+            foreach ($solvenciaMesesAnteriores as $solvencia) {
                 if (empty($solvencia->Solvencia) || $solvencia->Solvencia <= 0) {
                     continue;
                 }
@@ -235,6 +240,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
     private function buscarEnMesesPosteriores($areaPresupuestalSolicitante, $areaDeBusqueda, $cuentaCargo, $cuentaAbono, $mes, &$solvenciaRequerida, $evento)
     {
+        Log::info('Meses posteriores...');
         set_time_limit(30000);
         ini_set('max_execution_time', 30000);
 
@@ -292,14 +298,28 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
         }
     }
 
-    private function buscarEnMismaCuentaDeAreaDistinta($areaPresupuestalSolicitante, $cuenta, $mes, &$solvenciaRequerida, $evento)
+    private function buscarEnMismaCuentaDeAreaDistinta($areaPresupuestalSolicitante, $cuenta, $mes, &$solvenciaRequerida, $evento, $polizasDevengado)
     {
+        Log::info('Misma cuenta, área distinta...');
         set_time_limit(30000);
         ini_set('max_execution_time', 30000);
         $anioActual = Carbon::now()->year;
         $solvenciaCuentaAreasDistintas = DB::select('exec SolvenciaCuentaEnAreasDistitas @cuenta = ?, @anio = ?, @mes = ?, @area = ?', array($cuenta->Codigo_cuenta, $anioActual, $mes, $areaPresupuestalSolicitante));
 
         if (count($solvenciaCuentaAreasDistintas) > 0) {
+            $conceptoGeneralCuenta = explode('(Por ejercer)', $cuenta->Descripcion_cuenta);
+            $polizasDevengadaMismaCuenta = collect($polizasDevengado)->where('concepto', '=', $conceptoGeneralCuenta[0] . '(Devengado)');
+            foreach ($polizasDevengadaMismaCuenta as $devengada) {
+                foreach ($solvenciaCuentaAreasDistintas as $i => $solvencia) {
+                    if ($devengada['area'] == $solvencia->area) {
+                        $solvenciaCuentaAreasDistintas[$i]->Solvencia = bcsub(
+                            $solvenciaCuentaAreasDistintas[$i]->Solvencia,
+                            $devengada['total'],
+                            2
+                        );
+                    }
+                }
+            }
 
             $polizas = [];
 
@@ -324,7 +344,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
         }
     }
 
-    private function buscarEnGruposPorJerarquia($areaPresupuestalSolicitante, $areaDeBusqueda, $cuenta, $mes, &$solvenciaRequerida, $evento, $nivel = 1)
+    private function buscarEnGruposPorJerarquia($areaPresupuestalSolicitante, $areaDeBusqueda, $cuenta, $mes, &$solvenciaRequerida, $evento, $polizasDevengado, $nivel = 1)
     {
         set_time_limit(30000);
         ini_set('max_execution_time', 30000);
@@ -339,6 +359,8 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
             7 => '11'
         ];
 
+        Log::warning('Jerarquia nivel ' . $nivel . '...');
+
         // Si ya no hay más niveles que buscar, termina
         if (!isset($gruposPorJerarquia[$nivel])) {
             return;
@@ -346,10 +368,34 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
         $primerosNumerosCOG = $gruposPorJerarquia[$nivel];
 
+
         //extraemos las solvencias del primer grupo al que se le puede quitar recurso
         $solvenciaPorGrupoJerarquia = DB::select('exec SolvenciaGruposPorCOG @area = ?, @anio = ?, @primerosNumerosCOG = ?, @mes = ?', array($areaDeBusqueda, 2025, $primerosNumerosCOG, $mes));
 
+        
         if (count($solvenciaPorGrupoJerarquia) > 0) {
+            foreach ($polizasDevengado as $devengada) {
+                if(str_contains($devengada['concepto'], '(Devengado)')){
+                    foreach ($solvenciaPorGrupoJerarquia as $i => $solvencia) {
+                        $conceptoGeneralCuenta = explode('(Por ejercer)', $solvencia->concepto);
+    
+                        Log::info($devengada['area'] . "--" . $devengada['concepto'] . '---------------------------');
+                        Log::info($solvencia->area . "--" . $solvencia->concepto . '----------------------------------');
+    
+                        if (($devengada['area'] == $solvencia->area) && ($devengada['concepto'] == $conceptoGeneralCuenta[0].'(Devengado)')) {
+                            $solvenciaPorGrupoJerarquia[$i]->Solvencia = bcsub(
+                                $solvenciaPorGrupoJerarquia[$i]->Solvencia,
+                                $devengada['total'],
+                                2
+                            );
+                        }
+    
+                    }
+                }else{
+                    continue;
+                }
+            }
+
 
             $polizas = [];
 
@@ -394,6 +440,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                 $mes,
                 $solvenciaRequerida,
                 $evento,
+                $polizasDevengado,
                 $nivel + 1
             );
         } else {
@@ -401,8 +448,9 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
         }
     }
 
-    private function buscarEnCuentasDeAreaDistinta($areaPresupuestalSolicitante, $cuenta, $mes, &$solvenciaRequerida, $evento)
+    private function buscarEnCuentasDeAreaDistinta($areaPresupuestalSolicitante, $cuenta, $mes, &$solvenciaRequerida, $evento, $polizasDevengado)
     {
+        Log::info('Área distinta...');
         set_time_limit(30000);
         ini_set('max_execution_time', 30000);
 
@@ -439,7 +487,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                     }
 
                     Log::info('Busque por jerarquía');
-                    $this->buscarEnGruposPorJerarquia($areaPresupuestalSolicitante, $area->area, $cuentaConSolvencia, $cuenta, $mes, $solvenciaRequerida, $evento);
+                    $this->buscarEnGruposPorJerarquia($areaPresupuestalSolicitante, $area->area, $cuentaConSolvencia, $cuenta, $mes, $solvenciaRequerida, $evento, $polizasDevengado);
                 }
             }
         }
@@ -452,6 +500,9 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
     private function crearPolizaDeReclasificacion(array &$polizas, $areaPresupuestalSolicitante, $areaDeBusqueda, $cuentaCargo, $cuentaAbono, $total, $mesCargo, $mesAbono, $evento)
     {
         Log::info('Creando poliza de reclasificación...');
+        Log::info('Cuenta Cargo: '. $cuentaCargo->Descripcion_cuenta . '--- total: ' . $total);
+        Log::info('Cuenta Abono: '. $cuentaAbono->Descripcion_cuenta . '--- total: ' . $total);
+
         $fechaActual = Carbon::now('America/Mexico_City');
         $idUsuarioRegistrante = Auth::id();
 
@@ -467,6 +518,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
             $ultimoNumero = end($numerosPolizas);
             $this->ultimoNumeroPolizaTipoD = ($ultimoNumero) ? $ultimoNumero + 1 : 1;
         }
+      
 
         //crear poliza cargo
         array_push($polizas, [
@@ -582,41 +634,6 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                     continue;
                 }
 
-                //inicia módulo para transferencias
-                if (empty($cuentasEnLaGuiaFaltantes) && empty($cuentasFaltantesPlanCuentas)) {
-                    if (str_contains($dato["DESCRIPCION"], "(Devengado)")) {
-                        //obtener cuenta comprometida en base a la devengada
-                        $conceptoGeneralCuenta = explode('(Devengado)', $dato['DESCRIPCION']);
-                        $descripcionCuentaComprometida = $conceptoGeneralCuenta[0] . '(Comprometido)';
-                        $codigoCuentaComprometida = Cuenta::where('Descripcion_cuenta', '=', $descripcionCuentaComprometida)
-                            ->value('Codigo_cuenta');
-                        $solvencia = DB::select(
-                            'EXEC SolvenciaComprometidoCapitulo1 @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?',
-                            array($dato['AREA EJECUTORA'], $codigoCuentaComprometida, $anioActual, $dato['MES'], $this->numeroDeEventoCompromiso)
-                        )[0]->total;
-
-                        $totalSinFormato = (float) str_replace([',', '$', ' '], '', $dato['CARGO']);
-                        if ($totalSinFormato > $solvencia) {
-                            if ($seDescomprometioRecurso == false) {
-                                //Cancelar el compromiso y descomprometerlo
-                                $resultadoDescomprometerRecurso = $this->descomprometerRecurso($this->numeroDeEventoCompromiso, $anioActual, $dato['CONCEPTO']);
-                            }
-                            if ($resultadoDescomprometerRecurso['rows_afectadas'] > 0 && $resultadoDescomprometerRecurso['rows_insertadas'] > 0) {
-                                $seDescomprometioRecurso = true;
-
-
-                                $solvenciaRequerida = bcsub($totalSinFormato, $solvencia, 2);
-                                //obtener cuenta presupuestal (por ejercer) en base al concepto general
-                                $descripcionCuentaPresupuestal = $conceptoGeneralCuenta[0] . '(Por ejercer)';
-                                $cuentaPresupuestal = Cuenta::where('Descripcion_cuenta', '=', $descripcionCuentaPresupuestal)->first();
-
-                                ini_set('memory_limit', '1024M');
-                                $this->buscarSolvencia($dato['AREA EJECUTORA'], $dato['AREA EJECUTORA'], $cuentaPresupuestal, $dato['MES'], $solvenciaRequerida, $this->numeroDeEventoCompromiso);
-                            }
-                        }
-                    }
-                }
-
 
                 if (str_contains($dato["DESCRIPCION"], "(Devengado)")) {
 
@@ -654,7 +671,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                         'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $dato['AREA EJECUTORA'],
                         'tipo_poliza' => 'E',
-                        'numero_poliza' =>  $this->numeroPoliza + 1,
+                        'numero_poliza' =>  $this->numeroPoliza,
                         'fecha' => $this->fechaAfectacion,
                         'cuenta' => $dato['CUENTA'],
                         'concepto' => $dato['DESCRIPCION'],
@@ -676,7 +693,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                             'idUsuarioRegistrante' => $idUsuarioRegistrante,
                             'area' => $dato['AREA EJECUTORA'],
                             'tipo_poliza' => 'E',
-                            'numero_poliza' =>  $this->numeroPoliza + 1,
+                            'numero_poliza' =>  $this->numeroPoliza,
                             'fecha' => $this->fechaAfectacion,
                             'cuenta' => $dataCuenta['Codigo_cuenta'],
                             'concepto' => $dataCuenta['Descripcion_cuenta'],
@@ -698,7 +715,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                         'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $dato['AREA EJECUTORA'],
                         'tipo_poliza' => 'E',
-                        'numero_poliza' =>  $this->numeroPoliza + 1,
+                        'numero_poliza' =>  $this->numeroPoliza,
                         'fecha' => $this->fechaAfectacion,
                         'cuenta' => $dato['CUENTA'],
                         'concepto' => $dato['DESCRIPCION'],
@@ -716,10 +733,6 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                 }
             }
 
-            if ($solvenciaRequerida == 0 && $seDescomprometioRecurso) {
-                $this->comprometerRecursoConNuevasSolvencias($this->numeroDeEventoCompromiso);
-            }
-
             if (!empty($cuentasFaltantesPlanCuentas)) {
                 $mensajeError = "Cuentas Faltantes en el plan:<br>";
                 foreach ($cuentasFaltantesPlanCuentas as $cuenta) {
@@ -735,6 +748,44 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                     Poliza::insert($chunk->toArray());
                 }); // divide $polizas en partes pequeñas (chunks) de 120 elementos. Esto evita la sobrecarga de memoria al hacer inserciones en la base.
 
+                foreach ($polizas as $dato) {
+                    if (str_contains($dato['concepto'], '(Devengado)')) {
+                        $conceptoGeneralCuenta = explode('(Devengado)', $dato['concepto']);
+                        $descripcionCuentaComprometida = $conceptoGeneralCuenta[0] . '(Comprometido)';
+                        $codigoCuentaComprometida = Cuenta::where('Descripcion_cuenta', '=', $descripcionCuentaComprometida)
+                            ->value('Codigo_cuenta');
+                        $solvencia = DB::select(
+                            'EXEC SolvenciaComprometidoCapitulo1 @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?',
+                            array($dato['area'], $codigoCuentaComprometida, $anioActual, $dato['mes'], $this->numeroDeEventoCompromiso)
+                        )[0]->total;
+
+                        $totalSinFormato = (float) str_replace([',', '$', ' '], '', $dato['total']);
+                        if ($totalSinFormato > $solvencia) {
+                            if ($seDescomprometioRecurso == false) {
+                                //Cancelar el compromiso y descomprometerlo
+                                $resultadoDescomprometerRecurso = $this->descomprometerRecurso($this->numeroDeEventoCompromiso, $anioActual, $dato['descripcion']);
+                            }
+                            if ($resultadoDescomprometerRecurso['rows_afectadas'] > 0 && $resultadoDescomprometerRecurso['rows_insertadas'] > 0) {
+                                $seDescomprometioRecurso = true;
+
+
+                                $solvenciaRequerida = bcsub($totalSinFormato, $solvencia, 2);
+                                //obtener cuenta presupuestal (por ejercer) en base al concepto general
+                                $descripcionCuentaPresupuestal = $conceptoGeneralCuenta[0] . '(Por ejercer)';
+                                $cuentaPresupuestal = Cuenta::where('Descripcion_cuenta', '=', $descripcionCuentaPresupuestal)->first();
+
+                                ini_set('memory_limit', '1024M');
+                                $this->buscarSolvencia($dato['area'], $dato['area'], $cuentaPresupuestal, $dato['mes'], $solvenciaRequerida, $this->numeroDeEventoCompromiso, $polizas);
+                            }
+                        }
+                    }
+                }
+
+
+
+                if ($solvenciaRequerida == 0 && $seDescomprometioRecurso) {
+                    $this->comprometerRecursoConNuevasSolvencias($this->numeroDeEventoCompromiso);
+                }
 
                 $this->liberarRemanente();
 
@@ -764,6 +815,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
         $anioActual = Carbon::now()->year;
         $eventoActual = $this->numeroEvento + 1;
 
+
         $polizasCompromiso = Poliza::where('evento', $eventoActual)
             ->where('categoria', 'EGRESOS COMPROMETIDO CAPITULO 1')
             ->whereYear('fecha', '=', $anioActual)
@@ -776,36 +828,48 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
             ->where('concepto', 'LIKE', '%Devengado%')
             ->get();
 
-
         $indexDevengado = [];
+        // $devengados = [];
         foreach ($polizasDevengado as $polizaDevengado) {
-            $concepto = trim(explode('(', $polizaDevengado->concepto)[0]);
+            $concepto = str_replace(' ', '', trim(explode('(Devengado)', $polizaDevengado->concepto)[0]));
             $key = $polizaDevengado->area . '|' . $polizaDevengado->mes . '|' . $concepto;
             $indexDevengado[$key] = $polizaDevengado;
+            // $devengados[] = [
+            //     'keyDev' => $key
+            // ];
         }
 
         $updatesFinalizado = [];
         $updatesActivo = [];
         $idsAEliminar = [];
+        // $comprometidos = [];
+        $devengoMayor = [];
 
         foreach ($polizasCompromiso as $polizaComprometida) {
-            $concepto = trim(explode('(', $polizaComprometida->concepto)[0]);
+            if (str_contains($polizaComprometida->concepto, '(Comprometido)')) {
+                $concepto = str_replace(' ', '', trim(explode('(Comprometido)', $polizaComprometida->concepto)[0]));
+            } else {
+                $concepto = str_replace(' ', '', trim(explode('(Por ejercer)', $polizaComprometida->concepto)[0]));
+            }
             $key = $polizaComprometida->area . '|' . $polizaComprometida->mes . '|' . $concepto;
-
+            // $comprometidos[] = [
+            //     'keyCom' => $key
+            // ];
             if (isset($indexDevengado[$key])) {
                 $dev = $indexDevengado[$key];
-
-                // if ($dev->total > $polizaComprometida->total) {
-                //     $compromisosMenores[] = [
-                //         'cuentaDev' => $dev->cuenta,
-                //         'nombreDev' => $dev->concepto,
-                //         'totalDev' => $dev->total,
-                //         'cuentaCom' => $polizaComprometida->cuenta,
-                //         'nombreCom' => $polizaComprometida->concepto,
-                //         'totalCom' => $polizaComprometida->total
-
-                //     ];
-                // }
+                
+                if($dev->total > $polizaComprometida->total){
+                    $devengoMayor[]=[
+                        'area' => $dev->area,
+                        'mes' => $dev->mes,
+                        'concepto' => $dev->concepto,
+                        'total' => $dev->total,
+                        'areaComp' => $polizaComprometida->area,
+                        'mesComp' => $polizaComprometida->mes,
+                        'conceptoComp' => $polizaComprometida->concepto,
+                        'totalComp' => $polizaComprometida->total
+                    ];
+                }
                 $nuevoTotal = min($dev->total, $polizaComprometida->total);
 
 
@@ -815,7 +879,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                     'estatus_evento' => EstatusEvento::FINALIZADO->value,
                 ];
 
-                if (bccomp($polizaComprometida->total, $dev->total, 2) === 1) {
+                if ((bccomp($polizaComprometida->total, $dev->total, 2) == 1) || (bccomp($polizaComprometida->total, $dev->total, 2) == 0)) {
                     $updatesActivo[] = [
                         'id' => $polizaComprometida->id,
                         'evento' => $polizaComprometida->evento + 1,
@@ -834,8 +898,17 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
             }
         }
 
-        // dd($compromisosMenores);
-        // dd('ALTO');
+        // // Pasar a arrays simples de keys
+        // $keysComp = array_column($comprometidos, 'keyCom');
+        // $keysDev  = array_column($devengados, 'keyDev');
+
+        // // Buscar devengados que no están en compromisos
+        // $devengosNoComprometidos = array_diff($keysDev, $keysComp);
+       
+        // Log::error($devengosNoComprometidos);
+
+        // Log::info($devengoMayor);
+        dd('ALTO');  
 
         // $coincidencias = [];
 
@@ -850,9 +923,6 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
         //         }
         //     }
         // }
-
-
-
 
         foreach ($updatesFinalizado as $data) {
             Poliza::where('id', $data['id'])->update([
