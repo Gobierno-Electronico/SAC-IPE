@@ -40,13 +40,13 @@ class MovimientosDeudoresTable extends Tabla
     public function render()
     {
         $eventos = Poliza::select('evento', 'descripcion')
-        ->whereYear('fecha', '=', Carbon::now()->year)
-        ->where('tipo_poliza', '=', 'D')
-        ->where('categoria', 'LIKE', '%DEUDORES%')
-        ->distinct()
-        ->get()
-        ->sortBy(fn($item) => (int) $item->evento) // Ordenar en PHP convirtiendo a número
-        ->pluck('descripcion', 'evento');
+            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->where('tipo_poliza', '=', 'D')
+            ->where('categoria', 'LIKE', '%DEUDORES%')
+            ->distinct()
+            ->get()
+            ->sortBy(fn($item) => (int) $item->evento) // Ordenar en PHP convirtiendo a número
+            ->pluck('descripcion', 'evento');
         return view('livewire.movimientos-deudores-table', ['eventos' => $eventos]);
     }
 
@@ -55,7 +55,8 @@ class MovimientosDeudoresTable extends Tabla
         return Poliza::query();
     }
 
-    public function actualizarEvento(){
+    public function actualizarEvento()
+    {
         $this->eventoSeleccionado = $this->eventoSeleccionado;
     }
 
@@ -65,8 +66,13 @@ class MovimientosDeudoresTable extends Tabla
         $contador = 0;
         $this->data = array_map(function ($entrada) use (&$contador) {
             $entrada =  (array) $entrada;
-        // Convertir a número y dividir entre 2
-            $entrada['total'] = floatval($entrada['total']);            $entrada['total'] = '$' . number_format($entrada['total'], 2, '.', ',');
+            // Convertir a número y dividir entre 2
+            $entrada['total'] = floatval($entrada['total']);
+            $entrada['total'] = '$' . number_format($entrada['total'], 2, '.', ',');
+            if (isset($entrada['tipoRegistro']) && $entrada['tipoRegistro'] === 'COMPROBACION') {
+                $entrada['tipoRegistro'] = 'COMPROBACIÓN';
+            }
+
             $entrada['id'] = $contador++;
             return $entrada;
         }, DB::select('EXEC dbo.ConsultaMovimientosDeudores @anio = ?', array($anioActual)));
@@ -97,7 +103,7 @@ class MovimientosDeudoresTable extends Tabla
 
             return $contains;
         });
-        
+
 
         $currentItems = array_slice($filtered->toArray(), $this->perPage * ($currentPage - 1), $this->perPage);
         return new LengthAwarePaginator($currentItems, count($filtered), $this->perPage, $currentPage);
@@ -113,9 +119,10 @@ class MovimientosDeudoresTable extends Tabla
             Column::make('evento', 'Evento'),
             Column::make('numero_poliza', 'Número de Póliza'),
             Column::make('descripcion', 'Descripción'),
+            Column::make('tipoRegistro', 'Categoria'),
             Column::make('fechaAfectacion', 'Fecha de afectación'),
             Column::make('fechaRegistro', 'Fecha de registro'),
-            Column::make('total', 'Total por Póliza'), 
+            Column::make('total', 'Total por Póliza'),
             Column::make('estatus_evento', 'Estatus de evento')->component('columns.estado'),
             Column::make('id', 'Acciones')->component('columns.accionVerMovimiento'),
 
@@ -132,9 +139,8 @@ class MovimientosDeudoresTable extends Tabla
         $this->descripcion = $this->data[$value]['descripcion'];
         $this->categoriaModulo = $this->data[$value]['categoria'];
         $this->tipoMovimiento = 'PolizaAnticipos' . ucfirst(strtolower($partesCategoria[1]));
-        
-        $this->consultarRegistro = true;
 
+        $this->consultarRegistro = true;
     }
 
     public function search()
