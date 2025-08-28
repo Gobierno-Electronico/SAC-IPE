@@ -88,7 +88,7 @@ class DeudoresReintegroAnticipoForm extends Component
     public function cambioEvento(){
         $this->limpiar(); 
         try{
-            $this->montoDelEvento = DB::select('EXEC ImporteTotalReintegroAnticipo @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
+            $this->montoDelEvento = DB::select('EXEC ImporteTotalOtorgamientoAnticipo @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             $this->dispatch('formato_importe', id: 'inputMontoEvento', amount: ($this->montoDelEvento > 0) ? $this->montoDelEvento : '');
             $this->dispatch('mostrarMensaje', mensaje: 'Monto del evento cargado', tipo: 'success', tiempo: 1500);
         }catch (\Throwable $th) {

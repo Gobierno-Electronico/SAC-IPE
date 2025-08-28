@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Livewire;
+
 use Livewire\Attributes\On;
 use App\Models\Poliza;
 use Illuminate\Database\Eloquent\Builder;
@@ -29,7 +30,8 @@ class DeudoresComprobacionAnticipoTable extends Tabla
     public $numeroPoliza;
     public $numeroEvento;
 
-    public function render(){
+    public function render()
+    {
         return view('livewire.deudores-comprobacion-anticipo-table');
     }
 
@@ -64,7 +66,7 @@ class DeudoresComprobacionAnticipoTable extends Tabla
     #[On('agregar-registro')]
     public function agregarRegistro($registro)
     {
-        try{
+        try {
             if (bccomp((string)($this->total + $registro['importe']), (string)$registro['montoEvento'], 2) == 1) {
                 $this->dispatch('mostrarMensaje', mensaje: 'Monto total del evento superado', tipo: 'error', tiempo: 3000);
                 return;
@@ -96,8 +98,7 @@ class DeudoresComprobacionAnticipoTable extends Tabla
                 }
                 $this->dispatch('cambioTotal', total: $this->total);
             }
-
-        }catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             Log::error('Ocurrió un error al agregar registro en deudores comprobación de anticipo: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
@@ -137,7 +138,7 @@ class DeudoresComprobacionAnticipoTable extends Tabla
             }
         }
 
-        if($totalImportesEvento > 0){
+        if ($totalImportesEvento > 0) {
             $this->totalDispoibleEvento = bcsub(bcsub($registro['montoEvento'], $totalImportesEvento, 2), $registro['importe'], 2);
         }
     }
@@ -171,7 +172,7 @@ class DeudoresComprobacionAnticipoTable extends Tabla
 
     public function edit($id)
     {
-        try{
+        try {
             $this->recalcularDisponibilidad($id);
             foreach ($this->dataCompleta as $key => $registro) {
                 if ($registro['id'] == $id) {
@@ -242,9 +243,7 @@ class DeudoresComprobacionAnticipoTable extends Tabla
         }
     }
 
-    public function changeState($value)
-    {
-    }
+    public function changeState($value) {}
 
     #[On('finalizar-registros')]
     public function finalizarRegistros()
@@ -254,9 +253,9 @@ class DeudoresComprobacionAnticipoTable extends Tabla
             return;
         }
 
-        try{
+        try {
             $idUsuarioRegistrante = Auth::id();
-            
+
             $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'D')
                 ->whereYear('fecha', '=', Carbon::now()->year)
@@ -288,14 +287,14 @@ class DeudoresComprobacionAnticipoTable extends Tabla
                     ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
                     ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
 
-                if($movimiento['selectorPagoRetenciones'] == 'NO') {
+                if ($movimiento['selectorPagoRetenciones'] == 'NO') {
                     $interaccionCuentaCuentasFiltradas = [];
 
                     foreach ($interaccionCuentaCuentas as $cuenta) {
                         if ($cuenta['tipo_interaccion'] == 'Contable - Cargo') {
                             if (count($interaccionCuentaCuentas) > 11) {
                                 $numeroInicialCuenta = explode('.', $cuenta['Codigo_cuenta']);
-                                if($numeroInicialCuenta[0] == 1) {
+                                if ($numeroInicialCuenta[0] == 1) {
                                     $interaccionCuentaCuentasFiltradas[] = $cuenta;
                                     continue;
                                 }
@@ -307,10 +306,10 @@ class DeudoresComprobacionAnticipoTable extends Tabla
                                     $interaccionCuentaCuentasFiltradas[] = $cuenta;
                                     continue;
                                 }
-                            }else {
+                            } else {
                                 $interaccionCuentaCuentasFiltradas[] = $cuenta;
                             }
-                        }else {
+                        } else {
                             $interaccionCuentaCuentasFiltradas[] = $cuenta;
                         }
                     }
@@ -360,14 +359,14 @@ class DeudoresComprobacionAnticipoTable extends Tabla
                         ]);
                     }
                     Poliza::insert($polizas);
-                }else{
+                } else {
                     $interaccionCuentaCuentasFiltradas = [];
 
                     foreach ($interaccionCuentaCuentas as $cuenta) {
                         if ($cuenta['tipo_interaccion'] == 'Contable - Cargo') {
                             if (count($interaccionCuentaCuentas) > 11) {
                                 $numeroInicialCuenta = explode('.', $cuenta['Codigo_cuenta']);
-                                if($numeroInicialCuenta[0] == 2) {
+                                if ($numeroInicialCuenta[0] == 2) {
                                     $interaccionCuentaCuentasFiltradas[] = $cuenta;
                                     continue;
                                 }
@@ -379,16 +378,16 @@ class DeudoresComprobacionAnticipoTable extends Tabla
                                     $interaccionCuentaCuentasFiltradas[] = $cuenta;
                                     continue;
                                 }
-                            }else {
+                            } else {
                                 $interaccionCuentaCuentasFiltradas[] = $cuenta;
                             }
-                        }else {
+                        } else {
                             $interaccionCuentaCuentasFiltradas[] = $cuenta;
                         }
                     }
                     $interaccionCuentaCuentas = $interaccionCuentaCuentasFiltradas;
 
-                    if(str_contains($movimiento['codigoCuentaContable'], '2.1.1.7.01.')){
+                    if (str_contains($movimiento['codigoCuentaContable'], '2.1.1.7.01.')) {
                         $polizas = [
                             [
                                 'idUsuarioRegistrante' => $idUsuarioRegistrante,
@@ -414,9 +413,9 @@ class DeudoresComprobacionAnticipoTable extends Tabla
 
                         foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
                             if (!str_contains($dataCuenta['Descripcion_cuenta'], 'Responsabilidad de Funcionarios y Empleados Ejercicio Actual')) {
-                                if($dataCuenta['tipo_interaccion'] == 'Presupuestal - Abono' && str_contains($dataCuenta['Descripcion_cuenta'], '(Ejercido)')){
+                                if ($dataCuenta['tipo_interaccion'] == 'Presupuestal - Abono' && str_contains($dataCuenta['Descripcion_cuenta'], '(Ejercido)')) {
                                     continue;
-                                }else{
+                                } else {
                                     array_push($polizas, [
                                         'idUsuarioRegistrante' => $idUsuarioRegistrante,
                                         'area' => $movimiento['codigoAreaResponsable'],
@@ -441,9 +440,8 @@ class DeudoresComprobacionAnticipoTable extends Tabla
                         }
 
                         Poliza::insert($polizas);
+                    } else {
 
-                    }else{
-                        
                         $polizas = [
                             [
                                 'idUsuarioRegistrante' => $idUsuarioRegistrante,
@@ -490,19 +488,36 @@ class DeudoresComprobacionAnticipoTable extends Tabla
 
                         Poliza::insert($polizas);
                     }
-
                 }
             }
             DB::commit();
-            $importeTotalEvento = DB::select('EXEC ImporteTotalComprobacionAnticipo @evento = ?', [$this->numeroEvento]);
+            $importeTotalEvento = DB::select('EXEC ImporteTotalOtorgamientoAnticipo @evento = ?', [$this->numeroEvento]);
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
                 Poliza::where('evento', '=', $this->numeroEvento)
-                    ->whereIn('categoria', ['DEUDORES REINTEGRO ANTICIPOS'])
+                    ->whereIn('categoria', [
+                        'DEUDORES OTORGAMIENTO ANTICIPOS',
+                        'DEUDORES REINTEGRO ANTICIPOS'
+                    ])
                     ->whereYear('fecha', '=', Carbon::now()->year)
                     ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
+
+                $hayRetenciones = Poliza::where('evento', '=', $this->numeroEvento)
+                    ->where('categoria', '=', 'DEUDORES COMPROBACION ANTICIPOS')
+                    ->whereYear('fecha', '=', Carbon::now()->year)
+                    ->where(function ($q) {
+                        $q->where('concepto', 'LIKE', '%ISR%')
+                            ->orWhere('concepto', 'LIKE', '%IVA%');
+                    })
+                    ->exists();
+                if(!$hayRetenciones){
+                    Poliza::where('evento', '=', $this->numeroEvento)
+                    ->where('categoria', 'DEUDORES COMPROBACION ANTICIPOS')
+                    ->whereYear('fecha', '=', Carbon::now()->year)
+                    ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
+                }
             }
             $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
-        }catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             DB::rollBack();
             Log::error('Ocurrió un error al finalizarRegistro en deudores comprobación de anticipo: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);

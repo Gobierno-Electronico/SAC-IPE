@@ -116,6 +116,7 @@ class MovimientosDeudoresTable extends Tabla
             Column::make('fechaAfectacion', 'Fecha de afectación'),
             Column::make('fechaRegistro', 'Fecha de registro'),
             Column::make('total', 'Total por Póliza'), 
+            Column::make('estatus_evento', 'Estatus de evento')->component('columns.estado'),
             Column::make('id', 'Acciones')->component('columns.accionVerMovimiento'),
 
         ];

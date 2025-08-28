@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Livewire;
+
 use Livewire\Attributes\On;
 use App\Models\Poliza;
 use Illuminate\Database\Eloquent\Builder;
@@ -27,7 +28,8 @@ class DeudoresReintegroAnticipoTable extends Tabla
     public $numeroEvento;
     public $totalDisponible = 0;
 
-    public function render(){
+    public function render()
+    {
         return view('livewire.deudores-reintegro-anticipo-table');
     }
 
@@ -57,7 +59,7 @@ class DeudoresReintegroAnticipoTable extends Tabla
 
     public function edit($id)
     {
-        try{
+        try {
             $this->recalcularDisponibilidad($id);
             foreach ($this->dataCompleta as $key => $registro) {
                 if ($registro['id'] == $id) {
@@ -117,7 +119,6 @@ class DeudoresReintegroAnticipoTable extends Tabla
             Log::error('Ocurrió un error al eliminar en deudores reintegro table: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al eliminar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
-
     }
 
     public function recalcularDisponibilidad($id)
@@ -133,12 +134,12 @@ class DeudoresReintegroAnticipoTable extends Tabla
         }
 
         $totalImportes = 0;
-        foreach($this->cacheData as $key => $movimiento) {
-            if($movimiento['id'] != $id && str_contains($movimiento['cuenta'], $datosSeleccionado['codigoCuenta'])) {
-                if($totalImportes == 0){
+        foreach ($this->cacheData as $key => $movimiento) {
+            if ($movimiento['id'] != $id && str_contains($movimiento['cuenta'], $datosSeleccionado['codigoCuenta'])) {
+                if ($totalImportes == 0) {
                     $movimiento['disponibilidad'] = bcsub($movimiento['solvencia'], $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
-                }else{
+                } else {
                     $movimiento['disponibilidad'] = bcsub(bcsub($movimiento['solvencia'], $totalImportes, 2), $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
                 }
@@ -147,15 +148,13 @@ class DeudoresReintegroAnticipoTable extends Tabla
         }
     }
 
-    public function changeState($value)
-    {
-    }
+    public function changeState($value) {}
 
     #[On('agregar-registro')]
     public function agregarRegistro($registro)
     {
-        try{
-            if($this->verificarPresupuesto($registro)){
+        try {
+            if ($this->verificarPresupuesto($registro)) {
                 $nuevoRegistro = [
                     'id' => 0,
                     'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
@@ -166,19 +165,19 @@ class DeudoresReintegroAnticipoTable extends Tabla
                     'importe' => $registro['importe'],
                     'solvencia' => $registro['ppto'],
                     'disponibilidad' => $this->totalDisponible
-                ]; 
-    
+                ];
+
                 array_push($this->cacheData, $nuevoRegistro);
                 array_push($this->dataCompleta, $registro);
                 $this->total = 0;
                 foreach ($this->cacheData as $key => $registro) {
-                    $this->cacheData[$key]['id'] = $key + 1; 
+                    $this->cacheData[$key]['id'] = $key + 1;
                     $this->dataCompleta[$key]['id'] = $key + 1;
-                    $this->total+= $registro['importe'];
+                    $this->total += $registro['importe'];
                 }
                 $this->dispatch('cambioTotal', total: $this->total);
             }
-        }catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             Log::error('Ocurrió un error al agregar registro en deudores reintegro table: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
@@ -190,17 +189,17 @@ class DeudoresReintegroAnticipoTable extends Tabla
         $this->totalDisponible = $solvencia - $registro['importe'];
         $totalImportes = 0;
 
-        foreach ($this->cacheData as $movimiento){
-            if(str_contains($movimiento['cuenta'], $registro['codigoCuenta'])){
+        foreach ($this->cacheData as $movimiento) {
+            if (str_contains($movimiento['cuenta'], $registro['codigoCuenta'])) {
                 $totalImportes += $movimiento['importe'];
             }
         }
 
-        if($totalImportes > 0){
+        if ($totalImportes > 0) {
             $this->totalDisponible = bcsub(bcsub($solvencia, $totalImportes, 2), $registro['importe'], 2);
         }
 
-        if($this->totalDisponible < 0){
+        if ($this->totalDisponible < 0) {
             $this->dispatch('mostrarMensaje', mensaje: 'Solvencia insuficiente', tipo: 'warning', tiempo: 3000);
             return false;
         }
@@ -215,7 +214,7 @@ class DeudoresReintegroAnticipoTable extends Tabla
             return;
         }
 
-        try{
+        try {
             $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'D')
@@ -238,17 +237,16 @@ class DeudoresReintegroAnticipoTable extends Tabla
             $fecha->year($anioActual);
 
             $polizas = [];
-            foreach($this->dataCompleta as $movimiento)
-            {
+            foreach ($this->dataCompleta as $movimiento) {
                 $movimiento['importe'] = doubleval($movimiento['importe']);
                 $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['idCuenta'])
-                ->whereIn('concepto_id', [10107])
-                ->where('tipo_interaccion', '=', 'Contable - Abono')
-                ->first();
+                    ->whereIn('concepto_id', [10107])
+                    ->where('tipo_interaccion', '=', 'Contable - Abono')
+                    ->first();
 
                 $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
-                ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
-                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get();
+                    ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+                    ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get();
 
                 $interaccionCuentaCuentasFiltradas = [];
                 foreach ($interaccionCuentaCuentas as $cuenta) {
@@ -257,7 +255,7 @@ class DeudoresReintegroAnticipoTable extends Tabla
                             $interaccionCuentaCuentasFiltradas[] = $cuenta;
                             continue;
                         }
-                    }else{
+                    } else {
                         $interaccionCuentaCuentasFiltradas[] = $cuenta;
                     }
                 }
@@ -284,7 +282,7 @@ class DeudoresReintegroAnticipoTable extends Tabla
                     'updated_at' => $fecha
                 ]);
 
-                
+
                 foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
                     array_push($polizas, [
                         'idUsuarioRegistrante' => $idUsuarioRegistrante,
@@ -306,24 +304,41 @@ class DeudoresReintegroAnticipoTable extends Tabla
                         'updated_at' => $fecha
                     ]);
                 }
-
             }
 
             Poliza::insert($polizas);
             DB::commit();
 
-            $importeTotalEvento = DB::select('EXEC ImporteTotalReintegroAnticipo @evento = ?', [$this->numeroEvento]);
+            $importeTotalEvento = DB::select('EXEC ImporteTotalOtorgamientoAnticipo @evento = ?', [$this->numeroEvento]);
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
                 Poliza::where('evento', '=', $this->numeroEvento)
-                    ->whereIn('categoria', ['DEUDORES OTORGAMIENTO ANTICIPOS'])
+                    ->whereIn('categoria', [
+                        'DEUDORES OTORGAMIENTO ANTICIPOS',
+                        'DEUDORES REINTEGRO ANTICIPOS'
+                    ])
                     ->whereYear('fecha', '=', Carbon::now()->year)
                     ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
+
+                $hayRetenciones = Poliza::where('evento', '=', $this->numeroEvento)
+                    ->where('categoria', '=', 'DEUDORES COMPROBACION ANTICIPOS')
+                    ->whereYear('fecha', '=', Carbon::now()->year)
+                    ->where(function ($q) {
+                        $q->where('concepto', 'LIKE', '%ISR%')
+                            ->orWhere('concepto', 'LIKE', '%IVA%');
+                    })
+                    ->exists();
+                if (!$hayRetenciones) {
+                    Poliza::where('evento', '=', $this->numeroEvento)
+                        ->where('categoria', 'DEUDORES COMPROBACION ANTICIPOS')
+                        ->whereYear('fecha', '=', Carbon::now()->year)
+                        ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
+                }
             }
 
             $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
-        }catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('Ocurrió un error al finalizarRegistro en deudores reintegro table: '. $th->getMessage());
+            Log::error('Ocurrió un error al finalizarRegistro en deudores reintegro table: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }

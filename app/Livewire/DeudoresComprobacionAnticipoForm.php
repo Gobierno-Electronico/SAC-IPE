@@ -66,23 +66,31 @@ class DeudoresComprobacionAnticipoForm extends Component
     public $cambiarCuentaContableSeleccionada = true;
 
     public $PTTOEjercer = 0;
+    public $cuentaResponsabilidad;
 
     public function render()
     {
         try {
             $eventos =  Poliza::select('evento', 'descripcion')
-            ->whereYear('fecha', '=', Carbon::now()->year)
-            ->where('tipo_poliza', '=', 'D')
-            ->where('categoria', '=', 'DEUDORES REINTEGRO ANTICIPOS')
-            ->where('estatus_evento', '=', EstatusEvento::ACTIVO->value)
-            ->distinct()
-            ->pluck('descripcion', 'evento');
+                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->where('tipo_poliza', '=', 'D')
+                ->where('categoria', '=', 'DEUDORES OTORGAMIENTO ANTICIPOS')
+                ->where('estatus_evento', '=', EstatusEvento::ACTIVO->value)
+                ->distinct()
+                ->pluck('descripcion', 'evento');
 
             $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [10109])
-            ->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
-            ->where('cuentas.Descripcion_cuenta', 'LIKE', '%Pagado%' )
-            ->orderBy('cuentas.Descripcion_cuenta')->get();
+                ->whereIn('interaccion_cuenta_conceptos.concepto_id', [10109])
+                ->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Cargo')
+                ->where('cuentas.Descripcion_cuenta', 'LIKE', '%Pagado%')
+                ->orderBy('cuentas.Descripcion_cuenta')->get();
+
+            $this->cuentaResponsabilidad = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+                ->whereIn('interaccion_cuenta_conceptos.concepto_id', [10109])
+                ->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Abono')
+                ->where('cuentas.Descripcion_cuenta', 'LIKE', '%Responsabilidad de Funcionarios%')
+                ->orderBy('cuentas.Descripcion_cuenta')->get();
+
 
             $this->cambiarCuentaContableSeleccionada = false;
             $this->llenarCuentasContableAbono();
@@ -94,41 +102,43 @@ class DeudoresComprobacionAnticipoForm extends Component
         }
     }
 
-    public function cambioEvento(){
-        $this->limpiar(); 
-        try{
+    public function cambioEvento()
+    {
+        $this->limpiar();
+        try {
             $this->llenarCamposEspecificos();
-            $this->montoDelEvento = DB::select('EXEC ImporteTotalComprobacionAnticipo @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
+            $this->montoDelEvento = DB::select('EXEC ImporteTotalOtorgamientoAnticipo @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             $this->dispatch('formato_importe', id: 'inputMontoEvento', amount: ($this->montoDelEvento > 0) ? $this->montoDelEvento : '');
             $this->dispatch('mostrarMensaje', mensaje: 'Monto del evento cargado', tipo: 'success', tiempo: 1500);
             $this->llenarCuentasContableAbono();
-        }catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar el monto del evento en deudores comprobación de anticipo: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 
-    public function llenarCamposEspecificos(){
-        try{      
+    public function llenarCamposEspecificos()
+    {
+        try {
+            $hayReintegro = Poliza::where('evento', '=', $this->numeroEvento)
+                ->where('categoria', '=', 'DEUDORES REINTEGRO ANTICIPOS')
+                ->exists();
+            $categoria = '';
+
+            if ($hayReintegro) {
+                $categoria = 'DEUDORES REINTEGRO ANTICIPOS';
+            } else {
+                $categoria = 'DEUDORES OTORGAMIENTO ANTICIPOS';
+            }
             $descripcionEvento = Poliza::select('descripcion')
                 ->where('evento', '=', $this->numeroEvento)
                 ->where('tipo_poliza', '=', 'D')
-                ->where('categoria', '=', 'DEUDORES REINTEGRO ANTICIPOS')
+                ->where('categoria', '=', $categoria)
                 ->get()[0]->descripcion;
-        
-            $areaEvento = Poliza::select('area')
-                ->where('evento', '=', $this->numeroEvento)
-                ->where('tipo_poliza', '=', 'D')
-                ->where('categoria', '=', 'DEUDORES REINTEGRO ANTICIPOS')
-                ->get()[0]->area;
-        
-            $idArea = CodigoDepartamento::select('id')
-                ->where('Codigo_completo', '=', $areaEvento)
-                ->get()[0]->id; 
-        
+
+
             $this->observaciones = $descripcionEvento;
-            $this->selectCodigoAreaResponsable = $idArea;   
-        }catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             Log::error('Ocurrió un error al llenar campos específicos en deudores comprobación de anticipo: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
@@ -137,18 +147,17 @@ class DeudoresComprobacionAnticipoForm extends Component
     public function verificarCantidadRelaciones()
     {
         $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('concepto_id', [10109])
-        ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
+            ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
 
         $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
-        ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
-        ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-        ->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Cargo')
-        ->get()->toArray();
+            ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+            ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+            ->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Cargo')
+            ->get()->toArray();
 
-        if(count($interaccionCuentaCuentas) > 2)
-        {
+        if (count($interaccionCuentaCuentas) > 2) {
             $this->habilitarSelectorTipoRegistro = true;
-        }else{
+        } else {
             $this->habilitarSelectorTipoRegistro = false;
         }
 
@@ -162,19 +171,18 @@ class DeudoresComprobacionAnticipoForm extends Component
             $this->cuentaContableAbono = "";
         }
 
-        try{
+        try {
             $this->cambiarCuentaContableSeleccionada = true;
 
             $this->cuentasContableAbono = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [10109])
-            ->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Abono')
-            ->where('cuentas.Codigo_cuenta', 'LIKE', '%2.1.1.7.01.%' )
-            ->orWhere('cuentas.Descripcion_cuenta', '=', 'Responsabilidad de Funcionarios y Empleados Ejercicio Actual')
-            ->orderBy('cuentas.Descripcion_cuenta')->get();
+                ->whereIn('interaccion_cuenta_conceptos.concepto_id', [10109])
+                ->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Abono')
+                ->where('cuentas.Codigo_cuenta', 'LIKE', '%2.1.1.7.01.%')
+                ->orWhere('cuentas.Descripcion_cuenta', '=', 'Responsabilidad de Funcionarios y Empleados Ejercicio Actual')
+                ->orderBy('cuentas.Descripcion_cuenta')->get();
 
             $this->cuentasContableAbono = $this->cuentasContableAbono->unique('Descripcion_cuenta');
-
-        }catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar las cuentas contables en deudores comprobación de anticipo: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas contables, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
@@ -182,34 +190,34 @@ class DeudoresComprobacionAnticipoForm extends Component
 
     public function cargarPresupuestoPorEjercer()
     {
-        try{
+        try {
             if (!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
 
             $anioActual = Carbon::now()->year;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [10109])->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
             $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')
-            ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->where('Descripcion_cuenta', 'LIKE', '%(Por ejercer)%')->first();
+                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->where('Descripcion_cuenta', 'LIKE', '%(Por ejercer)%')->first();
 
             $solvencia = DB::select('EXEC SolvenciaCuentasPorEjercer @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($departamento->Codigo_completo, $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $this->mes))[0]->Solvencia;
             $this->PTTOEjercer = ($solvencia > 0) ? floatval($solvencia) : 0;
 
             $this->dispatch('formato_importe', id: 'inputPTTOEjercer', amount: "{$this->PTTOEjercer}");
-            $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar cargado', tipo: 'success', tiempo: 1500); 
-        }catch (\Throwable $th) {
+            $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar cargado', tipo: 'success', tiempo: 1500);
+        } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar presupuesto en deudores comprobación de anticipo: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar presupuesto, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 
-     public function asignarCuentaContableAbono()
+    public function asignarCuentaContableAbono()
     {
-        try{
+        try {
             $descripcionPartida = Cuenta::select('Descripcion_cuenta')->where('id', '=', $this->cuenta)->get();
             $conceptoGeneralPartida = rtrim(explode('(', $descripcionPartida[0]->Descripcion_cuenta)[0]);
-                    
+
             $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [10109])
-            ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
+                ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
             $cuentasContables = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
                 ->join('interaccion_cuenta_conceptos', function ($join) {
                     $join->on('interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
@@ -217,43 +225,43 @@ class DeudoresComprobacionAnticipoForm extends Component
                 })
                 ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
                 ->where('cuentas.Descripcion_cuenta', 'like', '%' . $conceptoGeneralPartida . '%')
-                ->get(); 
-            
+                ->get();
+
             $this->cuentaContableAbono = $cuentasContables[0]->cuenta_id;
-        }catch(\Throwable $th) {
+        } catch (\Throwable $th) {
             Log::error('Ocurrió un error al asignar cuenta contable en deudores comprobación de anticipo: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al asignar cuenta contable, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
-    } 
+    }
 
 
     public function agregarRegistro()
     {
-        try{
-            if($this->selectorPagoRetenciones == 'SI' && $this->cuentaContableAbono == ""){
+        try {
+            if ($this->selectorPagoRetenciones == 'SI' && $this->cuentaContableAbono == "") {
                 $this->dispatch('mostrarMensaje', mensaje: 'Retención requerida', tipo: 'warning', tiempo: 3000);
                 return;
             }
 
-            if($this->selectorPagoRetenciones == 'NO'){
+            if ($this->selectorPagoRetenciones == 'NO') {
                 $this->asignarCuentaContableAbono();
             }
 
-            if($this->selectorBanco == 'SI' && $this->cuentaBanco == ""){
+            if ($this->selectorBanco == 'SI' && $this->cuentaBanco == "") {
                 $this->dispatch('mostrarMensaje', mensaje: 'Cuenta de banco requerida', tipo: 'warning', tiempo: 3000);
                 return;
             }
 
-            if($this->habilitarSelectorTipoRegistro == true && $this->tipoRegistro == ""){
+            if ($this->habilitarSelectorTipoRegistro == true && $this->tipoRegistro == "") {
                 $this->dispatch('mostrarMensaje', mensaje: 'Tipo de registro requerido', tipo: 'warning', tiempo: 3000);
                 return;
             }
 
-            if($this->selectorBanco == 'SI'){
-                if($this->importeBanco == ""){
+            if ($this->selectorBanco == 'SI') {
+                if ($this->importeBanco == "") {
                     $this->dispatch('mostrarMensaje', mensaje: 'Importe de banco requerido', tipo: 'warning', tiempo: 3000);
                     return;
-                }else{
+                } else {
                     $this->importeBanco = floatval(str_replace(['$', ','], "", $this->importeBanco));
                     $this->importeBanco = ($this->importeBanco > 0)  ? $this->importeBanco : "";
                 }
@@ -295,9 +303,9 @@ class DeudoresComprobacionAnticipoForm extends Component
 
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
-        }catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (\Illuminate\Validation\ValidationException $e) {
             $this->dispatch('mostrarMensaje', mensaje: $e->getMessage(), tipo: 'warning', tiempo: 3000);
-        }catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             Log::error('Ocurrió un error al registrar en deudores comprobación de anticipo: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
@@ -310,6 +318,7 @@ class DeudoresComprobacionAnticipoForm extends Component
         $this->mes = "";
         $this->importe = "";
         $this->tipoRegistro = "";
+        $this->cuentaContableAbono = "";
         $this->habilitarSelectorTipoRegistro = false;
         $this->dispatch('limpiar');
     }
@@ -343,7 +352,7 @@ class DeudoresComprobacionAnticipoForm extends Component
         $this->cuentaBanco = $datosRegistro['cuentaBanco'];
         $this->importeBanco = $datosRegistro['importeBanco'];
 
-        if($this->tipoRegistro != ''){
+        if ($this->tipoRegistro != '') {
             $this->habilitarSelectorTipoRegistro = true;
         }
 

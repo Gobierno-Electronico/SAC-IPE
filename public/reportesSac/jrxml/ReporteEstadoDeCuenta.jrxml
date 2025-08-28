@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PolizaEgresosComprometidoCapitulo1" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" isFloatColumnFooter="true" uuid="55a8c4bf-9344-4264-a6b2-ecc8cd2fda35">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteEstadoDeCuenta" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" isFloatColumnFooter="true" uuid="55a8c4bf-9344-4264-a6b2-ecc8cd2fda35">
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
@@ -29,71 +29,50 @@
 	<parameter name="Hora" class="java.lang.String"/>
 	<parameter name="Numero" class="java.lang.String"/>
 	<parameter name="Evento" class="java.lang.String"/>
+	<parameter name="Cuenta" class="java.lang.String"/>
+	<parameter name="FechaInicio" class="java.lang.String"/>
+	<parameter name="FechaFin" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[EXEC dbo.PolizaEgresosComprometidoCapitulo1 @Numero_poliza =  $P{Numero}, @evento =  $P{Evento}]]>
+		<![CDATA[EXEC dbo.ReporteEstadoDeCuenta @cuenta =  $P{Cuenta}, @fechaInicio =  $P{FechaInicio}, @fechaFin = $P{FechaFin}]]>
 	</queryString>
-	<field name="nombreUsuario" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="nombreUsuario"/>
-		<property name="com.jaspersoft.studio.field.label" value="nombreUsuario"/>
-	</field>
-	<field name="area" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="area"/>
-		<property name="com.jaspersoft.studio.field.label" value="area"/>
-	</field>
-	<field name="Clave" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="Clave"/>
-		<property name="com.jaspersoft.studio.field.label" value="Clave"/>
-	</field>
-	<field name="cuenta" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="cuenta"/>
-		<property name="com.jaspersoft.studio.field.label" value="cuenta"/>
-	</field>
-	<field name="tipo_interaccion" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="tipo_interaccion"/>
-		<property name="com.jaspersoft.studio.field.label" value="tipo_interaccion"/>
-	</field>
 	<field name="tipo_poliza" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="tipo_poliza"/>
 		<property name="com.jaspersoft.studio.field.label" value="tipo_poliza"/>
+	</field>
+	<field name="numero_poliza" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="numero_poliza"/>
+		<property name="com.jaspersoft.studio.field.label" value="numero_poliza"/>
 	</field>
 	<field name="evento" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="evento"/>
 		<property name="com.jaspersoft.studio.field.label" value="evento"/>
 	</field>
-	<field name="estatus_evento" class="java.lang.Short">
-		<property name="com.jaspersoft.studio.field.name" value="estatus_evento"/>
-		<property name="com.jaspersoft.studio.field.label" value="estatus_evento"/>
-	</field>
 	<field name="FechaRegistro" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="FechaRegistro"/>
 		<property name="com.jaspersoft.studio.field.label" value="FechaRegistro"/>
+	</field>
+	<field name="fecha" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="fecha"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha"/>
 	</field>
 	<field name="descripcion" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="descripcion"/>
 		<property name="com.jaspersoft.studio.field.label" value="descripcion"/>
 	</field>
-	<field name="numero" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="numero"/>
-		<property name="com.jaspersoft.studio.field.label" value="numero"/>
+	<field name="tipo_interaccion" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="tipo_interaccion"/>
+		<property name="com.jaspersoft.studio.field.label" value="tipo_interaccion"/>
 	</field>
-	<field name="concepto" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="concepto"/>
-		<property name="com.jaspersoft.studio.field.label" value="concepto"/>
-	</field>
-	<field name="total_suma" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="total_suma"/>
-		<property name="com.jaspersoft.studio.field.label" value="total_suma"/>
-	</field>
-	<field name="validado" class="java.lang.Integer">
-		<property name="com.jaspersoft.studio.field.name" value="validado"/>
-		<property name="com.jaspersoft.studio.field.label" value="validado"/>
+	<field name="total" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="total"/>
+		<property name="com.jaspersoft.studio.field.label" value="total"/>
 	</field>
 	<variable name="SumaCargo" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{tipo_interaccion}.equals("Presupuestal - Cargo") ? $F{total_suma} : 0]]></variableExpression>
+		<variableExpression><![CDATA[$F{tipo_interaccion}.equals("Presupuestal - Cargo") ? $F{total} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
 	<variable name="SumaAbono" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{tipo_interaccion}.equals("Presupuestal - Abono") ? $F{total_suma} : 0]]></variableExpression>
+		<variableExpression><![CDATA[$F{tipo_interaccion}.equals("Presupuestal - Abono") ? $F{total} : 0]]></variableExpression>
 	</variable>
 	<group name="Cuentas">
 		<groupExpression><![CDATA[$F{tipo_interaccion}]]></groupExpression>
@@ -127,9 +106,7 @@ DEPARTAMENTO DE CONTABILIDAD Y PRESUPUESTO]]></text>
 				<textFieldExpression><![CDATA["HORA"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="157" y="50" width="447" height="19" forecolor="#050505" uuid="ef0e1097-650b-4d3b-8d17-fac4179f63c8">
-					<printWhenExpression><![CDATA[$F{validado} == 0]]></printWhenExpression>
-				</reportElement>
+				<reportElement x="157" y="50" width="447" height="19" forecolor="#050505" uuid="ef0e1097-650b-4d3b-8d17-fac4179f63c8"/>
 				<textElement textAlignment="Center">
 					<font fontName="Times New Roman" size="11" isBold="true"/>
 				</textElement>
@@ -189,7 +166,6 @@ DEPARTAMENTO DE CONTABILIDAD Y PRESUPUESTO]]></text>
 				<textElement textAlignment="Center">
 					<font fontName="Times New Roman" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[//ACA VA RANGO]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="157" y="89" width="447" height="20" uuid="a975d5e6-5ed4-4c74-9134-8505059267d0">
@@ -199,7 +175,6 @@ DEPARTAMENTO DE CONTABILIDAD Y PRESUPUESTO]]></text>
 				<textElement textAlignment="Center">
 					<font fontName="Times New Roman" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[//ACA VA LA CUENTA]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="604" y="0" width="133" height="10" uuid="4049a2c4-5442-4aef-ba98-675f8246b719">
@@ -432,7 +407,7 @@ Evento]]></text>
 					<font fontName="Times New Roman" size="9"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{concepto}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="641" y="19" width="80" height="23" uuid="218657f9-3739-48d4-b2ad-00bdb0c79626">
@@ -453,7 +428,7 @@ Evento]]></text>
 					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{total_suma})]]></textFieldExpression>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{total})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="481" y="19" width="80" height="23" uuid="31974cca-a510-483f-9e0d-303d49106ecd">
@@ -471,7 +446,6 @@ Evento]]></text>
 					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{total_suma})]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="-20" y="0" width="20" height="42" uuid="ed6c79bf-49a6-46c3-afd1-5b6fd280e224"/>
@@ -486,7 +460,6 @@ Evento]]></text>
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Presupuestal - Cargo"))]]></printWhenExpression>
 				</reportElement>
 				<box padding="2">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -498,7 +471,6 @@ Evento]]></text>
 					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{total_suma})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="561" y="-1" width="80" height="20" uuid="6d047648-e156-46f6-8512-9668483ba02f">
@@ -506,7 +478,6 @@ Evento]]></text>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Presupuestal - Cargo"))]]></printWhenExpression>
 				</reportElement>
 				<box padding="2">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -518,14 +489,12 @@ Evento]]></text>
 					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{total_suma})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="721" y="-1" width="80" height="20" uuid="36b632a4-818b-4ec4-beb5-2c82eb2b0e8b">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Presupuestal - Cargo"))]]></printWhenExpression>
 				</reportElement>
 				<box padding="2">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -537,7 +506,6 @@ Evento]]></text>
 					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{total_suma})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="641" y="-1" width="80" height="20" uuid="f2c3ba0e-d848-426a-8383-a1554daf935e">
@@ -545,7 +513,6 @@ Evento]]></text>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Presupuestal - Cargo"))]]></printWhenExpression>
 				</reportElement>
 				<box padding="2">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -557,7 +524,6 @@ Evento]]></text>
 					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{total_suma})]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="ScaleFont">
 				<reportElement x="55" y="19" width="50" height="23" uuid="aeef6954-b57d-4766-a653-528026495fcf">
@@ -572,7 +538,7 @@ Evento]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{area}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{numero_poliza}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="105" y="19" width="46" height="23" uuid="463db3c5-421a-4fb8-91ad-715e68f7fa45">
@@ -591,7 +557,7 @@ Evento]]></text>
 					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{cuenta}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{evento}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="ScaleFont">
 				<reportElement x="0" y="19" width="54" height="23" uuid="ff862e1e-3e32-4e6a-9dbf-93a68c2ad4cc">
@@ -606,7 +572,7 @@ Evento]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{area}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{tipo_poliza}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="151" y="19" width="70" height="23" uuid="068f3098-f24a-41d1-88a1-732309fd1e16">
@@ -626,14 +592,14 @@ Evento]]></text>
 					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{cuenta}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="561" y="19" width="80" height="23" uuid="c325b54d-d3f3-4d4e-9ea9-4dc426e5cc5b">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Presupuestal - Cargo"))]]></printWhenExpression>
+					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Contable - Cargo") || $F{tipo_interaccion}.equals("Presupuestal - Cargo"))]]></printWhenExpression>
 				</reportElement>
 				<box padding="2">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -645,10 +611,10 @@ Evento]]></text>
 					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{total_suma})]]></textFieldExpression>
+				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{total})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="721" y="19" width="80" height="23" uuid="e77c4938-9cec-4079-99a2-37b2e8230d05">
+				<reportElement x="721" y="19" width="80" height="23" printWhenGroupChanges="Cuentas" uuid="e77c4938-9cec-4079-99a2-37b2e8230d05">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -666,7 +632,6 @@ Evento]]></text>
 					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{total_suma})]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
