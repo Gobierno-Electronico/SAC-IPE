@@ -2,7 +2,7 @@
 @section('title', 'Estado de cuenta')
 
 @section('content')
-    <script src="{{ asset('js/Presupuesto/balanzaArmonizada.js') }}"></script>
+    <script src="{{ asset('js/Reportes/reportes.js') }}"></script>
      
 
     <div class="container mt-5">

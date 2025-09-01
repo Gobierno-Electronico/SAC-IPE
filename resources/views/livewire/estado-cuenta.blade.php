@@ -54,3 +54,38 @@
     </div>
 
 </div>
+
+<script>
+document.addEventListener('livewire:init', () => {
+    Livewire.on('generarReporteJasper', (data) => {
+        let { cuenta, fechaInicio, fechaFin, descripcionCuenta } = data;
+
+        let nombrereporte = 'ReporteEstadoDeCuenta';
+
+        const wsUrl = "http://" + window.IP_PORT + "/" + window.NOMBRE_REPORTEADOR + "/webresources/service/report?name=" + nombrereporte + "&params=";
+
+        let url = `${wsUrl}Cuenta;${cuenta},DescripcionCuenta;${descripcionCuenta},FechaInicio;${fechaInicio},FechaFin;${fechaFin}`;
+
+        console.log("Llamando Jasper con URL:", url);
+
+        let mensajeEdoSolicitud = toastr.info("Procesando solicitud, espere un momento...", "", { timeOut: "0" });
+
+        fetch(url, { method: "GET" })
+            .then((response) => {
+                if (!response.ok) {
+                    toastr.error("Problemas al procesar la solicitud");
+                    mensajeEdoSolicitud.remove();
+                } else {
+                    response.text().then((reporteUrl) => {
+                        window.open(reporteUrl);
+                        mensajeEdoSolicitud.remove();
+                    });
+                }
+            })
+            .catch((error) => {
+                mensajeEdoSolicitud.remove();
+                toastr.error("Error al conectar con Jasper");
+            });
+    });
+});
+</script>

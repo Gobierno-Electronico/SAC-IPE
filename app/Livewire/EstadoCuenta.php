@@ -46,9 +46,17 @@ class EstadoCuenta extends Component
     {
         try {
             $this->validate();
-            dd($this->cuenta, $this->fechaInicio, $this->fechaFin);
+            $cuenta = Cuenta::find($this->cuenta);
+
+            $this->dispatch(
+                'generarReporteJasper',
+                cuenta: $cuenta->Codigo_cuenta,
+                descripcionCuenta: $cuenta->Descripcion_cuenta,
+                fechaInicio: $this->fechaInicio,
+                fechaFin: $this->fechaFin,
+            );        
         } catch (\Illuminate\Validation\ValidationException $e) {
-            $this->dispatch('mostrarMensaje', mensaje: $e->getMessage(), tipo: 'warning', tiempo: 3000);
+             $this->dispatch('mostrarMensaje', mensaje: $e->getMessage(), tipo: 'warning', tiempo: 3000);
         }
     }
 }
