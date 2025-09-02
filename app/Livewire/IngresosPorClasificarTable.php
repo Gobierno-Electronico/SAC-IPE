@@ -241,6 +241,9 @@ class IngresosPorClasificarTable extends Tabla
     
                 $poliza->save();
                 $polizaDerecha->save();
+                   Poliza::where('evento', '=', $this->numeroEvento)
+                    ->whereIn('categoria', ['INGRESOS POR CLASIFICAR'])
+                    ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
                 DB::commit();
             }
             $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);

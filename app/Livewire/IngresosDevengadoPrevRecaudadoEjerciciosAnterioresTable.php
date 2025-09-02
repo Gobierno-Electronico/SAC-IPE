@@ -18,7 +18,7 @@ use App\Models\InteraccionCuentaConcepto;
 use App\Models\CodigoDepartamento;
 use App\Enums\EstatusEvento;
 
-class DevengadoPrevRecaudadoTable extends Tabla
+class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresTable extends Tabla
 {
     public $cacheData = [];
     public $dataCompleta = [];
@@ -31,7 +31,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
 
     public function render()
     {
-        return view('livewire.devengado-prev-recaudado-table');
+        return view('livewire.ingresos-devengado-prev-recaudado-ejercicios-anteriores-table');
     }
 
     public function query(): Builder
@@ -50,13 +50,10 @@ class DevengadoPrevRecaudadoTable extends Tabla
     {
         return [
             Column::make('area', 'Area'),
-            Column::make('partida', 'Partida'),
             Column::make('cuentaPago', 'Cuenta de pago'),
             Column::make('mes', 'Mes'),
             Column::make('movimiento', 'Movimiento'),
-            Column::make('ejecutar', 'PPTO por ejecutar')->component('columns.importe'),
             Column::make('importe', 'Importe')->component('columns.importe'),
-            Column::make('disponibilidad', 'Disponibilidad')->component('columns.importe'),
             Column::make('id', 'Acciones')->component('columns.accionesIngresos')
         ];
     }
@@ -96,7 +93,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
             $this->total = $totalActualizado;
             $this->dispatch('cambioTotal', total: $totalActualizado);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al editar en Devengado previamente recaudado: ' . $th->getMessage());
+            Log::error('Ocurrió un error al editar en Devengado previamente recaudado ejercicios anteriores: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al editar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -127,7 +124,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
             $this->total = $totalActualizado;
             $this->dispatch('cambioTotal', total: $totalActualizado);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al eliminar en Devengado previamente recaudado: ' . $th->getMessage());
+            Log::error('Ocurrió un error al eliminar en Devengado previamente recaudado ejercicios anteriores: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al eliminar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -173,48 +170,18 @@ class DevengadoPrevRecaudadoTable extends Tabla
             }
 
             $anioActual = Carbon::now()->year;
-            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $registro['cuentaId'])->where('concepto_id', '=', 14)->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
-            $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')
-                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->where('Descripcion_cuenta', 'LIKE', '%(Por ejecutar)%')->first();
-
-
-            $solvencia = DB::select('EXEC SolvenciaCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($registro['codigoAreaResponsable'], $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $registro['mes']));
-            // $solvenciaCuentaPago = DB::select('EXEC SolvenciaIngresosPorClasificar @cuenta = ?, @cuentaPago = ?, @evento =?', array($registro['codigoCuenta'], $registro['codigoCuentaPago'], $registro['evento']));
-            // $this->sumarRegistrosPorCuentaPago($registro);
-            // if ($this->totalRegistrosPorCuentaPago + $registro['importe'] > $solvenciaCuentaPago[0]->Total) {
-            //     $this->dispatch('mostrarMensaje', mensaje: 'Solvencia de la cuenta de pago insuficiente', tipo: 'error', tiempo: 3000);
-            //     return;
-            // }
-
-            $totalDisponible = $solvencia[0]->Solvencia - $registro['importe'];
-            $totalImportes = 0;
-
-            foreach ($this->cacheData as $movimiento) {
-                if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoCuenta']) && $movimiento['mes'] == $registro['mes'] && $movimiento['evento'] == $registro['evento']) {
-                    $totalImportes += $movimiento['importe'];
-                }
-            }
-
-            if ($totalImportes > 0) {
-                $totalDisponible = bcsub(bcsub($solvencia[0]->Solvencia, $totalImportes, 2), $registro['importe'], 2);
-            }
-
-            if ($totalDisponible < 0) {
-                $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto por ejecutar insuficiente', tipo: 'error', tiempo: 3000);
-                return;
-            }
 
             $nuevoRegistro = [
                 'id' => 0,
                 'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
-                'partida' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
+                // 'partida' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
                 'cuentaPago' => $registro['codigoCuentaPago'] . ' ' . $registro['descripcionCuentaPago'],
                 'mes' => $registro['mes'],
                 // 'evento' => $registro['evento'],
                 'movimiento' => 'DEVENGADO PREVIAMENTE RECAUDADO',
-                'ejecutar' => $solvencia[0]->Solvencia,
+                // 'ejecutar' => $solvencia[0]->Solvencia,
                 'importe' => $registro['importe'],
-                'disponibilidad' => $totalDisponible
+                // 'disponibilidad' => $totalDisponible
             ];
             array_push($this->cacheData, $nuevoRegistro);
             array_push($this->dataCompleta, $registro);
@@ -226,7 +193,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
             }
             $this->dispatch('cambioTotal', total: $this->total);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al agregar registro en Devengado previamente recaudado: ' . $th->getMessage());
+            Log::error('Ocurrió un error al agregar registro en Devengado previamente recaudado ejercicios anteriores: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -270,25 +237,21 @@ class DevengadoPrevRecaudadoTable extends Tabla
             sort($numerosEvento);
     
             $this->numeroEvento = (int)end($numerosEvento) + 1;
-          
+ 
             $anioActual = Carbon::now()->year;
             $fecha = Carbon::now('America/Mexico_City');
             $fecha->year($anioActual);
+            $cuentaIngresosClasificar = Cuenta::where('Codigo_cuenta', '2.1.9.1.01.01')->get();
 
             $bitacora = new BitacoraController();
             $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un devengado previamente recaudado con evento: ' . $this->numeroEvento, request());
 
             DB::beginTransaction();
 
-            foreach ($this->dataCompleta as $movimiento) {
-                $movimiento['importe'] = doubleval($movimiento['importe']);
-                $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaId'])->where('concepto_id', '=', 14)
-                    ->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
-                $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
-                    ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
-                    ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
-                $importeMovimiento = $movimiento['importe'];
 
+            foreach ($this->dataCompleta as $movimiento) {
+                $importeMovimiento = doubleval($movimiento['importe']);
+                
                 $polizas = [
                     [
                         'idUsuarioRegistrante' => $idUsuarioRegistrante,
@@ -296,67 +259,53 @@ class DevengadoPrevRecaudadoTable extends Tabla
                         'tipo_poliza' => 'I',
                         'numero_poliza' =>  $this->numeroPoliza,
                         'fecha' => $movimiento['fechaAfectacion'],
-                        'cuenta' => $movimiento['codigoCuenta'],
-                        'cuentaRelacionada' => $movimiento['codigoCuentaPago'],
-                        'concepto' => $movimiento['descripcionCuenta'],
+                        'cuenta' => $movimiento['codigoCuentaPago'],
+                        'concepto' => $movimiento['descripcionCuentaPago'],
                         'total' => abs($importeMovimiento),
                         'mes' => $movimiento['mes'],
                         'descripcion' => $movimiento['observaciones'],
                         'evento' => $this->numeroEvento,
-                        'tipo_interaccion' => $interaccionCuentaConceptoPrincipal->tipo_interaccion,
+                        'tipo_interaccion' => 'Contable - Abono',
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
-                        'categoria' => 'INGRESOS DEVENGADO PREVIAMENTE RECAUDADO',
+                        'categoria' => 'INGRESOS DEVENGADO PREVIAMENTE RECAUDADO EJERCICIOS ANTERIORES',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
-                    ]
-                ];
-                foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
-                    $importe = $movimiento['importe'];
-                    if (str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')) {
-                        if ($movimiento['iva'] > 0) {
-                            $importe = $movimiento['iva'];
-                        } else {
-                            //Saltamos la interacción con iva que no quieren que se le agregue el IVA, esto para no mostrarlo en la poliza
-                            continue;
-                        }
-                    }
-                    if ($dataCuenta['tipo_interaccion'] == 'Contable - Abono' &&  !str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')) {
-                        $importe = $importe - $movimiento['iva'];
-                    }
-                    array_push($polizas, [
+                    ],
+
+                    [
                         'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'I',
                         'numero_poliza' =>  $this->numeroPoliza,
                         'fecha' => $movimiento['fechaAfectacion'],
-                        'cuenta' => $dataCuenta['Codigo_cuenta'],
-                        'cuentaRelacionada' => $movimiento['codigoCuentaPago'],
-                        'concepto' => $dataCuenta['Descripcion_cuenta'],
-                        'total' => $importe,
+                        'cuenta' => $cuentaIngresosClasificar[0]->Codigo_cuenta,
+                        'concepto' => $cuentaIngresosClasificar[0]->Descripcion_cuenta,
+                        'total' => abs($importeMovimiento),
                         'mes' => $movimiento['mes'],
                         'descripcion' => $movimiento['observaciones'],
                         'evento' => $this->numeroEvento,
-                        'tipo_interaccion' => $dataCuenta['tipo_interaccion'],
+                        'tipo_interaccion' => 'Contable - Cargo',
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
-                        'categoria' => 'INGRESOS DEVENGADO PREVIAMENTE RECAUDADO',
+                        'categoria' => 'INGRESOS DEVENGADO PREVIAMENTE RECAUDADO EJERCICIOS ANTERIORES',
                         'created_at' => $fecha,
                         'updated_at' => $fecha
-                    ]);
-                }
+                    ]
+                ];
+               
                 Poliza::insert($polizas);
             }
 
-
-            Poliza::where('evento', '=', $this->numeroEvento)
-                    ->whereIn('categoria', ['INGRESOS DEVENGADO PREVIAMENTE RECAUDADO'])
+                Poliza::where('evento', '=', $this->numeroEvento)
+                    ->whereIn('categoria', ['INGRESOS DEVENGADO PREVIAMENTE RECAUDADO EJERCICIOS ANTERIORES'])
                     ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
+          
             DB::commit();
             $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente);
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('Ocurrió un error al finalizarRegistro en devengado previamente recaudado: ' . $th->getMessage());
+            Log::error('Ocurrió un error al finalizarRegistro en devengado previamente recaudado ejercicios anteriores: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }

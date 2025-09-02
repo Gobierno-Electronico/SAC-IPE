@@ -16,7 +16,7 @@ use App\Models\InteraccionCuentaConcepto;
 use App\Enums\EstatusEvento;
 
 
-class DevengadoPrevRecaudadoForm extends Component
+class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresForm extends Component
 {
     #[Validate('required', message: 'Área solicitante requerida')]
     public $selectCodigoArea = "";
@@ -26,9 +26,6 @@ class DevengadoPrevRecaudadoForm extends Component
 
     #[Validate('required', message: 'Área responsable requerida')]
     public $selectCodigoAreaResponsable = "";
-
-    #[Validate('required', message: 'Cuenta requerida')]
-    public $cuenta = "";
 
     #[Validate('required', message: 'Mes requerido')]
     public $mes = "";
@@ -61,20 +58,16 @@ class DevengadoPrevRecaudadoForm extends Component
     public function render()
     {
         try {
-            $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-                ->where('interaccion_cuenta_conceptos.concepto_id', '=', 14)->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Abono')
-                ->where('cuentas.Descripcion_cuenta', 'LIKE', '%(Devengado)%')->orderBy('cuentas.Codigo_cuenta')->get();
-
             $this->cambiarCuentaPagoSeleccionada = false;
             $this->llenarCuentasPago();
-            $this->verificarCausaIVA();
+            // $this->verificarCausaIVA();
 
             $solvenciaPorClasificar = DB::select('EXEC SolvenciaIngresosPorClasificarGeneral')[0]->Total;
             $this->montoPorClasificar = ($solvenciaPorClasificar > 0) ? $solvenciaPorClasificar : 0;
 
-            return view('livewire.devengado-prev-recaudado-form', ['cuentas' => $cuentas, 'montoPorClasificar' => $this->montoPorClasificar]);
+            return view('livewire.ingresos-devengado-prev-recaudado-ejercicios-anteriores-form', ['montoPorClasificar' => $this->montoPorClasificar]);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al cargar cuentas en Devengado previamente recaudado: ' . $th->getMessage());
+            Log::error('Ocurrió un error al cargar cuentas en Devengado previamente recaudado ejercicios anteriores: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -95,7 +88,7 @@ class DevengadoPrevRecaudadoForm extends Component
                 })
                 ->get();
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al cargar las cuentas de pago en devengado previamente recaudado: ' . $th->getMessage());
+            Log::error('Ocurrió un error al cargar las cuentas de pago en devengado previamente recaudado ejercicios anteriores: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas de pago, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -118,7 +111,6 @@ class DevengadoPrevRecaudadoForm extends Component
             $this->causaIva = floatval(str_replace(['$', ','], "", $this->causaIva));
             $this->importe = ($this->importe > 0)  ? $this->importe : "";
             $this->validate();
-            $cuenta = Cuenta::find($this->cuenta);
             $cuentaPagoSeleccionada = Cuenta::find($this->cuentaPago);
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $registro = [
@@ -128,9 +120,6 @@ class DevengadoPrevRecaudadoForm extends Component
                 'areaResponsableId' => $this->selectCodigoAreaResponsable,
                 'codigoAreaResponsable' => $departamento->Codigo_completo,
                 'descripcionAreaResponsable' => $departamento->Nombre,
-                'cuentaId' => $this->cuenta,
-                'codigoCuenta' => $cuenta->Codigo_cuenta,
-                'descripcionCuenta' => $cuenta->Descripcion_cuenta,
                 'cuentaPagoId' => $this->cuentaPago,
                 'codigoCuentaPago' => $cuentaPagoSeleccionada->Codigo_cuenta,
                 'descripcionCuentaPago' => $cuentaPagoSeleccionada->Descripcion_cuenta,
@@ -138,49 +127,48 @@ class DevengadoPrevRecaudadoForm extends Component
                 'fechaAfectacion' => $this->fechaAfectacion,
                 'importe' => $this->importe,
                 'montoPorClasificar' => $this->montoPorClasificar,
-                'iva' => $this->causaIva,
-                'agregarIVA' => $this->agregarIVA,
+
             ];
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
         } catch (\Illuminate\Validation\ValidationException $e) {
             $this->dispatch('mostrarMensaje', mensaje: $e->getMessage(), tipo: 'warning', tiempo: 3000);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al agregar registro en Devengado previamente recaudado: ' . $th->getMessage());
+            Log::error('Ocurrió un error al agregar registro en Devengado previamente recaudado ejercicios anteriores: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 
-    public function verificarCausaIVA()
-    {
-        try {
-            if (!$this->cuenta) return;
-            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [14])->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
-            $interaccionCuentasCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
-                ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
-                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
+    // public function verificarCausaIVA()
+    // {
+    //     try {
+    //         if (!$this->cuenta) return;
+    //         $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [14])->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
+    //         $interaccionCuentasCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
+    //             ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
+    //             ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
 
-            foreach ($interaccionCuentasCuentas as $key => $dataCuenta) {
-                if (str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')) {
-                    if ($this->importe == "") {
-                        $this->dispatch('limpiarIVA');
-                    } else {
+    //         foreach ($interaccionCuentasCuentas as $key => $dataCuenta) {
+    //             if (str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')) {
+    //                 if ($this->importe == "") {
+    //                     $this->dispatch('limpiarIVA');
+    //                 } else {
 
-                        $importeFormateado = str_replace(['$', ','], '', $this->importe);
-                        $this->causaIva = ($importeFormateado / 1.16) * 0.16;
-                        $this->dispatch('formato_importe', id: 'inputIva', amount: "{$this->causaIva}");
-                    }
-                } else {
-                    $this->causaIva = 0;
-                    $this->agregarIVA = "";
-                    $this->dispatch('limpiarIVA');
-                }
-            }
-        } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al calcular IVA en Devengado previamente recaudado: ' . $th->getMessage());
-            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al calcular IVA, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
-        }
-    }
+    //                     $importeFormateado = str_replace(['$', ','], '', $this->importe);
+    //                     $this->causaIva = ($importeFormateado / 1.16) * 0.16;
+    //                     $this->dispatch('formato_importe', id: 'inputIva', amount: "{$this->causaIva}");
+    //                 }
+    //             } else {
+    //                 $this->causaIva = 0;
+    //                 $this->agregarIVA = "";
+    //                 $this->dispatch('limpiarIVA');
+    //             }
+    //         }
+    //     } catch (\Throwable $th) {
+    //         Log::error('Ocurrió un error al calcular IVA en Devengado previamente recaudado: ' . $th->getMessage());
+    //         $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al calcular IVA, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+    //     }
+    // }
 
     #[On('reiniciar')]
     public function reiniciar()
@@ -194,7 +182,6 @@ class DevengadoPrevRecaudadoForm extends Component
 
     public function limpiar()
     {
-        $this->cuenta = "";
         $this->mes = "";
         $this->importe = "";
         $this->causaIva = 0;
@@ -215,16 +202,15 @@ class DevengadoPrevRecaudadoForm extends Component
     {
         try {
             //code...
-            $this->cuenta = $datosRegistro['cuenta'];
             $this->mes = $datosRegistro['mes'];
             $this->importe = $datosRegistro['importe'];
             $this->selectCodigoAreaResponsable = $datosRegistro['area'];
             $this->agregarIVA = $datosRegistro['agregarIVA'];
             $this->cuentaPago = $datosRegistro['cuentaPago'];
-            $this->verificarCausaIVA();
+            // $this->verificarCausaIVA();
             $this->dispatch('llenarFormulario', cuenta: $datosRegistro['cuenta'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe'], area: $datosRegistro['area'], agregarIVA: $datosRegistro['agregarIVA']);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al llenar formulario en Devengado previamente recaudado: ' . $th->getMessage());
+            Log::error('Ocurrió un error al llenar formulario en Devengado previamente recaudado ejercicios anteriores: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al llenar formulario, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }

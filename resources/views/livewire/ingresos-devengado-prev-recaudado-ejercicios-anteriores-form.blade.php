@@ -25,8 +25,8 @@
             </div>
         </div>
         <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaIngresosDevengadoPreviamenteRecaudado" tipoPoliza="I"
-            urlFinalizar="/devengado-prev-recaudado" :$numeroPolizaRemanente categoriaModulo='INGRESOS DEVENGADO PREVIAMENTE RECAUDADO'/>
+            tipoMovimiento="PolizaIngresosDevengadoPreviamenteRecaudadoEjerciciosAnteriores" tipoPoliza="I"
+            urlFinalizar="/devengado-prev-recaudado-ejercicios-anteriores" :$numeroPolizaRemanente categoriaModulo='INGRESOS DEVENGADO PREVIAMENTE RECAUDADO EJERCICIOS ANTERIORES'/>
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
@@ -54,6 +54,7 @@
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
         <div class="row">
             <div class="col-3">
+               
                 <label for="selectAreaResponsable" class="form-label mt-3">Área responsable</label>
                 <select name="selectAreaResponsable" id="selectAreaResponsable" class="form-select"
                     wire:model.live="selectCodigoAreaResponsable">
@@ -66,17 +67,6 @@
                                 {{ $departamento->Codigo_completo . ' ' . $departamento->Nombre }}
                             </option>
                         @endif
-                    @endforeach
-                </select>
-
-                <label for="selectCuentaContable" class="form-label mt-3">Cuenta contable</label>
-                <select name="selectCuentaContable" id="selectCuentaContable" class="form-select"
-                    wire:model.live="cuenta" wire:change="verificarCausaIVA">
-                    <option value="" disabled>
-                        Seleccionar cuenta</option>
-                    @foreach ($cuentas as $cuenta)
-                        <option value="{{ $cuenta->cuenta_id }}">
-                            {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
                     @endforeach
                 </select>
 
@@ -110,9 +100,9 @@
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control"
                     onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model.live="importe"
-                    wire:model.live="importe" wire:change="verificarCausaIVA">
+                    wire:model.live="importe">
 
-                    @if($causaIva > 0)
+                {{-- @if($causaIva > 0)
                     <div id="id2" class="">
                         <label for="inputIva" class="form-label mt-3">Causa IVA</label>
                         <input type="text" name="inputIva" id="inputIva" class="form-control" wire:model='causaIva'>
@@ -135,10 +125,10 @@
                         <input type="radio" id="agregarIVA" name="agregarIVA" wire:model="agregarIVA" value="NO">
                         No
                     </label>
-                @endif
+                @endif --}}
             </div>
             <div class="col">
-                <livewire:devengado-prev-recaudado-table />
+                <livewire:ingresos-devengado-prev-recaudado-ejercicios-anteriores-table />
             </div>
 
             <div class="row mt-4">

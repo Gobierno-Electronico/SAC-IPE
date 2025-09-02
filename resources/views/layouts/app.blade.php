@@ -391,6 +391,10 @@
                                         <a href="{{ route('devengadoRecaudado') }}" method="GET" class="dropdown-item"
                                             onclick="mostrarCargando()">Devengado prev. recaudado</a>
                                     </li>
+                                    <li class="dropend">
+                                        <a href="{{ route('devengadoRecaudadoEjerciciosAnteriores') }}" method="GET" class="dropdown-item"
+                                            onclick="mostrarCargando()">Devengado prev. recaudado ejercicios anteriores</a>
+                                    </li>
                                 </ul>
                             </li>
 

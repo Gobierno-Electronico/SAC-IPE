@@ -21,6 +21,10 @@ class IngresosController extends Controller
         return view('ingresos.devengado-prev-recaudado');
     }
 
+    public function devengadoRecaudadoEjerciciosAnteriores(){
+        return view('ingresos.devengado-prev-recaudado-ejercicios-anteriores');
+    }
+
     public function ingresosDevengado(){
         return view('ingresos.ingresos-devengado');
     }

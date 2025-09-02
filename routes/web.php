@@ -121,6 +121,7 @@ Route::get("/movimientos", [PresupuestoController::class, 'movimientos'])->name(
 Route::get("/ingresos-por-clasificar", [IngresosController::class, 'ingresosPorClasificar'])->name('ingresosPorClasificar')->middleware('role:Administrador');
 Route::get("/depositos-bancos", [IngresosController::class, 'depositosBancos'])->name('depositosBancos')->middleware('role:Administrador');
 Route::get("/devengado-prev-recaudado", [IngresosController::class, 'devengadoRecaudado'])->name('devengadoRecaudado')->middleware('role:Administrador');
+Route::get("/devengado-prev-recaudado-ejercicios-anteriores", [IngresosController::class, 'devengadoRecaudadoEjerciciosAnteriores'])->name('devengadoRecaudadoEjerciciosAnteriores')->middleware('role:Administrador');
 Route::get("/ingresos-devengado", [IngresosController::class, 'ingresosDevengado'])->name('ingresosDevengado')->middleware('role:Administrador');
 Route::get("/ingresos-recaudado", [IngresosController::class, 'ingresosRecaudado'])->name('ingresosRecaudado')->middleware('role:Administrador');
 Route::get("/autorizacion-devolucion", [IngresosController::class, 'autorizacionDevolucion'])->name('autorizacionDevolucion')->middleware('role:Administrador');
