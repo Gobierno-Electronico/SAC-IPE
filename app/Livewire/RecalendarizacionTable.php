@@ -158,7 +158,7 @@ class RecalendarizacionTable extends Tabla
     #[On('finalizar-registros')]
     public function finalizarRegistros()
     {
-        if ($this->totalAumentado !== $this->totalDisminuido) {
+        if (bccomp($this->totalAumentado, $this->totalDisminuido, 2) !== 0) {
             $this->dispatch('mostrarMensaje', mensaje: 'Balance erroneo, los totales deben coincidir', tipo: 'warning', tiempo: 3000);
             return;
         }
