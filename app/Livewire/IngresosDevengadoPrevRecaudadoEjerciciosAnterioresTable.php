@@ -169,19 +169,14 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresTable extends Tabla
                 return;
             }
 
-            $anioActual = Carbon::now()->year;
 
             $nuevoRegistro = [
                 'id' => 0,
                 'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
-                // 'partida' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
                 'cuentaPago' => $registro['codigoCuentaPago'] . ' ' . $registro['descripcionCuentaPago'],
                 'mes' => $registro['mes'],
-                // 'evento' => $registro['evento'],
                 'movimiento' => 'DEVENGADO PREVIAMENTE RECAUDADO',
-                // 'ejecutar' => $solvencia[0]->Solvencia,
                 'importe' => $registro['importe'],
-                // 'disponibilidad' => $totalDisponible
             ];
             array_push($this->cacheData, $nuevoRegistro);
             array_push($this->dataCompleta, $registro);
@@ -256,7 +251,7 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresTable extends Tabla
                     [
                         'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
-                        'tipo_poliza' => 'I',
+                        'tipo_poliza' => 'D',
                         'numero_poliza' =>  $this->numeroPoliza,
                         'fecha' => $movimiento['fechaAfectacion'],
                         'cuenta' => $movimiento['codigoCuentaPago'],
@@ -276,7 +271,7 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresTable extends Tabla
                     [
                         'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
-                        'tipo_poliza' => 'I',
+                        'tipo_poliza' => 'D',
                         'numero_poliza' =>  $this->numeroPoliza,
                         'fecha' => $movimiento['fechaAfectacion'],
                         'cuenta' => $cuentaIngresosClasificar[0]->Codigo_cuenta,

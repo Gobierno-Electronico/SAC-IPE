@@ -7,13 +7,9 @@ use Livewire\Attributes\Validate;
 use Livewire\Attributes\On;
 use App\Models\Cuenta;
 use App\Models\CodigoDepartamento;
-use App\Models\Poliza;
-use Carbon\Carbon;
 use Log;
 use DB;
-use App\Models\InteraccionCuentaCuenta;
-use App\Models\InteraccionCuentaConcepto;
-use App\Enums\EstatusEvento;
+
 
 
 class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresForm extends Component
@@ -138,37 +134,6 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresForm extends Component
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
-
-    // public function verificarCausaIVA()
-    // {
-    //     try {
-    //         if (!$this->cuenta) return;
-    //         $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [14])->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
-    //         $interaccionCuentasCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
-    //             ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
-    //             ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get()->toArray();
-
-    //         foreach ($interaccionCuentasCuentas as $key => $dataCuenta) {
-    //             if (str_contains($dataCuenta['Descripcion_cuenta'], 'IVA')) {
-    //                 if ($this->importe == "") {
-    //                     $this->dispatch('limpiarIVA');
-    //                 } else {
-
-    //                     $importeFormateado = str_replace(['$', ','], '', $this->importe);
-    //                     $this->causaIva = ($importeFormateado / 1.16) * 0.16;
-    //                     $this->dispatch('formato_importe', id: 'inputIva', amount: "{$this->causaIva}");
-    //                 }
-    //             } else {
-    //                 $this->causaIva = 0;
-    //                 $this->agregarIVA = "";
-    //                 $this->dispatch('limpiarIVA');
-    //             }
-    //         }
-    //     } catch (\Throwable $th) {
-    //         Log::error('Ocurrió un error al calcular IVA en Devengado previamente recaudado: ' . $th->getMessage());
-    //         $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al calcular IVA, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
-    //     }
-    // }
 
     #[On('reiniciar')]
     public function reiniciar()
