@@ -51,7 +51,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
         return [
             Column::make('area', 'Area'),
             Column::make('partida', 'Partida'),
-            Column::make('cuentaPago', 'Cuenta de pago'),
+            // Column::make('cuentaPago', 'Cuenta de pago'),
             Column::make('mes', 'Mes'),
             Column::make('movimiento', 'Movimiento'),
             Column::make('ejecutar', 'PPTO por ejecutar')->component('columns.importe'),
@@ -74,7 +74,6 @@ class DevengadoPrevRecaudadoTable extends Tabla
                         'mes' => $registro['mes'],
                         'importe' => $registro['importe'],
                         'agregarIVA' => $registro['agregarIVA'],
-                        'cuentaPago' => $registro['cuentaPagoId']
                     ];
                     unset($this->dataCompleta[$key]);
                     $this->dataCompleta = array_values($this->dataCompleta);
@@ -141,14 +140,13 @@ class DevengadoPrevRecaudadoTable extends Tabla
                     'codigoArea' => $registro['codigoAreaResponsable'],
                     'codigoCuenta' => $registro['codigoCuenta'],
                     'mes' => $registro['mes'],
-                    'evento' => $registro['evento']
                 ];
             }
         }
 
         $totalImportes = 0;
         foreach ($this->cacheData as $key => $movimiento) {
-            if ($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuenta']) && $movimiento['mes'] == $datosSeleccionado['mes'] && $movimiento['evento'] == $datosSeleccionado['evento']) {
+            if ($movimiento['id'] != $id && str_contains($movimiento['area'], $datosSeleccionado['codigoArea']) && str_contains($movimiento['partida'], $datosSeleccionado['codigoCuenta']) && $movimiento['mes'] == $datosSeleccionado['mes']) {
                 if ($totalImportes == 0) {
                     $movimiento['disponibilidad'] = bcsub($movimiento['ejecutar'], $movimiento['importe'], 2);
                     $totalImportes += $movimiento['importe'];
@@ -179,18 +177,12 @@ class DevengadoPrevRecaudadoTable extends Tabla
 
 
             $solvencia = DB::select('EXEC SolvenciaCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($registro['codigoAreaResponsable'], $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $registro['mes']));
-            // $solvenciaCuentaPago = DB::select('EXEC SolvenciaIngresosPorClasificar @cuenta = ?, @cuentaPago = ?, @evento =?', array($registro['codigoCuenta'], $registro['codigoCuentaPago'], $registro['evento']));
-            // $this->sumarRegistrosPorCuentaPago($registro);
-            // if ($this->totalRegistrosPorCuentaPago + $registro['importe'] > $solvenciaCuentaPago[0]->Total) {
-            //     $this->dispatch('mostrarMensaje', mensaje: 'Solvencia de la cuenta de pago insuficiente', tipo: 'error', tiempo: 3000);
-            //     return;
-            // }
 
             $totalDisponible = $solvencia[0]->Solvencia - $registro['importe'];
             $totalImportes = 0;
 
             foreach ($this->cacheData as $movimiento) {
-                if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoCuenta']) && $movimiento['mes'] == $registro['mes'] && $movimiento['evento'] == $registro['evento']) {
+                if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoCuenta']) && $movimiento['mes'] == $registro['mes']) {
                     $totalImportes += $movimiento['importe'];
                 }
             }
@@ -208,9 +200,8 @@ class DevengadoPrevRecaudadoTable extends Tabla
                 'id' => 0,
                 'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
                 'partida' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
-                'cuentaPago' => $registro['codigoCuentaPago'] . ' ' . $registro['descripcionCuentaPago'],
+                // 'cuentaPago' => $registro['codigoCuentaPago'] . ' ' . $registro['descripcionCuentaPago'],
                 'mes' => $registro['mes'],
-                // 'evento' => $registro['evento'],
                 'movimiento' => 'DEVENGADO PREVIAMENTE RECAUDADO',
                 'ejecutar' => $solvencia[0]->Solvencia,
                 'importe' => $registro['importe'],
@@ -231,15 +222,15 @@ class DevengadoPrevRecaudadoTable extends Tabla
         }
     }
 
-    public function sumarRegistrosPorCuentaPago($registro)
-    {
-        $this->totalRegistrosPorCuentaPago = 0;
-        foreach ($this->dataCompleta as $key => $movimiento) {
-            if ($registro['codigoCuentaPago'] == $movimiento['codigoCuentaPago']) {
-                $this->totalRegistrosPorCuentaPago += $movimiento['importe'];
-            }
-        }
-    }
+    // public function sumarRegistrosPorCuentaPago($registro)
+    // {
+    //     $this->totalRegistrosPorCuentaPago = 0;
+    //     foreach ($this->dataCompleta as $key => $movimiento) {
+    //         if ($registro['codigoCuentaPago'] == $movimiento['codigoCuentaPago']) {
+    //             $this->totalRegistrosPorCuentaPago += $movimiento['importe'];
+    //         }
+    //     }
+    // }
 
     #[On('finalizar-registros')]
     public function finalizarRegistros()
@@ -297,7 +288,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
                         'numero_poliza' =>  $this->numeroPoliza,
                         'fecha' => $movimiento['fechaAfectacion'],
                         'cuenta' => $movimiento['codigoCuenta'],
-                        'cuentaRelacionada' => $movimiento['codigoCuentaPago'],
+                        // 'cuentaRelacionada' => $movimiento['codigoCuentaPago'],
                         'concepto' => $movimiento['descripcionCuenta'],
                         'total' => abs($importeMovimiento),
                         'mes' => $movimiento['mes'],
@@ -331,7 +322,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
                         'numero_poliza' =>  $this->numeroPoliza,
                         'fecha' => $movimiento['fechaAfectacion'],
                         'cuenta' => $dataCuenta['Codigo_cuenta'],
-                        'cuentaRelacionada' => $movimiento['codigoCuentaPago'],
+                        // 'cuentaRelacionada' => $movimiento['codigoCuentaPago'],
                         'concepto' => $dataCuenta['Descripcion_cuenta'],
                         'total' => $importe,
                         'mes' => $movimiento['mes'],

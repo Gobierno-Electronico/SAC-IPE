@@ -42,8 +42,8 @@ class DevengadoPrevRecaudadoForm extends Component
     #[Validate('required', message: 'Fecha de afectación requerida')]
     public $fechaAfectacion = "";
 
-    #[Validate('required', message: 'Cuenta de pago requerida')]
-    public $cuentaPago = "";
+    // #[Validate('required', message: 'Cuenta de pago requerida')]
+    // public $cuentaPago = "";
 
     public $subcuentas = [];
 
@@ -66,7 +66,7 @@ class DevengadoPrevRecaudadoForm extends Component
                 ->where('cuentas.Descripcion_cuenta', 'LIKE', '%(Devengado)%')->orderBy('cuentas.Codigo_cuenta')->get();
 
             $this->cambiarCuentaPagoSeleccionada = false;
-            $this->llenarCuentasPago();
+            // $this->llenarCuentasPago();
             $this->verificarCausaIVA();
 
             $solvenciaPorClasificar = DB::select('EXEC SolvenciaIngresosPorClasificarGeneral')[0]->Total;
@@ -79,26 +79,26 @@ class DevengadoPrevRecaudadoForm extends Component
         }
     }
 
-    public function llenarCuentasPago()
-    {
-        try {
+    // public function llenarCuentasPago()
+    // {
+    //     try {
 
-            if ($this->cambiarCuentaPagoSeleccionada) {
-                $this->cuentaPago = "";
-            }
-            $this->cambiarCuentaPagoSeleccionada = true;
-            $this->subcuentas = Cuenta::where('nivel', 6)
-                ->where(function ($query) {
-                    $query->where('Codigo_cuenta', 'like', '1.%')
-                        ->orWhere('Codigo_cuenta', 'like', '2.%')
-                        ->orWhere('Codigo_cuenta', 'like', '3.%');
-                })
-                ->get();
-        } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al cargar las cuentas de pago en devengado previamente recaudado: ' . $th->getMessage());
-            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas de pago, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
-        }
-    }
+    //         if ($this->cambiarCuentaPagoSeleccionada) {
+    //             $this->cuentaPago = "";
+    //         }
+    //         $this->cambiarCuentaPagoSeleccionada = true;
+    //         $this->subcuentas = Cuenta::where('nivel', 6)
+    //             ->where(function ($query) {
+    //                 $query->where('Codigo_cuenta', 'like', '1.%')
+    //                     ->orWhere('Codigo_cuenta', 'like', '2.%')
+    //                     ->orWhere('Codigo_cuenta', 'like', '3.%');
+    //             })
+    //             ->get();
+    //     } catch (\Throwable $th) {
+    //         Log::error('Ocurrió un error al cargar las cuentas de pago en devengado previamente recaudado: ' . $th->getMessage());
+    //         $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas de pago, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+    //     }
+    // }
 
     public function agregarRegistro()
     {
@@ -119,7 +119,7 @@ class DevengadoPrevRecaudadoForm extends Component
             $this->importe = ($this->importe > 0)  ? $this->importe : "";
             $this->validate();
             $cuenta = Cuenta::find($this->cuenta);
-            $cuentaPagoSeleccionada = Cuenta::find($this->cuentaPago);
+            // $cuentaPagoSeleccionada = Cuenta::find($this->cuentaPago);
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $registro = [
                 'id' => 0,
@@ -131,9 +131,9 @@ class DevengadoPrevRecaudadoForm extends Component
                 'cuentaId' => $this->cuenta,
                 'codigoCuenta' => $cuenta->Codigo_cuenta,
                 'descripcionCuenta' => $cuenta->Descripcion_cuenta,
-                'cuentaPagoId' => $this->cuentaPago,
-                'codigoCuentaPago' => $cuentaPagoSeleccionada->Codigo_cuenta,
-                'descripcionCuentaPago' => $cuentaPagoSeleccionada->Descripcion_cuenta,
+                // 'cuentaPagoId' => $this->cuentaPago,
+                // 'codigoCuentaPago' => $cuentaPagoSeleccionada->Codigo_cuenta,
+                // 'descripcionCuentaPago' => $cuentaPagoSeleccionada->Descripcion_cuenta,
                 'mes' => $this->mes,
                 'fechaAfectacion' => $this->fechaAfectacion,
                 'importe' => $this->importe,
@@ -198,7 +198,6 @@ class DevengadoPrevRecaudadoForm extends Component
         $this->mes = "";
         $this->importe = "";
         $this->causaIva = 0;
-        $this->cuentaPago = "";
         $this->agregarIVA = "";
         $this->dispatch('limpiar');
         $this->dispatch('limpiarIVA');
@@ -220,7 +219,6 @@ class DevengadoPrevRecaudadoForm extends Component
             $this->importe = $datosRegistro['importe'];
             $this->selectCodigoAreaResponsable = $datosRegistro['area'];
             $this->agregarIVA = $datosRegistro['agregarIVA'];
-            $this->cuentaPago = $datosRegistro['cuentaPago'];
             $this->verificarCausaIVA();
             $this->dispatch('llenarFormulario', cuenta: $datosRegistro['cuenta'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe'], area: $datosRegistro['area'], agregarIVA: $datosRegistro['agregarIVA']);
         } catch (\Throwable $th) {

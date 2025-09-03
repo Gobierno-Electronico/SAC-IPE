@@ -70,11 +70,11 @@
                     @endforeach
                 </select>
 
-                <label for="selectCuentaPago" class="form-label mt-3">Cuenta de pago</label>
+                <label for="selectCuentaPago" class="form-label mt-3">Cuenta de abono</label>
                 <select name="selectCuentaPago" id="selectCuentaPago" class="form-select"
                     wire:model="cuentaPago">
                     <option value="" disabled>
-                        Seleccionar cuenta pago</option>
+                        Seleccionar cuenta abono</option>
                     @foreach ($subcuentas as $cuentaPago)
                         <option value="{{ $cuentaPago->id }}">
                             {{ $cuentaPago->Codigo_cuenta . '  ' . $cuentaPago->Descripcion_cuenta }}</option>
