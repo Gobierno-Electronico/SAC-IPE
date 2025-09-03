@@ -25,7 +25,7 @@
             </div>
         </div>
         <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaIngresosDevengadoPreviamenteRecaudadoEjerciciosAnteriores" tipoPoliza="I"
+            tipoMovimiento="PolizaIngresosDevengadoPreviamenteRecaudadoEjerciciosAnteriores" tipoPoliza="D"
             urlFinalizar="/devengado-prev-recaudado-ejercicios-anteriores" :$numeroPolizaRemanente categoriaModulo='INGRESOS DEVENGADO PREVIAMENTE RECAUDADO EJERCICIOS ANTERIORES'/>
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
@@ -101,31 +101,6 @@
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control"
                     onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model.live="importe"
                     wire:model.live="importe">
-
-                {{-- @if($causaIva > 0)
-                    <div id="id2" class="">
-                        <label for="inputIva" class="form-label mt-3">Causa IVA</label>
-                        <input type="text" name="inputIva" id="inputIva" class="form-control" wire:model='causaIva'>
-                    </div>
-                @else
-                    <div id="id1" class="">
-                        <label for="inputIva" class="form-label mt-3">Causa IVA</label>
-                        <input type="text" name="inputIva" id="inputIva" class="form-control" disabled>
-                    </div>
-                @endif
-
-                @if ($causaIva > 0)
-                    <label for="agregarIVA"class="form-label mt-3">¿Desea agregar el IVA?</label><br>
-                    <label>
-                        <input type="radio" id="agregarIVA" name="agregarIVA" wire:model="agregarIVA" value="SI">
-                        Sí
-                    </label>
-                    &nbsp;&nbsp;&nbsp;
-                    <label>
-                        <input type="radio" id="agregarIVA" name="agregarIVA" wire:model="agregarIVA" value="NO">
-                        No
-                    </label>
-                @endif --}}
             </div>
             <div class="col">
                 <livewire:ingresos-devengado-prev-recaudado-ejercicios-anteriores-table />
