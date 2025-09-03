@@ -222,16 +222,6 @@ class DevengadoPrevRecaudadoTable extends Tabla
         }
     }
 
-    // public function sumarRegistrosPorCuentaPago($registro)
-    // {
-    //     $this->totalRegistrosPorCuentaPago = 0;
-    //     foreach ($this->dataCompleta as $key => $movimiento) {
-    //         if ($registro['codigoCuentaPago'] == $movimiento['codigoCuentaPago']) {
-    //             $this->totalRegistrosPorCuentaPago += $movimiento['importe'];
-    //         }
-    //     }
-    // }
-
     #[On('finalizar-registros')]
     public function finalizarRegistros()
     {
@@ -288,7 +278,6 @@ class DevengadoPrevRecaudadoTable extends Tabla
                         'numero_poliza' =>  $this->numeroPoliza,
                         'fecha' => $movimiento['fechaAfectacion'],
                         'cuenta' => $movimiento['codigoCuenta'],
-                        // 'cuentaRelacionada' => $movimiento['codigoCuentaPago'],
                         'concepto' => $movimiento['descripcionCuenta'],
                         'total' => abs($importeMovimiento),
                         'mes' => $movimiento['mes'],
@@ -322,7 +311,6 @@ class DevengadoPrevRecaudadoTable extends Tabla
                         'numero_poliza' =>  $this->numeroPoliza,
                         'fecha' => $movimiento['fechaAfectacion'],
                         'cuenta' => $dataCuenta['Codigo_cuenta'],
-                        // 'cuentaRelacionada' => $movimiento['codigoCuentaPago'],
                         'concepto' => $dataCuenta['Descripcion_cuenta'],
                         'total' => $importe,
                         'mes' => $movimiento['mes'],

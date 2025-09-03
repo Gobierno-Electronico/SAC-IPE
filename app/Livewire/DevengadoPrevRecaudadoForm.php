@@ -79,26 +79,6 @@ class DevengadoPrevRecaudadoForm extends Component
         }
     }
 
-    // public function llenarCuentasPago()
-    // {
-    //     try {
-
-    //         if ($this->cambiarCuentaPagoSeleccionada) {
-    //             $this->cuentaPago = "";
-    //         }
-    //         $this->cambiarCuentaPagoSeleccionada = true;
-    //         $this->subcuentas = Cuenta::where('nivel', 6)
-    //             ->where(function ($query) {
-    //                 $query->where('Codigo_cuenta', 'like', '1.%')
-    //                     ->orWhere('Codigo_cuenta', 'like', '2.%')
-    //                     ->orWhere('Codigo_cuenta', 'like', '3.%');
-    //             })
-    //             ->get();
-    //     } catch (\Throwable $th) {
-    //         Log::error('Ocurrió un error al cargar las cuentas de pago en devengado previamente recaudado: ' . $th->getMessage());
-    //         $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas de pago, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
-    //     }
-    // }
 
     public function agregarRegistro()
     {
@@ -119,7 +99,6 @@ class DevengadoPrevRecaudadoForm extends Component
             $this->importe = ($this->importe > 0)  ? $this->importe : "";
             $this->validate();
             $cuenta = Cuenta::find($this->cuenta);
-            // $cuentaPagoSeleccionada = Cuenta::find($this->cuentaPago);
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $registro = [
                 'id' => 0,
@@ -131,9 +110,6 @@ class DevengadoPrevRecaudadoForm extends Component
                 'cuentaId' => $this->cuenta,
                 'codigoCuenta' => $cuenta->Codigo_cuenta,
                 'descripcionCuenta' => $cuenta->Descripcion_cuenta,
-                // 'cuentaPagoId' => $this->cuentaPago,
-                // 'codigoCuentaPago' => $cuentaPagoSeleccionada->Codigo_cuenta,
-                // 'descripcionCuentaPago' => $cuentaPagoSeleccionada->Descripcion_cuenta,
                 'mes' => $this->mes,
                 'fechaAfectacion' => $this->fechaAfectacion,
                 'importe' => $this->importe,

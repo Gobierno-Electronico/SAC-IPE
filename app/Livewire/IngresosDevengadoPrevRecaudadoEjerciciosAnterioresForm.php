@@ -82,6 +82,7 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresForm extends Component
                         ->orWhere('Codigo_cuenta', 'like', '2.%')
                         ->orWhere('Codigo_cuenta', 'like', '3.%');
                 })
+                ->orderBy('Codigo_cuenta')
                 ->get();
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar las cuentas de pago en devengado previamente recaudado ejercicios anteriores: ' . $th->getMessage());

@@ -80,16 +80,6 @@
                     @endforeach
                 </select>
 
-                {{-- <label for="selectCuentaPago" class="form-label mt-3">Cuenta de pago</label>
-                <select name="selectCuentaPago" id="selectCuentaPago" class="form-select"
-                    wire:model="cuentaPago">
-                    <option value="" disabled>
-                        Seleccionar cuenta pago</option>
-                    @foreach ($subcuentas as $cuentaPago)
-                        <option value="{{ $cuentaPago->id }}">
-                            {{ $cuentaPago->Codigo_cuenta . '  ' . $cuentaPago->Descripcion_cuenta }}</option>
-                    @endforeach
-                </select> --}}
 
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
                 <select name="selectMes" id="selectMes" class="form-select" wire:model.live="mes">
