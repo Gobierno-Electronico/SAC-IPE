@@ -23,7 +23,7 @@
     </div>
     <livewire:recalendarizacion-form-consulta-table :$numeroPoliza :$numeroEvento :$total
         :$tipoMovimiento urlFinalizar="/movimientos-diario" :$numeroPolizaRemanente tipoPoliza="D"
-        categoriaModulo="DIARIO DIVERSOS CONCEPTOS"/>
+        :$categoriaModulo/>
 
     @else
 
