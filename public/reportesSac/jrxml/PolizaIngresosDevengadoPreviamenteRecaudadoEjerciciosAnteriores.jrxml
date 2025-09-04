@@ -17,7 +17,7 @@
 	<parameter name="Numero" class="java.lang.String"/>
 	<parameter name="Evento" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[EXEC dbo.PolizaIngresosDevengadoPreviamenteRecaudado @Numero_poliza =  $P{Numero}, @evento = $P{Evento}]]>
+		<![CDATA[EXEC dbo.PolizaIngresosDevengadoPreviamenteRecaudadoEjerciciosAnteriores @Numero_poliza =  $P{Numero}, @evento = $P{Evento}]]>
 	</queryString>
 	<field name="nombreUsuario" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="nombreUsuario"/>

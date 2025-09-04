@@ -44,10 +44,13 @@ class IngresosFormConsultaTable extends Tabla
             ->where('evento', '=', $this->numeroEvento)
             ->whereYear('fecha', '=', Carbon::now()->year)
             ->first();
+
             if($poliza['validado'] == 1){ 
                 $this->validado = true;
                 $this->init();
             } 
+
+
 
         return view('livewire.ingresos-form-consulta-table');
     }

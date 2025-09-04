@@ -42,7 +42,10 @@ class MovimientosDiarioTable extends Tabla
         $eventos = Poliza::select('evento', 'descripcion')
         ->whereYear('fecha', '=', Carbon::now()->year)
         ->where('tipo_poliza', '=', 'D')
-        ->where('categoria', '=', 'DIARIO DIVERSOS CONCEPTOS')
+        ->where(function ($q) {
+            $q->where('categoria', '=', 'DIARIO DIVERSOS CONCEPTOS')
+            ->orWhere('categoria', '=', 'INGRESOS DEVENGADO PREVIAMENTE RECAUDADO EJERCICIOS ANTERIORES');
+        })
         ->distinct()
         ->get()
         ->sortBy(fn($item) => (int) $item->evento) // Ordenar en PHP convirtiendo a número
@@ -71,7 +74,9 @@ class MovimientosDiarioTable extends Tabla
             return $entrada;
         }, DB::select('EXEC dbo.ConsultaMovimientoDiarioDiversosConceptos @anio = ?', array($anioActual)));
 
+        
         $collection = collect($this->data);
+
         if ($this->eventoSeleccionado) {
             $collection = $collection->where('evento', $this->eventoSeleccionado);
         }
@@ -113,6 +118,7 @@ class MovimientosDiarioTable extends Tabla
             Column::make('evento', 'Evento'),
             Column::make('numero_poliza', 'Número de Póliza'),
             Column::make('descripcion', 'Descripción'),
+            Column::make('categoria', 'Categoria'),
             Column::make('fechaAfectacion', 'Fecha de afectación'),
             Column::make('fechaRegistro', 'Fecha de registro'),
             Column::make('total', 'Total por Póliza'), 

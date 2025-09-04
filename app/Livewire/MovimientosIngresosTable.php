@@ -105,7 +105,7 @@ class MovimientosIngresosTable extends Tabla
             ->where('evento', '=', $item['evento'])
             ->where('tipo_poliza', '=', 'I')
             ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')
-            ->where('categoria', 'like', '%DEVENGADO%') // Filtra categoría que contenga 'comprometido'
+            ->where('categoria', 'like', '%DEVENGADO PREVIAMENTE RECAUDADO%') // Filtra categoría que contenga 'comprometido'
             ->get();
         
             

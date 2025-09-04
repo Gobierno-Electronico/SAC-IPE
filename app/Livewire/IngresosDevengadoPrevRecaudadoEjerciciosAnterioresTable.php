@@ -175,7 +175,7 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresTable extends Tabla
                 'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
                 'cuentaPago' => $registro['codigoCuentaPago'] . ' ' . $registro['descripcionCuentaPago'],
                 'mes' => $registro['mes'],
-                'movimiento' => 'DEVENGADO PREVIAMENTE RECAUDADO',
+                'movimiento' => 'DEVENGADO PREVIAMENTE RECAUDADO EJERCICIOS ANTERIORES',
                 'importe' => $registro['importe'],
             ];
             array_push($this->cacheData, $nuevoRegistro);
