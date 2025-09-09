@@ -74,11 +74,18 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresForm extends Component
 
     public function obtenerSolvencia()
     {
-        $anioActual = Carbon::now()->year;
-        $cuentaAbono = Cuenta::find($this->cuentaPago);
-        $this->solvenciaAbono = DB::select('EXEC SolvenciaCuentasContables @cuenta = ?, @anio = ?', array($cuentaAbono->Codigo_cuenta, $anioActual))[0]->Solvencia;
-        $this->dispatch('formato_importe', id: 'inputSolvenciaAbono', amount: ($this->solvenciaAbono > 0) ? $this->solvenciaAbono : '');
-        $this->dispatch('mostrarMensaje', mensaje: 'Solvencia cargada', tipo: 'success', tiempo: 1500);
+        try{
+            $anioActual = Carbon::now()->year;
+            $cuentaAbono = Cuenta::find($this->cuentaPago);
+            $solvencia = DB::select('EXEC SolvenciaCuentasContables @cuenta = ?, @anio = ?', array($cuentaAbono->Codigo_cuenta, $anioActual))[0]->Solvencia;
+            $this->solvenciaAbono = ($solvencia > 0) ? floatval($solvencia) : 0;
+
+            $this->dispatch('formato_importe', id: 'inputSolvenciaAbono', amount:"{$this->solvenciaAbono}");
+            $this->dispatch('mostrarMensaje', mensaje: 'Solvencia cargada', tipo: 'success', tiempo: 1500);
+        }catch(\Throwable $th){
+            Log::error('Ocurrió un error al obtener solvencia en Devengado previamente recaudado ejercicios anteriores: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al obtener solvencia, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
     }
 
     public function llenarCuentasPago()
