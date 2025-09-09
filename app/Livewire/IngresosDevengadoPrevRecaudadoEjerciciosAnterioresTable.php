@@ -28,6 +28,7 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresTable extends Tabla
     public $numeroEvento;
     public $numeroPolizaRemanente;
     public $totalRegistrosPorCuentaPago = 0;
+    public $totalDisponible = 0;
 
     public function render()
     {
@@ -61,17 +62,14 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresTable extends Tabla
     public function edit($id)
     {
         try {
-            //code...
-            $this->recalcularDisponibilidad($id);
             foreach ($this->dataCompleta as $key => $registro) {
                 if ($registro['id'] == $id) {
                     $datosRegistro = [
                         'area' => $registro['areaResponsableId'],
-                        'cuenta' => $registro['cuentaId'],
                         'mes' => $registro['mes'],
                         'importe' => $registro['importe'],
-                        'agregarIVA' => $registro['agregarIVA'],
-                        'cuentaPago' => $registro['cuentaPagoId']
+                        'cuentaPago' => $registro['cuentaPagoId'],
+                        'solvenciaAbono' => $registro['solvenciaAbono']
                     ];
                     unset($this->dataCompleta[$key]);
                     $this->dataCompleta = array_values($this->dataCompleta);
@@ -88,7 +86,6 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresTable extends Tabla
                 }
             }
 
-            // Recalculamos los totales solo después de eliminar el registro
             $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
             $this->total = $totalActualizado;
             $this->dispatch('cambioTotal', total: $totalActualizado);
@@ -101,8 +98,6 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresTable extends Tabla
     public function delete($id)
     {
         try {
-            //code...
-            $this->recalcularDisponibilidad($id);
             foreach ($this->cacheData as $key => $registro) {
                 if ($registro['id'] == $id) {
                     unset($this->cacheData[$key]);
@@ -119,7 +114,6 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresTable extends Tabla
                 }
             }
 
-            // Recalculamos los totales solo después de eliminar el registro
             $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
             $this->total = $totalActualizado;
             $this->dispatch('cambioTotal', total: $totalActualizado);
@@ -164,33 +158,59 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresTable extends Tabla
     public function agregarRegistro($registro)
     {
         try {
-            if (bccomp((string)($this->total + $registro['importe']), (string)$registro['montoPorClasificar'], 2) == 1) {
-                $this->dispatch('mostrarMensaje', mensaje: 'Solvencia por clasificar insuficiente', tipo: 'error', tiempo: 3000);
-                return;
+            if($this->verificarPresupuesto($registro['solvenciaAbono'], $registro['importe'], $registro['codigoCuentaPago'])){
+                
+                if (bccomp((string)($this->total + $registro['importe']), (string)$registro['montoPorClasificar'], 2) == 1) {
+                    $this->dispatch('mostrarMensaje', mensaje: 'Solvencia por clasificar insuficiente', tipo: 'error', tiempo: 3000);
+                    return;
+                }
+    
+    
+                $nuevoRegistro = [
+                    'id' => 0,
+                    'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
+                    'cuentaPago' => $registro['codigoCuentaPago'] . ' ' . $registro['descripcionCuentaPago'],
+                    'mes' => $registro['mes'],
+                    'movimiento' => 'DEVENGADO PREVIAMENTE RECAUDADO EJERCICIOS ANTERIORES',
+                    'importe' => $registro['importe'],
+                ];
+                array_push($this->cacheData, $nuevoRegistro);
+                array_push($this->dataCompleta, $registro);
+                $this->total = 0;
+                foreach ($this->cacheData as $key => $registro) {
+                    $this->cacheData[$key]['id'] = $key + 1; 
+                    $this->dataCompleta[$key]['id'] = $key + 1;
+                    $this->total += $registro['importe'];
+                }
+                $this->dispatch('cambioTotal', total: $this->total);
+            
             }
-
-
-            $nuevoRegistro = [
-                'id' => 0,
-                'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
-                'cuentaPago' => $registro['codigoCuentaPago'] . ' ' . $registro['descripcionCuentaPago'],
-                'mes' => $registro['mes'],
-                'movimiento' => 'DEVENGADO PREVIAMENTE RECAUDADO EJERCICIOS ANTERIORES',
-                'importe' => $registro['importe'],
-            ];
-            array_push($this->cacheData, $nuevoRegistro);
-            array_push($this->dataCompleta, $registro);
-            $this->total = 0;
-            foreach ($this->cacheData as $key => $registro) {
-                $this->cacheData[$key]['id'] = $key + 1; // El ID comienza en 1
-                $this->dataCompleta[$key]['id'] = $key + 1;
-                $this->total += $registro['importe'];
-            }
-            $this->dispatch('cambioTotal', total: $this->total);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al agregar registro en Devengado previamente recaudado ejercicios anteriores: ' . $th->getMessage());
-            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+                Log::error('Ocurrió un error al agregar registro en Devengado previamente recaudado ejercicios anteriores: ' . $th->getMessage());
+                $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+            }
+    }
+
+    public function verificarPresupuesto($solvencia, $importe, $codigoCuenta)
+    {
+        $this->totalDisponible = $solvencia - $importe;
+        $totalImportes = 0;
+
+        foreach ($this->cacheData as $movimiento){
+            if(str_contains($movimiento['cuentaPago'], $codigoCuenta)){
+                $totalImportes += $movimiento['importe'];
+            }
         }
+
+        if($totalImportes > 0){
+            $this->totalDisponible = bcsub(bcsub($solvencia, $totalImportes, 2), $importe, 2);
+        }
+
+                if($this->totalDisponible < 0){
+            $this->dispatch('mostrarMensaje', mensaje: 'Solvencia insuficiente', tipo: 'warning', tiempo: 3000);
+            return false;
+        }
+        return true;
     }
 
     public function sumarRegistrosPorCuentaPago($registro)
