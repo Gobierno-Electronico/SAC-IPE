@@ -290,19 +290,19 @@ class DeudoresComprobacionAnticipoTable extends Tabla
                 if ($movimiento['selectorPagoRetenciones'] == 'NO') {
                     $interaccionCuentaCuentasFiltradas = [];
 
-                    foreach ($interaccionCuentaCuentas as $cuenta) {
+                    foreach ($interaccionCuentaCuentas as $key => $cuenta) {
                         if ($cuenta['tipo_interaccion'] == 'Contable - Cargo') {
                             if (count($interaccionCuentaCuentas) > 11) {
                                 $numeroInicialCuenta = explode('.', $cuenta['Codigo_cuenta']);
-                                if ($numeroInicialCuenta[0] == 1) {
+                                if ($numeroInicialCuenta[0] == 5) {
                                     $interaccionCuentaCuentasFiltradas[] = $cuenta;
                                     continue;
                                 }
 
-                                if ($movimiento['tipoRegistro'] == 'Almacen' && $numeroInicialCuenta[0] < 5) {
+                                if ($movimiento['tipoRegistro'] == 'Almacen' && $numeroInicialCuenta[0] == 1) {
                                     $interaccionCuentaCuentasFiltradas[] = $cuenta;
                                     continue;
-                                } else if ($movimiento['tipoRegistro'] == 'Gasto' && $numeroInicialCuenta[0] >= 5) {
+                                } else if ($movimiento['tipoRegistro'] == 'Gasto' && $numeroInicialCuenta[0] == 2) {
                                     $interaccionCuentaCuentasFiltradas[] = $cuenta;
                                     continue;
                                 }
@@ -314,6 +314,7 @@ class DeudoresComprobacionAnticipoTable extends Tabla
                         }
                     }
                     $interaccionCuentaCuentas = $interaccionCuentaCuentasFiltradas;
+
 
                     $polizas = [
                         [
@@ -492,6 +493,7 @@ class DeudoresComprobacionAnticipoTable extends Tabla
             }
             DB::commit();
             $importeTotalEvento = DB::select('EXEC ImporteTotalOtorgamientoAnticipo @evento = ?', [$this->numeroEvento]);
+            
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
                 Poliza::where('evento', '=', $this->numeroEvento)
                     ->whereIn('categoria', [
@@ -509,11 +511,11 @@ class DeudoresComprobacionAnticipoTable extends Tabla
                             ->orWhere('concepto', 'LIKE', '%IVA%');
                     })
                     ->exists();
-                if(!$hayRetenciones){
+                if (!$hayRetenciones) {
                     Poliza::where('evento', '=', $this->numeroEvento)
-                    ->where('categoria', 'DEUDORES COMPROBACION ANTICIPOS')
-                    ->whereYear('fecha', '=', Carbon::now()->year)
-                    ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
+                        ->where('categoria', 'DEUDORES COMPROBACION ANTICIPOS')
+                        ->whereYear('fecha', '=', Carbon::now()->year)
+                        ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
                 }
             }
             $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
