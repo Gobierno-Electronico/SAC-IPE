@@ -367,7 +367,7 @@ class DeudoresComprobacionAnticipoTable extends Tabla
                         if ($cuenta['tipo_interaccion'] == 'Contable - Cargo') {
                             if (count($interaccionCuentaCuentas) > 11) {
                                 $numeroInicialCuenta = explode('.', $cuenta['Codigo_cuenta']);
-                                if ($numeroInicialCuenta[0] == 2) {
+                                if ($numeroInicialCuenta[0] == 5) {
                                     $interaccionCuentaCuentasFiltradas[] = $cuenta;
                                     continue;
                                 }
@@ -375,7 +375,7 @@ class DeudoresComprobacionAnticipoTable extends Tabla
                                 if ($movimiento['tipoRegistro'] == 'Almacen' && $numeroInicialCuenta[0] == 1) {
                                     $interaccionCuentaCuentasFiltradas[] = $cuenta;
                                     continue;
-                                } else if ($movimiento['tipoRegistro'] == 'Gasto' && $numeroInicialCuenta[0] >= 5) {
+                                } else if ($movimiento['tipoRegistro'] == 'Gasto' && $numeroInicialCuenta[0] == 2) {
                                     $interaccionCuentaCuentasFiltradas[] = $cuenta;
                                     continue;
                                 }
