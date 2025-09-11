@@ -48,6 +48,12 @@ class IngresosRecaudadoForm extends Component
     #[Validate('required', message: 'Cuenta de pago requerida')]
     public $cuentaPago = "";
 
+    #[Validate('required', message: 'Solvencia presupuestal requerida')]
+    public $solvenciaPresupuestal = "";
+
+    #[Validate('required', message: 'Solvencia abono requerida')]
+    public $solvenciaAbono = "";
+
     public $subcuentas = [];
 
     public $numeroPoliza;
@@ -93,6 +99,52 @@ class IngresosRecaudadoForm extends Component
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar el evento en recaudado: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
+    }
+
+    public function obtenerSolvenciaPresupuestal()
+    {
+        try{
+            if (!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
+            $this->llenarCuentasPago();
+
+            $anioActual = Carbon::now()->year;
+            $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
+            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)
+                ->whereIn('concepto_id', [19, 20, 21, 35, 39])
+                ->where('tipo_interaccion', '=', 'Presupuestal - Abono')
+                ->first();
+
+            $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
+                ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')
+                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+                ->where('Descripcion_cuenta', 'LIKE', '%(Devengado)%')
+                ->first();
+
+            $solvencia = DB::select('EXEC DevengadoCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?', array($departamento->Codigo_completo, $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $this->mes, $this->numeroEvento))[0]->TotalDevengado;
+            $this->solvenciaPresupuestal = ($solvencia > 0) ? floatval($solvencia) : 0;
+
+            $this->dispatch('formato_importe', id: 'inputSolvenciaPresupuestal', amount:"{$this->solvenciaPresupuestal}");
+            $this->dispatch('mostrarMensaje', mensaje: 'Solvencia cargada', tipo: 'success', tiempo: 1500);
+        }catch(\Throwable $th){
+            Log::error('Ocurrió un error al obtener la solvencia presupuestal en recaudado: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al obtener solvencia, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
+    }
+
+    public function obtenerSolvenciaContable()
+    {
+        try{
+            $anioActual = Carbon::now()->year;
+            $cuentaAbono = Cuenta::find($this->cuentaPago);
+            $solvencia = DB::select('EXEC SolvenciaCuentasContables @cuenta = ?, @anio = ?', array($cuentaAbono->Codigo_cuenta, $anioActual))[0]->Solvencia;
+            $this->solvenciaAbono = ($solvencia > 0) ? floatval($solvencia) : 0;
+
+            $this->dispatch('formato_importe', id: 'inputSolvenciaAbono', amount:"{$this->solvenciaAbono}");
+            $this->dispatch('mostrarMensaje', mensaje: 'Solvencia cargada', tipo: 'success', tiempo: 1500);
+        }catch(\Throwable $th){
+            Log::error('Ocurrió un error al obtener solvencia de cuenta abono en recaudado: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al obtener solvencia, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 
@@ -175,7 +227,9 @@ class IngresosRecaudadoForm extends Component
                 'descripcionCuentaPago' => $cuentaPagoSeleccionada->Descripcion_cuenta,
                 'mes' => $this->mes,
                 'importe' => $this->importe,
-                'montoEvento' => $this->montoDelEvento
+                'montoEvento' => $this->montoDelEvento,
+                'solvenciaPresupuestal' => $this->solvenciaPresupuestal,
+                'solvenciaAbono' => $this->solvenciaAbono
             ];
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
@@ -193,6 +247,8 @@ class IngresosRecaudadoForm extends Component
         $this->cuentaPago = "";
         $this->mes = "";
         $this->importe = "";
+        $this->solvenciaPresupuestal = "";
+        $this->solvenciaAbono = "";
         $this->dispatch('limpiar');
     }
 
@@ -204,7 +260,10 @@ class IngresosRecaudadoForm extends Component
         $this->mes = $datosRegistro['mes'];
         $this->importe = $datosRegistro['importe'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
-        $this->dispatch('llenarFormulario', cuenta: $datosRegistro['cuenta'], cuentaPago: $datosRegistro['cuentaPago'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe'], area: $datosRegistro['area']);
+        $this->solvenciaPresupuestal = $datosRegistro['solvenciaPresupuestal'];
+        $this->solvenciaAbono = $datosRegistro['solvenciaAbono'];
+        $this->dispatch('llenarFormulario', cuenta: $datosRegistro['cuenta'], cuentaPago: $datosRegistro['cuentaPago'], mes: $datosRegistro['mes'], 
+        importe: $datosRegistro['importe'], area: $datosRegistro['area'], solvenciaPresupuestal: $datosRegistro['solvenciaPresupuestal'], solvenciaAbono: $datosRegistro['solvenciaAbono']);
     }
 
     public function finalizarRegistros()

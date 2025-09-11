@@ -14,8 +14,8 @@
                         </div>
                         <div>
                             <label for="inputObservaciones" class="col-md-12 col-form-label">{{ __('Total') }}</label>
-                            <input value="{{  '$' . number_format($total, 2, '.', ',')  }}" type="text" class="form-control" name="inputAumentado"
-                                disabled>
+                            <input value="{{ '$' . number_format($total, 2, '.', ',') }}" type="text"
+                                class="form-control" name="inputAumentado" disabled>
                         </div>
                     </div>
 
@@ -24,7 +24,10 @@
 
             </div>
         </div>
-        <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total tipoMovimiento="PolizaIngresosRecaudado" tipoPoliza="I" urlFinalizar="/ingresos-recaudado" :$numeroPolizaRemanente categoriaModulo='INGRESOS RECAUDADO' categoriaRemanente='INGRESOS DEVENGADO REMANENTE RECAUDADO'/>
+        <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+            tipoMovimiento="PolizaIngresosRecaudado" tipoPoliza="I" urlFinalizar="/ingresos-recaudado"
+            :$numeroPolizaRemanente categoriaModulo='INGRESOS RECAUDADO'
+            categoriaRemanente='INGRESOS DEVENGADO REMANENTE RECAUDADO' />
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
@@ -46,7 +49,8 @@
             wire:model="observaciones">
 
         <label for="inputFechaRegistro" class="form-label mt-3">Fecha de afectación</label>
-        <input type="date" name="inputFechaRegistro" id="inputFechaRegistro" class="form-control" max="{{ now()->toDateString() }}" wire:model="fechaAfectacion">
+        <input type="date" name="inputFechaRegistro" id="inputFechaRegistro" class="form-control"
+            max="{{ now()->toDateString() }}" wire:model="fechaAfectacion">
 
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
         <div class="row">
@@ -60,14 +64,14 @@
                         </option>
                         @foreach ($eventos as $evento => $descripcion)
                             <option value="{{ $evento }}">
-                                {{ $evento }} - {{$descripcion}}
+                                {{ $evento }} - {{ $descripcion }}
                             </option>
                         @endforeach
                     </select>
                 </div>
                 <label for="selectAreaResponsable" class="form-label mt-3">Área responsable</label>
                 <select name="selectAreaResponsable" id="selectAreaResponsable" class="form-select"
-                    wire:model="selectCodigoAreaResponsable">
+                    wire:model="selectCodigoAreaResponsable" wire:change="obtenerSolvenciaPresupuestal">
                     <option value="" @if ($this->selectCodigoAreaResponsable == '') selected @endif>
                         Seleccionar un área
                     </option>
@@ -80,9 +84,9 @@
                     @endforeach
                 </select>
 
-                <label for="selectCuentaContable" class="form-label mt-3">Cuenta contable</label>
-                <select name="selectCuentaContable" id="selectCuentaContable" class="form-select"
-                    wire:model="cuenta" wire:change="llenarCuentasPago">
+                <label for="selectCuentaContable" class="form-label mt-3">Cuenta</label>
+                <select name="selectCuentaContable" id="selectCuentaContable" class="form-select" wire:model="cuenta"
+                    wire:change="obtenerSolvenciaPresupuestal">
                     <option value="" disabled>
                         Seleccionar cuenta</option>
                     @foreach ($cuentas as $cuenta)
@@ -90,19 +94,9 @@
                             {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
                     @endforeach
                 </select>
-
-                <label for="selectCuentaPago" class="form-label mt-3">Cuenta de pago</label>
-                <select name="selectCuentaPago" id="selectCuentaPago" class="form-select" wire:model="cuentaPago">
-                    <option value="" disabled>Seleccionar cuenta de pago</option>
-                        @foreach ($subcuentas as $cuentaPago)
-                            <option value="{{ $cuentaPago->cuenta_id }}">
-                                {{ $cuentaPago->Codigo_cuenta . '  ' . $cuentaPago->Descripcion_cuenta }}
-                            </option>
-                        @endforeach
-                </select>
-
+                
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
-                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes">
+                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes" wire:change="obtenerSolvenciaPresupuestal">
                     <option value="" selected disabled>Seleccionar mes...</option>
                     @foreach (range(1, 12) as $mes)
                         @php
@@ -113,8 +107,27 @@
                     @endforeach
                 </select>
 
+                <label for="selectCuentaPago" class="form-label mt-3">Cuenta de pago</label>
+                <select name="selectCuentaPago" id="selectCuentaPago" class="form-select" wire:model="cuentaPago" wire:change="obtenerSolvenciaContable">
+                    <option value="" disabled>Seleccionar cuenta de pago</option>
+                    @foreach ($subcuentas as $cuentaPago)
+                        <option value="{{ $cuentaPago->cuenta_id }}">
+                            {{ $cuentaPago->Codigo_cuenta . '  ' . $cuentaPago->Descripcion_cuenta }}
+                        </option>
+                    @endforeach
+                </select>
+
+
                 <label for="inputMontoEvento" class="form-label mt-3">Monto del evento</label>
                 <input type="text" name="inputMontoEvento" id="inputMontoEvento" class="form-control" disabled>
+
+                <label for="inputSolvenciaPresupuestal" class="form-label mt-3">Solvencia cuenta presupuestal</label>
+                <input type="text" name="inputSolvenciaPresupuestal" id="inputSolvenciaPresupuestal"
+                    class="form-control" disabled>
+
+                <label for="inputSolvenciaAbono" class="form-label mt-3">Solvencia cuenta de abono</label>
+                <input type="text" name="inputSolvenciaAbono" id="inputSolvenciaAbono" class="form-control"
+                    disabled>
 
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control"
@@ -152,9 +165,9 @@
     function validarDecimales(input) {
         // Obtener solo números y un punto decimal permitido
         let valor = input.value.replace(/[^0-9.]/g, '') // Elimina caracteres no numéricos
-                           .replace(/(\..*)\./g, '$1') // Evita más de un punto decimal
-                           .replace(/^0+(\d)/, '$1') // Elimina ceros iniciales
-                           .replace(/^(\d+)(\.\d{0,2})?.*$/, '$1$2'); // Máximo 2 decimales
+            .replace(/(\..*)\./g, '$1') // Evita más de un punto decimal
+            .replace(/^0+(\d)/, '$1') // Elimina ceros iniciales
+            .replace(/^(\d+)(\.\d{0,2})?.*$/, '$1$2'); // Máximo 2 decimales
 
         // Si el valor es solo un punto, permitirlo sin formatear
         if (valor === ".") {
@@ -190,5 +203,7 @@
     function limpiar() {
         $('#selectCuentaContable').val('');
         $('#inputImporte').val('');
+        $('#inputSolvenciaAbono').val('');
+        $('#inputSolvenciaPresupuestal').val('');
     }
 </script>
