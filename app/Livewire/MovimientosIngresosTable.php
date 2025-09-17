@@ -40,12 +40,12 @@ class MovimientosIngresosTable extends Tabla
     public function render()
     {
         $eventos = Poliza::select('evento', 'descripcion')
-        ->whereYear('fecha', '=', Carbon::now()->year)
-        ->where('tipo_poliza', '=', 'I')
-        ->distinct()
-        ->get()
-        ->sortBy(fn($item) => (int) $item->evento) // Ordenar en PHP convirtiendo a número
-        ->pluck('descripcion', 'evento');
+            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->where('tipo_poliza', '=', 'I')
+            ->distinct()
+            ->get()
+            ->sortBy(fn($item) => (int) $item->evento) // Ordenar en PHP convirtiendo a número
+            ->pluck('descripcion', 'evento');
         return view('livewire.movimientos-ingresos-table', ['eventos' => $eventos]);
     }
 
@@ -54,7 +54,8 @@ class MovimientosIngresosTable extends Tabla
         return Poliza::query();
     }
 
-    public function actualizarEvento(){
+    public function actualizarEvento()
+    {
         $this->eventoSeleccionado = $this->eventoSeleccionado;
     }
 
@@ -64,8 +65,8 @@ class MovimientosIngresosTable extends Tabla
         $contador = 0;
         $this->data = array_map(function ($entrada) use (&$contador) {
             $entrada =  (array) $entrada;
-        // Convertir a número y dividir entre 2
-            $entrada['total'] = floatval($entrada['total']) / 2;            $entrada['total'] = '$' . number_format($entrada['total'], 2, '.', ',');
+            $entrada['total'] = floatval($entrada['total']) / 2;
+            $entrada['total'] = '$' . number_format($entrada['total'], 2, '.', ',');
             $entrada['id'] = $contador++;
             return $entrada;
         }, DB::select('EXEC dbo.ConsultaMovimientosIngresos @anio = ?', array($anioActual)));
@@ -75,10 +76,22 @@ class MovimientosIngresosTable extends Tabla
             $collection = $collection->where('evento', $this->eventoSeleccionado);
         }
         if ($this->sortBy !== '') {
-            if ($this->sortDirection == "asc") {
-                $collection = $collection->sortBy($this->sortBy);
+            if (($this->sortBy == "fechaRegistro") || ($this->sortBy == "fechaAfectacion")) {
+                if ($this->sortDirection == "asc") {
+                    $collection = $collection->sortBy(function ($item) {
+                        return Carbon::createFromFormat('d-m-Y', $item['fechaRegistro']);
+                    });
+                } else {
+                    $collection = $collection->sortByDesc(function ($item) {
+                        return Carbon::createFromFormat('d-m-Y', $item['fechaRegistro']);
+                    });
+                }
             } else {
-                $collection = $collection->sortByDesc($this->sortBy);
+                if ($this->sortDirection == "asc") {
+                    $collection = $collection->sortBy($this->sortBy);
+                } else {
+                    $collection = $collection->sortByDesc($this->sortBy);
+                }
             }
         }
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
@@ -97,22 +110,16 @@ class MovimientosIngresosTable extends Tabla
             return $contains;
         });
 
-        // NUEVO: Agregar el total agrupado por evento y número de póliza
         $filtered = $filtered->map(function ($item) {
 
-            $totalesPolizas = Poliza::select('evento', 'numero_poliza', 'total') 
-            ->whereYear('fecha', '=', Carbon::now()->year) // Filtra por año actual
-            ->where('evento', '=', $item['evento'])
-            ->where('tipo_poliza', '=', 'I')
-            ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')
-            ->where('categoria', 'like', '%DEVENGADO PREVIAMENTE RECAUDADO%') // Filtra categoría que contenga 'comprometido'
-            ->get();
-        
-            
-            // $sumaTotal = $totalesPolizas->sum('total');
-            // dd($totalesPolizas);
-            $sumaTotal = $totalesPolizas->sum('total'); // NUEVO: Sumar los valores del atributo 'total'
-    
+            $totalesPolizas = Poliza::select('evento', 'numero_poliza', 'total')
+                ->whereYear('fecha', '=', Carbon::now()->year) // Filtra por año actual
+                ->where('evento', '=', $item['evento'])
+                ->where('tipo_poliza', '=', 'I')
+                ->get();
+
+            $sumaTotal = $totalesPolizas->sum('total');
+
             $item['total_evento'] = '$' . number_format($sumaTotal, 2, '.', ','); // NUEVO: Formatear el total
             return $item;
         });
@@ -153,26 +160,26 @@ class MovimientosIngresosTable extends Tabla
         //extraemos el número de póliza de remanente que corresponde al registro del número de póliza que ya tenemos
         $numeroPoliza = $this->numeroPoliza;
         $this->numeroPolizaRemanente = DB::table('polizas')
-        ->where('tipo_poliza', 'IAUX')
-        ->where('evento', '=', $this->numeroEvento)
-        ->whereYear('fecha', '=', Carbon::now()->year)
-        ->where('id', '>', function($query) use ($numeroPoliza) {
-            $query->select('id')
-                  ->from('polizas')
-                  ->where('numero_poliza', $numeroPoliza)
-                  ->where('tipo_poliza', 'I')
-                  ->limit(1);
-        })
-        ->orderBy('id', 'asc')
-        ->pluck('numero_poliza')
-        ->first();
+            ->where('tipo_poliza', 'IAUX')
+            ->where('evento', '=', $this->numeroEvento)
+            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->where('id', '>', function ($query) use ($numeroPoliza) {
+                $query->select('id')
+                    ->from('polizas')
+                    ->where('numero_poliza', $numeroPoliza)
+                    ->where('tipo_poliza', 'I')
+                    ->limit(1);
+            })
+            ->orderBy('id', 'asc')
+            ->pluck('numero_poliza')
+            ->first();
 
 
-        if($this->numeroPolizaRemanente == NULL){
+        if ($this->numeroPolizaRemanente == NULL) {
             $this->numeroPolizaRemanente = 0;
         }
 
-        switch($this->data[$value]['momentoContable']){
+        switch ($this->data[$value]['momentoContable']) {
             case "RECAUDADO":
                 $this->categoriaRemanente = 'INGRESOS DEVENGADO REMANENTE RECAUDADO';
                 break;
@@ -189,7 +196,6 @@ class MovimientosIngresosTable extends Tabla
         }
 
         $this->consultarRegistro = true;
-
     }
 
     public function search()

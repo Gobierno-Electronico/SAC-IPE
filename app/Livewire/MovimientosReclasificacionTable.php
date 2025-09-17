@@ -81,10 +81,22 @@ class MovimientosReclasificacionTable extends Tabla
             $collection = $collection->where('capitulo', $this->capituloSeleccionado);
         }
         if ($this->sortBy !== '') {
-            if ($this->sortDirection == "asc") {
-                $collection = $collection->sortBy($this->sortBy);
+            if (($this->sortBy == "fechaRegistro") || ($this->sortBy == "fechaAfectacion")) {
+                if ($this->sortDirection == "asc") {
+                    $collection = $collection->sortBy(function ($item) {
+                        return Carbon::createFromFormat('d-m-Y', $item['fechaRegistro']);
+                    });
+                } else {
+                    $collection = $collection->sortByDesc(function ($item) {
+                        return Carbon::createFromFormat('d-m-Y', $item['fechaRegistro']);
+                    });
+                }
             } else {
-                $collection = $collection->sortByDesc($this->sortBy);
+                if ($this->sortDirection == "asc") {
+                    $collection = $collection->sortBy($this->sortBy);
+                } else {
+                    $collection = $collection->sortByDesc($this->sortBy);
+                }
             }
         }
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
