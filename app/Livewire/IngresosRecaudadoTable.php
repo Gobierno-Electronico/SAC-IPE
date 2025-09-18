@@ -61,7 +61,6 @@ class IngresosRecaudadoTable extends Tabla
     public function edit($id)
     {
         try {
-            //code...
             $this->recalcularDisponibilidad($id);
             foreach ($this->dataCompleta as $key => $registro) {
                 if ($registro['id'] == $id) {
@@ -70,7 +69,9 @@ class IngresosRecaudadoTable extends Tabla
                         'cuenta' => $registro['cuentaId'],
                         'cuentaPago' => $registro['cuentaPagoId'],
                         'mes' => $registro['mes'],
-                        'importe' => $registro['importe']
+                        'importe' => $registro['importe'],
+                        'solvenciaPresupuestal' => $registro['solvenciaPresupuestal'],
+                        'solvenciaAbono' => $registro['solvenciaAbono']
                     ];
                     unset($this->dataCompleta[$key]);
                     $this->dataCompleta = array_values($this->dataCompleta);
@@ -86,7 +87,6 @@ class IngresosRecaudadoTable extends Tabla
                     break;
                 }
             }
-            // Recalculamos los totales solo después de eliminar el registro
             $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
             $this->total = $totalActualizado;
             $this->dispatch('cambioTotal', total: $totalActualizado);
@@ -99,7 +99,6 @@ class IngresosRecaudadoTable extends Tabla
     public function delete($id)
     {
         try {
-            //code...
             $this->recalcularDisponibilidad($id);
             foreach ($this->cacheData as $key => $registro) {
                 if ($registro['id'] == $id) {
@@ -116,7 +115,6 @@ class IngresosRecaudadoTable extends Tabla
                     break;
                 }
             }
-            // Recalculamos los totales solo después de eliminar el registro
             $totalActualizado = array_sum(array_column($this->cacheData, 'importe'));
             $this->total = $totalActualizado;
             $this->dispatch('cambioTotal', total: $totalActualizado);
@@ -161,68 +159,97 @@ class IngresosRecaudadoTable extends Tabla
     public function agregarRegistro($registro)
     {
         try {
-            //code...
-            if (bccomp((string)($this->total + $registro['importe']), (string)$registro['montoEvento'], 2) == 1) {
-                $this->dispatch('mostrarMensaje', mensaje: 'Monto total del evento superado', tipo: 'error', tiempo: 3000);
-                return;
-            }
-            $anioActual = Carbon::now()->year;
-            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $registro['cuentaId'])
-                ->whereIn('concepto_id', [19, 20, 21, 35, 39])
-                ->where('tipo_interaccion', '=', 'Presupuestal - Abono')
-                ->first();
-
-            $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
-                ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')
-                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-                ->where('Descripcion_cuenta', 'LIKE', '%(Devengado)%')
-                ->first();
-
-            $solvencia = DB::select('EXEC DevengadoCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?', array($registro['codigoAreaResponsable'], $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $registro['mes'], $registro['evento']));
-
-            $totalDisponible = $solvencia[0]->TotalDevengado - $registro['importe'];
-            $totalImportes = 0;
-            foreach ($this->cacheData as $movimiento) {
-                if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoCuenta']) && $movimiento['mes'] == $registro['mes'] && $movimiento['evento'] == $registro['evento']) {
-                    $totalImportes += $movimiento['importe'];
+            if($this->verificarPresupuesto($registro)){                
+                if (bccomp((string)($this->total + $registro['importe']), (string)$registro['montoEvento'], 2) == 1) {
+                    $this->dispatch('mostrarMensaje', mensaje: 'Monto total del evento superado', tipo: 'error', tiempo: 3000);
+                    return;
                 }
+                $anioActual = Carbon::now()->year;
+                $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $registro['cuentaId'])
+                    ->whereIn('concepto_id', [19, 20, 21, 35, 39])
+                    ->where('tipo_interaccion', '=', 'Presupuestal - Abono')
+                    ->first();
+    
+                $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
+                    ->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')
+                    ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+                    ->where('Descripcion_cuenta', 'LIKE', '%(Devengado)%')
+                    ->first();
+    
+                $solvencia = DB::select('EXEC DevengadoCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?', array($registro['codigoAreaResponsable'], $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $registro['mes'], $registro['evento']));
+    
+                $totalDisponible = $solvencia[0]->TotalDevengado - $registro['importe'];
+                $totalImportes = 0;
+                foreach ($this->cacheData as $movimiento) {
+                    if (str_contains($movimiento['area'], $registro['codigoAreaResponsable']) && str_contains($movimiento['partida'], $registro['codigoCuenta']) && $movimiento['mes'] == $registro['mes'] && $movimiento['evento'] == $registro['evento']) {
+                        $totalImportes += $movimiento['importe'];
+                    }
+                }
+    
+                if ($totalImportes > 0) {
+                    $totalDisponible = bcsub(bcsub($solvencia[0]->TotalDevengado, $totalImportes, 2), $registro['importe'], 2);
+                }
+    
+                if ($totalDisponible < 0) {
+                    $this->dispatch('mostrarMensaje', mensaje: 'Monto devengado insuficiente', tipo: 'error', tiempo: 3000);
+                    return;
+                }
+    
+                $nuevoRegistro = [
+                    'id' => 0,
+                    'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
+                    'partida' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
+                    'cuentaPago' => $registro['codigoCuentaPago'] . ' ' . $registro['descripcionCuentaPago'],
+                    'mes' => $registro['mes'],
+                    'evento' => $registro['evento'],
+                    'movimiento' => 'RECAUDADO',
+                    'ppto' => $solvencia[0]->TotalDevengado,
+                    'importe' => $registro['importe'],
+                    'disponibilidad' => $totalDisponible,
+                ];
+    
+                array_push($this->cacheData, $nuevoRegistro);
+                array_push($this->dataCompleta, $registro);
+                $this->total = 0;
+                foreach ($this->cacheData as $key => $registro) {
+                    $this->cacheData[$key]['id'] = $key + 1; // El ID comienza en 1
+                    $this->dataCompleta[$key]['id'] = $key + 1;
+                    $this->total += $registro['importe'];
+                }
+                $this->dispatch('cambioTotal', total: $this->total);
             }
-
-            if ($totalImportes > 0) {
-                $totalDisponible = bcsub(bcsub($solvencia[0]->TotalDevengado, $totalImportes, 2), $registro['importe'], 2);
-            }
-
-            if ($totalDisponible < 0) {
-                $this->dispatch('mostrarMensaje', mensaje: 'Monto devengado insuficiente', tipo: 'error', tiempo: 3000);
-                return;
-            }
-
-            $nuevoRegistro = [
-                'id' => 0,
-                'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
-                'partida' => $registro['codigoCuenta'] . ' ' . $registro['descripcionCuenta'],
-                'cuentaPago' => $registro['codigoCuentaPago'] . ' ' . $registro['descripcionCuentaPago'],
-                'mes' => $registro['mes'],
-                'evento' => $registro['evento'],
-                'movimiento' => 'RECAUDADO',
-                'ppto' => $solvencia[0]->TotalDevengado,
-                'importe' => $registro['importe'],
-                'disponibilidad' => $totalDisponible,
-            ];
-
-            array_push($this->cacheData, $nuevoRegistro);
-            array_push($this->dataCompleta, $registro);
-            $this->total = 0;
-            foreach ($this->cacheData as $key => $registro) {
-                $this->cacheData[$key]['id'] = $key + 1; // El ID comienza en 1
-                $this->dataCompleta[$key]['id'] = $key + 1;
-                $this->total += $registro['importe'];
-            }
-            $this->dispatch('cambioTotal', total: $this->total);
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al agregar registro en recaudado: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
+    }
+
+    public function verificarPresupuesto($registro)
+    {
+        $primerNumeroCuentaPago = collect(explode('.', $registro['codigoCuentaPago']))->first();
+        if( $primerNumeroCuentaPago == '2' || $primerNumeroCuentaPago == '3' || $primerNumeroCuentaPago == '4' ) {
+            $this->totalDisponible = $registro['solvenciaAbono'] - $registro['importe'];
+            $totalImportes = 0;
+
+            foreach ($this->cacheData as $movimiento){
+                if(str_contains($movimiento['cuentaPago'], $registro['codigoCuentaPago'])){
+                    $totalImportes += $movimiento['importe'];
+                }
+            }
+
+            if($totalImportes > 0){
+                $this->totalDisponible = bcsub(bcsub($registro['solvenciaAbono'], $totalImportes, 2), $registro['importe'], 2);
+            }
+
+            if($this->totalDisponible < 0){
+                $this->dispatch('mostrarMensaje', mensaje: 'Solvencia insuficiente', tipo: 'warning', tiempo: 3000);
+                return false;
+            }
+            return true;
+        }else{
+            return true;
+        }
+        
     }
 
     #[On('finalizar-registros')]

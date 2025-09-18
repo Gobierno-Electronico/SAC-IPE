@@ -70,7 +70,11 @@
             $("#selectAreaResponsable option:contains('" + parametros.area + "')").prop("selected", true);
             $("#selectMes option:contains('" + parametros.mes + "')").prop("selected", true);
             $('#inputImporte').val(parametros.importe);
+            $('#inputSolvenciaPresupuestal').val(parametros.solvenciaPresupuestal);
+            $('#inputSolvenciaAbono').val(parametros.solvenciaAbono);
             formatearImporte({id: 'inputImporte'})
+            formatearImporte({id: 'inputSolvenciaPresupuestal'})
+            formatearImporte({id: 'inputSolvenciaAbono'})
         }, 10);
     });
 

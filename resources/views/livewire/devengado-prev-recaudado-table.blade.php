@@ -67,9 +67,11 @@
         $("#selectAreaResponsable option:contains('" + parametros.area + "')").prop("selected", true);
         $("#selectMes option:contains('" + parametros.mes + "')").prop("selected", true);
         $('#inputImporte').val(parametros.importe);
+        $('#inputSolvenciaPresupuestal').val(parametros.solvenciaPresupuestal);
         $('#agregarIVA').val(parametros.agregarIVA);
         setTimeout(() => {
             formatearImporte({id: 'inputImporte'})
+            formatearImporte({id: 'inputSolvenciaPresupuestal'})
         }, 100);
     });
 

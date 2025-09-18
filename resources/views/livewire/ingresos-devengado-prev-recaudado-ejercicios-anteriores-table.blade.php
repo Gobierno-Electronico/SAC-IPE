@@ -63,13 +63,14 @@
 
     window.addEventListener('llenarFormulario', event => {
         let parametros = event.__livewire.params
-        $("#selectCuentaContable option:contains('" + parametros.cuenta + "')").prop("selected", true);
+        $("#selectCuentaPago option:contains('" + parametros.cuentaPago + "')").prop("selected", true);
         $("#selectAreaResponsable option:contains('" + parametros.area + "')").prop("selected", true);
         $("#selectMes option:contains('" + parametros.mes + "')").prop("selected", true);
         $('#inputImporte').val(parametros.importe);
-        $('#agregarIVA').val(parametros.agregarIVA);
+        $('#inputSolvenciaAbono').val(parametros.solvenciaAbono);
         setTimeout(() => {
             formatearImporte({id: 'inputImporte'})
+            formatearImporte({id: 'inputSolvenciaAbono'})
         }, 100);
     });
 

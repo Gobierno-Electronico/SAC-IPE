@@ -7,6 +7,7 @@ use Livewire\Attributes\Validate;
 use Livewire\Attributes\On;
 use App\Models\Cuenta;
 use App\Models\CodigoDepartamento;
+use Carbon\Carbon;
 use Log;
 use DB;
 
@@ -38,6 +39,9 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresForm extends Component
     #[Validate('required', message: 'Cuenta de pago requerida')]
     public $cuentaPago = "";
 
+    #[Validate('required', message: 'Solvencia abono requerido')]
+    public $solvenciaAbono = "";
+
     public $subcuentas = [];
 
     public $cambiarCuentaPagoSeleccionada = true;
@@ -65,6 +69,22 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresForm extends Component
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar cuentas en Devengado previamente recaudado ejercicios anteriores: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
+    }
+
+    public function obtenerSolvencia()
+    {
+        try{
+            $anioActual = Carbon::now()->year;
+            $cuentaAbono = Cuenta::find($this->cuentaPago);
+            $solvencia = DB::select('EXEC SolvenciaCuentasContables @cuenta = ?, @anio = ?', array($cuentaAbono->Codigo_cuenta, $anioActual))[0]->Solvencia;
+            $this->solvenciaAbono = ($solvencia > 0) ? floatval($solvencia) : 0;
+
+            $this->dispatch('formato_importe', id: 'inputSolvenciaAbono', amount:"{$this->solvenciaAbono}");
+            $this->dispatch('mostrarMensaje', mensaje: 'Solvencia cargada', tipo: 'success', tiempo: 1500);
+        }catch(\Throwable $th){
+            Log::error('Ocurrió un error al obtener solvencia en Devengado previamente recaudado ejercicios anteriores: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al obtener solvencia, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 
@@ -124,6 +144,7 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresForm extends Component
                 'fechaAfectacion' => $this->fechaAfectacion,
                 'importe' => $this->importe,
                 'montoPorClasificar' => $this->montoPorClasificar,
+                'solvenciaAbono' => $this->solvenciaAbono,
 
             ];
             $this->dispatch('agregar-registro', registro: $registro);
@@ -153,6 +174,7 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresForm extends Component
         $this->causaIva = 0;
         $this->cuentaPago = "";
         $this->agregarIVA = "";
+        $this->solvenciaAbono = "";
         $this->dispatch('limpiar');
         $this->dispatch('limpiarIVA');
     }
@@ -167,14 +189,12 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresForm extends Component
     public function llenarFormulario($datosRegistro)
     {
         try {
-            //code...
             $this->mes = $datosRegistro['mes'];
             $this->importe = $datosRegistro['importe'];
             $this->selectCodigoAreaResponsable = $datosRegistro['area'];
-            $this->agregarIVA = $datosRegistro['agregarIVA'];
             $this->cuentaPago = $datosRegistro['cuentaPago'];
-            // $this->verificarCausaIVA();
-            $this->dispatch('llenarFormulario', cuenta: $datosRegistro['cuenta'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe'], area: $datosRegistro['area'], agregarIVA: $datosRegistro['agregarIVA']);
+            $this->solvenciaAbono = $datosRegistro['solvenciaAbono'];
+            $this->dispatch('llenarFormulario', cuentapAGO: $datosRegistro['cuentaPago'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe'], area: $datosRegistro['area'], solvenciaAbono: $datosRegistro['solvenciaAbono']);
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al llenar formulario en Devengado previamente recaudado ejercicios anteriores: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al llenar formulario, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);

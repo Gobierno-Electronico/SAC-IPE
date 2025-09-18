@@ -74,6 +74,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
                         'mes' => $registro['mes'],
                         'importe' => $registro['importe'],
                         'agregarIVA' => $registro['agregarIVA'],
+                        'solvenciaPresupuestal' => $registro['solvenciaPresupuestal'],
                     ];
                     unset($this->dataCompleta[$key]);
                     $this->dataCompleta = array_values($this->dataCompleta);

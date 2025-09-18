@@ -42,6 +42,10 @@ class DevengadoPrevRecaudadoForm extends Component
     #[Validate('required', message: 'Fecha de afectación requerida')]
     public $fechaAfectacion = "";
 
+    #[Validate('required', message: 'Solvencia presupuestal requerida')]
+    public $solvenciaPresupuestal = "";
+
+
     // #[Validate('required', message: 'Cuenta de pago requerida')]
     // public $cuentaPago = "";
 
@@ -79,6 +83,28 @@ class DevengadoPrevRecaudadoForm extends Component
         }
     }
 
+    public function obtenerSolvenciaPresupuestal()
+    {
+        try{
+            $this->verificarCausaIVA();
+            if (!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
+    
+            $anioActual = Carbon::now()->year;
+            $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
+            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->where('concepto_id', '=', 14)->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
+            $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')
+                    ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->where('Descripcion_cuenta', 'LIKE', '%(Por ejecutar)%')->first();
+    
+            $solvencia = DB::select('EXEC SolvenciaCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($departamento->Codigo_completo, $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $this->mes))[0]->Solvencia;
+            $this->solvenciaPresupuestal = ($solvencia > 0) ? floatval($solvencia) : 0;
+
+            $this->dispatch('formato_importe', id: 'inputSolvenciaPresupuestal', amount:"{$this->solvenciaPresupuestal}");
+            $this->dispatch('mostrarMensaje', mensaje: 'Solvencia cargada', tipo: 'success', tiempo: 1500);
+        }catch(\Throwable $th){
+            Log::error('Ocurrió un error al obtener la solvencia presupuestal en Devengado previamente recaudado: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al obtener solvencia, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
+        }
+    }
 
     public function agregarRegistro()
     {
@@ -116,6 +142,7 @@ class DevengadoPrevRecaudadoForm extends Component
                 'montoPorClasificar' => $this->montoPorClasificar,
                 'iva' => $this->causaIva,
                 'agregarIVA' => $this->agregarIVA,
+                'solvenciaPresupuestal' => $this->solvenciaPresupuestal
             ];
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
@@ -195,8 +222,9 @@ class DevengadoPrevRecaudadoForm extends Component
             $this->importe = $datosRegistro['importe'];
             $this->selectCodigoAreaResponsable = $datosRegistro['area'];
             $this->agregarIVA = $datosRegistro['agregarIVA'];
+            $this->solvenciaPresupuestal = $datosRegistro['solvenciaPresupuestal'];
             $this->verificarCausaIVA();
-            $this->dispatch('llenarFormulario', cuenta: $datosRegistro['cuenta'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe'], area: $datosRegistro['area'], agregarIVA: $datosRegistro['agregarIVA']);
+            $this->dispatch('llenarFormulario', cuenta: $datosRegistro['cuenta'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe'], area: $datosRegistro['area'], agregarIVA: $datosRegistro['agregarIVA'], solvenciaPresupuestal: $datosRegistro['solvenciaPresupuestal']);
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al llenar formulario en Devengado previamente recaudado: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al llenar formulario, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);

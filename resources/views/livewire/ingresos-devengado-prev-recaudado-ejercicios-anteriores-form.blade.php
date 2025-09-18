@@ -14,8 +14,8 @@
                         </div>
                         <div>
                             <label for="inputObservaciones" class="col-md-12 col-form-label">{{ __('Total') }}</label>
-                            <input value="{{  '$' . number_format($total, 2, '.', ',')  }}" type="text" class="form-control" name="inputAumentado"
-                                disabled>
+                            <input value="{{ '$' . number_format($total, 2, '.', ',') }}" type="text"
+                                class="form-control" name="inputAumentado" disabled>
                         </div>
                     </div>
 
@@ -26,7 +26,8 @@
         </div>
         <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
             tipoMovimiento="PolizaIngresosDevengadoPreviamenteRecaudadoEjerciciosAnteriores" tipoPoliza="D"
-            urlFinalizar="/devengado-prev-recaudado-ejercicios-anteriores" :$numeroPolizaRemanente categoriaModulo='INGRESOS DEVENGADO PREVIAMENTE RECAUDADO EJERCICIOS ANTERIORES'/>
+            urlFinalizar="/devengado-prev-recaudado-ejercicios-anteriores" :$numeroPolizaRemanente
+            categoriaModulo='INGRESOS DEVENGADO PREVIAMENTE RECAUDADO EJERCICIOS ANTERIORES' />
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
@@ -48,13 +49,13 @@
             wire:model.live="observaciones">
 
         <label for="inputFechaRegistro" class="form-label mt-3">Fecha de afectación</label>
-        <input type="date" name="inputFechaRegistro" id="inputFechaRegistro" class="form-control mb-3" max="{{ now()->toDateString() }}"
-            wire:model.live="fechaAfectacion">
+        <input type="date" name="inputFechaRegistro" id="inputFechaRegistro" class="form-control mb-3"
+            max="{{ now()->toDateString() }}" wire:model.live="fechaAfectacion">
 
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
         <div class="row">
             <div class="col-3">
-               
+
                 <label for="selectAreaResponsable" class="form-label mt-3">Área responsable</label>
                 <select name="selectAreaResponsable" id="selectAreaResponsable" class="form-select"
                     wire:model.live="selectCodigoAreaResponsable">
@@ -71,8 +72,7 @@
                 </select>
 
                 <label for="selectCuentaPago" class="form-label mt-3">Cuenta de abono</label>
-                <select name="selectCuentaPago" id="selectCuentaPago" class="form-select"
-                    wire:model="cuentaPago">
+                <select name="selectCuentaPago" id="selectCuentaPago" class="form-select" wire:model="cuentaPago" wire:change="obtenerSolvencia">
                     <option value="" disabled>
                         Seleccionar cuenta abono</option>
                     @foreach ($subcuentas as $cuentaPago)
@@ -95,7 +95,11 @@
 
                 <label for="inputMontoPorClasificar" class="form-label mt-3">Solvencia por clasificar</label>
                 <input type="text" name="inputMontoPorClasificar" id="inputMontoPorClasificar" class="form-control"
-                    onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" disabled value="{{ number_format($montoPorClasificar, 2, '.', ',') }}">
+                    onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" disabled
+                    value="{{ number_format($montoPorClasificar, 2, '.', ',') }}">
+
+                <label for="inputSolvenciaAbono" class="form-label mt-3">Solvencia cuenta de abono</label>
+                <input type="text" name="inputSolvenciaAbono" id="inputSolvenciaAbono" class="form-control" disabled>
 
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control"
@@ -118,7 +122,6 @@
     @endif
 </div>
 <script>
-    
     window.addEventListener('formato_importe', event => {
         let params = event.__livewire.params
         formatearImporte({
@@ -164,6 +167,7 @@
     function limpiar() {
         $('#selectCuentaContable').val('');
         $('#inputImporte').val('');
+        $('#inputSolvenciaAbono').val('');
         $('#inputIva').val('');
     }
 </script>
