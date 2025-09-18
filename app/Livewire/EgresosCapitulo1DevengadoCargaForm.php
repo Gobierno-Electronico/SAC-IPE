@@ -76,7 +76,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                 ->whereYear('fecha', '=', Carbon::now()->year)
                 ->where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 1')
                 ->update([
-                    'estatus_evento' => EstatusEvento::CANCELADO->value
+                    'estatus_evento' => EstatusEvento::CONCLUIDO->value
                 ]);
 
             $resultado = DB::select('EXEC RegistroCancelacionCompromiso1000 @evento = ?, @anio = ?, @numeroPoliza = ?, @conceptoDeRegistro = ?', array($numeroDeEvento, $anioActual, $ultimoNumeroPolizaTipoD, $conceptoDeCarga));
@@ -123,7 +123,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
             ->toArray();
 
         $ultimoNumero = end($numerosPolizas);
-        $nuevoNumeroPoliza = ($ultimoNumero) ? $ultimoNumero + 1 : 1;
+        $nuevoNumeroPoliza = ($ultimoNumero) ? ($ultimoNumero - 1) : 1;
         $nuevoNumeroEvento = end($numerosEvento);
 
         $datos = collect();
@@ -602,7 +602,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                 ->toArray();
 
             $ultimoNumero = end($numerosPolizas);
-            $this->numeroPoliza = ($ultimoNumero) ? $ultimoNumero + 1 : 1;
+            $this->numeroPoliza = ($ultimoNumero) ? $ultimoNumero + 2 : 1;
             $this->numeroEvento = end($numerosEvento);
 
             $polizas = [];
@@ -655,7 +655,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                     }
 
                     $interaccionCuentaCuentas = $interaccionCuentaCuentasFiltradas;
-
+                    
                     $this->total = $this->total + floatval(str_replace([',', '$', ' '], ['', '', ''], $dato['CARGO']));
                     array_push($polizas, [
                         'idUsuarioRegistrante' => $idUsuarioRegistrante,
@@ -762,9 +762,11 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                                 //obtener cuenta presupuestal (por ejercer) en base al concepto general
                                 $descripcionCuentaPresupuestal = $conceptoGeneralCuenta[0] . '(Por ejercer)';
                                 $cuentaPresupuestal = Cuenta::where('Descripcion_cuenta', '=', $descripcionCuentaPresupuestal)->first();
-    
+                                Log::info("Descripción presupuestal: {$descripcionCuentaPresupuestal}");
+                                Log::info("Cuenta presupuestal: {$cuentaPresupuestal->Descripcion_cuenta}");
                                 ini_set('memory_limit', '1024M');
                                 $this->buscarSolvencia($dato['area'], $dato['area'], $cuentaPresupuestal, $dato['mes'], $solvenciaRequerida, $this->numeroDeEventoCompromiso, $polizas);
+
                             }
                             
                         }
@@ -935,7 +937,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                     'total' => $data['total'],
                     'idUsuarioRegistrante' => $polizaOriginal->idUsuarioRegistrante,
                     'tipo_poliza' => 'E',
-                    'numero_poliza' => $this->numeroPoliza + 2,
+                    'numero_poliza' => $this->numeroPoliza + 1,
                     'fecha' => $this->fechaAfectacion,
                     'cuenta' => $polizaOriginal->cuenta,
                     'descripcion' => $polizaOriginal->descripcion,
@@ -1077,7 +1079,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
     {
         $this->consultarRegistro = true;
         $this->numeroEvento = $numeroEvento + 1;
-        $this->numeroPoliza = $numeroPoliza + 1;
+        $this->numeroPoliza = $numeroPoliza;
         $this->total = $total;
     }
 }

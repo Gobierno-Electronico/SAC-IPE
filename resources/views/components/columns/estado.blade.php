@@ -8,13 +8,12 @@
     <div @class([
         'text-white rounded-3 px-2 texto_estados text-uppercase fw-bold small text-center',
         'bg-success' => $value == EstatusEvento::ACTIVO->value,
-        'bg-secondary' => $value == EstatusEvento::FINALIZADO->value,
-        'bg-danger' => $value == EstatusEvento::CANCELADO->value,
+        'bg-secondary' => in_array($value, [EstatusEvento::FINALIZADO->value, EstatusEvento::CONCLUIDO->value]),
     ])>
         @if ($value == EstatusEvento::ACTIVO->value)
             Activo
-        @elseif ($value == EstatusEvento::CANCELADO->value)
-            Cancelado
+        @elseif ($value == EstatusEvento::CONCLUIDO->value)
+            Concluido
         @else
             Finalizado
         @endif
