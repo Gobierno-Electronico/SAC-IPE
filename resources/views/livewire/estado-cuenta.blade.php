@@ -60,7 +60,20 @@ document.addEventListener('livewire:init', () => {
     Livewire.on('generarReporteJasper', (data) => {
         let { cuenta, fechaInicio, fechaFin, descripcionCuenta } = data;
 
-        let nombrereporte = 'ReporteEstadoDeCuenta';
+        const inicio = dayjs(fechaInicio);
+        const fin = dayjs(fechaFin);
+
+        const esMesCompleto = inicio.isSame(inicio.startOf("month"), "day") &&
+            fin.isSame(fin.endOf("month"), "day") &&
+            inicio.isSame(fin, "month");
+
+        let nombrereporte = '';
+
+        if(esMesCompleto){
+            nombrereporte = 'ReporteEstadoDeCuenta';
+        }else{
+            nombrereporte = 'ReporteEstadoDeCuentaPorRango';
+        }
 
         const wsUrl = "http://" + window.IP_PORT + "/" + window.NOMBRE_REPORTEADOR + "/webresources/service/report?name=" + nombrereporte + "&params=";
 
