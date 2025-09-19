@@ -258,7 +258,7 @@
 				<textElement textAlignment="Center">
 					<font fontName="Times New Roman" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[CANCELADO]]></text>
+				<text><![CDATA[CONCLUIDO]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="157" y="20" width="447" height="20" uuid="338d49da-baef-4068-9e5f-22840ad8ab7f"/>
