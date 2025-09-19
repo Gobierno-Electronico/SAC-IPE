@@ -712,7 +712,7 @@
                                     </li>
                                     <li class="dropend">
                                         <a href="{{ route('capitulo1Cancelaciones') }}" method="GET"
-                                            class="dropdown-item" onclick="mostrarCargando()">Cancelaciones</a>
+                                            class="dropdown-item" onclick="mostrarCargando()">Concluidos</a>
                                     </li>
                                 </ul>
                             </li>
