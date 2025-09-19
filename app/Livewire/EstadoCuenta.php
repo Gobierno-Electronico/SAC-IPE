@@ -47,7 +47,6 @@ class EstadoCuenta extends Component
         try {
             $this->validate();
             $cuenta = Cuenta::find($this->cuenta);
-
             $this->dispatch(
                 'generarReporteJasper',
                 cuenta: $cuenta->Codigo_cuenta,
