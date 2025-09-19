@@ -35,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
         //         $query->time
         //     );
         // });
+        ini_set('max_execution_time', 120);
         $anioActual = Carbon::now()->year;
 
 
