@@ -1,7 +1,7 @@
 <div>
     @if ($consultarRegistro)
     <div>
-        <h4>Resumen de movimientos de cancelaciones del compromiso del capítulo 1000</h4>
+        <h4>Resumen de movimientos de concluidos del compromiso del capítulo 1000</h4>
 
         <div class="row mt-4">
             <div class="row mb-3">
