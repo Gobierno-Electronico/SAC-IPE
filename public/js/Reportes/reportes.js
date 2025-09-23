@@ -13,6 +13,7 @@ function generarPDF(btn) {
 
     nombrereporte = $('#botonMovimiento').val();
     console.log(nombrereporte)
+
     const wsUrl = "http://"+IP_PORT+"/"+NOMBRE_REPORTEADOR+"/webresources/service/report?name="+nombrereporte+"&params="
     url = `${wsUrl}Fecha;${$('#botonFecha').val()},Hora;${$('#botonHora').val()},Numero;${$('#botonNumeroPoliza').val()},Evento;${$('#botonEvento').val()}`;
     let mensajeEdoSolicitud = toastr.info("Procesando solicitud, espere un momento por favor . . .", "", { timeOut: "0" });

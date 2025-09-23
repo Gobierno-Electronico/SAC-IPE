@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ReportesController extends Controller
@@ -10,19 +11,62 @@ class ReportesController extends Controller
     {
         $this->middleware('auth');
     }
-    public function balanza() {
+    public function balanza()
+    {
         return view('reportes.balanza');
     }
 
-    public function mayor() {
+    public function mayor()
+    {
         return view('reportes.mayor');
     }
 
-    public function diario(){
+    public function diario()
+    {
         return view('reportes.diario');
     }
 
-    public function estadoCuenta(){
+    public function estadoCuenta()
+    {
         return view('reportes.estadoCuenta');
+    }
+
+    public function mostrarClasificadores($tipo)
+    {
+        $titulo = '';
+        switch ($tipo) {
+            case 'CA':
+                $titulo = 'Clasificador Administrativo';
+                break;
+            case 'CP':
+                $titulo = 'Clasificador Programático';
+                break;
+
+            case 'CFG':
+                $titulo = 'Clasificador Funcional Gasto';
+                break;
+
+            case 'CTG':
+                $titulo = 'Clasificador Tipo Gasto';
+                break;
+
+            case 'COG':
+                $titulo = 'Clasificador Objeto Gasto';
+                break;
+
+            case 'CFF':
+                $titulo = 'Clasificador Fuente Financiamiento';
+                break;
+
+            case 'CRI':
+                $titulo = 'Clasificador Rubro Ingreso';
+                break;
+
+            default:
+                $titulo = 'Clasificador Administrativo';
+                break;
+
+        }
+        return view('reportes.clasificadores', compact('tipo', 'titulo'));
     }
 }

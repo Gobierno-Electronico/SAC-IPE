@@ -33,6 +33,9 @@ Route::get('/', function () {
 });
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+//Catálogos
+Route::get('/catalogos/{tipo}', [ReportesController::class, 'mostrarClasificadores'])->name('mostrarClasificadores')->middleware('role:Administrador');
+
 //Cuentas
 Route::get('/cuentas', [CuentasController::class, 'listaDeCuentas'])->name('listaDeCuentas')->middleware('can:acceso-cuentas');
 Route::get('/cuentas/editar/{id}', [CuentasController::class, 'editarCuenta'])->name('editarCuenta')->middleware('can:acceso-cuentas');

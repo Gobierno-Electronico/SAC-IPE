@@ -116,7 +116,7 @@
 
             </div>
             {{ $this->data()->links() }}
-        </div>
+        </div> 
     @endif
 </div>
 <script>

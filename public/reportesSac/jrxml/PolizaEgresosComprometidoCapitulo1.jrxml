@@ -101,100 +101,23 @@
 	<background>
 		<band splitType="Stretch"/>
 	</background>
-	<pageHeader>
-		<band height="146" splitType="Stretch">
+	<title>
+		<band height="146">
+			<staticText>
+				<reportElement x="801" y="20" width="20" height="20" uuid="b1796204-71e4-4f84-a5d3-0d71240eb537"/>
+				<text><![CDATA[]]></text>
+			</staticText>
 			<image>
-				<reportElement x="20" y="0" width="137" height="50" uuid="13cd4ec7-8468-4e49-b7ec-344540383739"/>
+				<reportElement x="20" y="0" width="137" height="50" uuid="13cd4ec7-8468-4e49-b7ec-344540383739">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
 				<imageExpression><![CDATA["C:/xampp/htdocs/SAC-IPE/public/imagenes/ipe_reportes.png"]]></imageExpression>
 			</image>
-			<staticText>
-				<reportElement x="157" y="0" width="447" height="20" uuid="d8017d03-9fc6-4c7d-8af5-1bca5a8eb09c"/>
-				<textElement textAlignment="Center">
-					<font fontName="Times New Roman" isBold="true"/>
-				</textElement>
-				<text><![CDATA[INSTITUTO DE PENSIONES DEL ESTADO DE VERACRUZ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="157" y="40" width="447" height="20" uuid="6990732b-840e-4e42-815a-45f2f43cf4f6"/>
-				<textElement textAlignment="Center">
-					<font fontName="Times New Roman" size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[PÓLIZA DE EGRESOS]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="604" y="0" width="133" height="20" uuid="8c206f97-bf18-47f6-93df-85b27a0f630d">
-					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-				</reportElement>
-				<textElement textAlignment="Left">
-					<font fontName="Times New Roman" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["TIPO."]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="604" y="20" width="133" height="20" uuid="6def13a6-ea14-4bc9-9338-25cd566f291d">
-					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-				</reportElement>
-				<textElement textAlignment="Left">
-					<font fontName="Times New Roman" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["NO."]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="604" y="40" width="133" height="20" uuid="59c4e039-3aa3-466e-a691-8b348888c71b">
-					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Left">
-					<font fontName="Times New Roman" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["FECHA AFECTACIÓN"]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="604" y="80" width="133" height="20" uuid="de6f328b-7ccb-4882-b512-9b0520225f08">
-					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-				</reportElement>
-				<textElement textAlignment="Left">
-					<font fontName="Times New Roman" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["HORA"]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="737" y="0" width="64" height="20" uuid="cdbabbb6-64bd-44cf-a356-0b99db91341e">
-					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-				</reportElement>
-				<textElement textAlignment="Center">
-					<font fontName="Times New Roman" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{tipo_poliza}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="737" y="20" width="64" height="20" uuid="b15eaf6e-c856-4dbf-a694-20402cc30fb4">
-					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-				</reportElement>
-				<textElement textAlignment="Center">
-					<font fontName="Times New Roman" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{Numero}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="157" y="60" width="447" height="20" forecolor="#FF0509" uuid="ef0e1097-650b-4d3b-8d17-fac4179f63c8">
-					<printWhenExpression><![CDATA[$F{validado} == 0]]></printWhenExpression>
-				</reportElement>
-				<textElement textAlignment="Center">
-					<font fontName="Times New Roman" size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[NO VALIDADO]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="737" y="100" width="64" height="20" uuid="80ab161b-7fd1-4c90-9614-5dbf15769158">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center">
 					<font fontName="Times New Roman" isBold="true"/>
@@ -202,29 +125,10 @@
 				<textFieldExpression><![CDATA[$F{evento}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="604" y="100" width="133" height="20" uuid="c5ddb66e-641b-4a3f-8b09-0a9a24111231">
-					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-				</reportElement>
-				<textElement textAlignment="Left">
-					<font fontName="Times New Roman" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["EVENTO"]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="737" y="40" width="64" height="20" uuid="cda063ee-3de4-49c7-8cb3-0f50b2def965">
-					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-				</reportElement>
-				<textElement textAlignment="Center">
-					<font fontName="Times New Roman" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{Fecha}]]></textFieldExpression>
-			</textField>
-			<textField>
 				<reportElement x="737" y="80" width="64" height="20" uuid="301d9c86-85ca-4b19-90ee-45d1d8654609">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center">
 					<font fontName="Times New Roman" isBold="true"/>
@@ -232,19 +136,21 @@
 				<textFieldExpression><![CDATA[$P{Hora}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="604" y="60" width="133" height="20" uuid="005c3e28-c60f-4821-8ca6-608d48f1bfbb">
+				<reportElement x="737" y="40" width="64" height="20" uuid="cda063ee-3de4-49c7-8cb3-0f50b2def965">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
 				</reportElement>
-				<textElement textAlignment="Left">
+				<textElement textAlignment="Center">
 					<font fontName="Times New Roman" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["FECHA REGISTRO"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{Fecha}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="737" y="60" width="64" height="20" uuid="8cde696c-c29f-4078-b441-6fc553bfee14">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center">
 					<font fontName="Times New Roman" isBold="true"/>
@@ -252,8 +158,118 @@
 				<textFieldExpression><![CDATA[$F{FechaRegistro}]]></textFieldExpression>
 			</textField>
 			<staticText>
+				<reportElement x="157" y="60" width="447" height="20" forecolor="#FF0509" uuid="ef0e1097-650b-4d3b-8d17-fac4179f63c8">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NO VALIDADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="801" y="100" width="20" height="20" uuid="a3b7d5bf-b823-4ae8-a1c4-82574ad08d3e"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="737" y="20" width="64" height="20" uuid="b15eaf6e-c856-4dbf-a694-20402cc30fb4">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Numero}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="604" y="40" width="133" height="20" uuid="59c4e039-3aa3-466e-a691-8b348888c71b">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FECHA AFECTACIÓN"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="157" y="20" width="447" height="20" uuid="338d49da-baef-4068-9e5f-22840ad8ab7f">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="50" width="137" height="70" uuid="73cb6708-5359-4b44-bc47-2ff700ede80e">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-20" y="0" width="40" height="50" uuid="496e6c52-0cc2-4928-835b-1bd7c5bffa36">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="604" y="0" width="133" height="20" uuid="8c206f97-bf18-47f6-93df-85b27a0f630d">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TIPO."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="801" y="80" width="20" height="20" uuid="0f607b0c-1d1e-41f1-93e6-80b7de530019"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="737" y="0" width="64" height="20" uuid="cdbabbb6-64bd-44cf-a356-0b99db91341e">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tipo_poliza}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="801" y="60" width="20" height="20" uuid="67877b5b-5c58-484e-b4fb-5fee1ef43c96"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="604" y="100" width="133" height="20" uuid="c5ddb66e-641b-4a3f-8b09-0a9a24111231">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["EVENTO"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="604" y="60" width="133" height="20" uuid="005c3e28-c60f-4821-8ca6-608d48f1bfbb">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FECHA REGISTRO"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="801" y="40" width="20" height="20" uuid="1be142af-1004-4eb7-ad76-9c5d603b0de3"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
 				<reportElement x="157" y="80" width="447" height="20" forecolor="#FF0905" uuid="884690ce-6986-4927-974e-183c4a8930f5">
-					<printWhenExpression><![CDATA[$F{estatus_evento} == 9]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center">
 					<font fontName="Times New Roman" size="12" isBold="true"/>
@@ -261,60 +277,76 @@
 				<text><![CDATA[CONCLUIDO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="157" y="20" width="447" height="20" uuid="338d49da-baef-4068-9e5f-22840ad8ab7f"/>
+				<reportElement x="157" y="0" width="447" height="20" uuid="d8017d03-9fc6-4c7d-8af5-1bca5a8eb09c">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INSTITUTO DE PENSIONES DEL ESTADO DE VERACRUZ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-20" y="50" width="40" height="70" uuid="798cf989-b9f8-4902-ba0a-67845d2e8e00">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
 				<text><![CDATA[]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="157" y="100" width="447" height="20" uuid="45c07f67-f5b1-4bbd-b88c-5a9138081bf7"/>
-				<text><![CDATA[]]></text>
+				<reportElement x="157" y="40" width="447" height="20" uuid="6990732b-840e-4e42-815a-45f2f43cf4f6">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PÓLIZA DE EGRESOS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="20" y="50" width="137" height="70" uuid="73cb6708-5359-4b44-bc47-2ff700ede80e"/>
+				<reportElement x="-20" y="120" width="841" height="26" uuid="b6ddfca1-4266-48cf-8ea7-d19a050a0bb1">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
 				<text><![CDATA[]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="-20" y="0" width="40" height="50" uuid="496e6c52-0cc2-4928-835b-1bd7c5bffa36"/>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="-20" y="50" width="40" height="70" uuid="798cf989-b9f8-4902-ba0a-67845d2e8e00"/>
-				<text><![CDATA[]]></text>
-			</staticText>
+			<textField>
+				<reportElement x="604" y="20" width="133" height="20" uuid="6def13a6-ea14-4bc9-9338-25cd566f291d">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["NO."]]></textFieldExpression>
+			</textField>
 			<staticText>
 				<reportElement x="801" y="0" width="20" height="20" uuid="949870cd-727d-422a-8775-b0a4f8103052"/>
 				<text><![CDATA[]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="801" y="20" width="20" height="20" uuid="b1796204-71e4-4f84-a5d3-0d71240eb537"/>
+				<reportElement x="157" y="100" width="447" height="20" uuid="45c07f67-f5b1-4bbd-b88c-5a9138081bf7">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
 				<text><![CDATA[]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="801" y="40" width="20" height="20" uuid="1be142af-1004-4eb7-ad76-9c5d603b0de3"/>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="801" y="60" width="20" height="20" uuid="67877b5b-5c58-484e-b4fb-5fee1ef43c96"/>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="801" y="80" width="20" height="20" uuid="0f607b0c-1d1e-41f1-93e6-80b7de530019"/>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="801" y="100" width="20" height="20" uuid="a3b7d5bf-b823-4ae8-a1c4-82574ad08d3e"/>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="-20" y="120" width="841" height="26" uuid="b6ddfca1-4266-48cf-8ea7-d19a050a0bb1"/>
-				<text><![CDATA[]]></text>
-			</staticText>
+			<textField>
+				<reportElement x="604" y="80" width="133" height="20" uuid="de6f328b-7ccb-4882-b512-9b0520225f08">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["HORA"]]></textFieldExpression>
+			</textField>
 		</band>
-	</pageHeader>
+	</title>
 	<columnHeader>
 		<band height="20">
+			<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
 			<staticText>
-				<reportElement x="80" y="0" width="100" height="20" uuid="94a899f8-2502-46bf-a9dc-595d362649b7">
+				<reportElement x="80" y="0" width="100" height="20" isRemoveLineWhenBlank="true" uuid="94a899f8-2502-46bf-a9dc-595d362649b7">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
 				</reportElement>
 				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
 					<pen lineWidth="0.0"/>
@@ -329,8 +361,9 @@
 				<text><![CDATA[Cuenta]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="180" y="0" width="420" height="20" uuid="02f5e553-49db-4359-9c0a-5de1b8cf69aa">
+				<reportElement x="180" y="0" width="420" height="20" isRemoveLineWhenBlank="true" uuid="02f5e553-49db-4359-9c0a-5de1b8cf69aa">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
 				</reportElement>
 				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
 					<pen lineWidth="0.0"/>
@@ -345,8 +378,9 @@
 				<text><![CDATA[Descripción]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="600" y="0" width="100" height="20" uuid="747e932f-2d85-49da-84cc-a7049b1bdc01">
+				<reportElement x="600" y="0" width="100" height="20" isRemoveLineWhenBlank="true" uuid="747e932f-2d85-49da-84cc-a7049b1bdc01">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
 				</reportElement>
 				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
 					<pen lineWidth="0.0"/>
@@ -361,8 +395,9 @@
 				<text><![CDATA[Cargo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="700" y="0" width="101" height="20" uuid="ff900374-6332-4dc0-a982-64e6e28ce8d8">
+				<reportElement x="700" y="0" width="101" height="20" isRemoveLineWhenBlank="true" uuid="ff900374-6332-4dc0-a982-64e6e28ce8d8">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
 				</reportElement>
 				<box topPadding="2" leftPadding="3" bottomPadding="2" rightPadding="2">
 					<pen lineWidth="0.0"/>
@@ -377,9 +412,10 @@
 				<text><![CDATA[Abono]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="40" y="0" width="40" height="20" uuid="014b087d-961d-4c47-9903-5127aa452a66">
+				<reportElement x="40" y="0" width="40" height="20" isRemoveLineWhenBlank="true" uuid="014b087d-961d-4c47-9903-5127aa452a66">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -394,8 +430,9 @@
 				<text><![CDATA[Clave]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="40" height="20" uuid="2f009378-2538-4195-af75-a2f67c9f661a">
+				<reportElement x="0" y="0" width="40" height="20" isRemoveLineWhenBlank="true" uuid="2f009378-2538-4195-af75-a2f67c9f661a">
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -462,7 +499,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{concepto}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="$ #,##0.00">
 				<reportElement x="700" y="0" width="101" height="20" uuid="218657f9-3739-48d4-b2ad-00bdb0c79626">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
@@ -478,9 +515,9 @@
 					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{total_suma})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{total_suma}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="$ #,##0.00">
 				<reportElement x="600" y="0" width="100" height="20" uuid="31974cca-a510-483f-9e0d-303d49106ecd">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
@@ -496,7 +533,7 @@
 					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{total_suma})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{total_suma}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="ScaleFont">
 				<reportElement x="40" y="0" width="40" height="20" uuid="285f894c-0279-4d42-8f32-c8297e5c1b47">
@@ -745,7 +782,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA["TOTALES"]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤#,##0.00;¤-#,##0.00">
+			<textField pattern="$ #,##0.00">
 				<reportElement isPrintRepeatedValues="false" x="600" y="0" width="100" height="20" uuid="410d311f-8a95-4058-858e-b84168c8bad4">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
@@ -760,9 +797,9 @@
 					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($V{SumaCargo})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{SumaCargo}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="$ #,##0.00">
 				<reportElement isPrintRepeatedValues="false" x="700" y="0" width="101" height="20" uuid="7a60849e-452b-4488-94c6-30e141d0b97d">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
@@ -777,7 +814,7 @@
 					<font fontName="Times New Roman" size="11"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($V{SumaAbono})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{SumaAbono}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="-20" y="0" width="20" height="20" uuid="ac02f6e7-d43e-4ef6-81de-00b22946a8ef"/>
