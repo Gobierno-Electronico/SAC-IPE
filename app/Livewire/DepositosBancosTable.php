@@ -127,11 +127,11 @@ class DepositosBancosTable extends Tabla
 
     #[On('agregar-registro')]
     public function agregarRegistro($registro)
-    {
+    { 
         try {
-            $solvencia = DB::select('exec SolvenciaCajaGeneral @anio = ?', [Carbon::now()->year]);
+            $solvencia = DB::select('exec SolvenciaCuentasContables @cuenta = ?, @anio = ?', array('1.1.1.1.01.01', Carbon::now()->year));
 
-            if ($solvencia[0]->total - ($this->total + $registro['importe']) < 0) {
+            if ($solvencia[0]->Solvencia - ($this->total + $registro['importe']) < 0) {
                 $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto en Caja General insuficiente', tipo: 'error', tiempo: 3000);
                 return;
             }

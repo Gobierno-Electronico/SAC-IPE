@@ -35,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
         //         $query->time
         //     );
         // });
-        ini_set('max_execution_time', 120);
+        // ini_set('max_execution_time', 120);
         $anioActual = Carbon::now()->year;
 
 
@@ -82,7 +82,7 @@ class AppServiceProvider extends ServiceProvider
                 ->where([[$tabla . '.' . $campoWhere , '=', $valorWhere], [$tabla . '.' . $campoWhere2, '=', $valorWhere2]]);
         });
 
-        //Lógica para la comprobar la apertura del sistema
+        // Lógica para la comprobar la apertura del sistema
         $polizasPresupuestales = DB::table('polizas')
             ->select('categoria', 'evento')
             ->where('tipo_poliza', '=', 'P')

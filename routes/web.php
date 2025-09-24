@@ -34,7 +34,7 @@ Route::get('/', function () {
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 //Catálogos
-Route::get('/catalogos/{tipo}', [ReportesController::class, 'mostrarClasificadores'])->name('mostrarClasificadores')->middleware('role:Administrador');
+Route::get('/catalogos/{tipo}', [ReportesController::class, 'mostrarClasificadores'])->name('mostrarClasificadores')->middleware('can:acceso-cuentas');
 
 //Cuentas
 Route::get('/cuentas', [CuentasController::class, 'listaDeCuentas'])->name('listaDeCuentas')->middleware('can:acceso-cuentas');

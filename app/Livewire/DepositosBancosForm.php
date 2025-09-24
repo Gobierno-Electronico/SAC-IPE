@@ -9,6 +9,7 @@ use App\Models\Cuenta;
 use PDOException;
 use Log;
 use DB;
+use Carbon\Carbon;
 
 class DepositosBancosForm extends Component
 {
@@ -42,7 +43,10 @@ class DepositosBancosForm extends Component
             $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
                 ->where('interaccion_cuenta_conceptos.concepto_id', '=', 13)->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Cargo')
                 ->orderBy('cuentas.Codigo_cuenta')->get();
-            return view('livewire.depositos-bancos-form', ['cuentas' => $cuentas]);
+
+            $solvencia = DB::select('exec SolvenciaCuentasContables @cuenta = ?, @anio = ?', array('1.1.1.1.01.01', Carbon::now()->year));
+
+            return view('livewire.depositos-bancos-form', ['cuentas' => $cuentas, 'solvenciaCajaGeneral' => $solvencia[0]->Solvencia]);
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar cuentas en depósitos en bancos: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar cuentas, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);

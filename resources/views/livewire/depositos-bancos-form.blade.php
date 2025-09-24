@@ -16,8 +16,8 @@
                             <div>
                                 <label for="inputObservaciones"
                                     class="col-md-12 col-form-label">{{ __('Total') }}</label>
-                                <input value="{{  '$' . number_format($total, 2, '.', ',')  }}" type="text" class="form-control"
-                                    name="inputAumentado" disabled>
+                                <input value="{{ '$' . number_format($total, 2, '.', ',') }}" type="text"
+                                    class="form-control" name="inputAumentado" disabled>
                             </div>
                         </div>
 
@@ -27,7 +27,7 @@
                 </div>
             </div>
             <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-                tipoMovimiento="PolizaIngresosDepositosBancos" urlFinalizar="/depositos-bancos" tipoPoliza="I" />
+                tipoMovimiento="PolizaIngresosDepositosEnBancos" urlFinalizar="/depositos-bancos" tipoPoliza="I" />
         @else
             <div>
                 <label for="selectArea" class="form-label">Área solicitante</label>
@@ -47,8 +47,8 @@
                 <input type="text" name="inputObservacion" id="inputObservacion" class="form-control"
                     wire:model.live="observaciones">
                 <label for="inputFechaRegistro" class="form-label mt-3">Fecha de afectación</label>
-                <input type="date" name="inputFechaRegistro" id="inputFechaRegistro" class="form-control mb-3" max="{{ now()->toDateString() }}"
-                    wire:model.live="fechaAfectacion">
+                <input type="date" name="inputFechaRegistro" id="inputFechaRegistro" class="form-control mb-3"
+                    max="{{ now()->toDateString() }}" wire:model.live="fechaAfectacion">
             </div>
 
             <h2 class="mt-5 mb-3">Selección de movimientos</h2>
@@ -78,6 +78,10 @@
                         @endforeach
                     </select>
 
+                    <label for="inputSolvenciaCajaGeneral" class="form-label">Solvencia caja general</label>
+                    <input type="text" name="inputSolvenciaCajaGeneral" id="inputSolvenciaCajaGeneral"
+                        class="form-control mb-3" value="{{ '$' . number_format($solvenciaCajaGeneral, 2, '.', ',') }}" disabled>
+
                     <label for="inputImporte" class="form-label">Importe</label>
                     <input type="text" name="inputImporte" id="inputImporte" class="form-control mb-3"
                         wire:model.live="importe" onkeyup="validarDecimales(this)" onchange="formatearImporte(this)">
@@ -103,25 +107,25 @@
         })
 
         function validarDecimales(input) {
-        // Obtener solo números y un punto decimal permitido
-        let valor = input.value.replace(/[^0-9.]/g, '') // Elimina caracteres no numéricos
-                           .replace(/(\..*)\./g, '$1') // Evita más de un punto decimal
-                           .replace(/^0+(\d)/, '$1') // Elimina ceros iniciales
-                           .replace(/^(\d+)(\.\d{0,2})?.*$/, '$1$2'); // Máximo 2 decimales
+            // Obtener solo números y un punto decimal permitido
+            let valor = input.value.replace(/[^0-9.]/g, '') // Elimina caracteres no numéricos
+                .replace(/(\..*)\./g, '$1') // Evita más de un punto decimal
+                .replace(/^0+(\d)/, '$1') // Elimina ceros iniciales
+                .replace(/^(\d+)(\.\d{0,2})?.*$/, '$1$2'); // Máximo 2 decimales
 
-        // Si el valor es solo un punto, permitirlo sin formatear
-        if (valor === ".") {
-            input.value = valor;
-            return;
+            // Si el valor es solo un punto, permitirlo sin formatear
+            if (valor === ".") {
+                input.value = valor;
+                return;
+            }
+
+            // Convertir a número para formateo
+            let partes = valor.split('.');
+            let numeroEntero = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Agrega comas a los miles
+
+            // Reconstruir con decimales si existen
+            input.value = partes.length > 1 ? `${numeroEntero}.${partes[1]}` : numeroEntero;
         }
-
-        // Convertir a número para formateo
-        let partes = valor.split('.');
-        let numeroEntero = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Agrega comas a los miles
-
-        // Reconstruir con decimales si existen
-        input.value = partes.length > 1 ? `${numeroEntero}.${partes[1]}` : numeroEntero;
-    }
 
         function formatearImporte(obj) {
             var amount = $('#' + obj.id).val().replace(/[^0-9.]/g, '');
