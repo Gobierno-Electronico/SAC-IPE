@@ -27,7 +27,7 @@
                 </div>
             </div>
             <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-                tipoMovimiento="PolizaIngresosDepositosEnBancos" urlFinalizar="/depositos-bancos" tipoPoliza="I" />
+                tipoMovimiento="PolizaIngresosDepositosEnBancos" categoriaModulo='INGRESOS DEPOSITOS EN BANCOS' urlFinalizar="/depositos-bancos" tipoPoliza="I" />
         @else
             <div>
                 <label for="selectArea" class="form-label">Área solicitante</label>
