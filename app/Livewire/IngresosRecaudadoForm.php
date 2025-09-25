@@ -69,7 +69,7 @@ class IngresosRecaudadoForm extends Component
         try {
             //code...
             $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-                ->whereIn('interaccion_cuenta_conceptos.concepto_id', [19, 20, 21, 35, 39])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Abono')
+                ->whereIn('interaccion_cuenta_conceptos.concepto_id', [19, 20, 21, 35, 39, 10115, 10116, 10117])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Abono')
                 ->orderBy('cuentas.Codigo_cuenta')->get();
             $eventos =  Poliza::select('evento', 'descripcion')
                 ->whereYear('fecha', '=', Carbon::now()->year)
@@ -187,7 +187,7 @@ class IngresosRecaudadoForm extends Component
             }
 
             $this->cambiarCuentaPagoSeleccionada = true;
-            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [19, 20, 21, 35, 39])
+            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [19, 20, 21, 35, 39, 10115, 10116, 10117])
                 ->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
             $this->subcuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
                 ->join('interaccion_cuenta_conceptos', function ($join) {
