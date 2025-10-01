@@ -187,7 +187,7 @@ class IngresosRecaudadoForm extends Component
             }
 
             $this->cambiarCuentaPagoSeleccionada = true;
-            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [19, 20, 21, 35, 39, 10115, 10116, 10117])
+            $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [19, 20, 21, 35, 39, 10114, 10115, 10116, 10117])
                 ->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
             $this->subcuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)
                 ->join('interaccion_cuenta_conceptos', function ($join) {
