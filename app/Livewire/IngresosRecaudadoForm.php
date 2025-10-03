@@ -111,7 +111,7 @@ class IngresosRecaudadoForm extends Component
             $anioActual = Carbon::now()->year;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)
-                ->whereIn('concepto_id', [19, 20, 21, 35, 39])
+                ->whereIn('concepto_id', [19, 20, 21, 35, 39, 10114, 10115, 10116, 10117])
                 ->where('tipo_interaccion', '=', 'Presupuestal - Abono')
                 ->first();
 

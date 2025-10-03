@@ -166,7 +166,7 @@ class IngresosRecaudadoTable extends Tabla
                 }
                 $anioActual = Carbon::now()->year;
                 $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $registro['cuentaId'])
-                    ->whereIn('concepto_id', [19, 20, 21, 35, 39])
+                    ->whereIn('concepto_id', [19, 20, 21, 35, 39, 10114, 10115, 10116, 10117])
                     ->where('tipo_interaccion', '=', 'Presupuestal - Abono')
                     ->first();
     
@@ -325,7 +325,7 @@ class IngresosRecaudadoTable extends Tabla
             foreach ($this->dataCompleta as $movimiento) {
                 $movimiento['importe'] = doubleval($movimiento['importe']);
                 $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['cuentaId'])
-                    ->whereIn('concepto_id', [19, 20, 21, 35, 39])
+                    ->whereIn('concepto_id', [19, 20, 21, 35, 39, 10114, 10115, 10116, 10117])
                     ->where('tipo_interaccion', '=', 'Presupuestal - Abono')
                     ->first();
                 $interaccionCuentaCuentas = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoPrincipal->id)
