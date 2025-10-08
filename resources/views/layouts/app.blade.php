@@ -95,47 +95,76 @@
                                                 {{ __('Cuentas') }}</a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="dropdown-item" href="/catalogos/CA" id="navbarCA" onclick="mostrarCargando()"
-                                                role="button">
+                                            <a class="dropdown-item" href="/catalogos/CA" id="navbarCA"
+                                                onclick="mostrarCargando()" role="button">
                                                 {{ __('Clasificador Administrativo') }}
                                             </a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="dropdown-item" href="/catalogos/CP" id="navbarCP" onclick="mostrarCargando()"
-                                                role="button">
+                                            <a class="dropdown-item" href="/catalogos/CP" id="navbarCP"
+                                                onclick="mostrarCargando()" role="button">
                                                 {{ __('Clasificador Programático') }}
                                             </a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="dropdown-item" href="/catalogos/CFG" id="navbarCFG" onclick="mostrarCargando()"
-                                                role="button">
+                                            <a class="dropdown-item" href="/catalogos/CFG" id="navbarCFG"
+                                                onclick="mostrarCargando()" role="button">
                                                 {{ __('Clasificador Funcional Gasto') }}
                                             </a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="dropdown-item" href="/catalogos/CTG" id="navbarCTG" onclick="mostrarCargando()"
-                                                role="button">
+                                            <a class="dropdown-item" href="/catalogos/CTG" id="navbarCTG"
+                                                onclick="mostrarCargando()" role="button">
                                                 {{ __('Clasificador Tipo Gasto') }}
                                             </a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="dropdown-item" href="/catalogos/COG" id="navbarCOG" onclick="mostrarCargando()"
-                                                role="button">
+                                            <a class="dropdown-item" href="/catalogos/COG" id="navbarCOG"
+                                                onclick="mostrarCargando()" role="button">
                                                 {{ __('Clasificador Objeto Gasto') }}
                                             </a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="dropdown-item" href="/catalogos/CFF" id="navbarCFF" onclick="mostrarCargando()"
-                                                role="button">
+                                            <a class="dropdown-item" href="/catalogos/CFF" id="navbarCFF"
+                                                onclick="mostrarCargando()" role="button">
                                                 {{ __('Clasificador Fuente Financiamiento') }}
                                             </a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="dropdown-item" href="/catalogos/CRI" id="navbarCRI" onclick="mostrarCargando()"
-                                                role="button">
+                                            <a class="dropdown-item" href="/catalogos/CRI" id="navbarCRI"
+                                                onclick="mostrarCargando()" role="button">
                                                 {{ __('Clasificador Rubro Ingreso') }}
                                             </a>
                                         </li>
+
+                                        <li class="nav-item dropdown">
+                                            <a class="dropdown-item" href="#" id="navbarCRI"
+                                                onclick="mostrarCargando()" role="button">
+                                                {{ __('Cargar matrices de conversión') }}
+                                            </a>
+                                        </li>
+
+                                        <li class="dropdown dropend">
+                                            <a href="#" class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                                role="button">
+                                                Matrices de Conversión
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li class="nav-item dropdown">
+                                                    <a class="dropdown-item" href="{{route('cargarMatriz')}}" id="navbarMatriz"
+                                                        onclick="mostrarCargando()" role="button">
+                                                        {{ __('Carga') }}
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item dropdown">
+                                                    <a class="dropdown-item" href="#" id="navbarCRI"
+                                                        onclick="mostrarCargando()" role="button">
+                                                        {{ __('Consulta') }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>   
+
                                 </li>
                             </ul>
                             </li>

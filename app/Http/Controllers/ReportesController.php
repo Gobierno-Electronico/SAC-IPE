@@ -69,4 +69,8 @@ class ReportesController extends Controller
         }
         return view('reportes.clasificadores', compact('tipo', 'titulo'));
     }
+
+    public function mostrarVistaCargaMatriz(){
+        return view('matriz_conversion.matriz');
+    }
 }

@@ -86,10 +86,11 @@ class CuentasController extends Controller
         return true;
     }
 
-    private function validarIdentificador($data, $key) {
+    private function validarIdentificador($data, $key)
+    {
         // Patrón regex para validar la cadena
         $patron = '/^[A-Z]{2}-\d+$/';
-        
+
         // Verificar si la cadena cumple con el patrón
         if (preg_match($patron, $data[$key])) {
             return true; // La cadena es válida
@@ -250,7 +251,7 @@ class CuentasController extends Controller
         }
     }
 
-    
+
     public function cargaExcel()
     {
         return view('cuentas.cargaExcel');
@@ -476,8 +477,9 @@ class CuentasController extends Controller
                         if ($identificadorExistente->Codigo_cuenta != $row['Cuenta']) {
                             $codigoCuentaExistente = $this->buscarCodigoDeCuenta($row['Cuenta']);
                             if (count($codigoCuentaExistente)) {
+                                Log::info($codigoCuentaExistente);
                                 return response()->json(['error' => 'Código de cuenta ya existente']);
-                            }else{
+                            } else {
                                 $identificadorExistente->Codigo_cuenta = $row['Cuenta'];
                                 $identificadorExistente->save();
                                 $cuentasRepetidas[] = "El codigo de la cuenta con identificador {$row['Identificador']} fue actualizada!";
@@ -564,28 +566,28 @@ class CuentasController extends Controller
                     $nivel = count($codigoDividido);
                     //Se le suma para que el Nivel de la Cuenta empiece en "1"
                     $nivel = $nivel + 1;
-                    
-                    
+
+
                     $codigoCuentaExistente = $this->buscarCodigoDeCuenta($row['Cuenta']);
                     if (count($codigoCuentaExistente)) {
+                        Log::info($codigoCuentaExistente);
                         return response()->json(['error' => 'Código de cuenta ya existente']);
-                    }else{
-                        
-                    $cuenta = Cuenta::create([
-                        'Codigo_cuenta' => $row['Cuenta'],
-                        'Descripcion_cuenta' => $row['Descripcion'],
-                        'Nivel' => $row['Nivel'] = $nivel,
-                        'Estado' => $row['Estado'] = 'True',
-                        'Naturaleza' => $row['Naturaleza'],
-                        'identificador' => $row['Identificador'],
-                        'Cuenta_registro' => Str::upper($row['Cta. de registro']) == 'SÍ' || Str::upper($row['Cta. de registro']) == 'Sí' || Str::upper($row['Cta. de registro']) == 'Si' || Str::upper($row['Cta. de registro']) == 'SI',
-                        // 'Clasificador_rubro_ingreso' => empty($row['CRI']) ? null : $row['CRI'],
-                        // 'Clasificador_objeto_gasto' => empty($row['COG']) ? null : $row['COG'],
-                        'Cuenta_padre_ID' => empty($cuentaPadre) ? null : $cuentaPadre,
-                    ]);
-                    Log::info($cuenta);
+                    } else {
+
+                        $cuenta = Cuenta::create([
+                            'Codigo_cuenta' => $row['Cuenta'],
+                            'Descripcion_cuenta' => $row['Descripcion'],
+                            'Nivel' => $row['Nivel'] = $nivel,
+                            'Estado' => $row['Estado'] = 'True',
+                            'Naturaleza' => $row['Naturaleza'],
+                            'identificador' => $row['Identificador'],
+                            'Cuenta_registro' => Str::upper($row['Cta. de registro']) == 'SÍ' || Str::upper($row['Cta. de registro']) == 'Sí' || Str::upper($row['Cta. de registro']) == 'Si' || Str::upper($row['Cta. de registro']) == 'SI',
+                            // 'Clasificador_rubro_ingreso' => empty($row['CRI']) ? null : $row['CRI'],
+                            // 'Clasificador_objeto_gasto' => empty($row['COG']) ? null : $row['COG'],
+                            'Cuenta_padre_ID' => empty($cuentaPadre) ? null : $cuentaPadre,
+                        ]);
+                        Log::info($cuenta);
                     }
-                    
                 }
 
                 // codigo interno unicamente para borrar al inicio de la carga cualquier actualizacion en el plan de cuentas
@@ -601,6 +603,13 @@ class CuentasController extends Controller
 
                 // Se verifica si hubo errores durante la importación. Si no hubo errores, se confirma la transacción y se redirige con un mensaje de éxito.
                 // Si hubo errores, se revierte la transacción y se redirige con un mensaje de error que muestra los errores.
+
+                //limpia cuentas que traigan dos espacios o más en su descripción   
+                Cuenta::where('Descripcion_cuenta', 'LIKE', '%  %')
+                    ->update([
+                        'Descripcion_cuenta' => DB::raw("LTRIM(RTRIM(REPLACE(REPLACE(Descripcion_cuenta, '  ', ' '), '  ', ' ')))")
+                    ]);
+
                 if (empty($cuentasRepetidas)) {
                     DB::commit();
                     return response()->json(['mensaje' => 'Importación exitosa', 'error' => '']);
@@ -608,6 +617,8 @@ class CuentasController extends Controller
                     DB::commit();
                     return response()->json(['mensaje' => $cuentasRepetidas, 'error' => '']);
                 }
+
+
                 // Si ocurre alguna excepción durante el proceso de importación, se revierte la transacción
                 // y se redirige con un mensaje de error que incluye detalles sobre la excepción.
             } catch (\Exception $error) {
@@ -633,7 +644,7 @@ class CuentasController extends Controller
                 session()->flash('message', 'No se pudo analizar el documento como archivo Excel válido.');
                 session()->flash('message_type', 'error');
                 return redirect('/home');
-            }else{
+            } else {
 
                 // Validar encabezados del archivo Excel
                 $expectedHeaders = ['Cuenta', 'Descripcion', 'Cta. de registro', 'Naturaleza', 'Identificador'];
@@ -645,23 +656,23 @@ class CuentasController extends Controller
                     session()->flash('message_type', 'error');
                     return redirect('/home');
                 }
-    
+
                 // Guardar registro en bitácora
                 $bitacoraController = new BitacoraController();
                 $bitacoraController->bitacora('limpiarCuentas', 'depuró o intentó depurar el plan de cuentas ', Request());
-    
+
                 // Iniciar transacción
                 DB::beginTransaction();
-    
+
                 // Leer los datos del archivo
                 $rows = $xlsx->rows();
-    
+
                 // Eliminar la fila del encabezado
                 array_shift($rows);
-    
+
                 // Obtener los registros de la base de datos
                 $cuentas = Cuenta::all(); // Asumiendo que tienes un modelo Cuenta
-    
+
                 // Procesar cada cuenta de la base de datos
                 foreach ($cuentas as $cuenta) {
                     $found = false;
@@ -672,7 +683,7 @@ class CuentasController extends Controller
                         // $ctaRegistroExcel = (strtoupper($row[2]) == 'SI') ? 1 : 0;
                         // $naturalezaExcel = empty($row[3]) ? null : $row[3]; // Convertir vacío a null
                         $identificadorExcel = $row[4]; // Columna Identificador
-    
+
                         // Comparar con la base de datos
                         if (
                             $cuenta->Codigo_cuenta == $cuentaExcel &&
@@ -693,17 +704,15 @@ class CuentasController extends Controller
                     // Guardar los cambios en la base de datos
                     $cuenta->save();
                 }
-    
+
                 // Commit de la transacción
                 DB::commit();
-    
+
                 // Mensaje de éxito
                 session()->flash('message', 'Plan de cuentas depurado correctamente');
                 session()->flash('message_type', 'success');
                 return redirect('/home');
-
             }
-
         } catch (\Exception $e) {
             // Rollback de la transacción en caso de error
             DB::rollback();
@@ -716,7 +725,6 @@ class CuentasController extends Controller
             session()->flash('message_type', 'error');
             return redirect('/home');
         }
-        
     }
 
 
