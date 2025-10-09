@@ -98,4 +98,17 @@ class MatrizConsultaForm extends Component
                 ];
         }
     }
+
+    public function borrar()
+    {
+        if (!$this->tipoMatriz) {
+            $this->dispatch('mostrarMensaje', mensaje: 'Debe seleccionar un tipo de matriz', tipo: 'error', tiempo: 3000);
+            return;
+        }
+
+        MatrizConversion::where('categoria_matriz', $this->tipoMatriz)->delete();
+
+        $this->tipoMatriz = '';
+        $this->dispatch('mostrarMensaje', mensaje: 'Matriz eliminada correctamente', tipo: 'success', tiempo: 3000);
+    }
 }

@@ -160,7 +160,13 @@ class IngresosRecaudadoTable extends Tabla
     {
         try {
             if($this->verificarPresupuesto($registro)){                
-                if (bccomp((string)($this->total + $registro['importe']), (string)$registro['montoEvento'], 2) == 1) {
+                if (
+                    bccomp(
+                        bcadd(number_format($this->total, 2, '.', ''), number_format($registro['importe'], 2, '.', ''), 2),
+                        number_format($registro['montoEvento'], 2, '.', ''),
+                        2
+                    ) === 1
+                ) { 
                     $this->dispatch('mostrarMensaje', mensaje: 'Monto total del evento superado', tipo: 'error', tiempo: 3000);
                     return;
                 }
