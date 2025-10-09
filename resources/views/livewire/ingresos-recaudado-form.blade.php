@@ -125,8 +125,8 @@
                 <input type="text" name="inputSolvenciaPresupuestal" id="inputSolvenciaPresupuestal"
                     class="form-control" disabled>
 
-                <label for="inputSolvenciaAbono" class="form-label mt-3">Solvencia cuenta de abono</label>
-                <input type="text" name="inputSolvenciaAbono" id="inputSolvenciaAbono" class="form-control"
+                <label for="inputSolvenciaCargo" class="form-label mt-3">Solvencia cuenta de cargo</label>
+                <input type="text" name="inputSolvenciaCargo" id="inputSolvenciaCargo" class="form-control"
                     disabled>
 
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
@@ -203,7 +203,7 @@
     function limpiar() {
         $('#selectCuentaContable').val('');
         $('#inputImporte').val('');
-        $('#inputSolvenciaAbono').val('');
+        $('#inputSolvenciaCargo').val('');
         $('#inputSolvenciaPresupuestal').val('');
     }
 </script>

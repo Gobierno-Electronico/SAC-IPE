@@ -140,10 +140,10 @@ class IngresosRecaudadoForm extends Component
             $solvencia = DB::select('EXEC SolvenciaCuentasContables @cuenta = ?, @anio = ?', array($cuentaAbono->Codigo_cuenta, $anioActual))[0]->Solvencia;
             $this->solvenciaAbono = ($solvencia > 0) ? floatval($solvencia) : 0;
 
-            $this->dispatch('formato_importe', id: 'inputSolvenciaAbono', amount:"{$this->solvenciaAbono}");
+            $this->dispatch('formato_importe', id: 'inputSolvenciaCargo', amount:"{$this->solvenciaAbono}");
             $this->dispatch('mostrarMensaje', mensaje: 'Solvencia cargada', tipo: 'success', tiempo: 1500);
         }catch(\Throwable $th){
-            Log::error('Ocurrió un error al obtener solvencia de cuenta abono en recaudado: ' . $th->getMessage());
+            Log::error('Ocurrió un error al obtener solvencia de cuenta cargo en recaudado: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al obtener solvencia, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }

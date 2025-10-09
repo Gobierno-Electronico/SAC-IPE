@@ -157,7 +157,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="nav-item dropdown">
-                                                    <a class="dropdown-item" href="#" id="navbarCRI"
+                                                    <a class="dropdown-item" href="{{route('consultarMatriz')}}" id="navbarCRI"
                                                         onclick="mostrarCargando()" role="button">
                                                         {{ __('Consulta') }}
                                                     </a>
