@@ -73,4 +73,8 @@ class ReportesController extends Controller
     public function mostrarVistaCargaMatriz(){
         return view('matriz_conversion.matriz');
     }
+
+    public function mostrarVistaConsultaMatriz(){
+        return view('reportes.consultaMatrices');
+    }
 }
