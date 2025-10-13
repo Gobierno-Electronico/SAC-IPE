@@ -72,6 +72,10 @@
 
         <div>
             {{ $datos->links() }}
+            <button id="botonFecha" value="{{ $fecha }}" hidden></button>
+            <button id="botonHora" value="{{ $hora }}" hidden></button>
+            <button id="botonTitulo" value="{{ $titulo }}" hidden></button>
+
         </div>
         <div class="mt-4 d-flex justify-content-between">
             <button @if ($tipoMatriz == '') disabled @endif id="borrarMatriz" type="button"
@@ -89,3 +93,84 @@
         </div>
     @endif
 </div>
+
+<script>
+    const IP_PORT = window.IP_PORT;
+    const NOMBRE_REPORTEADOR = window.NOMBRE_REPORTEADOR;
+
+    function generarReporte(btn) {
+        const btnId = btn.id;
+        const btnHtml = $("#" + btnId).html();
+
+        const spinner = '<div class="spinner-border" role="status"><span class="sr-only">Cargando...</span></div>';
+        $("#" + btnId).html(spinner).prop("disabled", true);
+        $('#loadingScreen').prop('hidden', false);
+
+        const categoria = $('#inputCategoriaMatriz').val();
+        const fecha = $('#botonFecha').val();
+        const hora = $('#botonHora').val();
+
+        const titulo = 'MATRIZ ' + $('#inputCategoriaMatriz option:selected').val();
+
+        if (!categoria) {
+            toastr.warning('Debes seleccionar un tipo de matriz antes de generar el reporte.');
+            resetButton(btnId, btnHtml);
+            return;
+        }
+
+        let nombreReporte = '';
+        switch (categoria) {
+            case 'INGRESOS DEVENGADO-RECAUDADO SIMULTANEO':
+                nombreReporte = 'ReporteMatrizDevengadoRecaudadoSimultaneo';
+                break;
+            case 'GASTOS DEVENGADO':
+                nombreReporte = 'ReporteMatrizGastosDevengado';
+                break;
+            case 'GASTOS PAGADO':
+                nombreReporte = 'ReporteMatrizGastosPagado';
+                break;
+            default:
+                nombreReporte = 'ReporteMatrizGeneral';
+                break;
+        }
+
+        const wsUrl = "http://" + IP_PORT + "/" + NOMBRE_REPORTEADOR +
+            "/webresources/service/report?name=" + nombreReporte + "&params=";
+
+        const url = `${wsUrl}` +
+            `Fecha;${fecha},Hora;${hora},Titulo;${titulo},Categoria;${categoria}`;
+
+        console.log("URL generada:", url);
+
+        let mensajeEdoSolicitud = toastr.info("Procesando solicitud, espere un momento por favor...", "", {
+            timeOut: "0"
+        });
+
+        fetch(url, { method: "GET" })
+            .then((response) => {
+                if (!response.ok) {
+                    toastr.error("Problemas al procesar la solicitud, por favor inténtelo más tarde.");
+                    mensajeEdoSolicitud.remove();
+                } else {
+                    response.text().then((pdfUrl) => {
+                        window.open(pdfUrl, "_blank");
+                        toastr.success("Reporte generado correctamente.");
+                        mensajeEdoSolicitud.remove();
+                    });
+                }
+
+                resetButton(btnId, btnHtml);
+            })
+            .catch((error) => {
+                console.error("Error al generar el reporte:", error);
+                mensajeEdoSolicitud.remove();
+                toastr.error("Problemas al procesar la solicitud, por favor inténtelo más tarde.");
+                resetButton(btnId, btnHtml);
+            });
+    }
+
+    function resetButton(id, html) {
+        $("#" + id).prop("disabled", false).html(html);
+        $('#loadingScreen').prop('hidden', true);
+    }
+</script>

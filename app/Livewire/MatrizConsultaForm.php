@@ -7,6 +7,7 @@ use Livewire\WithPagination;
 use Illuminate\Database\Eloquent\Builder;
 use App\Clases\Column;
 use App\Models\MatrizConversion;
+use Carbon\Carbon;
 
 class MatrizConsultaForm extends Component
 {
@@ -16,6 +17,10 @@ class MatrizConsultaForm extends Component
     public $perPage = 10;
     public $sortBy = '';
     public $sortDirection = 'asc';
+    public $fecha;
+    public $hora;
+    public $titulo;
+
 
     protected $paginationTheme = 'bootstrap';
 
@@ -30,6 +35,8 @@ class MatrizConsultaForm extends Component
             );
 
         $datos = $this->tipoMatriz ? $query->paginate($this->perPage) : collect();
+        $this->fecha = Carbon::now()->format('d-m-Y');
+        $this->hora = Carbon::now()->format('h:i A');
 
         return view('livewire.matriz-consulta', compact('datos'));
     }
