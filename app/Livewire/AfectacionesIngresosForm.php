@@ -136,12 +136,12 @@ class AfectacionesIngresosForm extends Component
                     $query->where('Nombre', 'like', '%Por ejecutar%')
                         ->orWhere('Nombre', 'like', '%Modificado%');
                 })->orderBy('Nombre')->get();
+            
             $this->codigoCuentaAbono = $cuentas[1]->Cuenta_contable;
             $this->codigoCuentaCargo = $cuentas[0]->Cuenta_contable;
             $this->descripcionCuentaAbono = $cuentas[1]->Nombre;
             $this->descripcionCuentaCargo = $cuentas[0]->Nombre;
-            // dd($cuentas);
-            // dd($this->descripcionCuentaCargo, $this->descripcionCuentaAbono, $this->codigoCuentaCargo, $this->codigoCuentaAbono);
+
             $this->dispatch(
                 'actualizar-cuentas',
                 codigoCargo: $this->codigoCuentaCargo,
