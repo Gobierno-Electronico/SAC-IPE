@@ -107,6 +107,8 @@
             let mensajeEdoSolicitud = toastr.info("Procesando solicitud, espere un momento por favor . . .", "", {
                 timeOut: "0"
             });
+                    console.log("URL generada:", url);
+
             fetch(url, {
                     method: "GET",
                 })
