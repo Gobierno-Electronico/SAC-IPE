@@ -78,19 +78,21 @@
 
         </div>
         <div class="mt-4 d-flex justify-content-between">
-            <button @if ($tipoMatriz == '') disabled @endif id="borrarMatriz" type="button"
-                class="btn btn-danger shadow border-1 mt-3 mt-md-0" data-bs-toggle="modal"
-                data-bs-target="#confirmModalborrarMatriz">
+            <button id="borrarMatriz" type="button" class="btn btn-danger shadow border-1 mt-3 mt-md-0"
+                data-bs-toggle="modal" data-bs-target="#confirmModalborrarMatriz"
+                @if ($tipoMatriz == '' || $datos->isEmpty()) disabled @endif>
                 Borrar matriz
             </button>
+
             <div>
                 <button id="botonGenerarPoliza" onclick="generarReporte(this)" type="button"
                     class="btn btn-success shadow border-1 mt-3 mt-md-0"
-                    @if ($tipoMatriz == '') disabled @endif>
+                    @if ($tipoMatriz == '' || $datos->isEmpty()) disabled @endif>
                     Generar reporte
                 </button>
             </div>
         </div>
+
     @endif
 </div>
 
@@ -146,7 +148,9 @@
             timeOut: "0"
         });
 
-        fetch(url, { method: "GET" })
+        fetch(url, {
+                method: "GET"
+            })
             .then((response) => {
                 if (!response.ok) {
                     toastr.error("Problemas al procesar la solicitud, por favor inténtelo más tarde.");
