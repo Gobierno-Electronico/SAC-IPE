@@ -173,6 +173,8 @@ Route::get("/capitulo7-recuperacion-recaudado-prestamosIniciales", [PrestamosCon
 Route::get("/capitulo7-recuperacion-recaudado-prestamosRenovacion", [PrestamosController::class, 'capitulo7RecaudadoPrestamosRenovacion'])->name('capitulo7RecaudadoPrestamosRenovacion')->middleware('role:Administrador');
 Route::get("/movimientos-prestamos", [PrestamosController::class, 'consultarMovimientos'])->name('movimientosPrestamos')->middleware('role:Administrador');
 
+Route::get("/capitulo7-recuperacion-ejercicios-anteriores", [PrestamosController::class, 'capitulo7RecuperacionEjerciciosAnteriores'])->name('capitulo7RecuperacionEjerciciosAnteriores')->middleware('role:Administrador');
+
 //Deudores
 Route::get("/deudores-otorgamiento-anticipo", [DeudoresController::class, 'otorgamientoAnticipo'])->name('otorgamientoAnticipo')->middleware('role:Administrador');
 Route::get("/deudores-reintegro-anticipo", [DeudoresController::class, 'reintegroAnticipo'])->name('reintegroAnticipo')->middleware('role:Administrador');

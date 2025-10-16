@@ -151,19 +151,19 @@
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <li class="nav-item dropdown">
-                                                    <a class="dropdown-item" href="{{route('cargarMatriz')}}" id="navbarMatriz"
-                                                        onclick="mostrarCargando()" role="button">
+                                                    <a class="dropdown-item" href="{{ route('cargarMatriz') }}"
+                                                        id="navbarMatriz" onclick="mostrarCargando()" role="button">
                                                         {{ __('Carga') }}
                                                     </a>
                                                 </li>
                                                 <li class="nav-item dropdown">
-                                                    <a class="dropdown-item" href="{{route('consultarMatriz')}}" id="navbarCRI"
-                                                        onclick="mostrarCargando()" role="button">
+                                                    <a class="dropdown-item" href="{{ route('consultarMatriz') }}"
+                                                        id="navbarCRI" onclick="mostrarCargando()" role="button">
                                                         {{ __('Consulta') }}
                                                     </a>
                                                 </li>
                                             </ul>
-                                        </li>   
+                                        </li>
 
                                 </li>
                             </ul>
@@ -706,6 +706,14 @@
                                         </li>
                                     </ul>
                                 </li>
+
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('capitulo7RecuperacionEjerciciosAnteriores') }}" method="GET"
+                                        onclick="mostrarCargando()">
+                                        Recuperación de ejercicios anteriores
+                                    </a>
+                                </li>
+
 
                             </ul>
 
