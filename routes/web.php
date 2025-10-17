@@ -33,6 +33,7 @@ Route::get('/', function () {
 });
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+Route::get('/fuente/cargar', [ReportesController::class, 'mostrarVistaCargafuente'])->name('cargarfuente')->middleware('can:acceso-cuentas');
 //Catálogos
 Route::get('/catalogos/{tipo}', [ReportesController::class, 'mostrarClasificadores'])->name('mostrarClasificadores')->middleware('can:acceso-cuentas');
 Route::get('/matriz/cargar', [ReportesController::class, 'mostrarVistaCargaMatriz'])->name('cargarMatriz')->middleware('can:acceso-cuentas');
