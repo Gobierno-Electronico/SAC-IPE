@@ -234,7 +234,7 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresTable extends Tabla
         try {
             $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
-                ->where('tipo_poliza', '=', 'I')
+                ->where('tipo_poliza', '=', 'D')
                 ->whereYear('fecha', '=', Carbon::now()->year)
                 ->distinct()
                 ->orderBy('numero_poliza')
