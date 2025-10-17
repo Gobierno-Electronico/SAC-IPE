@@ -77,4 +77,7 @@ class ReportesController extends Controller
     public function mostrarVistaConsultaMatriz(){
         return view('reportes.consultaMatrices');
     }
+    public function mostrarVistaCargaFuente(){
+        return view('fuente.fuente');
+    }
 }
