@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col-4">
                     <label for="tipoCuenta" class="form-label">Tipo de cuenta</label>
-                    <select name="tipoCuenta" id="tipoCuenta" class="form-select mb-3" wire:model.live="tipoCuenta">
+                    <select name="tipoCuenta" id="tipoCuenta" class="form-select mb-3" wire:model="tipoCuenta">
                         <option value="" selected disabled>Seleccionar...</option>
                         <option value="Presupuestal">Presupuestal</option>
                         <option value="Contable">Contable</option>
@@ -23,11 +23,11 @@
                     <input type="text" name="buscadorCuenta" id="buscadorCuenta" class="form-control mb-3" placeholder="Código o Descripción de cuenta" wire:model.live="busquedaCuenta">
 
                     <label for="fechaInicio" class="form-label">Fecha Inicio</label>
-                    <input type="date" name="fechaInicio" id="fechaInicio" class="form-control" wire:model.live="fechaInicio">
+                    <input type="date" name="fechaInicio" id="fechaInicio" class="form-control" wire:model="fechaInicio">
                 </div>
                 <div class="col-4">
                     <label for="nivel" class="form-label">Nivel</label>
-                    <select name="nivel" id="nivel" class="form-select mb-3" wire:model.live="nivel">
+                    <select name="nivel" id="nivel" class="form-select mb-3" wire:model="nivel">
                         <option value="" selected disabled>Seleccionar nivel...</option>
                         @for ($i = 1; $i < 6; $i++)
                             <option value="{{$i}}">Nivel {{$i}}</option>
@@ -35,7 +35,7 @@
                     </select>
 
                     <label for="cuenta" class="form-label">Cuentas</label>
-                    <select name="cuenta" id="cuenta" class="form-select mb-3" wire:model.live="cuenta">
+                    <select name="cuenta" id="cuenta" class="form-select mb-3" wire:model="cuenta">
                         <option value="" selected disabled>Seleccionar cuenta...</option>
                         @foreach ($cuentas as $cuenta)
                             <option value="{{$cuenta->id}}">{{$cuenta->Codigo_cuenta}} - {{$cuenta->Descripcion_cuenta}}</option>
@@ -43,7 +43,7 @@
                     </select>
 
                     <label for="fechaFin" class="form-label">Fecha Fin</label>
-                    <input type="date" name="fechaFin" id="fechaFin" class="form-control" wire:model.live="fechaFin">
+                    <input type="date" name="fechaFin" id="fechaFin" class="form-control" wire:model="fechaFin">
                 </div>
             </div>
         </div>
