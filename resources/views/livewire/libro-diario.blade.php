@@ -17,9 +17,14 @@
         </div>
     </div>
     <div class="mt-4 d-flex flex-row-reverse">
-            <button id="botonGenerarLibroDiario" wire:click="generar" type="button"
+            <button id="botonGenerarLibroDiario" wire:click="generar('PDF')" type="button"
                 class="btn btn-success shadow border-1 mt-3 mt-md-0" @if ($fechaInicio == "" || $fechaFin == "") disabled @endif>
-                Generar libro diario
+                Generar libro diario PDF
+            </button>
+
+             <button id="botonGenerarLibroDiario" wire:click="generar('X')" type="button"
+                class="btn btn-success shadow border-1 mt-3 mt-md-0 me-3" @if ($fechaInicio == "" || $fechaFin == "") disabled @endif>
+                Generar libro diario EXCEL
             </button>
     </div>
 </div>

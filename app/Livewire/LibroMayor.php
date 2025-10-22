@@ -47,7 +47,7 @@ class LibroMayor extends Component
     public function change(){
     }
 
-    public function generar(){
+    public function generar($formato){
         $codigoCuentaSeleccionada = Cuenta::where('id', $this->cuenta)->value('Codigo_cuenta');
         $subtituloFechas = "Mayor del " . 
             Carbon::parse($this->fechaInicio)
@@ -58,7 +58,7 @@ class LibroMayor extends Component
             ->translatedFormat('d/F/Y');
         $fecha = Carbon::now()->format('d/m/Y');
         $hora = Carbon::now()->format('h:i A');
-        $params = "FechaInicio;{$this->fechaInicio},FechaFin;{$this->fechaFin},Cuenta;{$codigoCuentaSeleccionada},Nivel;{$this->nivel},Fecha;{$fecha},Hora;{$hora}, SubtituloFechas;{$subtituloFechas}";
+        $params = "FechaInicio;{$this->fechaInicio},FechaFin;{$this->fechaFin},Cuenta;{$codigoCuentaSeleccionada},Nivel;{$this->nivel},Fecha;{$fecha},Hora;{$hora}, SubtituloFechas;{$subtituloFechas}&formato={$formato}";
         $this->dispatch('descargar', Params: $params);
     
     }

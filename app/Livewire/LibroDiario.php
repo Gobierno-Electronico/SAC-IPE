@@ -24,7 +24,7 @@ class LibroDiario extends Component
     public function change(){
     }
 
-    public function generar(){
+    public function generar($formato){
         $fecha = Carbon::now()->format('d/m/Y');
         $hora = Carbon::now()->format('h:i A');
         $subtituloFechas = "Diario del " . 
@@ -34,7 +34,7 @@ class LibroDiario extends Component
             Carbon::parse($this->fechaFin)
             ->locale('es')
             ->translatedFormat('d/F/Y');        
-        $params = "FechaInicio;{$this->fechaInicio},FechaFin;{$this->fechaFin},SubtituloFechas;{$subtituloFechas},Fecha;{$fecha},Hora;{$hora}";
+        $params = "FechaInicio;{$this->fechaInicio},FechaFin;{$this->fechaFin},SubtituloFechas;{$subtituloFechas},Fecha;{$fecha},Hora;{$hora}&formato={$formato}";
         $this->dispatch('descargar', Params: $params);
 
     }

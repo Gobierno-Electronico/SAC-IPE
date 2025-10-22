@@ -561,7 +561,7 @@ Departamento de Contabilidad y Presupuesto]]></text>
 				</textElement>
 				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="dd/MMM/yyyy">
 				<reportElement x="-20" y="0" width="50" height="39" uuid="ed81cb1d-a6a0-4cfe-b3c7-ada0fe2407a3">
 					<printWhenExpression><![CDATA[$F{numero_asiento} == 1]]></printWhenExpression>
 				</reportElement>
