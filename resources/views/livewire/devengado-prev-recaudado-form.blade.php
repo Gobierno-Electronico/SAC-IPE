@@ -70,6 +70,17 @@
                     @endforeach
                 </select>
 
+                <label for="selectDocumentoFuente" class="form-label mt-3">Documento fuente</label>
+                <select name="selectDocumentoFuente" id="selectDocumentoFuente" class="form-select"
+                    wire:model="documentoFuente">
+                    <option value="">Selecciona una opción...</option>
+                    @foreach (\App\Enums\DocumentosFuente::cases() as $documento)
+                        <option value="{{ $documento->value }}">
+                            {{ $documento->value === 'Memorandum' ? 'Memorándum' : $documento->value }}
+                        </option>
+                    @endforeach
+                </select>
+
                 <label for="selectCuentaContable" class="form-label mt-3">Cuenta</label>
                 <select name="selectCuentaContable" id="selectCuentaContable" class="form-select"
                     wire:model.live="cuenta" wire:change="obtenerSolvenciaPresupuestal">
@@ -83,7 +94,8 @@
 
 
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
-                <select name="selectMes" id="selectMes" class="form-select" wire:model.live="mes" wire:change="obtenerSolvenciaPresupuestal">
+                <select name="selectMes" id="selectMes" class="form-select" wire:model.live="mes"
+                    wire:change="obtenerSolvenciaPresupuestal">
                     <option value="" selected disabled>Seleccionar mes...</option>
                     @foreach (range(1, 12) as $mes)
                         @php
@@ -101,7 +113,8 @@
 
 
                 <label for="inputSolvenciaPresupuestal" class="form-label mt-3">Solvencia cuenta presupuestal</label>
-                <input type="text" name="inputSolvenciaPresupuestal" id="inputSolvenciaPresupuestal" class="form-control" disabled>
+                <input type="text" name="inputSolvenciaPresupuestal" id="inputSolvenciaPresupuestal"
+                    class="form-control" disabled>
 
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control"

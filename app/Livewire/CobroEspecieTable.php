@@ -47,6 +47,7 @@ class CobroEspecieTable extends Tabla
     {
         return [
             Column::make('area', 'Area'),
+            Column::make('documentoFuente', 'Documento fuente'),
             Column::make('partida', 'Partida'),
             Column::make('mes', 'Mes'),
             Column::make('movimiento', 'Movimiento'),
@@ -67,7 +68,8 @@ class CobroEspecieTable extends Tabla
                         'area' => $registro['areaResponsableId'],
                         'cuenta' => $registro['cuentaId'],
                         'mes' => $registro['mes'],
-                        'importe' => $registro['importe']
+                        'importe' => $registro['importe'],
+                        'documentoFuente' => $registro['documentoFuente'],
                     ];
                     unset($this->dataCompleta[$key]);
                     $this->dataCompleta = array_values($this->dataCompleta);
@@ -200,6 +202,7 @@ class CobroEspecieTable extends Tabla
                 'ppto' => $solvencia[0]->Total,
                 'importe' => $registro['importe'],
                 'disponibilidad' => $totalDisponible,
+                'documentoFuente' => $registro['documentoFuente'],
             ];
 
             array_push($this->cacheData, $nuevoRegistro);
@@ -275,6 +278,7 @@ class CobroEspecieTable extends Tabla
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'INGRESOS COBRO ESPECIE',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]
@@ -297,6 +301,7 @@ class CobroEspecieTable extends Tabla
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'INGRESOS COBRO ESPECIE',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);

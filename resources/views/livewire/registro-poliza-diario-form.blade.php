@@ -54,7 +54,18 @@
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
         <div class="row">
             <div class="col-3">
-                <label for="selectCuenta" class="form-label">Cuenta</label>
+                <label for="selectDocumentoFuente" class="form-label mt-3">Documento fuente</label>
+                <select name="selectDocumentoFuente" id="selectDocumentoFuente" class="form-select"
+                    wire:model="documentoFuente">
+                    <option value="">Selecciona una opción...</option>
+                    @foreach (\App\Enums\DocumentosFuente::cases() as $documento)
+                        <option value="{{ $documento->value }}">
+                            {{ $documento->value === 'Memorandum' ? 'Memorándum' : $documento->value }}
+                        </option>
+                    @endforeach
+                </select>
+
+                <label for="selectCuenta" class="form-label mt-3">Cuenta</label>
                 <select name="selectCuenta" id="selectCuenta" class="form-select mb-3" wire:model="cuenta" wire:change="calcularSolvencia()">
                     <option value="" @if ($this->cuenta == '') selected @endif selected>Seleccionar
                         cuenta...</option>

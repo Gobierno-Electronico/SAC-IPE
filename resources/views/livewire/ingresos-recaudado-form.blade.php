@@ -84,6 +84,17 @@
                     @endforeach
                 </select>
 
+                <label for="selectDocumentoFuente" class="form-label mt-3">Documento fuente</label>
+                <select name="selectDocumentoFuente" id="selectDocumentoFuente" class="form-select"
+                    wire:model="documentoFuente">
+                    <option value="">Selecciona una opción...</option>
+                    @foreach (\App\Enums\DocumentosFuente::cases() as $documento)
+                        <option value="{{ $documento->value }}">
+                            {{ $documento->value === 'Memorandum' ? 'Memorándum' : $documento->value }}
+                        </option>
+                    @endforeach
+                </select>
+
                 <label for="selectCuentaContable" class="form-label mt-3">Cuenta</label>
                 <select name="selectCuentaContable" id="selectCuentaContable" class="form-select" wire:model="cuenta"
                     wire:change="obtenerSolvenciaPresupuestal">
@@ -94,9 +105,10 @@
                             {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
                     @endforeach
                 </select>
-                
+
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
-                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes" wire:change="obtenerSolvenciaPresupuestal">
+                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes"
+                    wire:change="obtenerSolvenciaPresupuestal">
                     <option value="" selected disabled>Seleccionar mes...</option>
                     @foreach (range(1, 12) as $mes)
                         @php
@@ -108,7 +120,8 @@
                 </select>
 
                 <label for="selectCuentaPago" class="form-label mt-3">Cuenta de pago</label>
-                <select name="selectCuentaPago" id="selectCuentaPago" class="form-select" wire:model="cuentaPago" wire:change="obtenerSolvenciaContable">
+                <select name="selectCuentaPago" id="selectCuentaPago" class="form-select" wire:model="cuentaPago"
+                    wire:change="obtenerSolvenciaContable">
                     <option value="" disabled>Seleccionar cuenta de pago</option>
                     @foreach ($subcuentas as $cuentaPago)
                         <option value="{{ $cuentaPago->cuenta_id }}">

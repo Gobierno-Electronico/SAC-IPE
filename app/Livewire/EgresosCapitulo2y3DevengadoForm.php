@@ -52,6 +52,9 @@ class EgresosCapitulo2y3DevengadoForm extends Component
     #[Validate('required', message: 'Monto del evento requerido')]
     public $montoDelEvento = "";
 
+    #[Validate('required', message: 'Documento fuente requerido')]
+    public $documentoFuente = "";
+
     public $PTTOComprometido = 0;
 
     public $consultarRegistro = false;
@@ -308,7 +311,8 @@ class EgresosCapitulo2y3DevengadoForm extends Component
                 'montoEvento' => $this->montoDelEvento,
                 'pttoComprometido' => $this->PTTOComprometido,
                 'selectorPagoRetenciones' => $this->selectorPagoRetenciones,
-                'tipoRegistro' => $this->tipoRegistro
+                'tipoRegistro' => $this->tipoRegistro,
+                'documentoFuente' => $this->documentoFuente
             ];
 
             $this->dispatch('agregar-registro', registro: $registro);
@@ -349,6 +353,7 @@ class EgresosCapitulo2y3DevengadoForm extends Component
         $this->PTTOComprometido = $datosRegistro['pttoComprometido'];
         $this->selectorPagoRetenciones = $datosRegistro['selectorPagoRetenciones'];
         $this->tipoRegistro = $datosRegistro['tipoRegistro'];
+        $this->documentoFuente = $datosRegistro['documentoFuente'];
         $this->dispatch('llenarFormulario', presupuesto: $this->PTTOComprometido, importe: $this->importe);
     }
 

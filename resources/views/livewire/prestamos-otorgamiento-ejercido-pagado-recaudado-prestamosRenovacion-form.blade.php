@@ -1,136 +1,151 @@
 <div class="mt-5">
     @if ($consultarRegistro)
-    <div>
-        <h4>Resumen de movimientos por registrar</h4>
+        <div>
+            <h4>Resumen de movimientos por registrar</h4>
 
-        <div class="row mt-4">
-            <div class="row mb-3">
-                <div class="d-flex flex-row gap-3 mb-3">
-                    <div class="w-100">
-                        <label for="inputObservaciones" class="col-md-12 col-form-label">{{ __('Observación') }}</label>
-                        <input value="{{ $observaciones }}" id="inputObservacionesConsulta" type="text"
-                            class="form-control w-100" name="inputObservaciones" disabled>
-                    </div>
-                    <div>
-                        <label for="inputObservaciones" class="col-md-12 col-form-label">{{ __('Total') }}</label>
-                        <input value="{{  '$' . number_format($total, 2, '.', ',')  }}" type="text" class="form-control" name="inputAumentado" disabled>
+            <div class="row mt-4">
+                <div class="row mb-3">
+                    <div class="d-flex flex-row gap-3 mb-3">
+                        <div class="w-100">
+                            <label for="inputObservaciones"
+                                class="col-md-12 col-form-label">{{ __('Observación') }}</label>
+                            <input value="{{ $observaciones }}" id="inputObservacionesConsulta" type="text"
+                                class="form-control w-100" name="inputObservaciones" disabled>
+                        </div>
+                        <div>
+                            <label for="inputObservaciones" class="col-md-12 col-form-label">{{ __('Total') }}</label>
+                            <input value="{{ '$' . number_format($total, 2, '.', ',') }}" type="text"
+                                class="form-control" name="inputAumentado" disabled>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <livewire:egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-        tipoMovimiento="PolizaOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacion"
-        urlFinalizar="/capitulo7-otorgamiento-ejercido-pagado-recaudado-prestamosRenovacion" tipoPoliza="D"
-        categoriaModulo='OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS RENOVACION' />
+        <livewire:egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+            tipoMovimiento="PolizaOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacion"
+            urlFinalizar="/capitulo7-otorgamiento-ejercido-pagado-recaudado-prestamosRenovacion" tipoPoliza="D"
+            categoriaModulo='OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS RENOVACION' />
     @else
-    <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
-    <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select" wire:model="selectCodigoArea">
-        @foreach (\App\Models\CodigoDepartamento::all() as $departamento)
-        @if (strlen($departamento->Codigo_completo) >= 5)
-        @if ($departamento->Codigo_completo == "1.5.04")
-        <option value="{{ $departamento->id }}" selected>
-            {{ $departamento->Codigo_completo . ' ' . $departamento->Nombre }}
-        </option>
-        @endif
-        @endif
-        @endforeach
-
-    </select>
-
-    <label for="inputObservacion" class="form-label mt-3">Observación</label>
-    <input type="text" name="inputObservacion" id="inputObservacion" class="form-control" wire:model="observaciones">
-
-    <label for="inputFechaAfectacion" class="form-label mt-3">Fecha de afectación</label>
-    <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control"
-        max="{{ now()->toDateString() }}" wire:model="fechaAfectacion">
-
-    <h2 class="mt-5 mb-3">Selección de movimientos</h2>
-    <div class="row">
-        <div class="col-3">
-            <label for="selectAreaResponsable" class="form-label mt-3">Área responsable</label>
-            <select name="selectAreaResponsable" id="selectAreaResponsable" class="form-select"
-                wire:model="selectCodigoAreaResponsable" wire:change="cargarPresupuesto">
-                <option value="" @if ($this->selectCodigoAreaResponsable == '') selected @endif disabled>
-                    Seleccionar un área
-                </option>
-                @foreach (\App\Models\CodigoDepartamento::all() as $departamento)
+        <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
+        <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
+            wire:model="selectCodigoArea">
+            @foreach (\App\Models\CodigoDepartamento::all() as $departamento)
                 @if (strlen($departamento->Codigo_completo) >= 5)
-                <option value="{{ $departamento->id }}" @if ($this->selectCodigoAreaResponsable == $departamento->id)
-                    selected @endif>
-                    {{ $departamento->Codigo_completo . ' ' . $departamento->Nombre }}
-                </option>
+                    @if ($departamento->Codigo_completo == '1.5.04')
+                        <option value="{{ $departamento->id }}" selected>
+                            {{ $departamento->Codigo_completo . ' ' . $departamento->Nombre }}
+                        </option>
+                    @endif
                 @endif
-                @endforeach
-            </select>
+            @endforeach
 
-            <label for="selectCuenta" class="form-label mt-3">Cuenta</label>
-            <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta"
-                wire:change="cargarPresupuesto">
-                <option value="" disabled>Seleccionar cuenta</option>
-                @foreach ($cuentas as $cuenta)
-                <option value="{{ $cuenta->cuenta_id }}">
-                    {{ $cuenta->Codigo_cuenta . ' ' . $cuenta->Descripcion_cuenta }}</option>
-                @endforeach
-            </select>
+        </select>
 
-            <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
-            <select name="selectMes" id="selectMes" class="form-select" wire:model="mes"
-                wire:change="cargarPresupuesto">
-                <option value="" selected disabled>Seleccionar mes...</option>
-                @foreach (range(1, 12) as $mes)
-                @php
-                $carbonMes = \Carbon\Carbon::createFromFormat('!m', $mes);
-                @endphp
-                <option value="{{ ucfirst($carbonMes->monthName) }}">{{ ucfirst($carbonMes->monthName) }}
-                </option>
-                @endforeach
-            </select>
+        <label for="inputObservacion" class="form-label mt-3">Observación</label>
+        <input type="text" name="inputObservacion" id="inputObservacion" class="form-control"
+            wire:model="observaciones">
 
-            <label for="inputPTTOEjecutar" class="form-label mt-3">Presupuesto por ejecutar</label>
-            <input type="text" name="inputPTTOEjecutar" id="inputPTTOEjecutar" class="form-control" disabled>
+        <label for="inputFechaAfectacion" class="form-label mt-3">Fecha de afectación</label>
+        <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control"
+            max="{{ now()->toDateString() }}" wire:model="fechaAfectacion">
 
-            <label for="inputImporte" class="form-label mt-3">Importe</label>
-            <input type="text" name="inputImporte" id="inputImporte" class="form-control"
-                onkeyup="validarDecimales(this)" onchange="formatearImporte(this)" wire:model="importe">
+        <h2 class="mt-5 mb-3">Selección de movimientos</h2>
+        <div class="row">
+            <div class="col-3">
+                <label for="selectAreaResponsable" class="form-label mt-3">Área responsable</label>
+                <select name="selectAreaResponsable" id="selectAreaResponsable" class="form-select"
+                    wire:model="selectCodigoAreaResponsable" wire:change="cargarPresupuesto">
+                    <option value="" @if ($this->selectCodigoAreaResponsable == '') selected @endif disabled>
+                        Seleccionar un área
+                    </option>
+                    @foreach (\App\Models\CodigoDepartamento::all() as $departamento)
+                        @if (strlen($departamento->Codigo_completo) >= 5)
+                            <option value="{{ $departamento->id }}" @if ($this->selectCodigoAreaResponsable == $departamento->id) selected @endif>
+                                {{ $departamento->Codigo_completo . ' ' . $departamento->Nombre }}
+                            </option>
+                        @endif
+                    @endforeach
+                </select>
 
-            <label for="selectCuentaAbono" class="form-label mt-3">Cuenta de abono</label>
-            <select name="selectCuentaAbono" id="selectCuentaAbono" class="form-select" wire:model="cuentaAbono">
-                <option value="" selected disabled>Seleccionar cuenta de abono</option>
-                @foreach ($cuentasAbono as $item)
-                <option value="{{ $item->cuenta_id }}">
-                    {{ $item->Codigo_cuenta . ' ' . $item->Descripcion_cuenta }}
-                </option>
-                @endforeach
-            </select>
+                <label for="selectDocumentoFuente" class="form-label mt-3">Documento fuente</label>
+                <select name="selectDocumentoFuente" id="selectDocumentoFuente" class="form-select"
+                    wire:model="documentoFuente">
+                    <option value="">Selecciona una opción...</option>
+                    @foreach (\App\Enums\DocumentosFuente::cases() as $documento)
+                        <option value="{{ $documento->value }}">
+                            {{ $documento->value === 'Memorandum' ? 'Memorándum' : $documento->value }}
+                        </option>
+                    @endforeach
+                </select>
 
-            <label for="inputImporteAbono" class="form-label mt-3">Importe abono</label>
-            <input type="text" name="inputImporteAbono" id="inputImporteAbono" class="form-control"
-                onkeyup="validarDecimales(this)" onchange="formatearImporte(this)" wire:model="importeAbono">
 
-            <label for="selectDestinoRecurso" class="form-label mt-3">Destino del recurso</label>
-            <select name="selectDestinoRecurso" id="selectDestinoRecurso" class="form-select"
-                wire:model="destinoRecurso">
-                <option value="" selected disabled>Seleccionar destino del recurso</option>
-                <option value="capital">Capital</option>
-                <option value="fondoGarantia">Fondo de Garantía</option>
-                <option value="primaRenovacion">Prima de Renovación</option>
-            </select>
-        </div>
+                <label for="selectCuenta" class="form-label mt-3">Cuenta</label>
+                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta"
+                    wire:change="cargarPresupuesto">
+                    <option value="" disabled>Seleccionar cuenta</option>
+                    @foreach ($cuentas as $cuenta)
+                        <option value="{{ $cuenta->cuenta_id }}">
+                            {{ $cuenta->Codigo_cuenta . ' ' . $cuenta->Descripcion_cuenta }}</option>
+                    @endforeach
+                </select>
 
-        <div class="col">
-            <livewire:prestamos-otorgamiento-ejercido-pagado-recaudado-prestamosRenovacion-table />
-        </div>
+                <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
+                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes"
+                    wire:change="cargarPresupuesto">
+                    <option value="" selected disabled>Seleccionar mes...</option>
+                    @foreach (range(1, 12) as $mes)
+                        @php
+                            $carbonMes = \Carbon\Carbon::createFromFormat('!m', $mes);
+                        @endphp
+                        <option value="{{ ucfirst($carbonMes->monthName) }}">{{ ucfirst($carbonMes->monthName) }}
+                        </option>
+                    @endforeach
+                </select>
 
-        <div class="row mt-4">
+                <label for="inputPTTOEjecutar" class="form-label mt-3">Presupuesto por ejecutar</label>
+                <input type="text" name="inputPTTOEjecutar" id="inputPTTOEjecutar" class="form-control" disabled>
+
+                <label for="inputImporte" class="form-label mt-3">Importe</label>
+                <input type="text" name="inputImporte" id="inputImporte" class="form-control"
+                    onkeyup="validarDecimales(this)" onchange="formatearImporte(this)" wire:model="importe">
+
+                <label for="selectCuentaAbono" class="form-label mt-3">Cuenta de abono</label>
+                <select name="selectCuentaAbono" id="selectCuentaAbono" class="form-select" wire:model="cuentaAbono">
+                    <option value="" selected disabled>Seleccionar cuenta de abono</option>
+                    @foreach ($cuentasAbono as $item)
+                        <option value="{{ $item->cuenta_id }}">
+                            {{ $item->Codigo_cuenta . ' ' . $item->Descripcion_cuenta }}
+                        </option>
+                    @endforeach
+                </select>
+
+                <label for="inputImporteAbono" class="form-label mt-3">Importe abono</label>
+                <input type="text" name="inputImporteAbono" id="inputImporteAbono" class="form-control"
+                    onkeyup="validarDecimales(this)" onchange="formatearImporte(this)" wire:model="importeAbono">
+
+                <label for="selectDestinoRecurso" class="form-label mt-3">Destino del recurso</label>
+                <select name="selectDestinoRecurso" id="selectDestinoRecurso" class="form-select"
+                    wire:model="destinoRecurso">
+                    <option value="" selected disabled>Seleccionar destino del recurso</option>
+                    <option value="capital">Capital</option>
+                    <option value="fondoGarantia">Fondo de Garantía</option>
+                    <option value="primaRenovacion">Prima de Renovación</option>
+                </select>
+            </div>
+
             <div class="col">
-                <button class="btn btn-success" wire:click="agregarRegistro">Agregar registro</button>
+                <livewire:prestamos-otorgamiento-ejercido-pagado-recaudado-prestamosRenovacion-table />
             </div>
-            <div class="col text-end">
-                <button class="btn btn-success" wire:click="finalizarRegistros">Finalizar registros</button>
+
+            <div class="row mt-4">
+                <div class="col">
+                    <button class="btn btn-success" wire:click="agregarRegistro">Agregar registro</button>
+                </div>
+                <div class="col text-end">
+                    <button class="btn btn-success" wire:click="finalizarRegistros">Finalizar registros</button>
+                </div>
             </div>
         </div>
-    </div>
 
     @endif
 </div>
@@ -150,9 +165,9 @@
     function validarDecimales(input) {
         // Obtener solo números y un punto decimal permitido
         let valor = input.value.replace(/[^0-9.]/g, '') // Elimina caracteres no numéricos
-                           .replace(/(\..*)\./g, '$1') // Evita más de un punto decimal
-                           .replace(/^0+(\d)/, '$1') // Elimina ceros iniciales
-                           .replace(/^(\d+)(\.\d{0,2})?.*$/, '$1$2'); // Máximo 2 decimales
+            .replace(/(\..*)\./g, '$1') // Evita más de un punto decimal
+            .replace(/^0+(\d)/, '$1') // Elimina ceros iniciales
+            .replace(/^(\d+)(\.\d{0,2})?.*$/, '$1$2'); // Máximo 2 decimales
 
         // Si el valor es solo un punto, permitirlo sin formatear
         if (valor === ".") {

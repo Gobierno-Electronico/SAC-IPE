@@ -48,6 +48,7 @@ class EgresosCapitulo5PagadoTable extends Tabla
     {
         return [
             Column::make('area', 'Area'),
+            Column::make('documentoFuente', 'Documento fuente'),
             Column::make('partida', 'Partida'),
             Column::make('cuentaBanco', 'Cuenta contable'),
             Column::make('cuentaRetenciones', 'Cuenta de retenciones'),
@@ -82,6 +83,7 @@ class EgresosCapitulo5PagadoTable extends Tabla
                     'pttoEjercido' => $registro['pttoEjercido'],
                     'importe' => $registro['importe'],
                     'disponibilidad' => $this->totalDisponible,
+                    'documentoFuente' => $registro['documentoFuente'],
                 ];
                 array_push($this->cacheData, $nuevoRegistro);
                 array_push($this->dataCompleta, $registro);
@@ -164,7 +166,8 @@ class EgresosCapitulo5PagadoTable extends Tabla
                         'importe' => $registro['importe'],
                         'cuentaRetenciones' => $registro['cuentaRetencionesId'],
                         'pttoEjercido' => $registro['pttoEjercido'],
-                        'montoContable' => $registro['montoContable']
+                        'montoContable' => $registro['montoContable'],
+                        'documentoFuente' => $registro['documentoFuente'],
                     ];
 
                     unset($this->dataCompleta[$key]);
@@ -325,6 +328,7 @@ class EgresosCapitulo5PagadoTable extends Tabla
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS PAGADO CAPITULO 5',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]
@@ -348,6 +352,7 @@ class EgresosCapitulo5PagadoTable extends Tabla
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS PAGADO CAPITULO 5',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);
@@ -442,6 +447,7 @@ class EgresosCapitulo5PagadoTable extends Tabla
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::FINALIZADO->value,
                         'categoria' => 'EGRESOS EJERCIDO CAPITULO 5 REMANENTE PAGADO',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);
@@ -469,6 +475,7 @@ class EgresosCapitulo5PagadoTable extends Tabla
                             'validado' => false,
                             'estatus_evento' => EstatusEvento::FINALIZADO->value,
                             'categoria' => 'EGRESOS EJERCIDO CAPITULO 5 REMANENTE PAGADO',
+                            'documento_fuente' => $movimiento['documentoFuente'],
                             'created_at' => $fecha,
                             'updated_at' => $fecha
                         ];
@@ -500,6 +507,7 @@ class EgresosCapitulo5PagadoTable extends Tabla
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::FINALIZADO->value,
                         'categoria' => 'EGRESOS EJERCIDO CAPITULO 5 REMANENTE PAGADO',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);

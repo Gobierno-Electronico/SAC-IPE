@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ContabilidadController extends Controller
 {
+    private $documentoFuente = "";
 
     public function __construct()
     {
@@ -50,16 +51,17 @@ class ContabilidadController extends Controller
     {
         $validator = Validator::make(request()->all(), [
             'input-archivo' => 'required',
-            'input-archivo.*' => 'mimes:xlsx'
+            'input-archivo.*' => 'mimes:xlsx',
+            'selectDocumentoFuente' => 'required'
         ]);
         if ($validator->fails()) {
             $errors = array_merge(...array_values($validator->errors()->messages()));
-            session()->flash('message', 'El archivo seleccionado no es un Excel o no se pudo procesar');
+            session()->flash('message', implode(" ", $errors));
             session()->flash('message_type', 'error');
             return back();
         }
         $archivo = $request->file('input-archivo');
-
+        $this->documentoFuente = $request->get('selectDocumentoFuente');
         // Validar que el archivo pueda ser analizado correctamente.
         if ($xlsx = SimpleXLSX::parse($archivo)) {
             // Validar que los encabezados coincidan con los campos esperados.
@@ -303,6 +305,7 @@ class ContabilidadController extends Controller
             'tipo_interaccion' => $row['Cargo'] != '' ? 'Cargo' : 'Abono',
             'validado' => false,
             'categoria' => 'SALDO INICIAL',
+            'documento_fuente' => $this->documentoFuente,
             'created_at' => $fecha,
             'updated_at' => $fecha
         ]);

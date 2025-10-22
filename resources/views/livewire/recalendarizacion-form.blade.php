@@ -2,74 +2,77 @@
     <div class="row mt-5">
         @if ($consulta)
 
-        <div>
+            <div>
                 <h4>Consulta de movimientos por registrar</h4>
 
-            <div class="row mt-4">
-                <div class="row mb-3">
-                    <div class="d-flex flex-row gap-3 mb-3">
-                        <div class="w-100">
-                            <label for="inputObservaciones" class="col-md-12 col-form-label">{{ __('Observación') }}</label>
-                            <input value="{{ $observaciones }}" id="inputObservacionesConsulta" type="text"
-                                class="form-control w-100" name="inputObservaciones" disabled>
+                <div class="row mt-4">
+                    <div class="row mb-3">
+                        <div class="d-flex flex-row gap-3 mb-3">
+                            <div class="w-100">
+                                <label for="inputObservaciones"
+                                    class="col-md-12 col-form-label">{{ __('Observación') }}</label>
+                                <input value="{{ $observaciones }}" id="inputObservacionesConsulta" type="text"
+                                    class="form-control w-100" name="inputObservaciones" disabled>
+                            </div>
+                            <div>
+                                <label for="inputObservaciones"
+                                    class="col-md-12 col-form-label">{{ __('Total aumentado') }}</label>
+                                <input value="{{ $totalAumentado }}" type="text" class="form-control"
+                                    name="inputAumentado" disabled>
+                            </div>
+                            <div>
+                                <label for="inputObservaciones"
+                                    class="col-md-12 col-form-label">{{ __('Total disminuido') }}</label>
+                                <input value="{{ $totalDisminuido }}" type="text" class="form-control"
+                                    name="inputDisminuido" disabled>
+                            </div>
                         </div>
-                        <div>
-                            <label for="inputObservaciones" class="col-md-12 col-form-label">{{ __('Total aumentado') }}</label>
-                            <input value="{{ $totalAumentado }}" type="text" class="form-control" name="inputAumentado"
-                                disabled>
+                        <div class="mt-3">
+                            <livewire:recalendarizacion-form-consulta-table :$numeroPoliza :$numeroEvento
+                                :$totalAumentado :$totalDisminuido urlFinalizar="/presupuesto/recalendarizacion"
+                                tipoPoliza="D" tipoMovimiento="PolizaReclasificacion"
+                                categoriaModulo='RECLASIFICACIÓN O RECALENDARIZACIÓN' />
+
                         </div>
-                        <div>
-                            <label for="inputObservaciones" class="col-md-12 col-form-label">{{ __('Total disminuido') }}</label>
-                            <input value="{{ $totalDisminuido }}" type="text" class="form-control" name="inputDisminuido"
-                                disabled>
-                        </div>
-                    </div>
-                    <div class="mt-3">
-                        <livewire:recalendarizacion-form-consulta-table :$numeroPoliza :$numeroEvento :$totalAumentado :$totalDisminuido urlFinalizar="/presupuesto/recalendarizacion" tipoPoliza="D" tipoMovimiento="PolizaReclasificacion" categoriaModulo='RECLASIFICACIÓN O RECALENDARIZACIÓN'/>
 
                     </div>
 
                 </div>
-
             </div>
-        </div>
-
-        
-
         @else
-        <div class="col-2">
-            <label for="" class="form-label fs-5">Área solicitante</label>
-        </div>
-        <div class="col-3">
-            <select name="selectCodigoArea" id="selectCodigoArea" class="form-select" wire:model.live="selectCodigoArea"
-                wire:change="change('codigo')">
-                <option value="" @if ($this->selectDescripcionArea == "" ) selected @endif >
-                    Seleccionar código de área
-                </option>
-                @foreach (\App\Models\CodigoDepartamento::all() as $departamento)
-                    @if (strlen($departamento->Codigo_completo) >= 5)
-                        <option value="{{ $departamento->id }}" @if ($this->selectDescripcionArea == $departamento->id ) selected @endif>
-                            {{ $departamento->Codigo_completo }}
-                        </option>
-                    @endif
-                @endforeach
-            </select>
-        </div>
-        <div class="col">
-            <select name="selectDescripcionArea" id="selectDescripcionArea" class="form-select"
-                wire:model.live="selectDescripcionArea" wire:change="change('descripcion')">
-                <option value="" @if ($this->selectCodigoArea == "" ) selected @endif>
-                    Seleccionar descripción de área
-                </option>
-                @foreach (\App\Models\CodigoDepartamento::all() as $departamento)
-                    @if (strlen($departamento->Codigo_completo) >= 5)
-                        <option value="{{ $departamento->id }}" @if ($this->selectCodigoArea == $departamento->id ) selected @endif>
-                            {{ $departamento->Nombre }}
-                        </option>
-                    @endif
-                @endforeach
-            </select>
-        </div>
+            <div class="col-2">
+                <label for="" class="form-label fs-5">Área solicitante</label>
+            </div>
+            <div class="col-3">
+                <select name="selectCodigoArea" id="selectCodigoArea" class="form-select"
+                    wire:model.live="selectCodigoArea" wire:change="change('codigo')">
+                    <option value="" @if ($this->selectDescripcionArea == '') selected @endif>
+                        Seleccionar código de área
+                    </option>
+                    @foreach (\App\Models\CodigoDepartamento::all() as $departamento)
+                        @if (strlen($departamento->Codigo_completo) >= 5)
+                            <option value="{{ $departamento->id }}" @if ($this->selectDescripcionArea == $departamento->id) selected @endif>
+                                {{ $departamento->Codigo_completo }}
+                            </option>
+                        @endif
+                    @endforeach
+                </select>
+            </div>
+            <div class="col">
+                <select name="selectDescripcionArea" id="selectDescripcionArea" class="form-select"
+                    wire:model.live="selectDescripcionArea" wire:change="change('descripcion')">
+                    <option value="" @if ($this->selectCodigoArea == '') selected @endif>
+                        Seleccionar descripción de área
+                    </option>
+                    @foreach (\App\Models\CodigoDepartamento::all() as $departamento)
+                        @if (strlen($departamento->Codigo_completo) >= 5)
+                            <option value="{{ $departamento->id }}" @if ($this->selectCodigoArea == $departamento->id) selected @endif>
+                                {{ $departamento->Nombre }}
+                            </option>
+                        @endif
+                    @endforeach
+                </select>
+            </div>
     </div>
     <div class="row mt-2">
         <div class="col-2">
@@ -80,38 +83,51 @@
         </div>
 
     </div>
-    
+
     <div class="row mt-2">
         <div class="col-2">
             <label for="inputFechaAfectacion" class="form-label fs-5">Fecha de afectación</label>
         </div>
         <div class="col">
-            <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control" max="{{ now()->toDateString() }}"
-                wire:model="fechaAfectacion">
+            <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control"
+                max="{{ now()->toDateString() }}" wire:model="fechaAfectacion">
         </div>
-    </div>   
+    </div>
 
     <h3 class="mt-5 mb-2">Selección de movimientos</h3>
     <div class="d-flex ">
         <div class="col-3">
             <div class="mb-3">
                 <label for="selectAreaResponsable" class="form-label">Área responsable</label>
-                <select name="selectAreaResponsable" id="selectAreaResponsable" class="form-select" wire:model.live="areaResponsable" wire:change="cambioSolvencia">
+                <select name="selectAreaResponsable" id="selectAreaResponsable" class="form-select mb-3"
+                    wire:model.live="areaResponsable" wire:change="cambioSolvencia">
                     <option value="" @if ($this->selectCodigoArea == '') selected @endif>
                         Seleccionar descripción de área
                     </option>
                     @foreach (\App\Models\CodigoDepartamento::all() as $departamento)
                         @if (strlen($departamento->Codigo_completo) >= 5)
-                            <option value="{{ $departamento->id }}" @if ($this->selectCodigoArea == $departamento->id ) selected @endif>
+                            <option value="{{ $departamento->id }}" @if ($this->selectCodigoArea == $departamento->id) selected @endif>
                                 {{ $departamento->Codigo_completo . ' ' . $departamento->Nombre }}
                             </option>
                         @endif
                     @endforeach
                 </select>
+
+                <label for="selectDocumentoFuente" class="form-label">Documento fuente</label>
+                <select name="selectDocumentoFuente" id="selectDocumentoFuente" class="form-select"
+                    wire:model="documentoFuente">
+                    <option value="">Selecciona una opción...</option>
+                    @foreach (\App\Enums\DocumentosFuente::cases() as $documento)
+                        <option value="{{ $documento->value }}">
+                            {{ $documento->value === 'Memorandum' ? 'Memorándum' : $documento->value }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
             <div class="mb-3">
                 <label for="selectPartida">Partida</label>
-                <select name="selectPartida" id="selectPartida" class="form-select" wire:model.live="cog" wire:change="cambioSolvencia">
+                <select name="selectPartida" id="selectPartida" class="form-select" wire:model.live="cog"
+                    wire:change="cambioSolvencia">
                     <option value="" @if ($this->cog == '') selected @endif>
                         Seleccionar Partida
                     </option>
@@ -123,19 +139,22 @@
             </div>
             <div class="mb-3">
                 <label for="selectMesAfectacion">Mes de afectación</label>
-                <select name="selectMesAfectacion" id="selectMesAfectacion" wire:change="cambioSolvencia" class="form-select" wire:model.live="mes">
+                <select name="selectMesAfectacion" id="selectMesAfectacion" wire:change="cambioSolvencia"
+                    class="form-select" wire:model.live="mes">
                     <option value="" selected>Seleccionar mes...</option>
                     @foreach (range(1, 12) as $mes)
                         @php
                             $carbonMes = \Carbon\Carbon::createFromFormat('!m', $mes);
                         @endphp
-                        <option value="{{ ucfirst($carbonMes->monthName) }}">{{ ucfirst($carbonMes->monthName) }}</option>
+                        <option value="{{ ucfirst($carbonMes->monthName) }}">{{ ucfirst($carbonMes->monthName) }}
+                        </option>
                     @endforeach
                 </select>
             </div>
             <div class="mb-3">
                 <label for="inputAfectacion">Afectación PPTAL</label>
-                <select name="inputAfectacion" id="inputAfectacion" class="form-select" wire:model.live="afectacion">
+                <select name="inputAfectacion" id="inputAfectacion" class="form-select"
+                    wire:model.live="afectacion">
                     <option value="" selected>Seleccionar tipo de afectación...</option>
                     <option value="aumento">Aumento</option>
                     <option value="disminucion">Disminución</option>
@@ -143,15 +162,19 @@
             </div>
             <div class="mb-3">
                 <label for="inputSolvencia">Solvencia</label>
-                <input type="text" name="inputSolvencia" id="inputSolvencia" class="form-control" onchange="formatearImporte(this)" onkeyup="keyPress(event, this)" wire:model.live="solvencia" disabled >
+                <input type="text" name="inputSolvencia" id="inputSolvencia" class="form-control"
+                    onchange="formatearImporte(this)" onkeyup="keyPress(event, this)" wire:model.live="solvencia"
+                    disabled>
             </div>
             <div class="mb-3">
                 <label for="inputImporte">Importe</label>
-                <input type="text" name="inputImporte" id="inputImporte" class="form-control"  onchange="formatearImporte(this)" onkeyup="validarDecimales(this)" wire:model.live="importe">
+                <input type="text" name="inputImporte" id="inputImporte" class="form-control"
+                    onchange="formatearImporte(this)" onkeyup="validarDecimales(this)" wire:model.live="importe">
             </div>
             <div class="mb-4">
                 <label for="inputTipoMovimiento">Tipo de movimiento</label>
-                <select name="inputTipoMovimiento" id="inputTipoMovimiento" class="form-select" wire:model.live="movimiento">
+                <select name="inputTipoMovimiento" id="inputTipoMovimiento" class="form-select"
+                    wire:model.live="movimiento">
                     <option value="" selected>Seleccionar tipo de movimiento...</option>
                     <option value="reclasificacion">Reclasificación</option>
                     <option value="recalendarizacion">Recalendarización</option>
@@ -159,7 +182,7 @@
             </div>
         </div>
         <div class="col ms-4">
-            <livewire:recalendarizacion-table/>
+            <livewire:recalendarizacion-table />
         </div>
     </div>
     <div class="mb-3 row">
@@ -173,7 +196,6 @@
     @endif
 </div>
 <script>
-
     window.addEventListener('limpiar', event => {
         limpiar()
     })
@@ -182,11 +204,13 @@
         let parametros = event.__livewire.params
         $('#inputSolvencia').val(parametros.solvencia);
         setTimeout(() => {
-            formatearImporte({id: "inputSolvencia"})
+            formatearImporte({
+                id: "inputSolvencia"
+            })
         }, 100);
     })
 
-    function keyPress(e, obj){
+    function keyPress(e, obj) {
         let isCurrency = $('#' + obj.id).val().search(/[$]/)
         let texto = $('#' + obj.id).val().replace(/[^0-9.]/g, '');
         let isDecimal = texto.search(/[.]/)
@@ -200,9 +224,9 @@
     function validarDecimales(input) {
         // Obtener solo números y un punto decimal permitido
         let valor = input.value.replace(/[^0-9.]/g, '') // Elimina caracteres no numéricos
-                           .replace(/(\..*)\./g, '$1') // Evita más de un punto decimal
-                           .replace(/^0+(\d)/, '$1') // Elimina ceros iniciales
-                           .replace(/^(\d+)(\.\d{0,2})?.*$/, '$1$2'); // Máximo 2 decimales
+            .replace(/(\..*)\./g, '$1') // Evita más de un punto decimal
+            .replace(/^0+(\d)/, '$1') // Elimina ceros iniciales
+            .replace(/^(\d+)(\.\d{0,2})?.*$/, '$1$2'); // Máximo 2 decimales
 
         // Si el valor es solo un punto, permitirlo sin formatear
         if (valor === ".") {
@@ -245,7 +269,7 @@
         }
     }
 
-    function limpiar(){
+    function limpiar() {
         $('#selectAreaResponsable').val('');
         $('#selectPartida').val('');
         $('#selectMesAfectacion').val('');
@@ -254,5 +278,4 @@
         $('#inputImporte').val('');
         $('#inputTipoMovimiento').val('');
     }
-
 </script>

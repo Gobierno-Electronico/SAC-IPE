@@ -39,6 +39,7 @@ class RecalendarizacionTable extends Tabla
     {
         return [
             Column::make('areaNombre', 'Área'),
+            Column::make('documentoFuente', 'Documento fuente'),
             Column::make('COG', 'Partida'),
             Column::make('mes', 'mes'),
             Column::make('afectacion', 'Afectación'),
@@ -68,6 +69,8 @@ class RecalendarizacionTable extends Tabla
                 $mes = $registro['mes'];
                 $movimiento = $registro['afectacion'];
                 $solvencia = $registro['inicial'];
+                $documentoFuente = $registro['documentoFuente'];
+                
 
                 if ($registro['aumentado'] > 0) {
                     $importe = $registro['aumentado'];
@@ -77,7 +80,7 @@ class RecalendarizacionTable extends Tabla
                     $afectacion = 'Disminucion';
                 }
                 unset($this->cacheData[$key]);
-                $this->dispatch('llenar-formulario', $areaResponsable, $cog, $mes, $movimiento, $solvencia, $afectacion, $importe);
+                $this->dispatch('llenar-formulario', $areaResponsable, $cog, $mes, $movimiento, $solvencia, $afectacion, $importe, $documentoFuente);
                 break;
             }
         }
@@ -137,7 +140,8 @@ class RecalendarizacionTable extends Tabla
             'inicial' => $registro['solvencia'],
             'aumentado' => ($registro['afectacion'] == "aumento") ? $registro['importe'] : 0,
             'disminuido' => ($registro['afectacion'] == "disminucion") ? abs($registro['importe']) : 0,
-            'final' => $registro['solvencia'] + $registro['importe']
+            'final' => $registro['solvencia'] + $registro['importe'],
+            'documentoFuente' => $registro['documentoFuente'],
         ];
         array_push($this->cacheData, $nuevoRegistro);
         array_push($this->dataCompleta, $registro);
@@ -206,6 +210,7 @@ class RecalendarizacionTable extends Tabla
                 'tipo_interaccion' => $movimiento['afectacion'] == 'aumento' ? 'Cargo' : 'Abono',
                 'validado' => false,
                 'categoria' => strtoupper($movimiento['movimiento'] . ' ' . $movimiento['afectacion']),
+                'documento_fuente' => $movimiento['documentoFuente'],
                 'created_at' => $fecha,
                 'updated_at' => $fecha
             ]);

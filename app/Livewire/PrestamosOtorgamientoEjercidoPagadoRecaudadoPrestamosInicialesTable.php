@@ -46,6 +46,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
     {
         return [
             Column::make('area', 'Area'),
+            Column::make('documentoFuente', 'Documento fuente'),
             Column::make('mes', 'Mes'),
             Column::make('partida', 'Partida'),
             Column::make('cuentaAbono', 'Cuenta de abono'),
@@ -75,7 +76,8 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
                     'importe' => $registro['importe'],
                     'importeAbono' => $registro['importeAbono'],
                     'importeRestante' => $this->importeRestante,
-                    'destinoRecurso' => $registro['destinoRecurso']
+                    'destinoRecurso' => $registro['destinoRecurso'],
+                    'documentoFuente' => $registro['documentoFuente'],
                 ];
                 array_push($this->cacheData, $nuevoRegistro);
                 array_push($this->dataCompleta, $registro);
@@ -135,6 +137,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
                         'importeAbono' => $registro['importeAbono'],
                         'pttoEjecutar' => $registro['pttoEjecutar'],
                         'destinoRecurso' => $registro['destinoRecurso'],
+                        'documentoFuente' => $registro['documentoFuente'],
                     ];
 
                     unset($this->dataCompleta[$key]);
@@ -293,6 +296,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
                             'validado' => false,
                             'estatus_evento' => EstatusEvento::ACTIVO->value,
                             'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS INICIALES',
+                            'documento_fuente' => $movimiento['documentoFuente'],
                             'created_at' => $fecha,
                             'updated_at' => $fecha
                         ]
@@ -339,6 +343,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
                             'validado' => false,
                             'estatus_evento' => EstatusEvento::ACTIVO->value,
                             'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS INICIALES',
+                            'documento_fuente' => $movimiento['documentoFuente'],
                             'created_at' => $fecha,
                             'updated_at' => $fecha
                         ]);
@@ -369,6 +374,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS INICIALES',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);
@@ -390,6 +396,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
                             'validado' => false,
                             'estatus_evento' => EstatusEvento::ACTIVO->value,
                             'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS INICIALES',
+                            'documento_fuente' => $movimiento['documentoFuente'],
                             'created_at' => $fecha,
                             'updated_at' => $fecha
                         ]);

@@ -42,6 +42,9 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresForm extends Component
     #[Validate('required', message: 'Solvencia abono requerido')]
     public $solvenciaAbono = "";
 
+    #[Validate('required', message: 'Documento fuente requerido')]
+    public $documentoFuente = "";
+
     public $subcuentas = [];
 
     public $cambiarCuentaPagoSeleccionada = true;
@@ -145,7 +148,7 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresForm extends Component
                 'importe' => $this->importe,
                 'montoPorClasificar' => $this->montoPorClasificar,
                 'solvenciaAbono' => $this->solvenciaAbono,
-
+                'documentoFuente' => $this->documentoFuente
             ];
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
@@ -194,6 +197,7 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresForm extends Component
             $this->selectCodigoAreaResponsable = $datosRegistro['area'];
             $this->cuentaPago = $datosRegistro['cuentaPago'];
             $this->solvenciaAbono = $datosRegistro['solvenciaAbono'];
+            $this->documentoFuente = $datosRegistro['documentoFuente'];
             $this->dispatch('llenarFormulario', cuentapAGO: $datosRegistro['cuentaPago'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe'], area: $datosRegistro['area'], solvenciaAbono: $datosRegistro['solvenciaAbono']);
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al llenar formulario en Devengado previamente recaudado ejercicios anteriores: ' . $th->getMessage());

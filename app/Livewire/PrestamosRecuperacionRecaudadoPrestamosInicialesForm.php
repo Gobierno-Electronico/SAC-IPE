@@ -39,6 +39,9 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesForm extends Component
     #[Validate('required', message: 'Cuenta de banco requerida')]
     public $cuentaBanco = "";
 
+    #[Validate('required', message: 'Documento fuente requerido')]
+    public $documentoFuente = "";
+
     public $PTTOEjecutar = 0;
     public $consultarRegistro = false;
     public $cambiarCuentaContableSeleccionada = true;
@@ -135,6 +138,7 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesForm extends Component
                 'mes' => $this->mes,
                 'importe' => $this->importe,
                 'pttoEjecutar' => $this->PTTOEjecutar,
+                'documentoFuente' => $this->documentoFuente
             ];
 
             $this->dispatch('agregar-registro', registro: $registro);
@@ -170,6 +174,7 @@ class PrestamosRecuperacionRecaudadoPrestamosInicialesForm extends Component
         $this->importe = $datosRegistro['importe'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->PTTOEjecutar = $datosRegistro['pttoEjecutar'];
+        $this->documentoFuente = $datosRegistro['documentoFuente'];
         $this->dispatch('llenarFormulario', presupuesto: $this->PTTOEjecutar, importe: $this->importe);
     }
 

@@ -48,6 +48,9 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesForm extends
     #[Validate('required', message:'Destino del recurso requerido')]
     public $destinoRecurso="";
 
+    #[Validate('required', message: 'Documento fuente requerido')]
+    public $documentoFuente = "";
+
     public $consultarRegistro = false;
     public $cambiarCuentaContableSeleccionada = true;
     public $numeroEvento;
@@ -139,7 +142,8 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesForm extends
                 'importe' => $this->importe,
                 'importeAbono' => $this->importeAbono,
                 'pttoEjecutar' => $this->PTTOEjecutar,
-                'destinoRecurso' => $this->destinoRecurso
+                'destinoRecurso' => $this->destinoRecurso,
+                'documentoFuente' => $this->documentoFuente
             ];
 
             $this->dispatch('agregar-registro', registro: $registro);
@@ -177,6 +181,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesForm extends
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->PTTOEjecutar = $datosRegistro['pttoEjecutar'];
         $this->destinoRecurso = $datosRegistro['destinoRecurso'];
+        $this->documentoFuente = $datosRegistro['documentoFuente'];
         $this->dispatch('llenarFormulario', presupuesto: $this->PTTOEjecutar, importe: $this->importe, importeAbono: $this->importeAbono);
     }
 

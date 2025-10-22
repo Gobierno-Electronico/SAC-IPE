@@ -5,7 +5,7 @@
     <script src="{{ asset('js/Presupuesto/importarPresupuestoInicial.js') }}"></script>
     <x-download />
 
-     
+
     <button id="downloadButton" hidden></button>
     <div class="container mt-5">
 
@@ -46,19 +46,23 @@
             <form id="formImportarPresupuesto" action="/presupuesto/cargar-presupuesto-inicial-ingresos" method="post"
                 enctype="multipart/form-data">
                 @csrf
-                <div class="mt-5">
-                    <input class="form-control" type="file" accept=".xlsx" name="input-archivo" id="input-archivo"
+                <div class="mt-3">
+                    <label for="selectDocumentoFuente" class="form-label mt-3">Documento fuente</label>
+                    <select name="selectDocumentoFuente" id="selectDocumentoFuente" class="form-select">
+                        <option value="">Selecciona una opción...</option>
+                        @foreach (\App\Enums\DocumentosFuente::cases() as $documento)
+                            <option value="{{ $documento->value }}">
+                                {{ $documento->value === 'Memorandum' ? 'Memorándum' : $documento->value }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                    <input class="form-control mt-3" type="file" accept=".xlsx" name="input-archivo" id="input-archivo"
                         onchange="cambioArchivo()">
-                    {{-- <button type="button" onclick="document.getElementById('input-archivo').click()"
-                        class="btn btn-success ms-2 shadow border-0">
-                        <i class="fa-solid fa-file-arrow-up text-xl"></i>
-                        <span class="px-3">Agregar archivo</span>
-                    </button>
-                    <span class="ms-2" id="fieldName"></span> --}}
                 </div>
                 <div class="mt-5 d-flex justify-content-between">
-                    <button type="button" onclick="descargarPlantilla(this,'ingresos')" class="btn btn-success shadow border-0"
-                        id="botonPlantilla">
+                    <button type="button" onclick="descargarPlantilla(this,'ingresos')"
+                        class="btn btn-success shadow border-0" id="botonPlantilla">
                         Descargar plantilla
                     </button>
 

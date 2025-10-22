@@ -42,6 +42,9 @@ class EgresosCapitulo4DevengadoForm extends Component
     #[Validate('required', message: 'Monto del evento requerido')]
     public $montoDelEvento = "";
     
+    #[Validate('required', message: 'Documento fuente requerido')]
+    public $documentoFuente = "";
+    
     public $PTTOComprometido = 0;
     public $cuentasContables = [];
     public $cambiarCuentaContableSeleccionada = true;
@@ -229,7 +232,8 @@ class EgresosCapitulo4DevengadoForm extends Component
                 'mes' => $this->mes,
                 'importe' => $this->importe,
                 'montoEvento' => $this->montoDelEvento,
-                'pttoComprometido' => $this->PTTOComprometido
+                'pttoComprometido' => $this->PTTOComprometido,
+                'documentoFuente' => $this->documentoFuente
             ];
 
             $this->dispatch('agregar-registro', registro: $registro);
@@ -265,6 +269,7 @@ class EgresosCapitulo4DevengadoForm extends Component
         $this->importe = $datosRegistro['importe'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->PTTOComprometido = $datosRegistro['pttoComprometido'];
+        $this->documentoFuente = $datosRegistro['documentoFuente'];
         $this->dispatch('llenarFormulario', presupuesto: $this->PTTOComprometido, importe: $this->importe);
     }
 

@@ -48,6 +48,7 @@ class PrestamosRecuperacionEjerciciosAnterioresTable extends Tabla
     {
         return [
             Column::make('area', 'Area'),
+            Column::make('documentoFuente', 'Documento fuente'),
             Column::make('partida', 'Partida'),
             Column::make('cuentaCargo', 'Cuenta cargp'),
             Column::make('mes', 'Mes'),
@@ -71,7 +72,8 @@ class PrestamosRecuperacionEjerciciosAnterioresTable extends Tabla
                         'cuentaCargo' => $registro['cuentaCargoId'],
                         'mes' => $registro['mes'],
                         'importe' => $registro['importe'],
-                        'pttoEjecutar' => $registro['pttoEjecutar']
+                        'pttoEjecutar' => $registro['pttoEjecutar'],
+                        'documentoFuente' => $registro['documentoFuente'],
                     ];
 
                     unset($this->dataCompleta[$key]);
@@ -168,6 +170,7 @@ class PrestamosRecuperacionEjerciciosAnterioresTable extends Tabla
                 'pttoEjecutar' => $registro['pttoEjecutar'],
                 'importe' => $registro['importe'],
                 'disponibilidad' => $this->totalDisponible,
+                'documentoFuente' => $registro['documentoFuente'],
             ];
             array_push($this->cacheData, $nuevoRegistro);
             array_push($this->dataCompleta, $registro);
@@ -273,6 +276,7 @@ class PrestamosRecuperacionEjerciciosAnterioresTable extends Tabla
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'RECUPERACION RECAUDADO PRESTAMOS RENOVACION',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]
@@ -304,6 +308,7 @@ class PrestamosRecuperacionEjerciciosAnterioresTable extends Tabla
                             'validado' => false,
                             'estatus_evento' => EstatusEvento::ACTIVO->value,
                             'categoria' => 'RECUPERACION RECAUDADO PRESTAMOS RENOVACION',
+                            'documento_fuente' => $movimiento['documentoFuente'],
                             'created_at' => $fecha,
                             'updated_at' => $fecha
                         ]);

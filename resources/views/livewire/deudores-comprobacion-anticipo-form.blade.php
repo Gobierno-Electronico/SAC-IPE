@@ -79,6 +79,17 @@
                     @endforeach
                 </select>
 
+                <label for="selectDocumentoFuente" class="form-label mt-3">Documento fuente</label>
+                <select name="selectDocumentoFuente" id="selectDocumentoFuente" class="form-select"
+                    wire:model="documentoFuente">
+                    <option value="">Selecciona una opción...</option>
+                    @foreach (\App\Enums\DocumentosFuente::cases() as $documento)
+                        <option value="{{ $documento->value }}">
+                            {{ $documento->value === 'Memorandum' ? 'Memorándum' : $documento->value }}
+                        </option>
+                    @endforeach
+                </select>
+
                 <label for="selectCuenta" class="form-label mt-3">Cuenta</label>
                 <select name="selectCuenta" id="selectCuenta" class="form-select mb-3" wire:model.live="cuenta"
                     wire:change="verificarCantidadRelaciones">
@@ -118,8 +129,7 @@
                 <input type="text" name="inputMontoEvento" id="inputMontoEvento" class="form-control" disabled>
 
                 <label for="inputPTTOEjercer" class="form-label mt-3">Presupuesto por ejercer</label>
-                <input type="text" name="inputPTTOEjercer" id="inputPTTOEjercer" class="form-control"
-                    disabled>
+                <input type="text" name="inputPTTOEjercer" id="inputPTTOEjercer" class="form-control" disabled>
 
                 <label for="selectorPagoRetenciones" class="form-label mt-3">Pago de retenciones</label><br>
                 <label>
@@ -171,8 +181,7 @@
 
                     <label for="inputImporteBancos" class="form-label mt-3">Importe bancos</label>
                     <input type="text" name="inputImporteBancos" id="inputImporteBancos" class="form-control"
-                        onkeyup="validarDecimales(this)" onchange="formatearImporte(this)"
-                        wire:model="importeBanco">
+                        onkeyup="validarDecimales(this)" onchange="formatearImporte(this)" wire:model="importeBanco">
                 @endif
 
             </div>

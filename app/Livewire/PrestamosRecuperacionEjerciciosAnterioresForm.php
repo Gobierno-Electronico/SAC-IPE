@@ -39,6 +39,9 @@ class PrestamosRecuperacionEjerciciosAnterioresForm extends Component
     #[Validate('required', message: 'Importe requerido')]
     public $importe = "";
 
+    #[Validate('required', message: 'Documento fuente requerido')]
+    public $documentoFuente = "";
+
     public $PTTOEjecutar = 0;
     public $consultarRegistro = false;
     public $numeroEvento;
@@ -123,6 +126,7 @@ class PrestamosRecuperacionEjerciciosAnterioresForm extends Component
                 'mes' => $this->mes,
                 'importe' => $this->importe,
                 'pttoEjecutar' => $this->PTTOEjecutar,
+                'documentoFuente' => $this->documentoFuente
             ];
 
             $this->dispatch('agregar-registro', registro: $registro);
@@ -159,6 +163,7 @@ class PrestamosRecuperacionEjerciciosAnterioresForm extends Component
         $this->importe = $datosRegistro['importe'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->PTTOEjecutar = $datosRegistro['pttoEjecutar'];
+        $this->documentoFuente = $datosRegistro['documentoFuente'];
         $this->dispatch('llenarFormulario', presupuesto: $this->PTTOEjecutar, importe: $this->importe);
     }
 

@@ -35,6 +35,8 @@ class RegistroPolizaDiarioForm extends Component
     #[Validate('required', message: 'Tipo de interacción requerida')]
     public $tipoInteraccion = "";
 
+    #[Validate('required', message: 'Documento fuente requerido')]
+    public $documentoFuente = "";
 
     public $consultarRegistro = false;
     public $solvencia;
@@ -77,7 +79,8 @@ class RegistroPolizaDiarioForm extends Component
                 'descripcionCuenta' => $cuenta->Descripcion_cuenta,
                 'mes' => $this->mes,
                 'importe' => $this->importe,
-                'solvencia' => $this->solvencia
+                'solvencia' => $this->solvencia,
+                'documentoFuente' => $this->documentoFuente
             ];
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
@@ -141,6 +144,7 @@ class RegistroPolizaDiarioForm extends Component
         $this->importe = $datosRegistro['importe'];
         $this->tipoInteraccion = $datosRegistro['tipoInteraccion'];
         $this->solvencia = $datosRegistro['solvencia'];
+        $this->documentoFuente = $datosRegistro['documentoFuente'];
         $this->dispatch('llenarFormulario', cuenta: $datosRegistro['cuenta'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe'], tipoInteraccion: $datosRegistro['tipoInteraccion'], solvencia: $datosRegistro['solvencia']);
     }
 }
