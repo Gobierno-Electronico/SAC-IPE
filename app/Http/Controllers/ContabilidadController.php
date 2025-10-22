@@ -300,7 +300,7 @@ class ContabilidadController extends Controller
             'mes' => 'Enero',
             'descripcion' => 'CARGA DE SALDOS INICIALES DEL EJERCICIO ' . $anioActual,
             'evento' => $numeroEvento,
-            'tipo_interaccion' => $row['Cargo'] != '' ? 'Cargo' : 'Abono',
+            'tipo_interaccion' => $row['Cargo'] != '' ? 'Contable - Cargo' : 'Contable - Abono',
             'validado' => false,
             'categoria' => 'SALDO INICIAL',
             'created_at' => $fecha,

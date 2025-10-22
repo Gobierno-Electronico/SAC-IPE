@@ -203,7 +203,7 @@ class RecalendarizacionTable extends Tabla
                 'mes' => $movimiento['mes'],
                 'descripcion' => $movimiento['observaciones'],
                 'evento' => $this->numeroEvento,
-                'tipo_interaccion' => $movimiento['afectacion'] == 'aumento' ? 'Cargo' : 'Abono',
+                'tipo_interaccion' => $movimiento['afectacion'] == 'aumento' ? 'Presupuestal - Cargo' : 'Presupuestal - Abono',
                 'validado' => false,
                 'categoria' => strtoupper($movimiento['movimiento'] . ' ' . $movimiento['afectacion']),
                 'created_at' => $fecha,
