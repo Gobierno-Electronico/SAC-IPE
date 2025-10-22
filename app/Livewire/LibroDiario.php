@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\Attributes\On;
+
 class LibroDiario extends Component
 {
 
@@ -16,26 +17,27 @@ class LibroDiario extends Component
         return view('livewire.libro-diario');
     }
 
-    public function save() {
-
-    }
+    public function save() {}
 
 
-    public function change(){
-    }
+    public function change() {}
 
-    public function generar($formato){
-        $fecha = Carbon::now()->format('d/m/Y');
-        $hora = Carbon::now()->format('h:i A');
-        $subtituloFechas = "Diario del " . 
-            Carbon::parse($this->fechaInicio)
-            ->locale('es')
-            ->translatedFormat('d/F/Y') . " al " . 
-            Carbon::parse($this->fechaFin)
-            ->locale('es')
-            ->translatedFormat('d/F/Y');        
-        $params = "FechaInicio;{$this->fechaInicio},FechaFin;{$this->fechaFin},SubtituloFechas;{$subtituloFechas},Fecha;{$fecha},Hora;{$hora}&formato={$formato}";
-        $this->dispatch('descargar', Params: $params);
-
+    public function generar($formato)
+    {
+        try {
+            $fecha = Carbon::now()->format('d/m/Y');
+            $hora = Carbon::now()->format('h:i A');
+            $subtituloFechas = "Diario del " .
+                Carbon::parse($this->fechaInicio)
+                ->locale('es')
+                ->translatedFormat('d/F/Y') . " al " .
+                Carbon::parse($this->fechaFin)
+                ->locale('es')
+                ->translatedFormat('d/F/Y');
+            $params = "FechaInicio;{$this->fechaInicio},FechaFin;{$this->fechaFin},SubtituloFechas;{$subtituloFechas},Fecha;{$fecha},Hora;{$hora}&formato={$formato}";
+            $this->dispatch('descargar', Params: $params);
+        } catch (\Throwable $th) {
+            $this->dispatch('mostrarMensaje', mensaje: $th->getMessage(), tipo: 'warning', tiempo: 3000);
+        }
     }
 }
