@@ -42,7 +42,7 @@ class EstadoCuenta extends Component
         }
     }
 
-    public function generarEstadoCuenta()
+    public function generarEstadoCuenta($formato)
     {
         try {
             $this->validate();
@@ -53,6 +53,7 @@ class EstadoCuenta extends Component
                 descripcionCuenta: $cuenta->Descripcion_cuenta,
                 fechaInicio: $this->fechaInicio,
                 fechaFin: $this->fechaFin,
+                formato: $formato
             );        
         } catch (\Illuminate\Validation\ValidationException $e) {
              $this->dispatch('mostrarMensaje', mensaje: $e->getMessage(), tipo: 'warning', tiempo: 3000);

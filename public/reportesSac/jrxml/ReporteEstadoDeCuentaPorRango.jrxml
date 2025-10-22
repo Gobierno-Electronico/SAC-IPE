@@ -369,22 +369,20 @@ Evento]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="30" width="640" height="21" uuid="f06caca4-2afd-44b4-b9f4-2a17836a6300">
-					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1
-]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
 				</reportElement>
 				<box>
 					<leftPen lineWidth="0.5"/>
 				</box>
 				<text><![CDATA[]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="$ #,##0.00">
 				<reportElement x="720" y="30" width="80" height="21" uuid="f2c3ba0e-d848-426a-8383-a1554daf935e">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1
-]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
 				</reportElement>
 				<box padding="2">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -396,16 +394,15 @@ Evento]]></text>
 					<font fontName="Times New Roman" size="8" isBold="false"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{TotalAbonos})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{TotalAbonos}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="$ #,##0.00">
 				<reportElement x="640" y="30" width="80" height="21" uuid="6d047648-e156-46f6-8512-9668483ba02f">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1
-]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
 				</reportElement>
 				<box padding="2">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -417,7 +414,7 @@ Evento]]></text>
 					<font fontName="Times New Roman" size="8" isBold="false"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{TotalCargos})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{TotalCargos}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="30" width="800" height="21" uuid="fb5c7e46-39e7-4a4c-930a-48400ec9c98e"/>
@@ -428,7 +425,7 @@ Evento]]></text>
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<text><![CDATA[Static Text]]></text>
+				<text><![CDATA[]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -534,7 +531,7 @@ Evento]]></text>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FechaRegistro}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="$ #,##0.00">
 				<reportElement x="640" y="0" width="80" height="46" uuid="c325b54d-d3f3-4d4e-9ea9-4dc426e5cc5b">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
@@ -552,7 +549,7 @@ Evento]]></text>
 					<font fontName="Times New Roman" size="8"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{total})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="720" y="0" width="80" height="46" printWhenGroupChanges="Cuentas" uuid="58edae7e-feca-42c6-8f3d-89d2e33a7b3d">
@@ -574,7 +571,7 @@ Evento]]></text>
 				</textElement>
 				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="$ #,##0.00">
 				<reportElement x="720" y="0" width="80" height="46" uuid="218657f9-3739-48d4-b2ad-00bdb0c79626">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dd345508-5f21-4047-b06b-d787685e7f15"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
@@ -593,7 +590,7 @@ Evento]]></text>
 					<font fontName="Times New Roman" size="8"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$" + new DecimalFormat("#,##0.00").format($F{total})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="640" y="0" width="80" height="46" uuid="708305d4-4ee9-4f26-b800-320bf9d5d736">

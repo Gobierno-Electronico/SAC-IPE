@@ -44,11 +44,11 @@
     </div>
 
     <div class="mt-4 d-flex flex-row-reverse">
-        <button wire:click="generarEstadoCuenta" type="button"
+        <button wire:click="generarEstadoCuenta('X')" type="button"
             class="btn btn-success shadow border-1 mt-3 mt-md-0 ms-3">
             Generar Excel
         </button>
-        <button wire:click="generarEstadoCuenta" type="button" class="btn btn-success shadow border-1 mt-3 mt-md-0">
+        <button wire:click="generarEstadoCuenta('PDF')" type="button" class="btn btn-success shadow border-1 mt-3 mt-md-0">
             Generar PDF
         </button>
     </div>
@@ -58,7 +58,7 @@
 <script>
 document.addEventListener('livewire:init', () => {
     Livewire.on('generarReporteJasper', (data) => {
-        let { cuenta, fechaInicio, fechaFin, descripcionCuenta } = data;
+        let { cuenta, fechaInicio, fechaFin, descripcionCuenta, formato } = data;
 
         const inicio = dayjs(fechaInicio);
         const fin = dayjs(fechaFin);
@@ -77,7 +77,7 @@ document.addEventListener('livewire:init', () => {
 
         const wsUrl = "http://" + window.IP_PORT + "/" + window.NOMBRE_REPORTEADOR + "/webresources/service/report?name=" + nombrereporte + "&params=";
 
-        let url = `${wsUrl}Cuenta;${cuenta},DescripcionCuenta;${descripcionCuenta},FechaInicio;${fechaInicio},FechaFin;${fechaFin}`;
+        let url = `${wsUrl}Cuenta;${cuenta},DescripcionCuenta;${descripcionCuenta},FechaInicio;${fechaInicio},FechaFin;${fechaFin}&formato=${formato}`;
 
         console.log("Llamando Jasper con URL:", url);
 
