@@ -30,12 +30,12 @@
 
     <div class="mt-4 d-flex flex-row-reverse">
             <button id="botonGenerarPoliza" type="button"
-                class="btn btn-success shadow border-1 mt-3 me-3 mt-md-0" @if ($fechaInicio == '' || $fechaFin == '') disabled @endif wire:click="generar('PDF')" >
+                class="btn btn-success shadow border-1 mt-3 mt-md-0" @if ($fechaInicio == '' || $fechaFin == '') disabled @endif wire:click="generar('PDF')" >
                 Generar balanza armonizada PDF
             </button>
 
              <button id="botonGenerarPoliza" type="button"
-                class="btn btn-success shadow border-1 mt-3 mt-md-0" @if ($fechaInicio == '' || $fechaFin == '') disabled @endif wire:click="generar('X')" >
+                class="btn btn-success shadow border-1 mt-3 me-3 mt-md-0" @if ($fechaInicio == '' || $fechaFin == '') disabled @endif wire:click="generar('X')" >
                 Generar balanza armonizada EXCEL
             </button>
     </div>
