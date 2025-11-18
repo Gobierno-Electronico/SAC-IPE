@@ -4,50 +4,64 @@ namespace App\Livewire;
 
 use Carbon\Carbon;
 use Livewire\Component;
-use Livewire\Attributes\On;
+use App\Models\Cuenta;
+use Log;
+
 class LibroMayor extends Component
 {
 
-    public $selectedYear = '';
-    public $fecha1 = '';
-    public $fecha2 = '';
-    public $meses = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
+    public $tipoCuenta = '';
+    public $nivel = '';
+    public $cuenta = '';
+    public $fechaInicio = '';
+    public $fechaFin = '';
+    public $busquedaCuenta = '';
 
 
 
     public function render()
     {
-        return view('livewire.libro-mayor');
-    }
-
-    public function save() {
-
-    }
-
-
-    public function change(){
-    }
-
-    public function generar(){
-        $mes1 = Carbon::parse($this->fecha1)->month;
-        $mes2 = Carbon::parse($this->fecha2)->month;
-        $dia1 = Carbon::parse($this->fecha1)->day;
-        $dia2 = Carbon::parse($this->fecha2)->day;
-        $tituloFecha = "";
-        if($mes1 === $mes2){
-            if($dia1 === $dia2){
-                $tituloFecha = "DEL {$dia1} DE {$this->meses[$mes1-1]} DEL {$this->selectedYear}";
-            }
-            else{
-                $tituloFecha = "DEL {$dia1} AL {$dia2} DE {$this->meses[$mes1-1]} DEL {$this->selectedYear}";
-            }
-        }
-        else{
-            $tituloFecha = "DEL {$dia1} DE {$this->meses[$mes1-1]} AL {$dia2} DE {$this->meses[$mes2-1]} DEL {$this->selectedYear}";
+        $cuentas = collect();
+        try {
+            $cuentas = Cuenta::orderBy('Codigo_cuenta')
+                ->where('Nivel', '>=', ($this->nivel != '' ? $this->nivel : 1))
+                ->when($this->busquedaCuenta, function ($query) {
+                    $query->where(function ($q) {
+                        $q->where('Descripcion_cuenta', 'like', '%' . $this->busquedaCuenta . '%')
+                            ->orWhere('Codigo_cuenta', 'like', '%' . $this->busquedaCuenta . '%');
+                    });
+                })
+                ->get();
+        } catch (\Throwable $th) {
+            Log::error('Ocurrió un error al cargar cuentas en reportes Libro mayor: ' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
 
-        $params = "Fecha1;{$this->fecha1},Fecha2;{$this->fecha2},Anio;{$this->selectedYear},TituloFechas;{$tituloFecha}";
-        $this->dispatch('descargar', Params: $params);
-    
+        return view('livewire.libro-mayor', compact('cuentas'));
+    }
+
+    public function save() {}
+
+
+    public function change() {}
+
+    public function generar($formato)
+    {
+        try {
+            $codigoCuentaSeleccionada = Cuenta::where('id', $this->cuenta)->value('Codigo_cuenta');
+            $subtituloFechas = "Mayor del " .
+                Carbon::parse($this->fechaInicio)
+                ->locale('es')
+                ->translatedFormat('d/F/Y') . " al " .
+                Carbon::parse($this->fechaFin)
+                ->locale('es')
+                ->translatedFormat('d/F/Y');
+            $fecha = Carbon::now()->format('d/m/Y');
+            $hora = Carbon::now()->format('h:i A');
+            $params = "FechaInicio;{$this->fechaInicio},FechaFin;{$this->fechaFin},Cuenta;{$codigoCuentaSeleccionada},Nivel;{$this->nivel},Fecha;{$fecha},Hora;{$hora}, SubtituloFechas;{$subtituloFechas}&formato={$formato}";
+            $this->dispatch('descargar', Params: $params);
+        } catch (\Throwable $th) {
+            $this->dispatch('mostrarMensaje', mensaje: $th->getMessage(), tipo: 'warning', tiempo: 3000);
+        }
     }
 }

@@ -135,14 +135,7 @@
                                                 onclick="mostrarCargando()" role="button">
                                                 {{ __('Clasificador Rubro Ingreso') }}
                                             </a>
-                                        </li>
-
-                                        <li class="nav-item dropdown">
-                                            <a class="dropdown-item" href="#" id="navbarCRI"
-                                                onclick="mostrarCargando()" role="button">
-                                                {{ __('Cargar matrices de conversión') }}
-                                            </a>
-                                        </li>
+                                        </li>       
 
                                         <li class="dropdown dropend">
                                             <a href="#" class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"

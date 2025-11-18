@@ -9,9 +9,7 @@
             <div class="col-md-12">
                 <div class="card shadow border mt-5 border-0">
                     <div class="card-body bg-white p-5">
-                            {{-- <a href="{{ route('listaDeUsuarios')  }}" class="d-inline-block mt-1">
-                                <i class="fa-solid fa-circle-left" style="color: #198754; font-size: 1.5rem;"></i>
-                            </a> --}}
+                           
                         <livewire:afectaciones-ingresos-form :$tipo estado='INGRESOS' estadoOriginal='INGRESOS'/>
 
                     </div>

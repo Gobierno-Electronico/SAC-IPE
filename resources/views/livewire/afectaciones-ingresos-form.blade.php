@@ -1,4 +1,4 @@
-<div>
+    <div>
     <div class="d-flex justify-content-between mb-3">
         <h2>{{ $tipo }} presupuestal</h2>
         <div class="">

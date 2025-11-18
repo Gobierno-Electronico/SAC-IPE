@@ -192,7 +192,9 @@ class EgresosCapitulo4PagadoForm extends Component
                     $join->on('interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
                         ->where('tipo_interaccion', '=', 'Contable - Abono');
                 })
-                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get();
+                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+                ->orderBy('cuentas.Codigo_cuenta')
+                ->get();
 
             $this->llenarCuentasRetenciones($interaccionCuentaConcepto->id);
         } catch (\Throwable $th) {
