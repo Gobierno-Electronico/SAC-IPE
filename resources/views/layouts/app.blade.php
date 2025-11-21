@@ -370,6 +370,12 @@
                                                         Póliza diario
                                                     </a>
                                                 </li>
+                                                <li>
+                                                    <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                        href="{{ route('auxiliares') }}">
+                                                        Auxiliares
+                                                    </a>
+                                                </li>
                                             </ul>
                                         </li>
                                     @endcan
