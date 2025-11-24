@@ -481,4 +481,18 @@ class ContabilidadController extends Controller
             return back();
         }
     }
+
+    public function plantillaAuxiliares()
+    {
+        $rutaArchivo = public_path('plantillas/Plantilla de auxiliares' . '.xlsx');
+        if (file_exists($rutaArchivo)) {
+            $usuariosController = new BitacoraController();
+            $usuariosController->bitacora('plantillaAuxiliares', 'descargó la plantilla de auxiliares', request());
+            return response()->download($rutaArchivo, 'Plantilla de auxiliares.xlsx', [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            ]);
+        } else {
+            abort(404);
+        }
+    }
 }

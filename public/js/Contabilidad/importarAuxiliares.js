@@ -19,7 +19,7 @@ function cambioArchivo() {
     $("#fieldName").html(nombreArchivo);
 }
 
-function descargarPlantilla(btn, tipo) {
+function descargarPlantilla(btn) {
     let btnId = btn.id; 
     let btnHtml = $('#' + btnId + '').html();
     let spinner =
@@ -36,8 +36,7 @@ function descargarPlantilla(btn, tipo) {
     });
     $.ajax({
         type: 'GET',
-        url: '/presupuesto/plantilla-presupuesto-inicial',
-        data: { "type": tipo },
+        url: '/contabilidad/plantilla-auxiliares',
         success: function (data) {
             var blob = new Blob([data], {
                 type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -46,7 +45,7 @@ function descargarPlantilla(btn, tipo) {
             var a = document.createElement('a');
             a.href = url;
             a.download =
-                `Formato presupuesto inicial ${tipo}.xlsx`; 
+                `Plantilla de auxiliares.xlsx`; 
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);

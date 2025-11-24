@@ -1,12 +1,9 @@
 Cuentas Faltantes en el Plan de Cuentas
 ------------------------------------------------------------------------------------------
 
-Código de cuenta: 1.1.4
-Descripción: Inventarios
-------------------------------------------------------------------------------------------
-Código de cuenta: 1.1.6
-Descripción: Estimación por Pérdida o Deterioro de Activos Circulantes
-------------------------------------------------------------------------------------------
 Código de cuenta: 1.1.7
 Descripción: Otros Activos  Circulantes
+------------------------------------------------------------------------------------------
+Código de cuenta: 2.1.8
+Descripción: Otros Pasivos a Corto Plazo
 ------------------------------------------------------------------------------------------
