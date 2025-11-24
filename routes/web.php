@@ -118,6 +118,7 @@ Route::get("/movimientos-diario", [ContabilidadController::class, 'movimientosDi
 Route::get("/movimientos-deudores", [ContabilidadController::class, 'movimientosDeudores'])->name('movimientosDeudores')->middleware('can:acceso-contabilidad-consultar-carga');
 Route::get('/contabilidad/auxiliares', [ContabilidadController::class, 'auxiliares'])->name('auxiliares')->middleware('can:acceso-contabilidad-consultar-carga');
 Route::post('/contabilidad/cargar-auxiliares', [ContabilidadController::class, 'registrarAuxiliares'])->name('registrarAuxiliares')->middleware('can:acceso-contabilidad-consultar-carga');
+Route::get('/contabilidad/plantilla-auxiliares', [ContabilidadController::class, 'plantillaAuxiliares'])->name('plantillaAuxiliares')->middleware('can:acceso-contabilidad-consultar-carga');
 
 //Tipos de presupuesto
 Route::get("/tiposPresupuesto", [PresupuestoController::class, 'tiposPresupuesto'])->name('tiposPresupuesto')->middleware('can:acceso-presupuesto');

@@ -2,7 +2,7 @@
 @section('titulo', 'Carga de auxiliares')
 
 @section('content')
-    <script src="{{ asset('js/Presupuesto/importarAuxiliares.js') }}"></script>
+    <script src="{{ asset('js/Contabilidad/importarAuxiliares.js') }}"></script>
     <x-download />
 
     <button id="downloadButton" hidden></button>
@@ -77,7 +77,7 @@
                             onchange="cambioArchivo()" disabled>
                     </div>
                     <div class="mt-5 d-flex justify-content-between">
-                        <button type="button" onclick="descargarPlantilla(this, 'egresos')"
+                        <button type="button" onclick="descargarPlantilla(this)"
                             class="btn btn-success shadow border-0" id="botonPlantilla">
                             Descargar plantilla
                         </button>
