@@ -14,16 +14,16 @@
                         </div>
                         <div>
                             <label for="inputObservaciones" class="col-md-12 col-form-label">{{ __('Total') }}</label>
-                            <input value="{{  '$' . number_format($total, 2, '.', ',')  }}" type="text" class="form-control" name="inputAumentado"
-                                disabled>
+                            <input value="{{ '$' . number_format($total, 2, '.', ',') }}" type="text"
+                                class="form-control" name="inputAumentado" disabled>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <livewire:prestamos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaRecuperacionRecaudadoPrestamosIniciales" 
-            urlFinalizar="/capitulo7-recuperacion-recaudado-prestamosIniciales" tipoPoliza="D" 
+            tipoMovimiento="PolizaRecuperacionRecaudadoPrestamosIniciales"
+            urlFinalizar="/capitulo7-recuperacion-recaudado-prestamosIniciales" tipoPoliza="D"
             categoriaModulo='RECUPERACION RECAUDADO PRESTAMOS INICIAlES' />
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
@@ -31,7 +31,7 @@
             wire:model="selectCodigoArea">
             @foreach (\App\Models\CodigoDepartamento::all() as $departamento)
                 @if (strlen($departamento->Codigo_completo) >= 5)
-                    @if ($departamento->Codigo_completo == "1.5.04")
+                    @if ($departamento->Codigo_completo == '1.5.04')
                         <option value="{{ $departamento->id }}" selected>
                             {{ $departamento->Codigo_completo . ' ' . $departamento->Nombre }}
                         </option>
@@ -42,10 +42,12 @@
         </select>
 
         <label for="inputObservacion" class="form-label mt-3">Observación</label>
-        <input type="text" name="inputObservacion" id="inputObservacion" class="form-control" wire:model="observaciones">
+        <input type="text" name="inputObservacion" id="inputObservacion" class="form-control"
+            wire:model="observaciones">
 
         <label for="inputFechaAfectacion" class="form-label mt-3">Fecha de afectación</label>
-        <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control" max="{{ now()->toDateString() }}" wire:model="fechaAfectacion">
+        <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control"
+            max="{{ now()->toDateString() }}" wire:model="fechaAfectacion">
 
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
         <div class="row">
@@ -55,7 +57,7 @@
                     wire:model="selectCodigoAreaResponsable" wire:change="cargarPresupuesto">
                     <option value="" @if ($this->selectCodigoAreaResponsable == '') selected @endif disabled>
                         Seleccionar un área
-                    </option> 
+                    </option>
                     @foreach (\App\Models\CodigoDepartamento::all() as $departamento)
                         @if (strlen($departamento->Codigo_completo) >= 5)
                             <option value="{{ $departamento->id }}" @if ($this->selectCodigoAreaResponsable == $departamento->id) selected @endif>
@@ -65,8 +67,21 @@
                     @endforeach
                 </select>
 
+                <label for="selectDocumentoFuente" class="form-label mt-3">Documento fuente</label>
+                <select name="selectDocumentoFuente" id="selectDocumentoFuente" class="form-select"
+                    wire:model="documentoFuente">
+                    <option value="">Selecciona una opción...</option>
+                    @foreach (\App\Enums\DocumentosFuente::cases() as $documento)
+                        <option value="{{ $documento->value }}">
+                            {{ $documento->value === 'Memorandum' ? 'Memorándum' : $documento->value }}
+                        </option>
+                    @endforeach
+                </select>
+
+
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
-                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes" wire:change="cargarPresupuesto">
+                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes"
+                    wire:change="cargarPresupuesto">
                     <option value="" selected disabled>Seleccionar mes...</option>
                     @foreach (range(1, 12) as $mes)
                         @php
@@ -77,8 +92,9 @@
                     @endforeach
                 </select>
 
-                <label for="selectCuenta" class="form-label mt-3" >Cuenta</label>
-                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta" wire:change="cargarPresupuesto">
+                <label for="selectCuenta" class="form-label mt-3">Cuenta</label>
+                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta"
+                    wire:change="cargarPresupuesto">
                     <option value="" disabled>Seleccionar cuenta</option>
                     @foreach ($cuentas as $cuenta)
                         <option value="{{ $cuenta->cuenta_id }}">
@@ -89,7 +105,7 @@
                 <label for="inputPTTOEjecutar" class="form-label mt-3">Presupuesto</label>
                 <input type="text" name="inputPTTOEjecutar" id="inputPTTOEjecutar" class="form-control" disabled>
 
-                <label for="selectCuentaBanco" class="form-label mt-3" >Cuenta de banco</label>
+                <label for="selectCuentaBanco" class="form-label mt-3">Cuenta de banco</label>
                 <select name="selectCuentaBanco" id="selectCuentaBanco" class="form-select" wire:model="cuentaBanco">
                     <option value="" disabled>Seleccionar banco</option>
                     @foreach ($bancos as $cuenta)
@@ -97,8 +113,8 @@
                             {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
                     @endforeach
                 </select>
-            
-{{--                 <label for="selectDestinoRecurso" class="form-label mt-3">Plazo del préstamo</label>
+
+                {{--                 <label for="selectDestinoRecurso" class="form-label mt-3">Plazo del préstamo</label>
                 <select name="selectDestinoRecurso" id="selectDestinoRecurso" class="form-select"
                     wire:model="destinoRecurso">
                     <option value="" selected disabled>Seleccionar plazo del préstamo</option>
@@ -107,13 +123,14 @@
                 </select> --}}
 
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
-                <input type="text" name="inputImporte" id="inputImporte" class="form-control" onkeyup="validarDecimales(this)" onchange="formatearImporte(this)" wire:model="importe">
+                <input type="text" name="inputImporte" id="inputImporte" class="form-control"
+                    onkeyup="validarDecimales(this)" onchange="formatearImporte(this)" wire:model="importe">
 
             </div>
 
             <div class="col">
                 <livewire:prestamos-recuperacion-recaudado-prestamosIniciales-table />
-            </div> 
+            </div>
 
             <div class="row mt-4">
                 <div class="col">
@@ -124,7 +141,7 @@
                 </div>
             </div>
         </div>
-        
+
     @endif
 </div>
 
@@ -136,7 +153,7 @@
         }, params.amount)
     })
 
-     function formatearImporte(obj, amount = '') {
+    function formatearImporte(obj, amount = '') {
         amount = (amount) ? amount : $('#' + obj.id).val().replace(/[^0-9.]/g, '');
         amount = parseFloat(amount);
         if (!isNaN(amount)) {
@@ -170,9 +187,9 @@
     function validarDecimales(input) {
         // Obtener solo números y un punto decimal permitido
         let valor = input.value.replace(/[^0-9.]/g, '') // Elimina caracteres no numéricos
-                           .replace(/(\..*)\./g, '$1') // Evita más de un punto decimal
-                           .replace(/^0+(\d)/, '$1') // Elimina ceros iniciales
-                           .replace(/^(\d+)(\.\d{0,2})?.*$/, '$1$2'); // Máximo 2 decimales
+            .replace(/(\..*)\./g, '$1') // Evita más de un punto decimal
+            .replace(/^0+(\d)/, '$1') // Elimina ceros iniciales
+            .replace(/^(\d+)(\.\d{0,2})?.*$/, '$1$2'); // Máximo 2 decimales
 
         // Si el valor es solo un punto, permitirlo sin formatear
         if (valor === ".") {

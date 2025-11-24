@@ -1,5 +1,12 @@
-Cuentas Faltantes en el plan de cuentas
----------------------------------------------------------------------------------------
-Código de cuenta: 8.2.1.5.1.2.3.03.02
-Descripción: Productos de Papel, Cartón e Impresos Adquiridos como Materia Prima (Aprobado)
----------------------------------------------------------------------------------------
+Cuentas Faltantes en el Plan de Cuentas
+------------------------------------------------------------------------------------------
+
+Código de cuenta: 1.1.4
+Descripción: Inventarios
+------------------------------------------------------------------------------------------
+Código de cuenta: 1.1.6
+Descripción: Estimación por Pérdida o Deterioro de Activos Circulantes
+------------------------------------------------------------------------------------------
+Código de cuenta: 1.1.7
+Descripción: Otros Activos  Circulantes
+------------------------------------------------------------------------------------------

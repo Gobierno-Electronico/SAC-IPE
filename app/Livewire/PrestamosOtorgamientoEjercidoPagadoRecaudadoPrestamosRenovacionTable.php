@@ -48,6 +48,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
     {
         return [
             Column::make('area', 'Area'),
+            Column::make('documentoFuente', 'Documento fuente'),
             Column::make('mes', 'Mes'),
             Column::make('partida', 'Partida'),
             Column::make('cuentaAbono', 'Cuenta de abono'),
@@ -77,7 +78,8 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
                     'importe' => $registro['importe'],
                     'importeAbono' => $registro['importeAbono'],
                     'importeRestante' => $this->importeRestante,
-                    'destinoRecurso' => $registro['destinoRecurso']
+                    'destinoRecurso' => $registro['destinoRecurso'],
+                    'documentoFuente' => $registro['documentoFuente'],
                 ];
                 array_push($this->cacheData, $nuevoRegistro);
                 array_push($this->dataCompleta, $registro);
@@ -137,6 +139,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
                         'importeAbono' => $registro['importeAbono'],
                         'pttoEjecutar' => $registro['pttoEjecutar'],
                         'destinoRecurso' => $registro['destinoRecurso'],
+                        'documentoFuente' => $registro['documentoFuente'],
                     ];
 
                     unset($this->dataCompleta[$key]);
@@ -293,6 +296,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
                             'validado' => false,
                             'estatus_evento' => EstatusEvento::ACTIVO->value,
                             'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS RENOVACION',
+                            'documento_fuente' => $movimiento['documentoFuente'],
                             'created_at' => $fecha,
                             'updated_at' => $fecha
                         ]
@@ -341,6 +345,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
                             'validado' => false,
                             'estatus_evento' => EstatusEvento::ACTIVO->value,
                             'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS RENOVACION',
+                            'documento_fuente' => $movimiento['documentoFuente'],
                             'created_at' => $fecha,
                             'updated_at' => $fecha
                         ]);
@@ -375,6 +380,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS RENOVACION',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);
@@ -396,6 +402,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
                             'validado' => false,
                             'estatus_evento' => EstatusEvento::ACTIVO->value,
                             'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS RENOVACION',
+                            'documento_fuente' => $movimiento['documentoFuente'],
                             'created_at' => $fecha,
                             'updated_at' => $fecha
                         ]);
@@ -431,6 +438,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS RENOVACION',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);
@@ -452,6 +460,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
                             'validado' => false,
                             'estatus_evento' => EstatusEvento::ACTIVO->value,
                             'categoria' => 'OTORGAMIENTO EJERCIDO PAGADO RECAUDADO PRESTAMOS RENOVACION',
+                            'documento_fuente' => $movimiento['documentoFuente'],
                             'created_at' => $fecha,
                             'updated_at' => $fecha
                         ]);

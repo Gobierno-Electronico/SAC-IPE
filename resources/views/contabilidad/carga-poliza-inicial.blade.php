@@ -46,7 +46,17 @@
                 enctype="multipart/form-data">
                 @csrf
                 <div class="mt-5">
-                    <input class="form-control" type="file" accept=".xlsx" name="input-archivo" id="input-archivo"
+                    <label for="selectDocumentoFuente" class="form-label mt-3">Documento fuente</label>
+                    <select name="selectDocumentoFuente" id="selectDocumentoFuente" class="form-select" onchange="seleccionDocumentoFuente()">
+                        <option value="">Selecciona una opción...</option>
+                        @foreach (\App\Enums\DocumentosFuente::cases() as $documento)
+                            <option value="{{ $documento->value }}">
+                                {{ $documento->value === 'Memorandum' ? 'Memorándum' : $documento->value }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                    <input class="form-control mt-3" type="file" accept=".xlsx" name="input-archivo" id="input-archivo"
                         onchange="cambioArchivo()">
                 </div>
                 <div class="mt-5 d-flex justify-content-between">

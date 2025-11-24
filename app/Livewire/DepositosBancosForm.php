@@ -31,6 +31,9 @@ class DepositosBancosForm extends Component
     #[Validate('required', message: 'Fecha de afectación requerida')]
     public $fechaAfectacion = "";
 
+    #[Validate('required', message: 'Documento fuente requerido')]
+    public $documentoFuente = "";
+
     public $consultarRegistro = false;
     public $numeroEvento;
     public $numeroPoliza;
@@ -70,7 +73,8 @@ class DepositosBancosForm extends Component
                 'descripcionCuenta' => $cuenta->Descripcion_cuenta,
                 'mes' => $this->mes,
                 'fechaAfectacion' => $this->fechaAfectacion,
-                'importe' => $this->importe
+                'importe' => $this->importe,
+                'documentoFuente' => $this->documentoFuente
             ];
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
@@ -122,6 +126,7 @@ class DepositosBancosForm extends Component
             $this->cuenta = $idCuenta;
             $this->mes = $datosRegistro['mes'];
             $this->importe = $datosRegistro['importe'];
+            $this->documentoFuente = $datosRegistro['documentoFuente'];
 
             $this->dispatch('llenarFormulario', cuenta: $datosRegistro['codigoCuenta'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe']);
         } catch (\Throwable $th) {

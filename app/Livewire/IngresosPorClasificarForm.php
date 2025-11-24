@@ -30,6 +30,9 @@ class IngresosPorClasificarForm extends Component
     #[Validate('required', message: 'Fecha de afectación requerida')]
     public $fechaAfectacion = "";
 
+    #[Validate('required', message: 'Documento fuente requerido')]
+    public $documentoFuente = "";
+
     public $consultarRegistro = false;
     public $numeroEvento;
     public $numeroPoliza;
@@ -66,7 +69,8 @@ class IngresosPorClasificarForm extends Component
                 'descripcionCuenta' => $cuenta->Descripcion_cuenta,
                 'mes' => $this->mes,
                 'fechaAfectacion' => $this->fechaAfectacion,
-                'importe' => $this->importe
+                'importe' => $this->importe,
+                'documentoFuente' => $this->documentoFuente
             ];
             Log::info($registro);
             $this->dispatch('agregar-registro', registro: $registro);
@@ -119,7 +123,7 @@ class IngresosPorClasificarForm extends Component
         $this->cuenta = $idCuenta;
         $this->mes = $datosRegistro['mes'];
         $this->importe = $datosRegistro['importe'];
-
+        $this->documentoFuente = $datosRegistro['documentoFuente'];
         $this->dispatch('llenarFormulario', cuenta: $datosRegistro['codigoCuenta'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe']);
     }
 }

@@ -23,6 +23,18 @@
                                 type="text" class="form-control" name="inputObservaciones"
                                 wire:model.change="observaciones">
                         </div>
+                        <div>
+                            <label for="selectDocumentoFuente" class="form-label">Documento fuente</label>
+                            <select name="selectDocumentoFuente" id="selectDocumentoFuente" class="form-select"
+                                wire:model="documentoFuente">
+                                <option value="">Selecciona una opción...</option>
+                                @foreach (\App\Enums\DocumentosFuente::cases() as $documento)
+                                    <option value="{{ $documento->value }}">
+                                        {{ $documento->value === 'Memorandum' ? 'Memorándum' : $documento->value }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                     <div class="col-md-6 w-25">
                         <label for="selectCodigoDepartamento"
@@ -157,7 +169,7 @@
             </div>
             <div class="mt-3">
                 <livewire:afectaciones-ingresos-table :$selectCodigoDepartamento :$codigoCuentaCargo :$tipo
-                    :$codigoCuentaAbono :$observaciones :$estado :$totalPrevio :$numeroEvento/>
+                    :$codigoCuentaAbono :$observaciones :$estado :$totalPrevio :$numeroEvento />
             </div>
         @else
             <h4>Datos de egresos</h4>
@@ -170,6 +182,18 @@
                             <input placeholder="Ingrese las observaciones del movimiento" id="inputObservaciones"
                                 type="text" class="form-control" name="inputObservaciones"
                                 wire:model.change="observaciones">
+                        </div>
+                        <div>
+                            <label for="selectDocumentoFuente" class="form-label">Documento fuente</label>
+                            <select name="selectDocumentoFuente" id="selectDocumentoFuente" class="form-select"
+                                wire:model="documentoFuente">
+                                <option value="">Selecciona una opción...</option>
+                                @foreach (\App\Enums\DocumentosFuente::cases() as $documento)
+                                    <option value="{{ $documento->value }}">
+                                        {{ $documento->value === 'Memorandum' ? 'Memorándum' : $documento->value }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="col-md-6 w-25">
@@ -266,16 +290,15 @@
                         <label for="codigoClasificadorFuncional"
                             class="col-md-12 col-form-label">{{ __('Clasificación funcional') }}</label>
                         <input id="codigoClasificadorFuncional" type="text" class="form-control"
-                            name="codigoClasificadorFuncional" wire:model="codigoClasificadorFuncional"
-                            disabled>
+                            name="codigoClasificadorFuncional" wire:model="codigoClasificadorFuncional" disabled>
                     </div>
 
                     <div class="col">
                         <label for="descripcionClasificadorFuncional"
                             class="col-md-12 col-form-label">{{ __('Descripción') }}</label>
                         <input id="descripcionClasificadorFuncional" type="text" class="form-control"
-                            name="descripcionClasificadorFuncional"
-                            wire:model="descripcionClasificadorFuncional" disabled>
+                            name="descripcionClasificadorFuncional" wire:model="descripcionClasificadorFuncional"
+                            disabled>
                     </div>
                 </div>
 
@@ -302,16 +325,15 @@
                         <label for="codigoClasificadorTipoGasto"
                             class="col-md-12 col-form-label">{{ __('Clasificación por tipo de gasto') }}</label>
                         <input id="codigoClasificadorTipoGasto" type="text" class="form-control"
-                            name="codigoClasificadorTipoGasto" wire:model="codigoClasificadorTipoGasto"
-                            disabled>
+                            name="codigoClasificadorTipoGasto" wire:model="codigoClasificadorTipoGasto" disabled>
                     </div>
 
                     <div class="col">
                         <label for="descripcionClasificadorTipoGasto"
                             class="col-md-12 col-form-label">{{ __('Descripción') }}</label>
                         <input id="descripcionClasificadorTipoGasto" type="text" class="form-control"
-                            name="descripcionClasificadorTipoGasto"
-                            wire:model="descripcionClasificadorTipoGasto" disabled>
+                            name="descripcionClasificadorTipoGasto" wire:model="descripcionClasificadorTipoGasto"
+                            disabled>
                     </div>
                 </div>
 
@@ -320,8 +342,8 @@
                     <div class="col-md-6 w-25">
                         <label for="codigoCuentaCargoEgreso"
                             class="col-md-12 col-form-label">{{ __('Código cuenta contable de cargo') }}</label>
-                        <input id="codigoCuentaCargoEgreso" type="text" class="form-control" name="codigoCuentaCargoEgreso"
-                            wire:model="codigoCuentaCargoEgreso" disabled>
+                        <input id="codigoCuentaCargoEgreso" type="text" class="form-control"
+                            name="codigoCuentaCargoEgreso" wire:model="codigoCuentaCargoEgreso" disabled>
                     </div>
 
                     <div class="col">
@@ -336,8 +358,8 @@
                     <div class="col-md-6 w-25">
                         <label for="codigoCuentaAbonoEgreso"
                             class="col-md-12 col-form-label">{{ __('Código cuenta contable de abono') }}</label>
-                        <input id="codigoCuentaAbonoEgreso" type="text" class="form-control" name="codigoCuentaAbonoEgreso"
-                            wire:model="codigoCuentaAbonoEgreso" disabled>
+                        <input id="codigoCuentaAbonoEgreso" type="text" class="form-control"
+                            name="codigoCuentaAbonoEgreso" wire:model="codigoCuentaAbonoEgreso" disabled>
                     </div>
 
                     <div class="col">
@@ -350,7 +372,7 @@
             </div>
             <div class="mt-3">
                 <livewire:afectaciones-ingresos-table :$selectCodigoDepartamento :$codigoCuentaCargoEgreso :$tipo
-                    :$codigoCuentaAbonoEgreso :$observaciones :$estado :$totalPrevio :$numeroEvento/>
+                    :$codigoCuentaAbonoEgreso :$observaciones :$estado :$totalPrevio :$numeroEvento />
             </div>
         @endif
     @endif
@@ -367,14 +389,14 @@
                 minimumFractionDigits: 2,
             });
             $('#' + obj.id).val(formattedAmount);
-            console.log("Ejecuta: "+obj);
+            console.log("Ejecuta: " + obj);
         } else {
             toastr.warning('Ingrese valores numéricos en el campo de importe');
             $('#' + obj.id).val('');
         }
     }
 
-    function keyPress(e, obj){
+    function keyPress(e, obj) {
         let isCurrency = $('#' + obj.id).val().search(/[$]/)
         let texto = $('#' + obj.id).val().replace(/[^0-9.]/g, '');
         let isDecimal = texto.search(/[.]/)

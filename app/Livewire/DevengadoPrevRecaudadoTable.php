@@ -50,6 +50,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
     {
         return [
             Column::make('area', 'Area'),
+            Column::make('documentoFuente', 'Documento fuente'),
             Column::make('partida', 'Partida'),
             // Column::make('cuentaPago', 'Cuenta de pago'),
             Column::make('mes', 'Mes'),
@@ -75,6 +76,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
                         'importe' => $registro['importe'],
                         'agregarIVA' => $registro['agregarIVA'],
                         'solvenciaPresupuestal' => $registro['solvenciaPresupuestal'],
+                        'documentoFuente' => $registro['documentoFuente'],
                     ];
                     unset($this->dataCompleta[$key]);
                     $this->dataCompleta = array_values($this->dataCompleta);
@@ -206,7 +208,8 @@ class DevengadoPrevRecaudadoTable extends Tabla
                 'movimiento' => 'DEVENGADO PREVIAMENTE RECAUDADO',
                 'ejecutar' => $solvencia[0]->Solvencia,
                 'importe' => $registro['importe'],
-                'disponibilidad' => $totalDisponible
+                'disponibilidad' => $totalDisponible,
+                'documentoFuente' => $registro['documentoFuente'],
             ];
             array_push($this->cacheData, $nuevoRegistro);
             array_push($this->dataCompleta, $registro);
@@ -288,6 +291,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'INGRESOS DEVENGADO PREVIAMENTE RECAUDADO',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]
@@ -321,6 +325,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'INGRESOS DEVENGADO PREVIAMENTE RECAUDADO',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);

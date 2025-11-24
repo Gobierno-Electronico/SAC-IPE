@@ -14,15 +14,15 @@
                         </div>
                         <div>
                             <label for="inputObservaciones" class="col-md-12 col-form-label">{{ __('Total') }}</label>
-                            <input value="{{  '$' . number_format($total, 2, '.', ',')  }}" type="text" class="form-control" name="inputAumentado"
-                                disabled>
+                            <input value="{{ '$' . number_format($total, 2, '.', ',') }}" type="text"
+                                class="form-control" name="inputAumentado" disabled>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <livewire:egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaEgresosDevengadoCapitulo1" urlFinalizar="/capitulo1-devengado"  tipoPoliza="E"
+            tipoMovimiento="PolizaEgresosDevengadoCapitulo1" urlFinalizar="/capitulo1-devengado" tipoPoliza="E"
             categoriaModulo='EGRESOS DEVENGADO CAPITULO 1' />
     @else
         <div class="col text-end">
@@ -48,20 +48,21 @@
             wire:model="observaciones">
 
         <label for="inputFechaAfectacion" class="form-label mt-3">Fecha de afectación</label>
-        <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control" max="{{ now()->toDateString() }}"
-            wire:model="fechaAfectacion">
+        <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control"
+            max="{{ now()->toDateString() }}" wire:model="fechaAfectacion">
 
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
         <div class="row">
             <div class="col-3">
                 <label for="inputSeguimientoEvento" class="form-label mt-3">Número de seguimiento de evento</label>
-                <select name="selectSeguimientoEvento" id="selectSeguimientoEvento" class="form-select" wire:model="numeroEvento" wire:change="cambioEvento">
+                <select name="selectSeguimientoEvento" id="selectSeguimientoEvento" class="form-select"
+                    wire:model="numeroEvento" wire:change="cambioEvento">
                     <option value="" disabled>
                         Seleccionar un evento
                     </option>
-                    @foreach ($eventos as $evento  => $descripcion)
+                    @foreach ($eventos as $evento => $descripcion)
                         <option value="{{ $evento }}">
-                           {{ $evento }} - {{$descripcion}}
+                            {{ $evento }} - {{ $descripcion }}
                         </option>
                     @endforeach
                 </select>
@@ -81,17 +82,30 @@
                     @endforeach
                 </select>
 
+                <label for="selectDocumentoFuente" class="form-label mt-3">Documento fuente</label>
+                <select name="selectDocumentoFuente" id="selectDocumentoFuente" class="form-select"
+                    wire:model="documentoFuente">
+                    <option value="">Selecciona una opción...</option>
+                    @foreach (\App\Enums\DocumentosFuente::cases() as $documento)
+                        <option value="{{ $documento->value }}">
+                            {{ $documento->value === 'Memorandum' ? 'Memorándum' : $documento->value }}
+                        </option>
+                    @endforeach
+                </select>
+
                 <label for="selectPartidaPresupuestal" class="form-label mt-3">Partida presupuestal</label>
-                <select name="selectPartidaPresupuestal" id="selectPartidaPresupuestal" class="form-select" wire:model="partidaPresupuestal" wire:change="cargarPresupuestoComprometido">
+                <select name="selectPartidaPresupuestal" id="selectPartidaPresupuestal" class="form-select"
+                    wire:model="partidaPresupuestal" wire:change="cargarPresupuestoComprometido">
                     <option value="" selected disabled>Seleccionar partida presupuestal</option>
                     @foreach ($partidasPresupuestales as $partida)
-                    <option value="{{ $partida['cuenta_id'] }}">
-                        {{ $partida['Codigo_cuenta'] . '  ' . $partida['Descripcion_cuenta'] }}</option>
-                @endforeach
+                        <option value="{{ $partida['cuenta_id'] }}">
+                            {{ $partida['Codigo_cuenta'] . '  ' . $partida['Descripcion_cuenta'] }}</option>
+                    @endforeach
                 </select>
-                
+
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
-                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes" wire:change="cargarPresupuestoComprometido">
+                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes"
+                    wire:change="cargarPresupuestoComprometido">
                     <option value="" selected disabled>Seleccionar mes...</option>
                     @foreach (range(1, 12) as $mes)
                         @php
@@ -104,33 +118,34 @@
                 <label for="inputImporte" class="form-label mt-3">Importe total</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control"
                     onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model="importe">
-                
+
 
 
                 <label for="inputMontoEvento" class="form-label mt-3">Monto del evento</label>
                 <input type="text" name="inputMontoEvento" id="inputMontoEvento" class="form-control" disabled>
 
                 <label for="inputPTTOComprometido" class="form-label mt-3">Presupuesto comprometido</label>
-                <input type="text" name="inputPTTOComprometido" id="inputPTTOComprometido" class="form-control" disabled>
+                <input type="text" name="inputPTTOComprometido" id="inputPTTOComprometido" class="form-control"
+                    disabled>
 
                 <label for="selectCuenta" class="form-label mt-3">Cuenta contable</label>
                 <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuentaContable">
                     <option value="" selected disabled>Seleccionar cuenta</option>
                     @foreach ($cuentasContables as $partida)
-                    <option value="{{ $partida['cuenta_id'] }}">
-                        {{ $partida['Codigo_cuenta'] . '  ' . $partida['Descripcion_cuenta'] }}</option>
-                @endforeach
+                        <option value="{{ $partida['cuenta_id'] }}">
+                            {{ $partida['Codigo_cuenta'] . '  ' . $partida['Descripcion_cuenta'] }}</option>
+                    @endforeach
                 </select>
 
                 <label for="inputImporte" class="form-label mt-3">Importe abono</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control"
                     onkeyup="keyPress(event, this)" onchange="formatearImporte(this)" wire:model="importeAbono">
-                
+
             </div>
 
             <div class="col">
                 <livewire:egresos-capitulo1-devengado-table />
-            </div> 
+            </div>
 
             <div class="row mt-4">
                 <div class="col">
@@ -186,12 +201,12 @@
     function limpiar() {
         $('#inputPTTOComprometido').val('');
     }
-    
+
     function mostrarCargando() {
         $('#loadingScreen').prop('hidden', false);
         let mensajeEdoSolicitud = toastr.info("Cargando, espere un momento por favor . . .", "", {
             timeOut: "0"
         });
 
-        }
+    }
 </script>

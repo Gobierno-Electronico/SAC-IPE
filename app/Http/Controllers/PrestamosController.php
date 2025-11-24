@@ -38,4 +38,8 @@ class PrestamosController extends Controller
     public function consultarMovimientos(){
         return view ('prestamos.movimientos-prestamos');
     }
+
+    public function capitulo7RecuperacionEjerciciosAnteriores(){
+        return view("prestamos.prestamos-recuperacion-ejercicios-anteriores");
+    }
 }

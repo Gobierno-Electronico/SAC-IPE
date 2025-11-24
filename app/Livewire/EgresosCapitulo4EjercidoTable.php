@@ -48,6 +48,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
     {
         return [
             Column::make('area', 'Area'),
+            Column::make('documentoFuente', 'Documento fuente'),
             Column::make('cuenta', 'Partida'),
             Column::make('mes', 'Mes'),
             Column::make('movimiento', 'Movimiento'),
@@ -77,6 +78,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
                     'pttoDevengado' => $registro['pttoDevengado'],
                     'importe' => $registro['importe'],
                     'disponibilidad' => $this->totalDisponible,
+                    'documentoFuente' => $registro['documentoFuente'],
                 ];
                 array_push($this->cacheData, $nuevoRegistro);
                 array_push($this->dataCompleta, $registro);
@@ -128,7 +130,8 @@ class EgresosCapitulo4EjercidoTable extends Tabla
                         'cuenta' => $registro['cuentaId'],
                         'mes' => $registro['mes'],
                         'importe' => $registro['importe'],
-                        'pttoDevengado' => $registro['pttoDevengado']
+                        'pttoDevengado' => $registro['pttoDevengado'],
+                        'documentoFuente' => $registro['documentoFuente'],
                     ];
 
                     unset($this->dataCompleta[$key]);
@@ -269,6 +272,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS EJERCIDO CAPITULO 4',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]
@@ -291,6 +295,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS EJERCIDO CAPITULO 4',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);
@@ -360,6 +365,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
                             'validado' => false,
                             'estatus_evento' => EstatusEvento::FINALIZADO->value,
                             'categoria' => 'EGRESOS DEVENGADO CAPITULO 4 REMANENTE EJERCIDO',
+                            'documento_fuente' => $movimiento['documentoFuente'],
                             'created_at' => $fecha,
                             'updated_at' => $fecha
                         ];
@@ -391,6 +397,7 @@ class EgresosCapitulo4EjercidoTable extends Tabla
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::FINALIZADO->value,
                         'categoria' => 'EGRESOS DEVENGADO CAPITULO 4 REMANENTE EJERCIDO',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);

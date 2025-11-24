@@ -6,6 +6,10 @@ function seleccionCapitulo() {
     $('#input-archivo').prop('disabled', false);
 }
 
+function seleccionDocumentoFuente() {
+    $('#input-archivo').prop('disabled', false);
+}
+
 function cambioArchivo() {
     let archivo = document.getElementById('input-archivo')
     let nombreArchivo = ""

@@ -47,6 +47,7 @@ class IngresosRecaudadoTable extends Tabla
     {
         return [
             Column::make('area', 'Area'),
+            Column::make('documentoFuente', 'Documento fuente'),
             Column::make('partida', 'Partida'),
             Column::make('cuentaPago', 'Cuenta de pago'),
             Column::make('mes', 'Mes'),
@@ -71,7 +72,8 @@ class IngresosRecaudadoTable extends Tabla
                         'mes' => $registro['mes'],
                         'importe' => $registro['importe'],
                         'solvenciaPresupuestal' => $registro['solvenciaPresupuestal'],
-                        'solvenciaAbono' => $registro['solvenciaAbono']
+                        'solvenciaAbono' => $registro['solvenciaAbono'],
+                        'documentoFuente' => $registro['documentoFuente'],
                     ];
                     unset($this->dataCompleta[$key]);
                     $this->dataCompleta = array_values($this->dataCompleta);
@@ -212,6 +214,7 @@ class IngresosRecaudadoTable extends Tabla
                     'ppto' => $solvencia[0]->TotalDevengado,
                     'importe' => $registro['importe'],
                     'disponibilidad' => $totalDisponible,
+                    'documentoFuente' => $registro['documentoFuente'],
                 ];
     
                 array_push($this->cacheData, $nuevoRegistro);
@@ -373,6 +376,7 @@ class IngresosRecaudadoTable extends Tabla
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'INGRESOS RECAUDADO',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]
@@ -394,6 +398,7 @@ class IngresosRecaudadoTable extends Tabla
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'INGRESOS RECAUDADO',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);

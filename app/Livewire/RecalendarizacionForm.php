@@ -48,6 +48,9 @@ class RecalendarizacionForm extends Component
     #[Validate('required', message: 'Tipo de movimiento requerido')]
     public $movimiento = "";
 
+    #[Validate('required', message: 'Documento fuente requerido')]
+    public $documentoFuente = "";
+
     public $capitulo = '0';
     public $consulta = false;
     public $numeroEvento;
@@ -100,7 +103,8 @@ class RecalendarizacionForm extends Component
                 'afectacion' => $this->afectacion,
                 'solvencia' => $this->solvencia,
                 'importe' => $this->importe,
-                'movimiento' => $this->movimiento
+                'movimiento' => $this->movimiento,
+                'documentoFuente' => $this->documentoFuente
             ];
             if($registro['afectacion'] == "disminucion" && $registro['importe'] > $registro['solvencia']){
                 $this->dispatch('mostrarMensaje', mensaje: 'Solvencia insuficiente para una disminucion con ese importe', tipo: 'error', tiempo: 3000);
@@ -161,7 +165,7 @@ class RecalendarizacionForm extends Component
     }
 
     #[On('llenar-formulario')]
-    public function llenarFormulario ($areaResponsable, $cog, $mes, $movimiento, $solvencia, $afectacion, $importe) {
+    public function llenarFormulario ($areaResponsable, $cog, $mes, $movimiento, $solvencia, $afectacion, $importe, $documentoFuente) {
         $codigoAreaResponsable = explode(" ", $areaResponsable);
         $idAreaResponsable = CodigoDepartamento::where('Codigo_completo', '=', $codigoAreaResponsable[0])->value('id');
         $codigoCog = explode(" ", $cog);
@@ -185,6 +189,7 @@ class RecalendarizacionForm extends Component
         $this->importe = $importe;
         $this->solvencia = $solvencia;
         $this->movimiento = $movimientoMin;
+        $this->documentoFuente = $documentoFuente;
 
         $this->dispatch('llenarFormulario', areaResponsable: $areaResponsable, cog: $cog, mes: $mes,
                                             afectacion: $afectacion, solvencia: $solvencia, importe: $importe, movimiento: $movimiento);

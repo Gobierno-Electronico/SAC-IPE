@@ -24,8 +24,8 @@
             </div>
         </div>
         <livewire:recalendarizacion-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-        tipoMovimiento="PolizaAnticiposOtorgamiento" urlFinalizar="/deudores-otorgamiento-anticipo" tipoPoliza="D"
-        categoriaModulo='DEUDORES OTORGAMIENTO ANTICIPOS' />
+            tipoMovimiento="PolizaAnticiposOtorgamiento" urlFinalizar="/deudores-otorgamiento-anticipo" tipoPoliza="D"
+            categoriaModulo='DEUDORES OTORGAMIENTO ANTICIPOS' />
     @else
         <div>
             <label for="selectArea" class="form-label">Área solicitante</label>
@@ -55,8 +55,20 @@
         <div class="row">
             <div class="col-3">
 
-                <label for="selectCuenta" class="form-label">Cuenta</label>
-                <select name="selectCuenta" id="selectCuenta" class="form-select mb-3" wire:model.live="cuenta" wire:change="obtenerSolvencia">
+                <label for="selectDocumentoFuente" class="form-label mt-3">Documento fuente</label>
+                <select name="selectDocumentoFuente" id="selectDocumentoFuente" class="form-select"
+                    wire:model="documentoFuente">
+                    <option value="">Selecciona una opción...</option>
+                    @foreach (\App\Enums\DocumentosFuente::cases() as $documento)
+                        <option value="{{ $documento->value }}">
+                            {{ $documento->value === 'Memorandum' ? 'Memorándum' : $documento->value }}
+                        </option>
+                    @endforeach
+                </select>
+
+                <label for="selectCuenta" class="form-label mt-3">Cuenta</label>
+                <select name="selectCuenta" id="selectCuenta" class="form-select mb-3" wire:model.live="cuenta"
+                    wire:change="obtenerSolvencia">
                     <option value="" @if ($this->cuenta == '') selected @endif selected>Seleccionar
                         cuenta...</option>
                     @foreach ($cuentas as $cuenta)
@@ -70,7 +82,7 @@
                     wire:model="solvencia" disabled>
 
                 <label for="selectMes" class="form-label">Mes de afectación</label>
-                <select name="selectMes" id="selectMes" class="form-select mb-3" wire:model.live="mes" >
+                <select name="selectMes" id="selectMes" class="form-select mb-3" wire:model.live="mes">
                     <option value="" @if ($this->mes == '') selected @endif>Seleccionar mes...</option>
                     @foreach (range(1, 12) as $mes)
                         @php
@@ -80,7 +92,7 @@
                         </option>
                     @endforeach
                 </select>
-                         
+
                 <label for="inputImporte" class="form-label">Importe</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control mb-3"
                     wire:model.live="importe" onkeyup="validarDecimales(this)" onchange="formatearImporte(this)">

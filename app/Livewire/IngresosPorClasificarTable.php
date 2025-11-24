@@ -47,6 +47,7 @@ class IngresosPorClasificarTable extends Tabla
         return [
             Column::make('cuenta', 'Cuenta'),
             Column::make('descripcion', 'Descripción'),
+            Column::make('documentoFuente', 'Documento fuente'),
             Column::make('mes', 'Mes'),
             Column::make('importe', 'Importe')->component('columns.importe'),
             Column::make('id', 'Acciones')->component('columns.accionesIngresos')
@@ -63,7 +64,8 @@ class IngresosPorClasificarTable extends Tabla
                         'codigoCuenta' => $registro['cuenta'],
                         'descripcion' => $registro['descripcion'],
                         'mes' => $registro['mes'],
-                        'importe' => $registro['importe']
+                        'importe' => $registro['importe'],
+                        'documentoFuente' => $registro['documentoFuente'],
                     ];
     
                     unset($this->cacheData[$key]);
@@ -134,7 +136,8 @@ class IngresosPorClasificarTable extends Tabla
                 'cuenta' => $registro['codigoCuenta'],
                 'descripcion' => $registro['descripcionCuenta'],
                 'mes' => $registro['mes'],
-                'importe' => $registro['importe']
+                'importe' => $registro['importe'],
+                'documentoFuente' => $registro['documentoFuente'],
             ];
             array_push($this->cacheData, $nuevoRegistro);
             array_push($this->dataCompleta, $registro);
@@ -216,6 +219,7 @@ class IngresosPorClasificarTable extends Tabla
                     'validado' => false,
                     'estatus_evento' => EstatusEvento::ACTIVO->value,
                     'categoria' => 'INGRESOS POR CLASIFICAR',
+                    'documento_fuente' => $movimiento['documentoFuente'],
                     'created_at' => $fecha,
                     'updated_at' => $fecha
                 ]);
@@ -235,6 +239,7 @@ class IngresosPorClasificarTable extends Tabla
                     'validado' => false,
                     'estatus_evento' => EstatusEvento::ACTIVO->value,
                     'categoria' => 'INGRESOS POR CLASIFICAR',
+                    'documento_fuente' => $movimiento['documentoFuente'],
                     'created_at' => $fecha,
                     'updated_at' => $fecha
                 ]);

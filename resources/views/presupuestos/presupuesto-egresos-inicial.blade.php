@@ -4,7 +4,7 @@
 @section('content')
     <script src="{{ asset('js/Presupuesto/importarPresupuestoInicial.js') }}"></script>
     <x-download />
-     
+
     <button id="downloadButton" hidden></button>
     <div class="container mt-5">
 
@@ -45,7 +45,7 @@
             <form id="formImportarPresupuesto" action="/presupuesto/cargar-presupuesto-inicial-egresos" method="post"
                 enctype="multipart/form-data">
                 @csrf
-                <div class="mt-5">
+                <div class="mt-3">
                     <select class="select_presupuesto rounded-1 shadow-sm border-0 w-25" name="capitulo" id="capitulo"
                         onchange="seleccionCapitulo()">
                         @php
@@ -60,15 +60,20 @@
                         @endfor
                     </select>
                 </div>
-                <div class="mt-5">
+                <div class="mt-3">
+                     <select class="select_documentoFuente rounded-1 shadow-sm border-0 w-25" name="selectDocumentoFuente" id="selectDocumentoFuente" 
+                     onchange="seleccionDocumentoFuente()">
+                        <option selected disabled value="">Seleccione el documento fuente</option>
+                        @foreach (\App\Enums\DocumentosFuente::cases() as $documento)
+                            <option value="{{ $documento->value }}">
+                                {{ $documento->value === 'Memorandum' ? 'Memorándum' : $documento->value }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mt-3">
                     <input class="form-control" type="file" accept=".xlsx" name="input-archivo" id="input-archivo"
                         onchange="cambioArchivo()" disabled>
-                    {{-- <button type="button" onclick="document.getElementById('input-archivo').click()"
-                        class="btn btn-success ms-2 shadow border-0">
-                        <i class="fa-solid fa-file-arrow-up text-xl"></i>
-                        <span class="px-3">Agregar archivo</span>
-                    </button>
-                    <span class="ms-2" id="fieldName"></span> --}}
                 </div>
                 <div class="mt-5 d-flex justify-content-between">
                     <button type="button" onclick="descargarPlantilla(this, 'egresos')"

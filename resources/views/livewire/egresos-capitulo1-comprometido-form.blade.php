@@ -33,6 +33,17 @@
                 <label for="inputFechaAfectacion" class="form-label mt-3">Fecha de afectación</label>
                 <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control"
                     max="{{ now()->toDateString() }}" wire:model="fechaAfectacion">
+
+                <label for="selectDocumentoFuente" class="form-label mt-3">Documento fuente</label>
+                <select name="selectDocumentoFuente" id="selectDocumentoFuente" class="form-select"
+                    wire:model="documentoFuente">
+                    <option value="">Selecciona una opción...</option>
+                    @foreach (\App\Enums\DocumentosFuente::cases() as $documento)
+                        <option value="{{ $documento->value }}">
+                            {{ $documento->value === 'Memorandum' ? 'Memorándum' : $documento->value }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
             <div class="mt-5">

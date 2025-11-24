@@ -43,6 +43,9 @@ class EgresosCapitulo1EjercidoForm extends Component
     #[Validate('required', message: 'Monto del evento requerido')]  
     public $montoDelEvento = "";
 
+    #[Validate('required', message: 'Documento fuente requerido')]
+    public $documentoFuente = "";
+
     public $PTTODevengado = 0;
 
     public function render() 
@@ -182,6 +185,7 @@ class EgresosCapitulo1EjercidoForm extends Component
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS EJERCIDO CAPITULO 1',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]
@@ -206,6 +210,7 @@ class EgresosCapitulo1EjercidoForm extends Component
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS EJERCIDO CAPITULO 1',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]

@@ -45,6 +45,9 @@ class CobroEspecieForm extends Component
     #[Validate('required', message: 'Importe requerido')]
     public $importe = "";
 
+    #[Validate('required', message: 'Documento fuente requerido')]
+    public $documentoFuente = "";
+
     public $consultarRegistro = false;
     public $numeroPoliza;
     public $numeroPolizaRemanente;
@@ -135,7 +138,8 @@ class CobroEspecieForm extends Component
                 'descripcionCuenta' => $cuenta->Descripcion_cuenta,
                 'mes' => $this->mes,
                 'importe' => $this->importe,
-                'montoEvento' => $this->montoDelEvento
+                'montoEvento' => $this->montoDelEvento,
+                'documentoFuente' => $this->documentoFuente
             ];
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
@@ -162,6 +166,7 @@ class CobroEspecieForm extends Component
         $this->mes = $datosRegistro['mes'];
         $this->importe = $datosRegistro['importe'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
+        $this->documentoFuente = $datosRegistro['documentoFuente'];
         $this->dispatch('llenarFormulario', cuenta: $datosRegistro['cuenta'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe'], area: $datosRegistro['area']);
     }
 

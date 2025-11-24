@@ -34,6 +34,8 @@ class EgresosCapitulo1ComprometidoForm extends Component
     public $numeroPoliza;
     public $total;
     public $observaciones = '';
+    
+    public $documentoFuente = "";
 
     public function render()
     {
@@ -53,12 +55,15 @@ class EgresosCapitulo1ComprometidoForm extends Component
             $this->dispatch('mostrarCargando');
             $this->validate([
                 'archivo' => 'required|mimes:xlsx',
-                'fechaAfectacion' => 'required'
+                'fechaAfectacion' => 'required',
+                'documentoFuente' => 'required'
             ], [
                 'archivo.required' => "Debes seleccionar al menos un archivo.",
                 'archivo.mimes' => "El archivo debe ser de tipo XLSX.",
-                'fechaAfectacion.required' => "La fecha de afectación es requerida."
+                'fechaAfectacion.required' => "La fecha de afectación es requerida.",
+                'documentoFuente.required' => "El documento fuente es requerido."
             ]);
+
 
             $path = $this->archivo->store('temp');
             $filePath = storage_path('app/' . $path); // Ruta donde guardaste el archivo
@@ -225,6 +230,7 @@ class EgresosCapitulo1ComprometidoForm extends Component
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 1',
+                        'documento_fuente' => $this->documentoFuente,
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);
@@ -250,6 +256,7 @@ class EgresosCapitulo1ComprometidoForm extends Component
                             'validado' => false,
                             'estatus_evento' => EstatusEvento::ACTIVO->value,
                             'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 1',
+                            'documento_fuente' => $this->documentoFuente,
                             'created_at' => $fecha,
                             'updated_at' => $fecha
                         ]);

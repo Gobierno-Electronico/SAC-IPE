@@ -46,6 +46,9 @@ class EgresosCapitulo5EjercidoForm extends Component
     #[Validate('required', message: 'Monto del evento requerido')]
     public $montoDelEvento = "";
 
+    #[Validate('required', message: 'Documento fuente requerido')]
+    public $documentoFuente = "";
+
     public $consultarRegistro = false;
     public $numeroPoliza;
     public $numeroPolizaRemanente;
@@ -205,7 +208,8 @@ class EgresosCapitulo5EjercidoForm extends Component
                 'mes' => $this->mes,
                 'importe' => $this->importe,
                 'montoEvento' => $this->montoDelEvento,
-                'pttoDevengado' => $this->PTTODevengado
+                'pttoDevengado' => $this->PTTODevengado,
+                'documentoFuente' => $this->documentoFuente
             ];
 
             $this->dispatch('agregar-registro', registro: $registro);
@@ -241,6 +245,7 @@ class EgresosCapitulo5EjercidoForm extends Component
         $this->importe = $datosRegistro['importe'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->PTTODevengado = $datosRegistro['pttoDevengado'];
+        $this->documentoFuente = $datosRegistro['documentoFuente'];
         $this->dispatch('llenarFormulario', presupuesto: $this->PTTODevengado, importe: $this->importe);
     }
 

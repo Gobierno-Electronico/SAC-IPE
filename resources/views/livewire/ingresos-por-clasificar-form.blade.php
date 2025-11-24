@@ -14,8 +14,8 @@
                         </div>
                         <div>
                             <label for="inputObservaciones" class="col-md-12 col-form-label">{{ __('Total') }}</label>
-                            <input value="{{  '$' . number_format($total, 2, '.', ',')  }}" type="text" class="form-control" name="inputAumentado"
-                                disabled>
+                            <input value="{{ '$' . number_format($total, 2, '.', ',') }}" type="text"
+                                class="form-control" name="inputAumentado" disabled>
                         </div>
                     </div>
 
@@ -24,7 +24,8 @@
             </div>
         </div>
         <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaIngresosPorClasificar" urlFinalizar="/ingresos-por-clasificar" tipoPoliza="I" categoriaModulo='INGRESOS POR CLASIFICAR'/>
+            tipoMovimiento="PolizaIngresosPorClasificar" urlFinalizar="/ingresos-por-clasificar" tipoPoliza="I"
+            categoriaModulo='INGRESOS POR CLASIFICAR' />
     @else
         <div>
             <label for="selectArea" class="form-label">Área solicitante</label>
@@ -45,8 +46,8 @@
                 wire:model.live="observaciones">
 
             <label for="inputFechaRegistro" class="form-label mt-3">Fecha de afectación</label>
-            <input type="date" name="inputFechaRegistro" id="inputFechaRegistro" class="form-control mb-3" max="{{ now()->toDateString() }}"
-                wire:model.live="fechaAfectacion">
+            <input type="date" name="inputFechaRegistro" id="inputFechaRegistro" class="form-control mb-3"
+                max="{{ now()->toDateString() }}" wire:model.live="fechaAfectacion">
 
         </div>
 
@@ -71,6 +72,17 @@
                             $carbonMes = \Carbon\Carbon::createFromFormat('!m', $mes);
                         @endphp
                         <option value="{{ ucfirst($carbonMes->monthName) }}">{{ ucfirst($carbonMes->monthName) }}
+                        </option>
+                    @endforeach
+                </select>
+
+                <label for="selectDocumentoFuente" class="form-label">Documento fuente</label>
+                <select name="selectDocumentoFuente" id="selectDocumentoFuente" class="form-select mb-3"
+                    wire:model="documentoFuente">
+                    <option value="">Selecciona una opción...</option>
+                    @foreach (\App\Enums\DocumentosFuente::cases() as $documento)
+                        <option value="{{ $documento->value }}">
+                            {{ $documento->value === 'Memorandum' ? 'Memorándum' : $documento->value }}
                         </option>
                     @endforeach
                 </select>
@@ -102,9 +114,9 @@
     function validarDecimales(input) {
         // Obtener solo números y un punto decimal permitido
         let valor = input.value.replace(/[^0-9.]/g, '') // Elimina caracteres no numéricos
-                           .replace(/(\..*)\./g, '$1') // Evita más de un punto decimal
-                           .replace(/^0+(\d)/, '$1') // Elimina ceros iniciales
-                           .replace(/^(\d+)(\.\d{0,2})?.*$/, '$1$2'); // Máximo 2 decimales
+            .replace(/(\..*)\./g, '$1') // Evita más de un punto decimal
+            .replace(/^0+(\d)/, '$1') // Elimina ceros iniciales
+            .replace(/^(\d+)(\.\d{0,2})?.*$/, '$1$2'); // Máximo 2 decimales
 
         // Si el valor es solo un punto, permitirlo sin formatear
         if (valor === ".") {

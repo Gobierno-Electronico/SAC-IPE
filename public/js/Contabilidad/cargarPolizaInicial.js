@@ -14,6 +14,10 @@ function cambioArchivo() {
     $("#fieldName").html(nombreArchivo);
 }
 
+function seleccionDocumentoFuente() {
+    $('#input-archivo').prop('disabled', false);
+}
+
 function descargarPlantilla(btn) {
     let btnId = btn.id; //obtenemos el id del boton
     let btnHtml = $('#' + btnId + '').html(); //obtenemos el contenido html de mi boton

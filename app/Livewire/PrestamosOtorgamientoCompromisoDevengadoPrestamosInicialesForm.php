@@ -45,6 +45,9 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesForm extends Com
     #[Validate('required', message: 'Presupuesto por ejecutar requerido')]
     public $PTTOEjecutar = 0;
 
+    #[Validate('required', message: 'Documento fuente requerido')]
+    public $documentoFuente = "";
+
     public $consultarRegistro = false;
     public $cambiarCuentaContableSeleccionada = true;
     public $numeroEvento;
@@ -175,7 +178,8 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesForm extends Com
                 'mes' => $this->mes,
                 'importe' => $this->importe,
                 'importeAbono' => $this->importeAbono,
-                'pttoEjecutar' => $this->PTTOEjecutar
+                'pttoEjecutar' => $this->PTTOEjecutar,
+                'documentoFuente' => $this->documentoFuente
             ];
 
             $this->dispatch('agregar-registro', registro: $registro);
@@ -214,6 +218,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesForm extends Com
         $this->importeAbono = $datosRegistro['importeAbono'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->PTTOEjecutar = $datosRegistro['pttoEjecutar'];
+        $this->documentoFuente = $datosRegistro['documentoFuente'];
         $this->dispatch('llenarFormulario', presupuesto: $this->PTTOEjecutar, importe: $this->importe, importeAbono: $this->importeAbono);
     }
 

@@ -14,8 +14,8 @@
                         </div>
                         <div>
                             <label for="inputObservaciones" class="col-md-12 col-form-label">{{ __('Total') }}</label>
-                            <input value="{{  '$' . number_format($total, 2, '.', ',')  }}" type="text" class="form-control" name="inputAumentado"
-                                disabled>
+                            <input value="{{ '$' . number_format($total, 2, '.', ',') }}" type="text"
+                                class="form-control" name="inputAumentado" disabled>
                         </div>
                     </div>
 
@@ -25,8 +25,9 @@
             </div>
         </div>
         <livewire:egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaEgresosEjercidoCapitulo4" urlFinalizar="/capitulo4-ejercido" :$numeroPolizaRemanente tipoPoliza="E"
-            categoriaModulo='EGRESOS EJERCIDO CAPITULO 4' categoriaRemanente='EGRESOS DEVENGADO CAPITULO 4 REMANENTE EJERCIDO'/>
+            tipoMovimiento="PolizaEgresosEjercidoCapitulo4" urlFinalizar="/capitulo4-ejercido" :$numeroPolizaRemanente
+            tipoPoliza="E" categoriaModulo='EGRESOS EJERCIDO CAPITULO 4'
+            categoriaRemanente='EGRESOS DEVENGADO CAPITULO 4 REMANENTE EJERCIDO' />
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
@@ -48,20 +49,21 @@
             wire:model="observaciones">
 
         <label for="inputFechaAfectacion" class="form-label mt-3">Fecha de afectación</label>
-        <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control" max="{{ now()->toDateString() }}"
-            wire:model="fechaAfectacion">
+        <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control"
+            max="{{ now()->toDateString() }}" wire:model="fechaAfectacion">
 
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
         <div class="row">
             <div class="col-3">
                 <label for="inputSeguimientoEvento" class="form-label mt-3">Número de seguimiento de evento</label>
-                <select name="selectSeguimientoEvento" id="selectSeguimientoEvento" class="form-select" wire:model="numeroEvento" wire:change="cambioEvento">
+                <select name="selectSeguimientoEvento" id="selectSeguimientoEvento" class="form-select"
+                    wire:model="numeroEvento" wire:change="cambioEvento">
                     <option value="" disabled>
                         Seleccionar un evento
                     </option>
                     @foreach ($eventos as $evento => $descripcion)
                         <option value="{{ $evento }}">
-                           {{ $evento }} - {{$descripcion}}
+                            {{ $evento }} - {{ $descripcion }}
                         </option>
                     @endforeach
                 </select>
@@ -81,17 +83,30 @@
                     @endforeach
                 </select>
 
+                <label for="selectDocumentoFuente" class="form-label mt-3">Documento fuente</label>
+                <select name="selectDocumentoFuente" id="selectDocumentoFuente" class="form-select"
+                    wire:model="documentoFuente">
+                    <option value="">Selecciona una opción...</option>
+                    @foreach (\App\Enums\DocumentosFuente::cases() as $documento)
+                        <option value="{{ $documento->value }}">
+                            {{ $documento->value === 'Memorandum' ? 'Memorándum' : $documento->value }}
+                        </option>
+                    @endforeach
+                </select>
+
                 <label for="selectCuenta" class="form-label mt-3">Cuenta</label>
-                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta" wire:change="cargarPresupuestoDevengado">
+                <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta"
+                    wire:change="cargarPresupuestoDevengado">
                     <option value="" disabled>Seleccionar cuenta</option>
                     @foreach ($partidasPresupuestales->sortBy('Codigo_cuenta') as $partida)
-                    <option value="{{ $partida->cuenta_id }}">
-                        {{ $partida->Codigo_cuenta . '  ' . $partida->Descripcion_cuenta }}</option>
+                        <option value="{{ $partida->cuenta_id }}">
+                            {{ $partida->Codigo_cuenta . '  ' . $partida->Descripcion_cuenta }}</option>
                     @endforeach
                 </select>
 
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
-                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes" wire:change="cargarPresupuestoDevengado">
+                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes"
+                    wire:change="cargarPresupuestoDevengado">
                     <option value="" selected disabled>Seleccionar mes...</option>
                     @foreach (range(1, 12) as $mes)
                         @php
@@ -106,7 +121,8 @@
                 <input type="text" name="inputMontoEvento" id="inputMontoEvento" class="form-control" disabled>
 
                 <label for="inputPTTODevengado" class="form-label mt-3">Presupuesto devengado</label>
-                <input type="text" name="inputPTTODevengado" id="inputPTTODevengado" class="form-control" disabled>
+                <input type="text" name="inputPTTODevengado" id="inputPTTODevengado" class="form-control"
+                    disabled>
 
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control"
@@ -115,7 +131,7 @@
 
             <div class="col">
                 <livewire:egresos-capitulo4-ejercido-table />
-            </div> 
+            </div>
 
             <div class="row mt-4">
                 <div class="col">
@@ -144,9 +160,9 @@
     function validarDecimales(input) {
         // Obtener solo números y un punto decimal permitido
         let valor = input.value.replace(/[^0-9.]/g, '') // Elimina caracteres no numéricos
-                           .replace(/(\..*)\./g, '$1') // Evita más de un punto decimal
-                           .replace(/^0+(\d)/, '$1') // Elimina ceros iniciales
-                           .replace(/^(\d+)(\.\d{0,2})?.*$/, '$1$2'); // Máximo 2 decimales
+            .replace(/(\..*)\./g, '$1') // Evita más de un punto decimal
+            .replace(/^0+(\d)/, '$1') // Elimina ceros iniciales
+            .replace(/^(\d+)(\.\d{0,2})?.*$/, '$1$2'); // Máximo 2 decimales
 
         // Si el valor es solo un punto, permitirlo sin formatear
         if (valor === ".") {

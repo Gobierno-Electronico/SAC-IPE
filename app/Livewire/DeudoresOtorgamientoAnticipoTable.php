@@ -47,6 +47,7 @@ class DeudoresOtorgamientoAnticipoTable extends Tabla
     {
         return [
             Column::make('cuenta', 'Cuenta'),
+            Column::make('documentoFuente', 'Documento fuente'),
             Column::make('mes', 'Mes'),
             Column::make('importe', 'Importe')->component('columns.importe'),
             Column::make('disponibilidad', 'Disponibilidad')->component('columns.importe'),
@@ -64,7 +65,8 @@ class DeudoresOtorgamientoAnticipoTable extends Tabla
                         'cuenta' => $registro['idCuenta'],
                         'mes' => $registro['mes'],
                         'importe' => $registro['importe'],
-                        'solvencia' => $registro['solvencia']
+                        'solvencia' => $registro['solvencia'],
+                        'documentoFuente' => $registro['documentoFuente'],
                     ];
                     unset($this->dataCompleta[$key]);
                     $this->dataCompleta = array_values($this->dataCompleta);
@@ -164,7 +166,8 @@ class DeudoresOtorgamientoAnticipoTable extends Tabla
                     'movimiento' => 'DEUDORES OTORGAMIENTO ANTICIPO',
                     'importe' => $registro['importe'],
                     'solvencia' => $registro['solvencia'],
-                    'disponibilidad' => $this->totalDisponible
+                    'disponibilidad' => $this->totalDisponible,
+                    'documentoFuente' => $registro['documentoFuente'],
                 ]; 
     
                 array_push($this->cacheData, $nuevoRegistro);
@@ -271,6 +274,7 @@ class DeudoresOtorgamientoAnticipoTable extends Tabla
                     'validado' => false,
                     'estatus_evento' => EstatusEvento::ACTIVO->value,
                     'categoria' => 'DEUDORES OTORGAMIENTO ANTICIPOS',
+                    'documento_fuente' => $movimiento['documentoFuente'],
                     'created_at' => $fecha,
                     'updated_at' => $fecha
                 ]);
@@ -292,6 +296,7 @@ class DeudoresOtorgamientoAnticipoTable extends Tabla
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'DEUDORES OTORGAMIENTO ANTICIPOS',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);

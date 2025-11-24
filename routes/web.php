@@ -116,6 +116,8 @@ Route::post('/contabilidad/cargar-poliza-inicial', [ContabilidadController::clas
 Route::get('/contabilidad/registro-poliza-diario', [ContabilidadController::class, 'registroPolizaDiario'])->name('registroPolizaDiario')->middleware('can:acceso-contabilidad-consultar-carga');
 Route::get("/movimientos-diario", [ContabilidadController::class, 'movimientosDiario'])->name('movimientosDiario')->middleware('can:acceso-contabilidad-consultar-carga');
 Route::get("/movimientos-deudores", [ContabilidadController::class, 'movimientosDeudores'])->name('movimientosDeudores')->middleware('can:acceso-contabilidad-consultar-carga');
+Route::get('/contabilidad/auxiliares', [ContabilidadController::class, 'auxiliares'])->name('auxiliares')->middleware('can:acceso-contabilidad-consultar-carga');
+Route::post('/contabilidad/cargar-auxiliares', [ContabilidadController::class, 'registrarAuxiliares'])->name('registrarAuxiliares')->middleware('can:acceso-contabilidad-consultar-carga');
 
 //Tipos de presupuesto
 Route::get("/tiposPresupuesto", [PresupuestoController::class, 'tiposPresupuesto'])->name('tiposPresupuesto')->middleware('can:acceso-presupuesto');
@@ -173,6 +175,8 @@ Route::get("/capitulo7-otorgamiento-ejercido-pagado-recaudado-prestamosRenovacio
 Route::get("/capitulo7-recuperacion-recaudado-prestamosIniciales", [PrestamosController::class, 'capitulo7RecaudadoPrestamosIniciales'])->name('capitulo7RecaudadoPrestamosIniciales')->middleware('role:Administrador');
 Route::get("/capitulo7-recuperacion-recaudado-prestamosRenovacion", [PrestamosController::class, 'capitulo7RecaudadoPrestamosRenovacion'])->name('capitulo7RecaudadoPrestamosRenovacion')->middleware('role:Administrador');
 Route::get("/movimientos-prestamos", [PrestamosController::class, 'consultarMovimientos'])->name('movimientosPrestamos')->middleware('role:Administrador');
+
+Route::get("/capitulo7-recuperacion-ejercicios-anteriores", [PrestamosController::class, 'capitulo7RecuperacionEjerciciosAnteriores'])->name('capitulo7RecuperacionEjerciciosAnteriores')->middleware('role:Administrador');
 
 //Deudores
 Route::get("/deudores-otorgamiento-anticipo", [DeudoresController::class, 'otorgamientoAnticipo'])->name('otorgamientoAnticipo')->middleware('role:Administrador');
