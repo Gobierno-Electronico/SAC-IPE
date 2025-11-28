@@ -135,7 +135,7 @@
                                                 onclick="mostrarCargando()" role="button">
                                                 {{ __('Clasificador Rubro Ingreso') }}
                                             </a>
-                                        </li>       
+                                        </li>
 
                                         <li class="dropdown dropend">
                                             <a href="#" class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
@@ -325,6 +325,18 @@
                                                     <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                                         href="{{ route('estadoCuenta') }}" method="GET">
                                                         {{ __('Estado de cuenta') }}
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                        href="{{ route('estadoActividades') }}" method="GET">
+                                                        {{ __('Estado de actividades') }}
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                        href="{{ route('estadoSituacionFinanciera') }}" method="GET">
+                                                        {{ __('Estado de de situación financiera') }}
                                                     </a>
                                                 </li>
                                             </ul>
@@ -691,8 +703,8 @@
                                     <ul class="dropdown-menu">
                                         <li>
                                             <a class="dropdown-item"
-                                                href="{{ route('capitulo7RecaudadoPrestamosIniciales') }}" method="GET"
-                                                onclick="mostrarCargando()">
+                                                href="{{ route('capitulo7RecaudadoPrestamosIniciales') }}"
+                                                method="GET" onclick="mostrarCargando()">
                                                 Préstamos Iniciales
                                             </a>
                                         </li>
@@ -707,7 +719,8 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('capitulo7RecuperacionEjerciciosAnteriores') }}" method="GET"
+                                    <a class="dropdown-item"
+                                        href="{{ route('capitulo7RecuperacionEjerciciosAnteriores') }}" method="GET"
                                         onclick="mostrarCargando()">
                                         Recuperación de ejercicios anteriores
                                     </a>
