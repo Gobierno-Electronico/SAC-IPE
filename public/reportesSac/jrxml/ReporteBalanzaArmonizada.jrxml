@@ -11,7 +11,7 @@
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SAC-IPE Tierra"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SAC-IPE Venus"/>
 	<property name="com.jaspersoft.studio.report.description" value=""/>
 	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
 	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
@@ -31,7 +31,10 @@
 	<parameter name="FechaFin" class="java.lang.String"/>
 	<parameter name="SubtituloFechas" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[EXEC dbo.ReporteBalanzaArmonizada @FechaInicio = $P{FechaInicio}, @FechaFin = $P{FechaFin}]]>
+		<![CDATA[EXEC dbo.ReporteBalanzaArmonizada 
+    @FechaInicio = $P{FechaInicio},
+    @FechaFin = $P{FechaFin}
+]]>
 	</queryString>
 	<field name="Codigo_cuenta" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="Codigo_cuenta"/>
