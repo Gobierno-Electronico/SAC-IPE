@@ -123,7 +123,6 @@ class EgresosCapitulo5ComprometidoForm extends Component
     {
         $this->dispatch('finalizar-registros');
     }
-    #[On('limpiar')]
     public function limpiar()
     {
         $this->cuenta = "";
