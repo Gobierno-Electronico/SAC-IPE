@@ -41,6 +41,10 @@ class ReportesController extends Controller
         return view('reportes.estadoSituacionFinanciera');
     }
 
+    public function estadoCambiosSituacionFinanciera()
+    {
+        return view('reportes.estadoCambiosSituacionFinanciera');
+    }
 
 
     public function mostrarClasificadores($tipo)
