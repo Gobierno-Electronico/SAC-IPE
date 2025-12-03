@@ -50,6 +50,9 @@ class EgresosCapitulo4EjercidoForm extends Component
 
     #[Validate('required', message: 'Importe requerido')]
     public $importe;
+    
+    #[Validate('required', message: 'Documento fuente requerido')]
+    public $documentoFuente = "";
 
     public $cambiarCuentaSeleccionada = true;
     public $partidasPresupuestales = [];
@@ -208,7 +211,8 @@ class EgresosCapitulo4EjercidoForm extends Component
                 'mes' => $this->mes,
                 'importe' => $this->importe,
                 'montoEvento' => $this->montoDelEvento,
-                'pttoDevengado' => $this->PTTODevengado
+                'pttoDevengado' => $this->PTTODevengado,
+                'documentoFuente' => $this->documentoFuente
             ];
 
             $this->dispatch('agregar-registro', registro: $registro);
@@ -239,6 +243,7 @@ class EgresosCapitulo4EjercidoForm extends Component
         $this->importe = $datosRegistro['importe'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->PTTODevengado = $datosRegistro['pttoDevengado'];
+        $this->documentoFuente = $datosRegistro['documentoFuente'];
         $this->dispatch('llenarFormulario', presupuesto: $this->PTTODevengado, importe: $this->importe);
     }
 

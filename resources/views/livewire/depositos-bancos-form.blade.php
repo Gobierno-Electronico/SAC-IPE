@@ -27,7 +27,8 @@
                 </div>
             </div>
             <livewire:ingresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-                tipoMovimiento="PolizaIngresosDepositosEnBancos" categoriaModulo='INGRESOS DEPOSITOS EN BANCOS' urlFinalizar="/depositos-bancos" tipoPoliza="I" />
+                tipoMovimiento="PolizaIngresosDepositosEnBancos" categoriaModulo='INGRESOS DEPOSITOS EN BANCOS'
+                urlFinalizar="/depositos-bancos" tipoPoliza="I" />
         @else
             <div>
                 <label for="selectArea" class="form-label">Área solicitante</label>
@@ -78,9 +79,21 @@
                         @endforeach
                     </select>
 
+                    <label for="selectDocumentoFuente" class="form-label">Documento fuente</label>
+                    <select name="selectDocumentoFuente" id="selectDocumentoFuente" class="form-select mb-3"
+                        wire:model="documentoFuente">
+                        <option value="">Selecciona una opción...</option>
+                        @foreach (\App\Enums\DocumentosFuente::cases() as $documento)
+                            <option value="{{ $documento->value }}">
+                                {{ $documento->value === 'Memorandum' ? 'Memorándum' : $documento->value }}
+                            </option>
+                        @endforeach
+                    </select>
+
                     <label for="inputSolvenciaCajaGeneral" class="form-label">Solvencia caja general</label>
                     <input type="text" name="inputSolvenciaCajaGeneral" id="inputSolvenciaCajaGeneral"
-                        class="form-control mb-3" value="{{ '$' . number_format($solvenciaCajaGeneral, 2, '.', ',') }}" disabled>
+                        class="form-control mb-3" value="{{ '$' . number_format($solvenciaCajaGeneral, 2, '.', ',') }}"
+                        disabled>
 
                     <label for="inputImporte" class="form-label">Importe</label>
                     <input type="text" name="inputImporte" id="inputImporte" class="form-control mb-3"

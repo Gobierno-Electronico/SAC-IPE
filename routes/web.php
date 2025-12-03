@@ -108,6 +108,10 @@ Route::get('/diario', [ReportesController::class, 'diario'])->name('libroDiario'
 //Estado de cuenta
 Route::get('/estado-cuenta', [ReportesController::class, 'estadoCuenta'])->name('estadoCuenta')->middleware('can:acceso-contabilidad-reportes');
 
+//Estados financieros
+Route::get('/estado-actividades', [ReportesController::class, 'estadoActividades'])->name('estadoActividades')->middleware('can:acceso-contabilidad-reportes');
+Route::get('/estado-situacion-financiera', [ReportesController::class, 'estadoSituacionFinanciera'])->name('estadoSituacionFinanciera')->middleware('can:acceso-contabilidad-reportes');
+
 //Carga contabilidad
 Route::get('/contabilidad/poliza-inicial', [ContabilidadController::class, 'polizaInicial'])->name('polizaInicial')->middleware('can:acceso-contabilidad-consultar-carga');
 Route::get('/contabilidad/plantilla-poliza-inicial', [ContabilidadController::class, 'plantillaPolizaInicial'])->name('plantillaActivos')->middleware('can:acceso-contabilidad-consultar-carga');
@@ -116,6 +120,9 @@ Route::post('/contabilidad/cargar-poliza-inicial', [ContabilidadController::clas
 Route::get('/contabilidad/registro-poliza-diario', [ContabilidadController::class, 'registroPolizaDiario'])->name('registroPolizaDiario')->middleware('can:acceso-contabilidad-consultar-carga');
 Route::get("/movimientos-diario", [ContabilidadController::class, 'movimientosDiario'])->name('movimientosDiario')->middleware('can:acceso-contabilidad-consultar-carga');
 Route::get("/movimientos-deudores", [ContabilidadController::class, 'movimientosDeudores'])->name('movimientosDeudores')->middleware('can:acceso-contabilidad-consultar-carga');
+Route::get('/contabilidad/auxiliares', [ContabilidadController::class, 'auxiliares'])->name('auxiliares')->middleware('can:acceso-contabilidad-consultar-carga');
+Route::post('/contabilidad/cargar-auxiliares', [ContabilidadController::class, 'registrarAuxiliares'])->name('registrarAuxiliares')->middleware('can:acceso-contabilidad-consultar-carga');
+Route::get('/contabilidad/plantilla-auxiliares', [ContabilidadController::class, 'plantillaAuxiliares'])->name('plantillaAuxiliares')->middleware('can:acceso-contabilidad-consultar-carga');
 
 //Tipos de presupuesto
 Route::get("/tiposPresupuesto", [PresupuestoController::class, 'tiposPresupuesto'])->name('tiposPresupuesto')->middleware('can:acceso-presupuesto');
@@ -173,6 +180,8 @@ Route::get("/capitulo7-otorgamiento-ejercido-pagado-recaudado-prestamosRenovacio
 Route::get("/capitulo7-recuperacion-recaudado-prestamosIniciales", [PrestamosController::class, 'capitulo7RecaudadoPrestamosIniciales'])->name('capitulo7RecaudadoPrestamosIniciales')->middleware('role:Administrador');
 Route::get("/capitulo7-recuperacion-recaudado-prestamosRenovacion", [PrestamosController::class, 'capitulo7RecaudadoPrestamosRenovacion'])->name('capitulo7RecaudadoPrestamosRenovacion')->middleware('role:Administrador');
 Route::get("/movimientos-prestamos", [PrestamosController::class, 'consultarMovimientos'])->name('movimientosPrestamos')->middleware('role:Administrador');
+
+Route::get("/capitulo7-recuperacion-ejercicios-anteriores", [PrestamosController::class, 'capitulo7RecuperacionEjerciciosAnteriores'])->name('capitulo7RecuperacionEjerciciosAnteriores')->middleware('role:Administrador');
 
 //Deudores
 Route::get("/deudores-otorgamiento-anticipo", [DeudoresController::class, 'otorgamientoAnticipo'])->name('otorgamientoAnticipo')->middleware('role:Administrador');

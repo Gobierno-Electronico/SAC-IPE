@@ -49,6 +49,7 @@ class DeudoresReintegroAnticipoTable extends Tabla
     {
         return [
             Column::make('cuenta', 'Cuenta'),
+            Column::make('documentoFuente', 'Documento fuente'),
             Column::make('cuentaCargo', 'Cuenta Cargo'),
             Column::make('mes', 'Mes'),
             Column::make('importe', 'Importe')->component('columns.importe'),
@@ -68,7 +69,8 @@ class DeudoresReintegroAnticipoTable extends Tabla
                         'cuentaCargo' => $registro['idCuentaCargo'],
                         'mes' => $registro['mes'],
                         'importe' => $registro['importe'],
-                        'solvencia' => $registro['ppto']
+                        'solvencia' => $registro['ppto'],
+                        'documentoFuente' => $registro['documentoFuente'],
                     ];
                     unset($this->dataCompleta[$key]);
                     $this->dataCompleta = array_values($this->dataCompleta);
@@ -164,7 +166,8 @@ class DeudoresReintegroAnticipoTable extends Tabla
                     'movimiento' => 'DEUDORES REINTEGRO ANTICIPO',
                     'importe' => $registro['importe'],
                     'solvencia' => $registro['ppto'],
-                    'disponibilidad' => $this->totalDisponible
+                    'disponibilidad' => $this->totalDisponible,
+                    'documentoFuente' => $registro['documentoFuente'],
                 ];
 
                 array_push($this->cacheData, $nuevoRegistro);
@@ -278,6 +281,7 @@ class DeudoresReintegroAnticipoTable extends Tabla
                     'validado' => false,
                     'estatus_evento' => EstatusEvento::ACTIVO->value,
                     'categoria' => 'DEUDORES REINTEGRO ANTICIPOS',
+                    'documento_fuente' => $movimiento['documentoFuente'],
                     'created_at' => $fecha,
                     'updated_at' => $fecha
                 ]);
@@ -300,6 +304,7 @@ class DeudoresReintegroAnticipoTable extends Tabla
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'DEUDORES REINTEGRO ANTICIPOS',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);

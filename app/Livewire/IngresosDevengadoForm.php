@@ -28,6 +28,9 @@ class IngresosDevengadoForm extends Component
     #[Validate('required', message: 'Área responsable requerida')]
     public $selectCodigoAreaResponsable = "";
 
+    #[Validate('required', message: 'Documento fuente requerido')]
+    public $documentoFuente = "";
+
     #[Validate('required', message: 'Cuenta requerida')]
     public $cuenta = "";
 
@@ -102,6 +105,7 @@ class IngresosDevengadoForm extends Component
                 'pttoEjecutar' => $this->PTTOEjecutar,
                 'iva' => $this->causaIva,
                 'agregarIVA' => $this->agregarIVA,
+                'documentoFuente' => $this->documentoFuente
             ];
 
             $this->dispatch('agregar-registro', registro: $registro);
@@ -201,6 +205,7 @@ class IngresosDevengadoForm extends Component
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->PTTOEjecutar = $datosRegistro['ejecutar'];
         $this->agregarIVA = $datosRegistro['agregarIVA'];
+        $this->documentoFuente = $datosRegistro['documentoFuente'];
         $this->verificarCausaIVA();
         $this->dispatch('llenarFormulario', presupuesto: $this->PTTOEjecutar, iva: $this->causaIva, importe: $this->importe);
     }

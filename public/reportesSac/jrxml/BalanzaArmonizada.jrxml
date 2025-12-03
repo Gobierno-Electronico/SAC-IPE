@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.20.5.final using JasperReports Library version 6.20.5-3efcf2e67f959db3888d79f73dde2dbd7acb4f8e  -->
+<!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BalanzaArmonizada" pageWidth="1747" pageHeight="595" orientation="Landscape" columnWidth="1707" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="283f1541-42d6-4d73-8f29-0a6c9605635e">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SQL Server Nueva"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SAC-IPE VENUS"/>
 	<parameter name="Anio" class="java.lang.String"/>
 	<parameter name="Grupo" class="java.lang.String"/>
 	<parameter name="Tipo" class="java.lang.String"/>
@@ -10,7 +10,7 @@
 	<parameter name="Hora" class="java.lang.String"/>
 	<parameter name="Numero" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[EXEC BalanzaArmonizada @Anio =   $P{Anio} , @Grupo =  $P{Grupo} ]]>
+		<![CDATA[EXEC BalanzaArmonizada @Anio =   $P{Anio} , @Grupo =  $P{Grupo}]]>
 	</queryString>
 	<field name="Codigo_cuenta" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="Codigo_cuenta"/>

@@ -42,6 +42,7 @@ class AfectacionesIngresosForm extends Component
     public $codigoCuentaAbonoEgreso = '';
 
     public $observaciones = "";
+    public $documentoFuente = "";
     public $consulta = false;
     public $registros = [];
     public $selectCodigoOG = '';
@@ -316,9 +317,10 @@ class AfectacionesIngresosForm extends Component
                         'mes' => $mes['mes'],
                         'descripcion' => $this->observaciones,
                         'evento' => $this->numeroEvento,
-                        'tipo_interaccion' => $mes['tipo_interaccion'] == 'Presupuestal - Abono' ? 'Abono' : 'Cargo',
+                        'tipo_interaccion' => $mes['tipo_interaccion'] == 'Presupuestal - Abono' ? 'Presupuestal - Abono' : 'Presupuestal - Cargo',
                         'validado' => false,
                         'categoria' => ($this->tipo == "Ampliación") ? 'AMPLIACION ' . $this->estado : 'REDUCCION ' . $this->estado,
+                        'documento_fuente' => $this->documentoFuente,
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);
@@ -334,9 +336,10 @@ class AfectacionesIngresosForm extends Component
                         'mes' => $mes['mes'],
                         'descripcion' => $this->observaciones,
                         'evento' => $this->numeroEvento,
-                        'tipo_interaccion' => $mes['tipo_interaccion'] == 'Presupuestal - Abono' ? 'Cargo' : 'Abono',
+                        'tipo_interaccion' => $mes['tipo_interaccion'] == 'Presupuestal - Abono' ? 'Presupuestal - Cargo' : 'Presupuestal - Abono',
                         'validado' => false,
                         'categoria' => ($this->tipo == "Ampliación") ? 'AMPLIACION ' . $this->estado : 'REDUCCION ' . $this->estado,
+                        'documento_fuente' => $this->documentoFuente,
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);

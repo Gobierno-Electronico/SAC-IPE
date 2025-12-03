@@ -11,10 +11,12 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Poliza;
 use Illuminate\Support\Carbon;
 use App\Models\Cuenta;
+use App\Models\Auxiliar;
 use Illuminate\Support\Facades\Auth;
 
 class ContabilidadController extends Controller
 {
+    private $documentoFuente = "";
 
     public function __construct()
     {
@@ -46,20 +48,26 @@ class ContabilidadController extends Controller
         return view('contabilidad.consulta-poliza-inicial');
     }
 
+    public function auxiliares()
+    {
+        return view('contabilidad.carga-auxiliares');
+    }
+
     public function cargarPolizaInicial(Request $request)
     {
         $validator = Validator::make(request()->all(), [
             'input-archivo' => 'required',
-            'input-archivo.*' => 'mimes:xlsx'
+            'input-archivo.*' => 'mimes:xlsx',
+            'selectDocumentoFuente' => 'required'
         ]);
         if ($validator->fails()) {
             $errors = array_merge(...array_values($validator->errors()->messages()));
-            session()->flash('message', 'El archivo seleccionado no es un Excel o no se pudo procesar');
+            session()->flash('message', implode(" ", $errors));
             session()->flash('message_type', 'error');
             return back();
         }
         $archivo = $request->file('input-archivo');
-
+        $this->documentoFuente = $request->get('selectDocumentoFuente');
         // Validar que el archivo pueda ser analizado correctamente.
         if ($xlsx = SimpleXLSX::parse($archivo)) {
             // Validar que los encabezados coincidan con los campos esperados.
@@ -300,9 +308,10 @@ class ContabilidadController extends Controller
             'mes' => 'Enero',
             'descripcion' => 'CARGA DE SALDOS INICIALES DEL EJERCICIO ' . $anioActual,
             'evento' => $numeroEvento,
-            'tipo_interaccion' => $row['Cargo'] != '' ? 'Cargo' : 'Abono',
+            'tipo_interaccion' => $row['Cargo'] != '' ? 'Contable - Cargo' : 'Contable - Abono',
             'validado' => false,
             'categoria' => 'SALDO INICIAL',
+            'documento_fuente' => $this->documentoFuente,
             'created_at' => $fecha,
             'updated_at' => $fecha
         ]);
@@ -319,6 +328,167 @@ class ContabilidadController extends Controller
             $usuariosController = new BitacoraController();
             $usuariosController->bitacora('plantillaPolizaInicial', 'descargó la plantilla de carga de poliza inicial', request());
             return response()->download($rutaArchivo, 'Formato carga poliza inicial.xlsx', [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            ]);
+        } else {
+            abort(404);
+        }
+    }
+
+    public function registrarAuxiliares(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'input-archivo' => 'required|mimes:xlsx,xls',
+            'anio'    => 'required|numeric'
+        ]);
+
+        if ($validator->fails()) {
+            session()->flash('message', implode(" ", $validator->errors()->all()));
+            session()->flash('message_type', 'error');
+            return back();
+        }
+
+        $anio = $request->anio;
+
+        $existenDelAnio = Auxiliar::where('anio', $anio)->exists();
+
+        if ($existenDelAnio) {
+            session()->flash('message', "Ya existen auxiliares registrados para el año {$anio}. No es posible importar nuevamente.");
+            session()->flash('message_type', 'error');
+            return back();
+        }
+
+        $archivo = $request->file('input-archivo');
+
+        if (!$xlsx = SimpleXLSX::parse($archivo)) {
+            session()->flash('message', 'Error al leer el archivo: ' . SimpleXLSX::parseError());
+            session()->flash('message_type', 'error');
+            return back();
+        }
+
+        $encabezadosEsperados = [
+            "Cuenta", "Descripción", "Enero", "Febrero", "Marzo", "Abril",
+            "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
+            "Noviembre", "Diciembre"
+        ];
+
+        $encabezados = array_map('trim', $xlsx->rows()[0]);
+
+        if ($encabezados != $encabezadosEsperados) {
+            session()->flash('message', 'Los encabezados del archivo no coinciden con el formato esperado.');
+            session()->flash('message_type', 'error');
+            return back();
+        }
+
+        $mesesMap = [
+            "Enero" => 2, "Febrero" => 3, "Marzo" => 4, "Abril" => 5,
+            "Mayo" => 6, "Junio" => 7, "Julio" => 8, "Agosto" => 9,
+            "Septiembre" => 10, "Octubre" => 11, "Noviembre" => 12, "Diciembre" => 13
+        ];
+
+        $cuentasFaltantesPlanCuentas = [];
+
+        DB::beginTransaction();
+
+        try {
+
+            foreach ($xlsx->rows() as $i => $fila) {
+
+                if ($i == 0) continue;
+
+                $codigo = trim($fila[0]);
+                $descripcion = trim($fila[1]);
+
+                $existeCuenta = Cuenta::where("Codigo_cuenta", $codigo)->first();
+
+                if (!$existeCuenta) {
+
+                    if (!in_array($codigo, array_column($cuentasFaltantesPlanCuentas, 'Codigo_cuenta'))) {
+                        $cuentasFaltantesPlanCuentas[] = [
+                            "Codigo_cuenta" => $codigo,
+                            "Descripcion_cuenta" => $descripcion
+                        ];
+                    }
+
+                    continue;
+                }
+
+                foreach ($mesesMap as $nombreMes => $colIndex) {
+
+                    $valor = $fila[$colIndex] ?? 0;
+                    $valor = str_replace(['.', ','], ['', '.'], $valor);
+
+                    if ($valor === '' || !is_numeric($valor)) {
+                        $valor = 0;
+                    }
+
+                    Auxiliar::create([
+                        'codigo_cuenta'      => $codigo,
+                        'descripcion_cuenta' => $descripcion,
+                        'mes'                => $nombreMes, 
+                        'total'              => $valor,
+                        'anio'               => $anio,
+                    ]);
+                }
+            }
+
+            if (!empty($cuentasFaltantesPlanCuentas)) {
+
+                DB::rollBack();
+
+                $txtFileName = 'CuentasFaltantesEnPlanCuentas.txt';
+                $dir = public_path('/CuentasFaltantes');
+
+                if (!file_exists($dir)) {
+                    mkdir($dir, 0777, true);
+                }
+
+                $txtFilePath = $dir . '/' . $txtFileName;
+                $archivo = fopen($txtFilePath, 'w');
+
+                fwrite($archivo, "Cuentas Faltantes en el Plan de Cuentas\n");
+                fwrite($archivo, str_repeat("-", 90) . "\n\n");
+
+                foreach ($cuentasFaltantesPlanCuentas as $cuenta) {
+                    fwrite($archivo, "Código de cuenta: " . $cuenta["Codigo_cuenta"] . "\n");
+                    fwrite($archivo, "Descripción: " . $cuenta["Descripcion_cuenta"] . "\n");
+                    fwrite($archivo, str_repeat("-", 90) . "\n");
+                }
+
+                fclose($archivo);
+
+                session()->flash('message', 'Se detectaron cuentas que no existen en el plan de cuentas.');
+                session()->flash('message_type', 'error');
+                session()->flash('download', '1');
+                session()->flash('path', '/CuentasFaltantes/' . $txtFileName);
+                session()->flash('nombreArchivo', $txtFileName);
+
+                return back();
+            }
+
+            DB::commit();
+            session()->flash('message', 'Auxiliares importados correctamente');
+            session()->flash('message_type', 'success');
+            return back();
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+            Log::error($e->getMessage());
+
+            session()->flash('message', 'Error al importar: ' . $e->getMessage());
+            session()->flash('message_type', 'error');
+            return back();
+        }
+    }
+
+    public function plantillaAuxiliares()
+    {
+        $rutaArchivo = public_path('plantillas/Plantilla de auxiliares' . '.xlsx');
+        if (file_exists($rutaArchivo)) {
+            $usuariosController = new BitacoraController();
+            $usuariosController->bitacora('plantillaAuxiliares', 'descargó la plantilla de auxiliares', request());
+            return response()->download($rutaArchivo, 'Plantilla de auxiliares.xlsx', [
                 'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             ]);
         } else {

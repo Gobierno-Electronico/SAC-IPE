@@ -51,6 +51,9 @@ class DeudoresComprobacionAnticipoForm extends Component
     #[Validate('required', message: 'Monto del evento requerido')]
     public $montoDelEvento = "";
 
+    #[Validate('required', message: 'Documento fuente requerido')]
+    public $documentoFuente = "";
+
     public $tipoRegistro = "";
     public $cuentaContableAbono = "";
     public $cuentaBanco = "";
@@ -298,7 +301,8 @@ class DeudoresComprobacionAnticipoForm extends Component
                 'tipoRegistro' => $this->tipoRegistro,
                 'selectorBanco' => $this->selectorBanco,
                 'cuentaBancoId' => $this->cuentaBanco,
-                'importeBanco' => $this->importeBanco
+                'importeBanco' => $this->importeBanco,
+                'documentoFuente' => $this->documentoFuente
             ];
 
             $this->dispatch('agregar-registro', registro: $registro);
@@ -351,6 +355,7 @@ class DeudoresComprobacionAnticipoForm extends Component
         $this->selectorBanco = $datosRegistro['selectorBanco'];
         $this->cuentaBanco = $datosRegistro['cuentaBanco'];
         $this->importeBanco = $datosRegistro['importeBanco'];
+        $this->documentoFuente = $datosRegistro['documentoFuente'];
 
         if ($this->tipoRegistro != '') {
             $this->habilitarSelectorTipoRegistro = true;

@@ -31,6 +31,7 @@ class PresupuestoController extends Controller
     private $interaccionCuentaConceptoDerechaActual = null;
 
     private $cuentaDerechaActual = null;
+    private $documentoFuente = "";
 
     public function __construct()
     {
@@ -112,7 +113,8 @@ class PresupuestoController extends Controller
     {
         $validator = Validator::make(request()->all(), [
             'input-archivo' => 'required',
-            'input-archivo.*' => 'mimes:xlsx'
+            'input-archivo.*' => 'mimes:xlsx',
+            'selectDocumentoFuente' => 'required'
         ]);
         if ($validator->fails()) {
             $errors = array_merge(...array_values($validator->errors()->messages()));
@@ -121,6 +123,7 @@ class PresupuestoController extends Controller
             return back();
         }
         $archivo = $request->file('input-archivo');
+        $this->documentoFuente = $request->get('selectDocumentoFuente');
         // Poliza::truncate();
         // PresupuestoInicial::truncate();
         // return response()->json('Método desactivado');
@@ -462,6 +465,7 @@ class PresupuestoController extends Controller
                 'tipo_interaccion' => TipoInteraccionEnum::PRESUPUESTAL_CARGO,
                 'validado' => false,
                 'categoria' => 'INICIAL INGRESOS',
+                'documento_fuente' => $this->documentoFuente,
                 'created_at' => $fecha,
                 'updated_at' => $fecha
             ];
@@ -501,6 +505,7 @@ class PresupuestoController extends Controller
                 'tipo_interaccion' => TipoInteraccionEnum::PRESUPUESTAL_ABONO,
                 'validado' => false,
                 'categoria' => 'INICIAL INGRESOS',
+                'documento_fuente' => $this->documentoFuente,
                 'created_at' => $fecha,
                 'updated_at' => $fecha
             ];
@@ -559,7 +564,8 @@ class PresupuestoController extends Controller
         $validator = Validator::make(request()->all(), [
             'input-archivo' => 'required',
             'input-archivo.*' => 'mimes:xlsx, xls',
-            'capitulo' => 'required'
+            'capitulo' => 'required',
+            'selectDocumentoFuente' => 'required'
         ]);
         if ($validator->fails()) {
             $errors = array_merge(...array_values($validator->errors()->messages()));
@@ -567,6 +573,7 @@ class PresupuestoController extends Controller
             session()->flash('message_type', 'error');
             return back();
         }
+        $this->documentoFuente = $request->get('selectDocumentoFuente');
         $capitulo = $request->get('capitulo');
         // switch ($capitulo) {
         //     case '2000':
@@ -1013,6 +1020,7 @@ class PresupuestoController extends Controller
                 'tipo_interaccion' => 'Presupuestal - Abono',
                 'validado' => false,
                 'categoria' => 'INICIAL EGRESOS',
+                'documento_fuente' => $this->documentoFuente,
                 'created_at' => $created,
                 'updated_at' => $created
             ];
@@ -1032,6 +1040,7 @@ class PresupuestoController extends Controller
                 'tipo_interaccion' => 'Presupuestal - Cargo',
                 'validado' => false,
                 'categoria' => 'INICIAL EGRESOS',
+                'documento_fuente' => $this->documentoFuente,
                 'created_at' => $created,
                 'updated_at' => $created
             ];

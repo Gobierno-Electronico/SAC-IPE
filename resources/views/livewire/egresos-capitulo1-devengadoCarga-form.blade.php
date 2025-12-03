@@ -14,8 +14,8 @@
                         </div>
                         <div>
                             <label for="inputObservaciones" class="col-md-12 col-form-label">{{ __('Total') }}</label>
-                            <input value="{{  '$' . number_format($total, 2, '.', ',')  }}" type="text" class="form-control" name="inputAumentado"
-                                disabled>
+                            <input value="{{ '$' . number_format($total, 2, '.', ',') }}" type="text"
+                                class="form-control" name="inputAumentado" disabled>
                         </div>
                     </div>
                 </div>
@@ -31,6 +31,17 @@
                 <label for="inputFechaAfectacion" class="form-label mt-3">Fecha de afectación</label>
                 <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control"
                     max="{{ now()->toDateString() }}" wire:model="fechaAfectacion">
+
+                <label for="selectDocumentoFuente" class="form-label mt-3">Documento fuente</label>
+                <select name="selectDocumentoFuente" id="selectDocumentoFuente" class="form-select"
+                    wire:model="documentoFuente">
+                    <option value="">Selecciona una opción...</option>
+                    @foreach (\App\Enums\DocumentosFuente::cases() as $documento)
+                        <option value="{{ $documento->value }}">
+                            {{ $documento->value === 'Memorandum' ? 'Memorándum' : $documento->value }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
             <button id="downloadButton" hidden></button>
             <div class="mt-5">
@@ -43,8 +54,8 @@
                 </div>
 
                 <div class="mt-5 d-flex justify-content-between">
-                    <button type="button" onclick="descargarPlantillaDevengado(this)" class="btn btn-success shadow border-0"
-                        id="botonPlantilla">
+                    <button type="button" onclick="descargarPlantillaDevengado(this)"
+                        class="btn btn-success shadow border-0" id="botonPlantilla">
                         Descargar plantilla
                     </button>
 

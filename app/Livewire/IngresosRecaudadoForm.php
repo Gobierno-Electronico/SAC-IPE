@@ -54,6 +54,9 @@ class IngresosRecaudadoForm extends Component
     #[Validate('required', message: 'Solvencia abono requerida')]
     public $solvenciaAbono = "";
 
+    #[Validate('required', message: 'Documento fuente requerido')]
+    public $documentoFuente = "";
+
     public $subcuentas = [];
 
     public $numeroPoliza;
@@ -229,7 +232,9 @@ class IngresosRecaudadoForm extends Component
                 'importe' => $this->importe,
                 'montoEvento' => $this->montoDelEvento,
                 'solvenciaPresupuestal' => $this->solvenciaPresupuestal,
-                'solvenciaAbono' => $this->solvenciaAbono
+                'solvenciaAbono' => $this->solvenciaAbono,
+                'documentoFuente' => $this->documentoFuente
+
             ];
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
@@ -262,6 +267,7 @@ class IngresosRecaudadoForm extends Component
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->solvenciaPresupuestal = $datosRegistro['solvenciaPresupuestal'];
         $this->solvenciaAbono = $datosRegistro['solvenciaAbono'];
+        $this->documentoFuente = $datosRegistro['documentoFuente'];
         $this->dispatch('llenarFormulario', cuenta: $datosRegistro['cuenta'], cuentaPago: $datosRegistro['cuentaPago'], mes: $datosRegistro['mes'], 
         importe: $datosRegistro['importe'], area: $datosRegistro['area'], solvenciaPresupuestal: $datosRegistro['solvenciaPresupuestal'], solvenciaAbono: $datosRegistro['solvenciaAbono']);
     }

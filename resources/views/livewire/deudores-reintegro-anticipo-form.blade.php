@@ -23,8 +23,8 @@
 
             </div>
         </div>
-        <livewire:recalendarizacion-form-consulta-table :$numeroPoliza :$numeroEvento :$total tipoMovimiento="PolizaAnticiposReintegro" 
-            urlFinalizar="/deudores-reintegro-anticipo" tipoPoliza="D"
+        <livewire:recalendarizacion-form-consulta-table :$numeroPoliza :$numeroEvento :$total
+            tipoMovimiento="PolizaAnticiposReintegro" urlFinalizar="/deudores-reintegro-anticipo" tipoPoliza="D"
             categoriaModulo='DEUDORES REINTEGRO ANTICIPOS' />
     @else
         <div>
@@ -67,6 +67,17 @@
                     @endforeach
                 </select>
 
+                <label for="selectDocumentoFuente" class="form-label mt-3">Documento fuente</label>
+                <select name="selectDocumentoFuente" id="selectDocumentoFuente" class="form-select"
+                    wire:model="documentoFuente">
+                    <option value="">Selecciona una opción...</option>
+                    @foreach (\App\Enums\DocumentosFuente::cases() as $documento)
+                        <option value="{{ $documento->value }}">
+                            {{ $documento->value === 'Memorandum' ? 'Memorándum' : $documento->value }}
+                        </option>
+                    @endforeach
+                </select>
+
                 <label for="selectCuenta" class="form-label mt-3">Cuenta</label>
                 <select name="selectCuenta" id="selectCuenta" class="form-select mb-3" wire:model.live="cuenta">
                     <option value="" @if ($this->cuenta == '') selected @endif selected>Seleccionar
@@ -78,7 +89,8 @@
                 </select>
 
                 <label for="selectCuentaCargo" class="form-label mt-2">Cuenta Cargo</label>
-                <select name="selectCuentaCargo" id="selectCuentaCargo" class="form-select mb-3" wire:model="cuentaCargo" wire:change="cargarPresupuesto">
+                <select name="selectCuentaCargo" id="selectCuentaCargo" class="form-select mb-3"
+                    wire:model="cuentaCargo" wire:change="cargarPresupuesto">
                     <option value="" @if ($this->cuenta == '') selected @endif selected>Seleccionar
                         cuenta...</option>
                     @foreach ($cuentasCargo as $cuenta)
@@ -89,7 +101,8 @@
 
 
                 <label for="selectMes" class="form-label mt-2">Mes de afectación</label>
-                <select name="selectMes" id="selectMes" class="form-select mb-3" wire:model.live="mes" wire:change="cargarPresupuesto">
+                <select name="selectMes" id="selectMes" class="form-select mb-3" wire:model.live="mes"
+                    wire:change="cargarPresupuesto">
                     <option value="" @if ($this->mes == '') selected @endif>Seleccionar mes...</option>
                     @foreach (range(1, 12) as $mes)
                         @php

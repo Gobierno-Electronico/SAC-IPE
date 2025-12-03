@@ -14,8 +14,8 @@
                         </div>
                         <div>
                             <label for="inputObservaciones" class="col-md-12 col-form-label">{{ __('Total') }}</label>
-                            <input value="{{  '$' . number_format($total, 2, '.', ',')  }}" type="text" class="form-control" name="inputAumentado"
-                                disabled>
+                            <input value="{{ '$' . number_format($total, 2, '.', ',') }}" type="text"
+                                class="form-control" name="inputAumentado" disabled>
                         </div>
                     </div>
                 </div>
@@ -29,7 +29,7 @@
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
             wire:model="selectCodigoArea">
-            <option value=""disabled selected >Seleccionar área</option>
+            <option value=""disabled selected>Seleccionar área</option>
             @foreach (\App\Models\CodigoDepartamento::all() as $departamento)
                 @if (strlen($departamento->Codigo_completo) >= 5)
                     <option value="{{ $departamento->id }}">
@@ -65,6 +65,18 @@
                         @endif
                     @endforeach
                 </select>
+
+                <label for="selectDocumentoFuente" class="form-label mt-3">Documento fuente</label>
+                <select name="selectDocumentoFuente" id="selectDocumentoFuente" class="form-select"
+                    wire:model="documentoFuente">
+                    <option value="">Selecciona una opción...</option>
+                    @foreach (\App\Enums\DocumentosFuente::cases() as $documento)
+                        <option value="{{ $documento->value }}">
+                            {{ $documento->value === 'Memorandum' ? 'Memorándum' : $documento->value }}
+                        </option>
+                    @endforeach
+                </select>
+
 
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
                 <select name="selectMes" id="selectMes" class="form-select" wire:model="mes"
@@ -139,9 +151,9 @@
     function validarDecimales(input) {
         // Obtener solo números y un punto decimal permitido
         let valor = input.value.replace(/[^0-9.]/g, '') // Elimina caracteres no numéricos
-                           .replace(/(\..*)\./g, '$1') // Evita más de un punto decimal
-                           .replace(/^0+(\d)/, '$1') // Elimina ceros iniciales
-                           .replace(/^(\d+)(\.\d{0,2})?.*$/, '$1$2'); // Máximo 2 decimales
+            .replace(/(\..*)\./g, '$1') // Evita más de un punto decimal
+            .replace(/^0+(\d)/, '$1') // Elimina ceros iniciales
+            .replace(/^(\d+)(\.\d{0,2})?.*$/, '$1$2'); // Máximo 2 decimales
 
         // Si el valor es solo un punto, permitirlo sin formatear
         if (valor === ".") {

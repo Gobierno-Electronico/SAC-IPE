@@ -50,6 +50,7 @@ class DepositosBancosTable extends Tabla
             Column::make('cuenta', 'Cuenta'),
             Column::make('descripcion', 'Descripción'),
             Column::make('mes', 'Mes'),
+            Column::make('documentoFuente', 'Documento fuente'),
             Column::make('importe', 'Importe')->component('columns.importe'),
             Column::make('id', 'Acciones')->component('columns.accionesIngresos')
         ];
@@ -65,7 +66,8 @@ class DepositosBancosTable extends Tabla
                         'codigoCuenta' => $registro['cuenta'],
                         'descripcion' => $registro['descripcion'],
                         'mes' => $registro['mes'],
-                        'importe' => $registro['importe']
+                        'importe' => $registro['importe'],
+                        'documentoFuente' => $registro['documentoFuente'],
                     ];
     
                     unset($this->cacheData[$key]);
@@ -140,7 +142,8 @@ class DepositosBancosTable extends Tabla
                 'cuenta' => $registro['codigoCuenta'],
                 'descripcion' => $registro['descripcionCuenta'],
                 'mes' => $registro['mes'],
-                'importe' => $registro['importe']
+                'importe' => $registro['importe'],
+                'documentoFuente' => $registro['documentoFuente'],
             ];
             array_push($this->cacheData, $nuevoRegistro);
             array_push($this->dataCompleta, $registro);
@@ -220,6 +223,7 @@ class DepositosBancosTable extends Tabla
                     'validado' => false,
                     'estatus_evento' => EstatusEvento::FINALIZADO->value,
                     'categoria' => 'INGRESOS DEPOSITOS EN BANCOS',
+                    'documento_fuente' => $movimiento['documentoFuente'],
                     'created_at' => $fecha,
                     'updated_at' => $fecha
                 ]);
@@ -239,6 +243,7 @@ class DepositosBancosTable extends Tabla
                     'validado' => false,
                     'estatus_evento' => EstatusEvento::FINALIZADO->value,
                     'categoria' => 'INGRESOS DEPOSITOS EN BANCOS',
+                    'documento_fuente' => $movimiento['documentoFuente'],
                     'created_at' => $fecha,
                     'updated_at' => $fecha
                 ]);

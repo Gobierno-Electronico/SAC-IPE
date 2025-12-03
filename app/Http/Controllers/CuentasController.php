@@ -570,7 +570,7 @@ class CuentasController extends Controller
 
                     $codigoCuentaExistente = $this->buscarCodigoDeCuenta($row['Cuenta']);
                     if (count($codigoCuentaExistente)) {
-                        Log::info($codigoCuentaExistente);
+                        Log::info("CÓDIGO EXISTENTE: ------------- ".$codigoCuentaExistente);
                         return response()->json(['error' => 'Código de cuenta ya existente']);
                     } else {
 

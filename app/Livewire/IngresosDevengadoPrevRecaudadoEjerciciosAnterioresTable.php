@@ -51,6 +51,7 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresTable extends Tabla
     {
         return [
             Column::make('area', 'Area'),
+            Column::make('documentoFuente', 'Documento fuente'),
             Column::make('cuentaPago', 'Cuenta de pago'),
             Column::make('mes', 'Mes'),
             Column::make('movimiento', 'Movimiento'),
@@ -69,7 +70,8 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresTable extends Tabla
                         'mes' => $registro['mes'],
                         'importe' => $registro['importe'],
                         'cuentaPago' => $registro['cuentaPagoId'],
-                        'solvenciaAbono' => $registro['solvenciaAbono']
+                        'solvenciaAbono' => $registro['solvenciaAbono'],
+                        'documentoFuente' => $registro['documentoFuente'],
                     ];
                     unset($this->dataCompleta[$key]);
                     $this->dataCompleta = array_values($this->dataCompleta);
@@ -173,6 +175,7 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresTable extends Tabla
                     'mes' => $registro['mes'],
                     'movimiento' => 'DEVENGADO PREVIAMENTE RECAUDADO EJERCICIOS ANTERIORES',
                     'importe' => $registro['importe'],
+                    'documentoFuente' => $registro['documentoFuente'],
                 ];
                 array_push($this->cacheData, $nuevoRegistro);
                 array_push($this->dataCompleta, $registro);
@@ -234,7 +237,7 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresTable extends Tabla
         try {
             $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
-                ->where('tipo_poliza', '=', 'I')
+                ->where('tipo_poliza', '=', 'D')
                 ->whereYear('fecha', '=', Carbon::now()->year)
                 ->distinct()
                 ->orderBy('numero_poliza')
@@ -284,6 +287,7 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresTable extends Tabla
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'INGRESOS DEVENGADO PREVIAMENTE RECAUDADO EJERCICIOS ANTERIORES',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ],
@@ -304,6 +308,7 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresTable extends Tabla
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'INGRESOS DEVENGADO PREVIAMENTE RECAUDADO EJERCICIOS ANTERIORES',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]

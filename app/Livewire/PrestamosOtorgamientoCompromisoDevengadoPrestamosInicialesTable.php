@@ -46,6 +46,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesTable extends Ta
     {
         return [
             Column::make('area', 'Area'),
+            Column::make('documentoFuente', 'Documento fuente'),
             Column::make('mes', 'Mes'),
             Column::make('partida', 'Partida'),
             Column::make('cuentaAbono', 'Cuenta de abono'),
@@ -74,6 +75,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesTable extends Ta
                     'importe' => $registro['importe'],
                     'importeAbono' => $registro['importeAbono'],
                     'disponibilidad' => $this->totalDisponible,
+                    'documentoFuente' => $registro['documentoFuente'],
                 ];
                 array_push($this->cacheData, $nuevoRegistro);
                 array_push($this->dataCompleta, $registro);
@@ -127,7 +129,8 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesTable extends Ta
                         'mes' => $registro['mes'],
                         'importe' => $registro['importe'],
                         'importeAbono' => $registro['importeAbono'],
-                        'pttoEjecutar' => $registro['pttoEjecutar']
+                        'pttoEjecutar' => $registro['pttoEjecutar'],
+                        'documentoFuente' => $registro['documentoFuente'],
                     ];
      
                     unset($this->dataCompleta[$key]);
@@ -282,6 +285,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesTable extends Ta
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'OTORGAMIENTO COMPROMISO DEVENGADO PRESTAMOS INICIALES',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]
@@ -303,6 +307,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesTable extends Ta
                     'validado' => false,
                     'estatus_evento' => EstatusEvento::ACTIVO->value,
                     'categoria' => 'OTORGAMIENTO COMPROMISO DEVENGADO PRESTAMOS INICIALES',
+                    'documento_fuente' => $movimiento['documentoFuente'],
                     'created_at' => $fecha,
                     'updated_at' => $fecha
                 ]);
@@ -328,6 +333,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesTable extends Ta
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'OTORGAMIENTO COMPROMISO DEVENGADO PRESTAMOS INICIALES',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);
@@ -350,6 +356,7 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosInicialesTable extends Ta
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'OTORGAMIENTO COMPROMISO DEVENGADO PRESTAMOS INICIALES',
+                        'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);

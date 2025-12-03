@@ -45,6 +45,9 @@ class DevengadoPrevRecaudadoForm extends Component
     #[Validate('required', message: 'Solvencia presupuestal requerida')]
     public $solvenciaPresupuestal = "";
 
+    #[Validate('required', message: 'Documento fuente requerido')]
+    public $documentoFuente = "";
+
 
     // #[Validate('required', message: 'Cuenta de pago requerida')]
     // public $cuentaPago = "";
@@ -142,7 +145,8 @@ class DevengadoPrevRecaudadoForm extends Component
                 'montoPorClasificar' => $this->montoPorClasificar,
                 'iva' => $this->causaIva,
                 'agregarIVA' => $this->agregarIVA,
-                'solvenciaPresupuestal' => $this->solvenciaPresupuestal
+                'solvenciaPresupuestal' => $this->solvenciaPresupuestal,
+                'documentoFuente' => $this->documentoFuente
             ];
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
@@ -223,6 +227,7 @@ class DevengadoPrevRecaudadoForm extends Component
             $this->selectCodigoAreaResponsable = $datosRegistro['area'];
             $this->agregarIVA = $datosRegistro['agregarIVA'];
             $this->solvenciaPresupuestal = $datosRegistro['solvenciaPresupuestal'];
+            $this->documentoFuente = $datosRegistro['documentoFuente'];
             $this->verificarCausaIVA();
             $this->dispatch('llenarFormulario', cuenta: $datosRegistro['cuenta'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe'], area: $datosRegistro['area'], agregarIVA: $datosRegistro['agregarIVA'], solvenciaPresupuestal: $datosRegistro['solvenciaPresupuestal']);
         } catch (\Throwable $th) {

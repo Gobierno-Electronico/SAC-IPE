@@ -14,8 +14,8 @@
                         </div>
                         <div>
                             <label for="inputObservaciones" class="col-md-12 col-form-label">{{ __('Total') }}</label>
-                            <input value="{{  '$' . number_format($total, 2, '.', ',')  }}" type="text" class="form-control" name="inputAumentado"
-                                disabled>
+                            <input value="{{ '$' . number_format($total, 2, '.', ',') }}" type="text"
+                                class="form-control" name="inputAumentado" disabled>
                         </div>
                     </div>
 
@@ -83,6 +83,17 @@
                     @endforeach
                 </select>
 
+                <label for="selectDocumentoFuente" class="form-label mt-3">Documento fuente</label>
+                <select name="selectDocumentoFuente" id="selectDocumentoFuente" class="form-select"
+                    wire:model="documentoFuente">
+                    <option value="">Selecciona una opción...</option>
+                    @foreach (\App\Enums\DocumentosFuente::cases() as $documento)
+                        <option value="{{ $documento->value }}">
+                            {{ $documento->value === 'Memorandum' ? 'Memorándum' : $documento->value }}
+                        </option>
+                    @endforeach
+                </select>
+
                 <label for="selectCuenta" class="form-label mt-3">Cuenta</label>
                 <select name="selectCuenta" id="selectCuenta" class="form-select" wire:model="cuenta"
                     wire:change="cargarPresupuestoDevengado">
@@ -110,7 +121,8 @@
                 <input type="text" name="inputMontoEvento" id="inputMontoEvento" class="form-control" disabled>
 
                 <label for="inputPTTODevengado" class="form-label mt-3">Presupuesto devengado</label>
-                <input type="text" name="inputPTTODevengado" id="inputPTTODevengado" class="form-control" disabled>
+                <input type="text" name="inputPTTODevengado" id="inputPTTODevengado" class="form-control"
+                    disabled>
 
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control"
@@ -119,7 +131,7 @@
 
             <div class="col">
                 <livewire:egresos-capitulo2y3-ejercido-table />
-            </div> 
+            </div>
 
             <div class="row mt-4">
                 <div class="col">
@@ -148,9 +160,9 @@
     function validarDecimales(input) {
         // Obtener solo números y un punto decimal permitido
         let valor = input.value.replace(/[^0-9.]/g, '') // Elimina caracteres no numéricos
-                           .replace(/(\..*)\./g, '$1') // Evita más de un punto decimal
-                           .replace(/^0+(\d)/, '$1') // Elimina ceros iniciales
-                           .replace(/^(\d+)(\.\d{0,2})?.*$/, '$1$2'); // Máximo 2 decimales
+            .replace(/(\..*)\./g, '$1') // Evita más de un punto decimal
+            .replace(/^0+(\d)/, '$1') // Elimina ceros iniciales
+            .replace(/^(\d+)(\.\d{0,2})?.*$/, '$1$2'); // Máximo 2 decimales
 
         // Si el valor es solo un punto, permitirlo sin formatear
         if (valor === ".") {

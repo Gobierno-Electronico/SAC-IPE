@@ -50,6 +50,9 @@ class EgresosCapitulo5DevengadoForm extends Component
     #[Validate('required', message: 'Monto del evento requerido')]
     public $montoDelEvento = "";
 
+    #[Validate('required', message: 'Documento fuente requerido')]
+    public $documentoFuente = "";
+
     public $PTTOComprometido = 0;
 
     public $consultarRegistro = false;
@@ -282,6 +285,7 @@ class EgresosCapitulo5DevengadoForm extends Component
                 'montoEvento' => $this->montoDelEvento,
                 'pttoComprometido' => $this->PTTOComprometido,
                 'selectorPagoRetenciones' => $this->selectorPagoRetenciones,
+                'documentoFuente' => $this->documentoFuente
             ];
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
@@ -319,6 +323,7 @@ class EgresosCapitulo5DevengadoForm extends Component
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->PTTOComprometido = $datosRegistro['pttoComprometido'];
         $this->selectorPagoRetenciones = $datosRegistro['selectorPagoRetenciones'];
+        $this->documentoFuente = $datosRegistro['documentoFuente'];
         $this->dispatch('llenarFormulario', presupuesto: $this->PTTOComprometido, importe: $this->importe);
     }
 

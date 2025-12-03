@@ -27,7 +27,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
     use WithFileUploads;
     public $fechaAfectacion = "";
     public $archivo;
-
+    public $documentoFuente = "";
     public $PTTOEjecutar = 0;
     public $consultarRegistro = false;
     public $numeroEvento;
@@ -517,10 +517,11 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
             'mes' => $mesCargo,
             'descripcion' => 'Reclasificación presupuestal automática del capítulo 1000',
             'evento' => $evento,
-            'tipo_interaccion' => 'Cargo',
+            'tipo_interaccion' => 'Presupuestal - Cargo',
             'validado' => false,
             'estatus_evento' => EstatusEvento::FINALIZADO->value,
             'categoria' => 'RECALENDARIZACION DISMINUCION',
+            'documento_fuente' => $this->documentoFuente,
             'created_at' => $fechaActual,
             'updated_at' => $fechaActual
         ]);
@@ -538,10 +539,11 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
             'mes' => $mesAbono,
             'descripcion' => 'Reclasificación presupuestal automática del capítulo 1000',
             'evento' => $evento,
-            'tipo_interaccion' => 'Abono',
+            'tipo_interaccion' => 'Presupuestal - Abono',
             'validado' => false,
             'estatus_evento' => EstatusEvento::FINALIZADO->value,
             'categoria' => 'RECALENDARIZACION AUMENTO',
+            'documento_fuente' => $this->documentoFuente,
             'created_at' => $fechaActual,
             'updated_at' => $fechaActual
         ]);
@@ -675,6 +677,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS DEVENGADO CAPITULO 1',
+                        'documento_fuente' => $this->documentoFuente,
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);
@@ -697,6 +700,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                             'validado' => false,
                             'estatus_evento' => EstatusEvento::ACTIVO->value,
                             'categoria' => 'EGRESOS DEVENGADO CAPITULO 1',
+                            'documento_fuente' => $this->documentoFuente,
                             'created_at' => $fecha,
                             'updated_at' => $fecha
                         ]);
@@ -719,6 +723,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                         'validado' => false,
                         'estatus_evento' => EstatusEvento::ACTIVO->value,
                         'categoria' => 'EGRESOS DEVENGADO CAPITULO 1',
+                        'documento_fuente' => $this->documentoFuente,
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);
@@ -916,6 +921,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
                     'cuenta' => $polizaOriginal->cuenta,
                     'descripcion' => $polizaOriginal->descripcion,
                     'tipo_interaccion' => $polizaOriginal->tipo_interaccion,
+                    'documento_fuente' => $this->documentoFuente,
                     'validado' => false,
                     'estatus_evento' =>  EstatusEvento::ACTIVO->value,
                     'created_at' => Carbon::now('America/Mexico_City'),

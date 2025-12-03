@@ -14,16 +14,17 @@
                         </div>
                         <div>
                             <label for="inputObservaciones" class="col-md-12 col-form-label">{{ __('Total') }}</label>
-                            <input value="{{  '$' . number_format($total, 2, '.', ',')  }}" type="text" class="form-control" name="inputAumentado"
-                                disabled>
+                            <input value="{{ '$' . number_format($total, 2, '.', ',') }}" type="text"
+                                class="form-control" name="inputAumentado" disabled>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <livewire:egresos-form-consulta-table :$numeroPoliza :$numeroEvento :$total
-            tipoMovimiento="PolizaEgresosPagadoCapitulo2y3" urlFinalizar="/capitulo2y3-pagado" :$numeroPolizaRemanente tipoPoliza="E"
-            categoriaModulo='EGRESOS PAGADO CAPITULO 2y3' categoriaRemanente='EGRESOS EJERCIDO CAPITULO 2y3 REMANENTE PAGADO'/>
+            tipoMovimiento="PolizaEgresosPagadoCapitulo2y3" urlFinalizar="/capitulo2y3-pagado" :$numeroPolizaRemanente
+            tipoPoliza="E" categoriaModulo='EGRESOS PAGADO CAPITULO 2y3'
+            categoriaRemanente='EGRESOS EJERCIDO CAPITULO 2y3 REMANENTE PAGADO' />
     @else
         <label for="selectAreaSolicitante" class="form-label">Área solicitante</label>
         <select name="selectAreaSolicitante" id="selectAreaSolicitante" class="form-select"
@@ -45,8 +46,8 @@
             wire:model="observaciones">
 
         <label for="inputFechaAfectacion" class="form-label mt-3">Fecha de afectación</label>
-        <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control" max="{{ now()->toDateString() }}"
-            wire:model="fechaAfectacion">
+        <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control"
+            max="{{ now()->toDateString() }}" wire:model="fechaAfectacion">
 
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
         <div class="row">
@@ -57,9 +58,9 @@
                     <option value="" disabled>
                         Seleccionar un evento
                     </option>
-                    @foreach ($eventos as $evento => $descripcion )
+                    @foreach ($eventos as $evento => $descripcion)
                         <option value="{{ $evento }}">
-                           {{ $evento }} - {{$descripcion}}
+                            {{ $evento }} - {{ $descripcion }}
                         </option>
                     @endforeach
                 </select>
@@ -79,12 +80,24 @@
                     @endforeach
                 </select>
 
+                <label for="selectDocumentoFuente" class="form-label mt-3">Documento fuente</label>
+                <select name="selectDocumentoFuente" id="selectDocumentoFuente" class="form-select"
+                    wire:model="documentoFuente">
+                    <option value="">Selecciona una opción...</option>
+                    @foreach (\App\Enums\DocumentosFuente::cases() as $documento)
+                        <option value="{{ $documento->value }}">
+                            {{ $documento->value === 'Memorandum' ? 'Memorándum' : $documento->value }}
+                        </option>
+                    @endforeach
+                </select>
+
                 <label for="selectPartidaPresupuestal" class="form-label mt-3">Partida presupuestal</label>
-                <select name="selectPartidaPresupuestal" id="selectPartidaPresupuestal" class="form-select" wire:model="partidaPresupuestal" wire:change="llenarCuentasBanco">
+                <select name="selectPartidaPresupuestal" id="selectPartidaPresupuestal" class="form-select"
+                    wire:model="partidaPresupuestal" wire:change="llenarCuentasBanco">
                     <option value="" selected disabled>Seleccionar partida presupuestal</option>
                     @foreach ($partidasPresupuestales as $partida)
-                        <option value="{{ $partida['id'] }}"> 
-                            {{$partida['Codigo_cuenta'] . '  ' . $partida['Descripcion_cuenta']}}</option>
+                        <option value="{{ $partida['id'] }}">
+                            {{ $partida['Codigo_cuenta'] . '  ' . $partida['Descripcion_cuenta'] }}</option>
                     @endforeach
                 </select>
 
@@ -93,7 +106,7 @@
                     <option value="" disabled>Seleccionar cuenta</option>
                     @foreach ($cuentasBanco as $cuenta)
                         <option value="{{ $cuenta->cuenta_id }}">
-                            {{$cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
+                            {{ $cuenta->Codigo_cuenta . '  ' . $cuenta->Descripcion_cuenta }}</option>
                     @endforeach
                 </select>
 
@@ -102,13 +115,14 @@
                     wire:model="cuentaDeRetenciones" wire:change="cargarMontoContable">
                     <option value="" disabled>Seleccionar cuenta de retención</option>
                     @foreach ($cuentasRetenciones as $retencion)
-                        <option value="{{ $retencion['cuenta_id'] }}"> 
+                        <option value="{{ $retencion['cuenta_id'] }}">
                             {{ $retencion['Codigo_cuenta'] . '  ' . $retencion['Descripcion_cuenta'] }}</option>
                     @endforeach
                 </select>
 
                 <label for="selectMes" class="form-label mt-3">Mes de afectación</label>
-                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes" wire:change="cargarPresupuestoEjercido">
+                <select name="selectMes" id="selectMes" class="form-select" wire:model="mes"
+                    wire:change="cargarPresupuestoEjercido">
                     <option value="" selected disabled>Seleccionar mes...</option>
                     @foreach (range(1, 12) as $mes)
                         @php
@@ -126,7 +140,8 @@
                 <input type="text" name="inputPTTOEjercido" id="inputPTTOEjercido" class="form-control" disabled>
 
                 <label for="inputMontoContable" class="form-label mt-3">Monto contable</label>
-                <input type="text" name="inputMontoContable" id="inputMontoContable" class="form-control" disabled>
+                <input type="text" name="inputMontoContable" id="inputMontoContable" class="form-control"
+                    disabled>
 
                 <label for="inputImporte" class="form-label mt-3">Importe</label>
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control"
@@ -165,9 +180,9 @@
     function validarDecimales(input) {
         // Obtener solo números y un punto decimal permitido
         let valor = input.value.replace(/[^0-9.]/g, '') // Elimina caracteres no numéricos
-                           .replace(/(\..*)\./g, '$1') // Evita más de un punto decimal
-                           .replace(/^0+(\d)/, '$1') // Elimina ceros iniciales
-                           .replace(/^(\d+)(\.\d{0,2})?.*$/, '$1$2'); // Máximo 2 decimales
+            .replace(/(\..*)\./g, '$1') // Evita más de un punto decimal
+            .replace(/^0+(\d)/, '$1') // Elimina ceros iniciales
+            .replace(/^(\d+)(\.\d{0,2})?.*$/, '$1$2'); // Máximo 2 decimales
 
         // Si el valor es solo un punto, permitirlo sin formatear
         if (valor === ".") {

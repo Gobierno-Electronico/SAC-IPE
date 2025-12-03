@@ -49,6 +49,7 @@ class RegistroPolizaDiarioTable extends Tabla
     {
         return [
             Column::make('cuenta', 'Cuenta'),
+            Column::make('documentoFuente', 'Documento fuente'),
             Column::make('tipoInteraccion', 'Tipo de interacción'),
             Column::make('importeCargo', 'Importe cargo')->component('columns.importe'),
             Column::make('importeAbono', 'Importe abono')->component('columns.importe'),
@@ -69,7 +70,8 @@ class RegistroPolizaDiarioTable extends Tabla
                         'tipoInteraccion' => $registro['tipoInteraccion'],
                         'mes' => $registro['mes'],
                         'importe' => $registro['importe'],
-                        'solvencia' => $registro['solvencia']
+                        'solvencia' => $registro['solvencia'],
+                        'documentoFuente' => $registro['documentoFuente'],
                     ];
                     unset($this->dataCompleta[$key]);
                     $this->dataCompleta = array_values($this->dataCompleta);
@@ -169,7 +171,8 @@ class RegistroPolizaDiarioTable extends Tabla
                     'importeCargo' => $importeCargo,
                     'solvencia' => $registro['solvencia'],
                     'importeAbono' => $importeAbono,
-                    'disponibilidad' => $this->totalDisponible
+                    'disponibilidad' => $this->totalDisponible,
+                    'documentoFuente' => $registro['documentoFuente'],
                 ];
     
                 array_push($this->cacheData, $nuevoRegistro);
@@ -315,6 +318,7 @@ class RegistroPolizaDiarioTable extends Tabla
                     'validado' => false,
                     'estatus_evento' => EstatusEvento::ACTIVO->value,
                     'categoria' => 'DIARIO DIVERSOS CONCEPTOS',
+                    'documento_fuente' => $movimiento['documentoFuente'],
                     'created_at' => $fecha,
                     'updated_at' => $fecha
                 ]);

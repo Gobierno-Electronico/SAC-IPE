@@ -44,6 +44,9 @@ class DeudoresReintegroAnticipoForm extends Component
     #[Validate('required', message: 'Monto del evento requerido')]
     public $montoDelEvento = "";
 
+    #[Validate('required', message: 'Documento fuente requerido')]
+    public $documentoFuente = "";
+
     public $consultarRegistro = false;
     public $numeroPoliza;
     public $total;
@@ -141,7 +144,8 @@ class DeudoresReintegroAnticipoForm extends Component
                 'mes' => $this->mes,
                 'importe' => $this->importe,
                 'montoEvento' => $this->montoDelEvento,
-                'ppto' => $this->ppto
+                'ppto' => $this->ppto,
+                'documentoFuente' => $this->documentoFuente
             ];
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
@@ -184,6 +188,7 @@ class DeudoresReintegroAnticipoForm extends Component
         $this->mes = $datosRegistro['mes'];
         $this->importe = $datosRegistro['importe'];
         $this->ppto = $datosRegistro['solvencia'];
+        $this->documentoFuente = $datosRegistro['documentoFuente'];
         $this->dispatch('llenarFormulario', cuenta: $datosRegistro['cuenta'], cuentaCargo: $datosRegistro['cuentaCargo'], mes: $datosRegistro['mes'], importe: $datosRegistro['importe'], ppto: $datosRegistro['solvencia']);
     }
 }

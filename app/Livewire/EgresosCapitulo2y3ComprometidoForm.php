@@ -37,6 +37,9 @@ class EgresosCapitulo2y3ComprometidoForm extends Component
     #[Validate('required', message: 'Importe requerido')]
     public $importe = "";
 
+    #[Validate('required', message: 'Documento fuente requerido')]
+    public $documentoFuente = "";
+
     public $PTTOEjecutar = 0;
     
     public $consultarRegistro = false;
@@ -103,7 +106,8 @@ class EgresosCapitulo2y3ComprometidoForm extends Component
                 'descripcionCuenta' => $cuenta->Descripcion_cuenta,
                 'mes' => $this->mes,
                 'importe' => $this->importe,
-                'pttoEjecutar' => $this->PTTOEjecutar
+                'pttoEjecutar' => $this->PTTOEjecutar,
+                'documentoFuente' => $this->documentoFuente
             ];
 
             $this->dispatch('agregar-registro', registro: $registro);
@@ -138,6 +142,7 @@ class EgresosCapitulo2y3ComprometidoForm extends Component
         $this->importe = $datosRegistro['importe'];
         $this->selectCodigoAreaResponsable = $datosRegistro['area'];
         $this->PTTOEjecutar = $datosRegistro['pttoEjecutar'];
+        $this->documentoFuente = $datosRegistro['documentoFuente'];
         $this->dispatch('llenarFormulario', presupuesto: $this->PTTOEjecutar, importe: $this->importe);
     }
 
