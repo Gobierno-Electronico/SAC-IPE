@@ -19,7 +19,7 @@ class RecalendarizacionFormConsultaTable extends Tabla
     public $registros = [];
     public $numeroEvento;
     public $numeroPoliza;
-    public $searchBy = ['concepto', 'area', 'tipo_poliza', 'numero_poliza', 'Codificacion_rubro_ingreso', 'cuenta', 'total', 'mes'];
+    public $searchBy = ['concepto', 'area', 'tipo_poliza', 'numero_poliza', 'cuenta', 'total', 'mes'];
     public $fecha;
     public $hora;
     public $validado = false;

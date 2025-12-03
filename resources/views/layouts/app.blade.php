@@ -336,7 +336,13 @@
                                                 <li>
                                                     <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                                         href="{{ route('estadoSituacionFinanciera') }}" method="GET">
-                                                        {{ __('Estado de de situación financiera') }}
+                                                        {{ __('Estado de situación financiera') }}
+                                                    </a>
+                                                </li>
+                                                 <li>
+                                                    <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                        href="{{ route('estadoCambiosSituacionFinanciera') }}" method="GET">
+                                                        {{ __('Estado de cambios en la situación financiera') }}
                                                     </a>
                                                 </li>
                                             </ul>
