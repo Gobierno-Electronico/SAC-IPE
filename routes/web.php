@@ -111,6 +111,7 @@ Route::get('/estado-cuenta', [ReportesController::class, 'estadoCuenta'])->name(
 //Estados financieros
 Route::get('/estado-actividades', [ReportesController::class, 'estadoActividades'])->name('estadoActividades')->middleware('can:acceso-contabilidad-reportes');
 Route::get('/estado-situacion-financiera', [ReportesController::class, 'estadoSituacionFinanciera'])->name('estadoSituacionFinanciera')->middleware('can:acceso-contabilidad-reportes');
+Route::get('/estado-cambios-situacion-financiera', [ReportesController::class, 'estadoCambiosSituacionFinanciera'])->name('estadoCambiosSituacionFinanciera')->middleware('can:acceso-contabilidad-reportes');
 
 //Carga contabilidad
 Route::get('/contabilidad/poliza-inicial', [ContabilidadController::class, 'polizaInicial'])->name('polizaInicial')->middleware('can:acceso-contabilidad-consultar-carga');
