@@ -34,7 +34,7 @@ class EstadoAnaliticoDelActivo extends Component
                 Carbon::parse($this->fechaFin)
                 ->locale('es')
                 ->translatedFormat('d/F/Y');
-            $params = "FechaInicio;{$this->fechaInicio},FechaFin;{$this->fechaFin},SubtituloFechas;{$subtituloFechas},Fecha;{$fecha},Hora;{$hora}&formato={$formato}";
+            $params = "FechaInicio;{$this->fechaInicio},FechaFin;{$this->fechaFin},SubtituloFechas;{$subtituloFechas}&formato={$formato}";
             $this->dispatch('descargar', Params: $params);
         } catch (\Throwable $th) {
             $this->dispatch('mostrarMensaje', mensaje: $th->getMessage(), tipo: 'warning', tiempo: 3000);
