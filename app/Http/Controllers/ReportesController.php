@@ -41,6 +41,11 @@ class ReportesController extends Controller
         return view('reportes.estadoSituacionFinanciera');
     }
 
+        public function estadoAnaliticoDelActivo()
+    {
+        return view('reportes.estadoAnaliticoDelActivo');
+    }
+
     public function estadoCambiosSituacionFinanciera()
     {
         return view('reportes.estadoCambiosSituacionFinanciera');
