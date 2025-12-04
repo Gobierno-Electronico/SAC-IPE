@@ -31,7 +31,7 @@
 <script>
     window.addEventListener('descargar', event => {
         let btnId = "botonGenerarEstadoSituacionFinanciera"
-        let btnHtml = $("#" + btnId + "").html(); //obtenemos el contenido html de mi boton
+        let btnHtml = $("#" + btnId + "").html(); 
         let spinner =
             '<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>';
         $("#" + btnId + "").html(spinner);
@@ -56,15 +56,15 @@
                     mensajeEdoSolicitud.remove();
                 });
             }
-            $("#" + btnId + "").prop("disabled", false); //desbloqueamos el botón
-            $("#" + btnId + "").html(btnHtml); // regresamos el contenido html original al botón
+            $("#" + btnId + "").prop("disabled", false); 
+            $("#" + btnId + "").html(btnHtml); 
             $('#loadingScreen').prop('hidden', true);
 
         })
         .catch((error) => {
             mensajeEdoSolicitud.remove();
-            $("#" + btnId + "").prop("disabled", false); //desbloqueamos el botón
-            $("#" + btnId + "").html(btnHtml); // regresamos el contenido html original al botón
+            $("#" + btnId + "").prop("disabled", false); 
+            $("#" + btnId + "").html(btnHtml); 
             $('#loadingScreen').prop('hidden', true);
 
             toastr.error(
