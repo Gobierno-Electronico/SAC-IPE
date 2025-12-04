@@ -30,9 +30,9 @@
 	<parameter name="FechaInicio" class="java.lang.String"/>
 	<parameter name="FechaFin" class="java.lang.String"/>
 	<parameter name="SubtituloFechas" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT 1 as dummy
-]]>
+		<![CDATA[SELECT 1 as dummy]]>
 	</queryString>
 	<title>
 		<band height="68">
@@ -98,7 +98,7 @@ Estado de Situación Financiera]]></text>
 						<subreportParameterExpression><![CDATA[$P{FechaFin}]]></subreportParameterExpression>
 					</subreportParameter>
 					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression><![CDATA["SubReporteEstadoSituacionFinancieraActivo.jasper"]]></subreportExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "SubReporteEstadoSituacionFinancieraActivo.jasper"]]></subreportExpression>
 				</subreport>
 				<subreport>
 					<reportElement x="371" y="0" width="400" height="320" uuid="a347ecfb-a5a8-473e-8a6e-f9d136446cb6"/>
@@ -109,7 +109,7 @@ Estado de Situación Financiera]]></text>
 						<subreportParameterExpression><![CDATA[$P{FechaInicio}]]></subreportParameterExpression>
 					</subreportParameter>
 					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression><![CDATA["SubReporteEstadoSituacionFinancieraPasivo.jasper"]]></subreportExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "SubReporteEstadoSituacionFinancieraPasivo.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
 		</band>
