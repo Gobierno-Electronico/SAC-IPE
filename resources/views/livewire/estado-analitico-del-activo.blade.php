@@ -37,7 +37,7 @@
         $("#" + btnId + "").html(spinner);
         $("#" + btnId + "").prop("disabled", true);
         $('#loadingScreen').prop('hidden', false);
-        let url = "http://" + window.IP_PORT + "/" + window.window.NOMBRE_REPORTEADOR + "/webresources/service/report?name=ReporteEstadoSituacionFinanciera&params=" 
+        let url = "http://" + window.IP_PORT + "/" + window.window.NOMBRE_REPORTEADOR + "/webresources/service/report?name=ReporteEstadoAnaliticoActivo&params=" 
         url += event.__livewire.params.Params;
         let mensajeEdoSolicitud = toastr.info("Procesando solicitud, espere un momento por favor . . .", "", { timeOut: "0" });
         console.log(url);
