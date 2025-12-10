@@ -25,8 +25,6 @@ class EstadoAnaliticoDelActivo extends Component
     public function generar($formato)
     {
         try {
-            $fecha = Carbon::now()->format('d/m/Y');
-            $hora = Carbon::now()->format('h:i A');
             $subtituloFechas = "Estado Analítico del Activo del " .
                 Carbon::parse($this->fechaInicio)
                 ->locale('es')
