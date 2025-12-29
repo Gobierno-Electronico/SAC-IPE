@@ -1054,7 +1054,7 @@ class PresupuestoController extends Controller
         // }
 
         if (!empty($polizaEstimado)) {
-            $columns = ['idUsuarioRegistrante', 'area', 'tipo_poliza', 'numero_poliza', 'fecha', 'cuenta', 'concepto', 'total', 'mes', 'descripcion', 'evento', 'tipo_interaccion', 'validado', 'categoria', 'created_at', 'updated_at'];
+            $columns = ['idUsuarioRegistrante', 'area', 'tipo_poliza', 'numero_poliza', 'fecha', 'cuenta', 'concepto', 'total', 'mes', 'descripcion', 'evento', 'tipo_interaccion', 'validado', 'categoria', 'documento_fuente', 'created_at', 'updated_at'];
             $values = [];
             $bindings = [];
 
@@ -1069,7 +1069,7 @@ class PresupuestoController extends Controller
         }
 
         if (!empty($polizaPorEjecutar)) {
-            $columns = ['idUsuarioRegistrante', 'area', 'tipo_poliza', 'numero_poliza', 'fecha', 'cuenta', 'concepto', 'total', 'mes', 'descripcion', 'evento', 'tipo_interaccion', 'validado', 'categoria', 'created_at', 'updated_at'];
+            $columns = ['idUsuarioRegistrante', 'area', 'tipo_poliza', 'numero_poliza', 'fecha', 'cuenta', 'concepto', 'total', 'mes', 'descripcion', 'evento', 'tipo_interaccion', 'validado', 'categoria', 'documento_fuente', 'created_at', 'updated_at'];
             $values = [];
             $bindings = [];
 
