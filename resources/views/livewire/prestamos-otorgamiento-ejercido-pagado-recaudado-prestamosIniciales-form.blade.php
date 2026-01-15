@@ -109,27 +109,23 @@
                 <input type="text" name="inputImporte" id="inputImporte" class="form-control"
                     onkeyup="validarDecimales(this)" onchange="formatearImporte(this)" wire:model="importe">
 
-                <label for="selectCuentaAbono" class="form-label mt-3">Cuenta de abono</label>
-                <select name="selectCuentaAbono" id="selectCuentaAbono" class="form-select" wire:model="cuentaAbono">
-                    <option value="" selected disabled>Seleccionar cuenta de abono</option>
-                    @foreach ($cuentasAbono as $item)
-                        <option value="{{ $item->cuenta_id }}">
-                            {{ $item->Codigo_cuenta . ' ' . $item->Descripcion_cuenta }}
-                        </option>
-                    @endforeach
-                </select>
+                @if ($mostrarAbono)
+                    <label for="selectCuentaAbono" class="form-label mt-3">Cuenta de abono</label>
+                    <select name="selectCuentaAbono" id="selectCuentaAbono" class="form-select"
+                        wire:model="cuentaAbono">
+                        <option value="" selected disabled>Seleccionar cuenta de abono</option>
+                        @foreach ($cuentasAbono as $item)
+                            <option value="{{ $item->cuenta_id }}">
+                                {{ $item->Codigo_cuenta . ' ' . $item->Descripcion_cuenta }}
+                            </option>
+                        @endforeach
+                    </select>
 
-                <label for="inputImporteAbono" class="form-label mt-3">Importe abono</label>
-                <input type="text" name="inputImporteAbono" id="inputImporteAbono" class="form-control"
-                    onkeyup="validarDecimales(this)" onchange="formatearImporte(this)" wire:model="importeAbono">
+                    <label for="inputImporteAbono" class="form-label mt-3">Importe abono</label>
+                    <input type="text" name="inputImporteAbono" id="inputImporteAbono" class="form-control"
+                        onkeyup="validarDecimales(this)" onchange="formatearImporte(this)" wire:model="importeAbono">
+                @endif
 
-                <label for="selectDestinoRecurso" class="form-label mt-3">Destino del recurso</label>
-                <select name="selectDestinoRecurso" id="selectDestinoRecurso" class="form-select"
-                    wire:model="destinoRecurso">
-                    <option value="" selected disabled>Seleccionar destino del recurso</option>
-                    <option value="capital">Capital</option>
-                    <option value="fondoGarantia">Fondo de Garantía</option>
-                </select>
             </div>
 
             <div class="col">
