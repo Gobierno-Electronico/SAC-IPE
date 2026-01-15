@@ -2,7 +2,7 @@
 <!-- Created with Jaspersoft Studio version 6.20.5.final using JasperReports Library version 6.20.5-3efcf2e67f959db3888d79f73dde2dbd7acb4f8e  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteEstadoActividades" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="5" bottomMargin="5" isSummaryWithPageHeaderAndFooter="true" isIgnorePagination="true" uuid="55a8c4bf-9344-4264-a6b2-ecc8cd2fda35">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SAC-IPE Tierra"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SAC-IPE Venus"/>
 	<property name="com.jaspersoft.studio.report.description" value=""/>
 	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
 	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
@@ -49,6 +49,18 @@
 		<property name="com.jaspersoft.studio.field.name" value="SaldoFinal"/>
 		<property name="com.jaspersoft.studio.field.label" value="SaldoFinal"/>
 	</field>
+	<field name="AnioActual" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="AnioActual"/>
+		<property name="com.jaspersoft.studio.field.label" value="AnioActual"/>
+	</field>
+	<field name="SaldoFinalAnterior" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="SaldoFinalAnterior"/>
+		<property name="com.jaspersoft.studio.field.label" value="SaldoFinalAnterior"/>
+	</field>
+	<field name="AnioAnterior" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="AnioAnterior"/>
+		<property name="com.jaspersoft.studio.field.label" value="AnioAnterior"/>
+	</field>
 	<variable name="SumaNivel2" class="java.math.BigDecimal" resetType="Group" resetGroup="GroupNivel1" calculation="Sum">
 		<variableExpression><![CDATA[($F{Nivel}.intValue() == 2 
     ? $F{SaldoFinal} 
@@ -75,6 +87,24 @@
     ? $F{SaldoFinal}
     : java.math.BigDecimal.ZERO]]></variableExpression>
 	</variable>
+	<variable name="SumaNivel2SaldosAnteriores" class="java.math.BigDecimal" resetType="Group" resetGroup="GroupNivel1" calculation="Sum">
+		<variableExpression><![CDATA[($F{Nivel}.intValue() == 2 
+    ? $F{SaldoFinalAnterior} 
+    : java.math.BigDecimal.ZERO)]]></variableExpression>
+	</variable>
+	<variable name="SumaGrupo4SaldoAnterior" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[($F{Nivel}.intValue() == 2 && $V{CuentaNivel1}.equals("4"))
+    ? $F{SaldoFinalAnterior}
+    : java.math.BigDecimal.ZERO]]></variableExpression>
+	</variable>
+	<variable name="SumaGrupo5SaldoAnterior" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[($F{Nivel}.intValue() == 2 && $V{CuentaNivel1}.equals("5"))
+    ? $F{SaldoFinalAnterior}
+    : java.math.BigDecimal.ZERO]]></variableExpression>
+	</variable>
+	<variable name="TotalSaldosAnteriores" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$V{SumaGrupo4SaldoAnterior}.subtract($V{SumaGrupo5SaldoAnterior})]]></variableExpression>
+	</variable>
 	<group name="GroupNivel1">
 		<groupExpression><![CDATA[$V{CuentaNivel1}]]></groupExpression>
 		<groupFooter>
@@ -95,7 +125,7 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$V{SumaNivel2}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField pattern="$ #,##0.00">
 					<reportElement x="500" y="0" width="138" height="10" uuid="05c43dae-809a-44da-9182-c4d7f046331b">
 						<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 					</reportElement>
@@ -103,13 +133,13 @@
 						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle" markup="styled">
-						<font size="6"/>
+						<font size="6" isBold="true"/>
 						<paragraph rightIndent="3"/>
 					</textElement>
-					<textFieldExpression><![CDATA["0"]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{SumaNivel2SaldosAnteriores}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="161" y="0" width="218" height="10" uuid="ba6bf11d-438f-4b05-bb93-38cb11a62d3b">
@@ -117,7 +147,7 @@
 					</reportElement>
 					<box>
 						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
@@ -187,7 +217,7 @@ Estado de Actividades]]></text>
 			<textField>
 				<reportElement x="379" y="0" width="120" height="10" uuid="e28f0104-087f-4116-94cd-3448a89f236b"/>
 				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -195,20 +225,28 @@ Estado de Actividades]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date().getYear() + 1900]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{AnioActual}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="500" y="0" width="138" height="10" uuid="bb13e753-f9e1-4d77-90d2-098b1ab7c57d"/>
 				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date().getYear() + 1900 - 1]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{AnioAnterior}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="161" y="0" width="218" height="10" uuid="1b07cca9-d224-4e6a-9dc1-6642e96e2619"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>
@@ -221,7 +259,7 @@ Estado de Actividades]]></text>
 				</reportElement>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
@@ -257,13 +295,13 @@ Estado de Actividades]]></text>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="6" isBold="true"/>
 					<paragraph rightIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["0"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{SaldoFinalAnterior}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="161" y="10" width="218" height="10" isRemoveLineWhenBlank="true" uuid="1635352d-9913-4a1c-af13-1c38966e490f">
@@ -272,7 +310,7 @@ Estado de Actividades]]></text>
 				</reportElement>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
@@ -291,13 +329,13 @@ Estado de Actividades]]></text>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="6" isBold="false"/>
 					<paragraph rightIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA["0"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{SaldoFinalAnterior}]]></textFieldExpression>
 			</textField>
 			<textField pattern="$ #,##0.00">
 				<reportElement x="379" y="10" width="120" height="10" uuid="b30ffa8b-14a0-437d-8e87-f71d9cdf59a3">
@@ -316,6 +354,15 @@ Estado de Actividades]]></text>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{SaldoFinal}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="499" y="0" width="139" height="10" uuid="cf43808f-ad77-4833-998b-5b3a999a0486">
+					<printWhenExpression><![CDATA[$F{Nivel} == 1]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<lastPageFooter>
@@ -326,8 +373,8 @@ Estado de Actividades]]></text>
 				</reportElement>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -343,7 +390,7 @@ Estado de Actividades]]></text>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -352,21 +399,21 @@ Estado de Actividades]]></text>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{Total}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="$ #,##0.00">
 				<reportElement x="500" y="0" width="138" height="10" uuid="46e81bc7-7e90-4d9d-8b65-9d6b2cf46952">
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="6" isBold="true"/>
 					<paragraph rightIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA["0"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{TotalSaldosAnteriores}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="161" y="10" width="477" height="10" uuid="31654b19-a4ff-4f9e-8ddc-9cb804151ba7"/>

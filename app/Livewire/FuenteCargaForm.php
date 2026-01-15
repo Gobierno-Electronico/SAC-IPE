@@ -150,6 +150,9 @@ class FuenteCargaForm extends Component
      */
     public function actualizarDocumentosFuente()
     {
+        // MODIFICACIÓN AÑADIDA: Aumentar el límite de ejecución a 4 minutos (240 segundos)
+        set_time_limit(240); 
+        
         $this->dispatch('mostrarCargando'); // Mostrar spinner de carga
         $metadata = $this->validateAndGetFileMetadata();
         
@@ -232,9 +235,9 @@ class FuenteCargaForm extends Component
 
                     // 4. Buscar IDs de las pólizas coincidentes (SELECT id, optimizado)
                     $polizaIds = Poliza::where('evento', $evento)
-                                           ->where('tipo_poliza', $tipoPoliza)
-                                           ->where('numero_poliza', $polizaNum)
-                                           ->pluck('id');
+                                             ->where('tipo_poliza', $tipoPoliza)
+                                             ->where('numero_poliza', $polizaNum)
+                                             ->pluck('id');
 
                     if ($polizaIds->isEmpty()) {
                         $errores[] = "Fila $filaExcel: No se encontró una póliza que coincida (Evento: '$evento', Tipo: '$tipoPoliza', Número: '$polizaNum').";

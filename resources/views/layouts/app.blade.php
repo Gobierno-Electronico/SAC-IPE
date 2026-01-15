@@ -345,6 +345,12 @@
                                                         {{ __('Estado de cambios en la situación financiera') }}
                                                     </a>
                                                 </li>
+                                                <li>
+                                                    <a class="dropdown-item" id="" onclick="mostrarCargando()"
+                                                        href="{{ route('estadoAnaliticoDelActivo') }}" method="GET">
+                                                        {{ __('Estado de analítico del activo') }}
+                                                    </a>
+                                                </li>
                                             </ul>
                                         </li>
                                     @endcan

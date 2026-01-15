@@ -11,7 +11,6 @@
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SAC-IPE Tierra"/>
 	<property name="com.jaspersoft.studio.report.description" value=""/>
 	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
 	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
@@ -25,6 +24,7 @@
 	<property name="net.sf.jasperreports.export.xls.wrap.text" value="true"/>
 	<property name="net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.1" value="pageHeader"/>
 	<property name="net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.2" value="pageFooter"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SAC-IPE Venus"/>
 	<parameter name="Fecha" class="java.lang.String"/>
 	<parameter name="Hora" class="java.lang.String"/>
 	<parameter name="FechaInicio" class="java.lang.String"/>
@@ -36,6 +36,10 @@
 	<field name="tipo_interaccion" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="tipo_interaccion"/>
 		<property name="com.jaspersoft.studio.field.label" value="tipo_interaccion"/>
+	</field>
+	<field name="documento_fuente" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="documento_fuente"/>
+		<property name="com.jaspersoft.studio.field.label" value="documento_fuente"/>
 	</field>
 	<field name="fecha" class="java.sql.Date">
 		<property name="com.jaspersoft.studio.field.name" value="fecha"/>
@@ -77,25 +81,25 @@
 		<property name="com.jaspersoft.studio.field.name" value="descripcion"/>
 		<property name="com.jaspersoft.studio.field.label" value="descripcion"/>
 	</field>
-	<field name="Haber" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="Haber"/>
-		<property name="com.jaspersoft.studio.field.label" value="Haber"/>
-	</field>
 	<field name="Deber" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.name" value="Deber"/>
 		<property name="com.jaspersoft.studio.field.label" value="Deber"/>
 	</field>
+	<field name="Haber" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="Haber"/>
+		<property name="com.jaspersoft.studio.field.label" value="Haber"/>
+	</field>
 	<variable name="SubtotalCargoPorPagina" class="java.math.BigDecimal" resetType="Page" calculation="Sum">
-		<variableExpression><![CDATA[$F{Haber}]]></variableExpression>
+		<variableExpression><![CDATA[$F{Deber}]]></variableExpression>
 	</variable>
 	<variable name="SubtotalAbonoPorPagina" class="java.math.BigDecimal" resetType="Page" calculation="Sum">
-		<variableExpression><![CDATA[$F{Deber}]]></variableExpression>
-	</variable>
-	<variable name="TotalGlobalCargo" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{Haber}]]></variableExpression>
 	</variable>
-	<variable name="TotalGlobalAbono" class="java.math.BigDecimal" calculation="Sum">
+	<variable name="TotalGlobalCargo" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{Deber}]]></variableExpression>
+	</variable>
+	<variable name="TotalGlobalAbono" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{Haber}]]></variableExpression>
 	</variable>
 	<group name="PolizaGrupo">
 		<groupExpression><![CDATA[$F{evento} + "-" + $F{tipo_poliza} + "-" + $F{numero_poliza}]]></groupExpression>
@@ -574,8 +578,7 @@ Departamento de Contabilidad y Presupuesto]]></text>
 			</textField>
 			<textField pattern="dd/MMM/yyyy">
 				<reportElement x="-20" y="0" width="50" height="39" isRemoveLineWhenBlank="true" uuid="ed81cb1d-a6a0-4cfe-b3c7-ada0fe2407a3">
-					<printWhenExpression><![CDATA[$F{fecha} != null
-]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{fecha} != null]]></printWhenExpression>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -651,7 +654,7 @@ Departamento de Contabilidad y Presupuesto]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA["En proceso..."]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{documento_fuente}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="260" y="0" width="71" height="39" uuid="8233f276-412f-4eda-a077-6fdfbcc917f6"/>
@@ -758,6 +761,10 @@ Departamento de Contabilidad y Presupuesto]]></text>
 					<paragraph rightIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Haber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="190" y="0" width="70" height="39" uuid="58b3f773-ba78-4c77-9acc-01479ff2aa0b"/>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

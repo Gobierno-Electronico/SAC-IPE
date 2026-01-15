@@ -17,27 +17,27 @@
         </div>
     </div>
     <div class="mt-4 d-flex flex-row-reverse">
-            <button id="botonGenerarEstadoSituacionFinanciera" wire:click="generar('PDF')" type="button"
+            <button id="botonGenerarEstadoAnaliticoDelActivo" wire:click="generar('PDF')" type="button"
                 class="btn btn-success shadow border-1 mt-3 mt-md-0" @if ($fechaInicio == "" || $fechaFin == "") disabled @endif>
-                Generar Estado de Situación Financiera PDF
+                Generar Estado analítico del activo PDF
             </button>
 
-             <button id="botonGenerarEstadoSituacionFinanciera" wire:click="generar('X')" type="button"
+             <button id="botonGenerarEstadoAnaliticoDelActivo" wire:click="generar('X')" type="button"
                 class="btn btn-success shadow border-1 mt-3 mt-md-0 me-3" @if ($fechaInicio == "" || $fechaFin == "") disabled @endif>
-                Generar Estado de Situación Financiera EXCEL
+                Generar Estado analítico del activo EXCEL
             </button>
     </div>
 </div>
 <script>
     window.addEventListener('descargar', event => {
-        let btnId = "botonGenerarEstadoSituacionFinanciera"
+        let btnId = "botonGenerarEstadoAnaliticoDelActivo"
         let btnHtml = $("#" + btnId + "").html(); 
         let spinner =
             '<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>';
         $("#" + btnId + "").html(spinner);
         $("#" + btnId + "").prop("disabled", true);
         $('#loadingScreen').prop('hidden', false);
-        let url = "http://" + window.IP_PORT + "/" + window.window.NOMBRE_REPORTEADOR + "/webresources/service/report?name=ReporteEstadoSituacionFinanciera&params=" 
+        let url = "http://" + window.IP_PORT + "/" + window.window.NOMBRE_REPORTEADOR + "/webresources/service/report?name=ReporteEstadoAnaliticoActivo&params=" 
         url += event.__livewire.params.Params;
         let mensajeEdoSolicitud = toastr.info("Procesando solicitud, espere un momento por favor . . .", "", { timeOut: "0" });
         console.log(url);
