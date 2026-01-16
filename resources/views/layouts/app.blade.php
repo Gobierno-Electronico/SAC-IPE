@@ -947,15 +947,15 @@
     </div>
 
 </body>
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<link rel="stylesheet" type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 <script>
     function mostrarCargando() {
         $('#loadingScreen').prop('hidden', false);
-        let mensajeEdoSolicitud = toastr.info("Cargando, espere un momento por favor . . .", "", {
-            timeOut: "0"
+        toastr.info("Cargando, espere un momento por favor . . .", "", {
+            timeOut: 0
         });
-
     }
 
     function esconderCargando() {
@@ -964,19 +964,22 @@
 
     function mostrarMensajeAperturaSistema() {
         toastr.options = {
-            "closeButton": true,
-            "progressBar": true,
-            "positionClass": "toast-top-right",
-            "timeOut": "4000",
-        }
+            closeButton: true,
+            progressBar: true,
+            positionClass: "toast-top-right",
+            timeOut: 4000,
+        };
 
-        toastr.error('Para iniciar el registro de movimientos primero cargue el presupuesto y los saldos iniciales',
-            'ATENCIÓN');
+        toastr.error(
+            'Para iniciar el registro de movimientos primero cargue el presupuesto y los saldos iniciales',
+            'ATENCIÓN'
+        );
     }
 </script>
+
 @auth
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
+<script>
+document.addEventListener("DOMContentLoaded", function () {
 
             const modalElement = document.getElementById('modalSeleccionAnio');
             if (!modalElement) return;
@@ -986,11 +989,10 @@
                 keyboard: false
             });
 
-            if (!localStorage.getItem('añoSelect')) {
-                modalAnio.show();
-            } else {
-                window.añoSelect = localStorage.getItem('añoSelect');
-            }
+    // 👉 Si no hay año guardado, mostrar modal
+    if (!localStorage.getItem('añoSelect')) {
+        modalAnio.show();
+    }
 
             document.getElementById('btnAceptarAnio').addEventListener('click', function() {
                 const anio = document.getElementById('selectAnio').value;
@@ -1000,35 +1002,39 @@
                     return;
                 }
 
-                window.añoSelect = anio;
-                localStorage.setItem('añoSelect', anio);
+        // 👉 Guardar año
+        localStorage.setItem('añoSelect', anio);
+        window.añoSelect = anio;
 
-                modalAnio.hide();
-                toastr.success('Año seleccionado: ' + anio);
-            });
+        modalAnio.hide();
+
+        // 👉 RECARGA para que el navbar lo pinte desde Blade
+        location.reload();
+    });
 
         });
     </script>
 @endauth
+
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
 
-        const anioGuardado = localStorage.getItem('añoSelect');
+    const anioGuardado = localStorage.getItem('añoSelect');
+    if (!anioGuardado) return;
 
-        if (anioGuardado) {
-            window.añoSelect = anioGuardado;
+    window.añoSelect = anioGuardado;
 
-            const texto = document.getElementById('ejercicioActual');
-            const anioSpan = document.getElementById('anioNavbar');
+    const texto = document.getElementById('ejercicioActual');
+    const anioSpan = document.getElementById('anioNavbar');
 
-            if (texto && anioSpan) {
-                anioSpan.textContent = anioGuardado;
-                texto.style.display = 'inline';
-            }
-        }
+    if (texto && anioSpan) {
+        anioSpan.textContent = anioGuardado;
+        texto.style.display = 'inline';
+    }
 
     });
 </script>
+
 
 
 
