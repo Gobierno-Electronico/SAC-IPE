@@ -47,7 +47,7 @@
 
             <label for="inputFechaRegistro" class="form-label mt-3">Fecha de afectación</label>
             <input type="date" name="inputFechaRegistro" id="inputFechaRegistro" class="form-control mb-3"
-                 wire:model.live="fechaAfectacion">
+                wire:ignore wire:model.live="fechaAfectacion">
 
         </div>
 

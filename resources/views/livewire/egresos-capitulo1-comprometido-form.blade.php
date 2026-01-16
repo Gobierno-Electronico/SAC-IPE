@@ -32,7 +32,7 @@
             <div class="col-2">
                 <label for="inputFechaAfectacion" class="form-label mt-3">Fecha de afectación</label>
                 <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control"
-                    wire:model="fechaAfectacion">
+                    wire:ignore wire:model="fechaAfectacion">
 
                 <label for="selectDocumentoFuente" class="form-label mt-3">Documento fuente</label>
                 <select name="selectDocumentoFuente" id="selectDocumentoFuente" class="form-select"

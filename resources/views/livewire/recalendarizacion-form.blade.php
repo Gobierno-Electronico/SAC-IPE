@@ -89,7 +89,7 @@
             <label for="inputFechaAfectacion" class="form-label fs-5">Fecha de afectación</label>
         </div>
         <div class="col">
-            <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control"
+            <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control" wire:ignore
                 wire:model="fechaAfectacion">
         </div>
     </div>
