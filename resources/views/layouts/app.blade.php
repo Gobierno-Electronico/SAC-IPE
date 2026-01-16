@@ -172,7 +172,7 @@
                         </ul>
                         </li>
 
-                        @can('acceso-presupuesto')
+                        
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                     data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
@@ -292,7 +292,7 @@
                                     </li>
                                 </ul>
                             </li>
-                        @endcan
+                        
 
                         @canany(['acceso-contabilidad-reportes', 'acceso-contabilidad-consultar-carga'])
                             <li class="nav-item dropdown">
