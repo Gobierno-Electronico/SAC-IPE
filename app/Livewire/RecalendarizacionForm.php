@@ -57,7 +57,6 @@ class RecalendarizacionForm extends Component
     public $numeroPoliza;
     public $totalAumentado = 0;
     public $totalDisminuido = 0;
-
     public function render()
     {
         return view('livewire.recalendarizacion-form');

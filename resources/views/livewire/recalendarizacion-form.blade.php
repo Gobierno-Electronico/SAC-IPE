@@ -90,7 +90,7 @@
         </div>
         <div class="col">
             <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control"
-                max="{{ now()->toDateString() }}" wire:model="fechaAfectacion">
+                wire:model="fechaAfectacion">
         </div>
     </div>
 
@@ -196,6 +196,9 @@
     @endif
 </div>
 <script>
+
+
+
     window.addEventListener('limpiar', event => {
         limpiar()
     })
