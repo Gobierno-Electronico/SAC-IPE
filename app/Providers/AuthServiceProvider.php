@@ -24,38 +24,28 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('acceso-cuentas', function ($user) {
-            // dd($user->rol);
-            return in_array($user->rol->value, [
-                'Administrador',
-                'Jefe_Departamento_Contabilidad_Presupuesto',
-                'Jefe_Oficina_Contabilidad_general'
-            ]);
-        });
+        Gate::define(
+            'catalogos.cuentas',
+            fn($user) =>
+            $user->puede('catalogos.cuentas')
+        );
 
-        Gate::define('acceso-presupuesto', function ($user) {
-            return in_array($user->rol->value, [
-                'Administrador',
-                'Jefe_Oficina_Control_Presupuestal', 
-                'Analista'
-            ]);
-        });
+        Gate::define(
+            'catalogos.clasificador_administrativo',
+            fn($user) =>
+            $user->puede('catalogos.clasificador_administrativo')
+        );
 
-        Gate::define('acceso-contabilidad-reportes', function ($user) {
-            return in_array($user->rol->value, [
-                'Administrador',
-                'Jefe_Departamento_Contabilidad_Presupuesto', 
-                'Jefe_Oficina_Contabilidad_general'
-            ]);
-        });
+        Gate::define(
+            'catalogos.clasificador_programatico',
+            fn($user) =>
+            $user->puede('catalogos.clasificador_programatico')
+        );
 
-        Gate::define('acceso-contabilidad-consultar-carga', function ($user) {
-            return in_array($user->rol->value, [
-                'Administrador',
-                'Jefe_Oficina_Contabilidad_general',
-                'Analista'
-            ]);
-        });
-
+        Gate::define(
+            'catalogos.clasificador_funcional_gasto',
+            fn($user) =>
+            $user->puede('catalogos.clasificador_funcional_gasto')
+        );
     }
 }

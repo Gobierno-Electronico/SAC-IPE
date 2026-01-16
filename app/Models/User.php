@@ -48,4 +48,19 @@ class User extends Authenticatable
         'password' => 'hashed',
         'rol' => RolEnum::class
     ]; 
+
+    public function actividades()
+    {
+        return $this->belongsToMany(Actividad::class);
+    }
+
+    public function puede(string $actividad): bool
+    {
+        // Superusuario
+        if ($this->rol->value === 'Administrador') {
+            return true;
+        }
+
+        return $this->actividades->contains('nombre_actividad', $actividad);
+    }
 }
