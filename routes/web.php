@@ -70,28 +70,28 @@ Route::get('/relacionarCuentasCRI', [CuentasController::class, 'relacionarCuenta
 Route::get('/relacionarCuentasCFF', [CuentasController::class, 'relacionarCuentasCFF'])->name('relacionarCuentasCFF')->middleware('role:Administrador');
 
 //Presupuesto ingresos
-Route::get('/presupuesto/consulta-presupuesto-ingresos',[PresupuestoController::class, 'consultaPresupuestoIngresos'])->name('consultaPresupuestoIngresos')->middleware('can:acceso-presupuesto');
-Route::get('/presupuesto/presupuesto-inicial-ingresos',[PresupuestoController::class, 'presupuestoInicialIngresos'])->name('presupuestoInicialIngresos')->middleware('can:acceso-presupuesto');
-Route::post('/presupuesto/cargar-presupuesto-inicial-ingresos',[PresupuestoController::class, 'cargarPresupuestoInicialIngresos'])->name('cargarPresupuestoInicialIngresos')->middleware('can:acceso-presupuesto');
-Route::get('/presupuesto/plantilla-presupuesto-inicial',[PresupuestoController::class, 'plantillaPresupuestoInicial'])->name('plantillaPresupuestoInicial')->middleware('can:acceso-presupuesto');
+Route::get('/presupuesto/consulta-presupuesto-ingresos',[PresupuestoController::class, 'consultaPresupuestoIngresos'])->name('consultaPresupuestoIngresos');
+Route::get('/presupuesto/presupuesto-inicial-ingresos',[PresupuestoController::class, 'presupuestoInicialIngresos'])->name('presupuestoInicialIngresos');
+Route::post('/presupuesto/cargar-presupuesto-inicial-ingresos',[PresupuestoController::class, 'cargarPresupuestoInicialIngresos'])->name('cargarPresupuestoInicialIngresos');
+Route::get('/presupuesto/plantilla-presupuesto-inicial',[PresupuestoController::class, 'plantillaPresupuestoInicial'])->name('plantillaPresupuestoInicial');
 
 //Presupuesto egresos
-Route::get('/presupuesto/consulta-presupuesto-egresos',[PresupuestoController::class, 'consultaPresupuestoEgresos'])->name('consultaPresupuestoEgresos')->middleware('can:acceso-presupuesto');
-Route::get('/presupuesto/presupuesto-inicial-egresos',[PresupuestoController::class, 'presupuestoInicialEgresos'])->name('presupuestoInicialEgresos')->middleware('can:acceso-presupuesto');
-Route::post('/presupuesto/cargar-presupuesto-inicial-egresos',[PresupuestoController::class, 'cargarPresupuestoInicialEgresos'])->name('cargarPresupuestoInicialEgresos')->middleware('can:acceso-presupuesto');
-Route::get('/presupuesto/plantilla-presupuesto-inicial-egresos',[PresupuestoController::class, 'plantillaPresupuestoInicial'])->name('plantillaPresupuestoInicialEgresos')->middleware('can:acceso-presupuesto');
+Route::get('/presupuesto/consulta-presupuesto-egresos',[PresupuestoController::class, 'consultaPresupuestoEgresos'])->name('consultaPresupuestoEgresos');
+Route::get('/presupuesto/presupuesto-inicial-egresos',[PresupuestoController::class, 'presupuestoInicialEgresos'])->name('presupuestoInicialEgresos');
+Route::post('/presupuesto/cargar-presupuesto-inicial-egresos',[PresupuestoController::class, 'cargarPresupuestoInicialEgresos'])->name('cargarPresupuestoInicialEgresos');
+Route::get('/presupuesto/plantilla-presupuesto-inicial-egresos',[PresupuestoController::class, 'plantillaPresupuestoInicial'])->name('plantillaPresupuestoInicialEgresos');
 
 //Afectaciones líquidas
-Route::get('/presupuesto/consulta-ampliaciones-reducciones',[PresupuestoController::class, 'consultaAmpliacionesReducciones'])->name('consultaAmpliacionesReducciones')->middleware('can:acceso-presupuesto');
-Route::get('/presupuesto/ingresos/ampliacion',[PresupuestoController::class, 'ampliacionIngresos'])->name('ampliacionIngresos')->middleware('can:acceso-presupuesto');
-Route::get('/presupuesto/egresos/ampliacion',[PresupuestoController::class, 'ampliacionEgresos'])->name('ampliacionEgresos')->middleware('can:acceso-presupuesto');
-Route::get('/presupuesto/ingresos/reduccion',[PresupuestoController::class, 'reduccionIngresos'])->name('reduccionIngresos')->middleware('can:acceso-presupuesto');
-Route::get('/presupuesto/egresos/reduccion',[PresupuestoController::class, 'reduccionEgresos'])->name('reduccionEgresos')->middleware('can:acceso-presupuesto');
-Route::get('/presupuesto/verDetalleAfectacion/{evento}',[PresupuestoController::class, 'verDetalleAfectacion'])->name('verDetalleAfectacion')->middleware('can:acceso-presupuesto');
+Route::get('/presupuesto/consulta-ampliaciones-reducciones',[PresupuestoController::class, 'consultaAmpliacionesReducciones'])->name('consultaAmpliacionesReducciones');
+Route::get('/presupuesto/ingresos/ampliacion',[PresupuestoController::class, 'ampliacionIngresos'])->name('ampliacionIngresos');
+Route::get('/presupuesto/egresos/ampliacion',[PresupuestoController::class, 'ampliacionEgresos'])->name('ampliacionEgresos');
+Route::get('/presupuesto/ingresos/reduccion',[PresupuestoController::class, 'reduccionIngresos'])->name('reduccionIngresos');
+Route::get('/presupuesto/egresos/reduccion',[PresupuestoController::class, 'reduccionEgresos'])->name('reduccionEgresos');
+Route::get('/presupuesto/verDetalleAfectacion/{evento}',[PresupuestoController::class, 'verDetalleAfectacion'])->name('verDetalleAfectacion');
 Route::get('/presupuesto/consulta-transferencias', [PresupuestoController::class, 'consultarTransferencias'])->name('consultaTransferencias')->middleware('role:Administrador');
 
 // Recandelarización y Reclasificación
-Route::get('/presupuesto/recalendarizacion', [PresupuestoController::class, 'recalendarizacion'])->name('recalendarizacion')->middleware('can:acceso-presupuesto');
+Route::get('/presupuesto/recalendarizacion', [PresupuestoController::class, 'recalendarizacion'])->name('recalendarizacion');
 
 //Bitacora
 Route::get('/bitacoras', [BitacoraController::class, 'listarBitacoras'])->name('listarBitacoras')->middleware('role:Tecnico');
@@ -127,7 +127,7 @@ Route::post('/contabilidad/cargar-auxiliares', [ContabilidadController::class, '
 Route::get('/contabilidad/plantilla-auxiliares', [ContabilidadController::class, 'plantillaAuxiliares'])->name('plantillaAuxiliares')->middleware('can:acceso-contabilidad-consultar-carga');
 
 //Tipos de presupuesto
-Route::get("/tiposPresupuesto", [PresupuestoController::class, 'tiposPresupuesto'])->name('tiposPresupuesto')->middleware('can:acceso-presupuesto');
+Route::get("/tiposPresupuesto", [PresupuestoController::class, 'tiposPresupuesto'])->name('tiposPresupuesto');
 
 Route::get("/movimientos", [PresupuestoController::class, 'movimientos'])->name('movimientos')->middleware('role:Administrador');
 
