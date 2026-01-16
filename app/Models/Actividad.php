@@ -20,7 +20,11 @@ class Actividad extends Model
      */
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class)
-                    ->withTimestamps();
+        return $this->belongsToMany(
+            User::class,
+            'permisos_actividades_usuarios',
+            'id_actividad',
+            'id_usuario'
+        )->withTimestamps();
     }
 }
