@@ -69,7 +69,13 @@ class EgresosCapitulo2y3DevengadoForm extends Component
     public $cambiarCuentaContableSeleccionada = true;
 
     public $habilitarSelectorTipoRegistro = false;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render() 
     {
         try{

@@ -52,7 +52,13 @@ class DeudoresReintegroAnticipoForm extends Component
     public $total;
     public $tipoMovimiento;
     public $ppto;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         try {

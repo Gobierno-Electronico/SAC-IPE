@@ -64,7 +64,13 @@ class DevengadoPrevRecaudadoForm extends Component
     public $numeroEvento;
     public $numeroPolizaRemanente;
     public $total;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         try {

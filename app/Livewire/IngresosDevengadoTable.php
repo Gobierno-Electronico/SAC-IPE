@@ -23,7 +23,13 @@ class IngresosDevengadoTable extends Tabla
     public $total = 0;
     public $numeroPoliza;
     public $numeroEvento;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render(){
         return view('livewire.ingresos-devengado-table');
     }

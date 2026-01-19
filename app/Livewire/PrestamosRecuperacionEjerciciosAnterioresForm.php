@@ -47,7 +47,13 @@ class PrestamosRecuperacionEjerciciosAnterioresForm extends Component
     public $numeroEvento;
     public $numeroPoliza;
     public $total;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         try {

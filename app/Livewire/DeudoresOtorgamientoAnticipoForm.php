@@ -41,7 +41,13 @@ class DeudoresOtorgamientoAnticipoForm extends Component
     public $total;
     public $tipoMovimiento;
     public $solvencia;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         try {

@@ -56,7 +56,13 @@ class EgresosCapitulo2y3EjercidoForm extends Component
     public $cuentas = [];
     public $cambiarCuentaSeleccionada = true;
     public $PTTODevengado = 0;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render() 
     {
         try{

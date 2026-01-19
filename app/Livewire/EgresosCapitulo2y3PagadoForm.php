@@ -67,7 +67,13 @@ class EgresosCapitulo2y3PagadoForm extends Component
     public $cambiarPartidaPresupuestalSeleccionada = false;
     public $cambiarCuentaBancoSeleccionada = false;
     public $cambiarCuentaRetencionesSeleccionada = false;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         try {

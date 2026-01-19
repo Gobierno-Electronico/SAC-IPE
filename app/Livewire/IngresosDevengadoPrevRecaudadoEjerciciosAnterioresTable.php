@@ -29,7 +29,13 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresTable extends Tabla
     public $numeroPolizaRemanente;
     public $totalRegistrosPorCuentaPago = 0;
     public $totalDisponible = 0;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         return view('livewire.ingresos-devengado-prev-recaudado-ejercicios-anteriores-table');

@@ -26,7 +26,13 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
     public $importeRestante = 0;
     public $numeroPoliza;
     public $numeroEvento;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         return view('livewire.prestamos-otorgamiento-ejercido-pagado-recaudado-prestamosRenovacion-table');

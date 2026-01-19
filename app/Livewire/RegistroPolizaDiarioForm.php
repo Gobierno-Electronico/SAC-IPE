@@ -45,7 +45,13 @@ class RegistroPolizaDiarioForm extends Component
     public $totalCargo;
     public $totalAbono;
     public $total;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         try {

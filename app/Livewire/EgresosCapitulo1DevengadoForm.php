@@ -54,7 +54,13 @@ class EgresosCapitulo1DevengadoForm extends Component
     public $cambiarEventoSeleccionado = true;
     public $eventos = [];
     public $eventoAuxiliar = "";
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render() 
     {
         try{         

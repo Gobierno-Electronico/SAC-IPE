@@ -36,7 +36,13 @@ class IngresosFormConsultaTable extends Tabla
     public $categoriaRemanente;
 
     public $tipoMovimiento;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         $poliza = Poliza::where('numero_poliza', '=', $this->numeroPoliza)

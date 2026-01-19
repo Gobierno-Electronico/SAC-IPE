@@ -26,7 +26,13 @@ class EgresosCapitulo5DevengadoTable extends Tabla
     public $totalDisponible = 0;
     public $numeroEvento;
     public $numeroPolizaRemanente;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         return view('livewire.egresos-capitulo5-devengado-table');

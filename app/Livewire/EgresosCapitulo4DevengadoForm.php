@@ -50,7 +50,13 @@ class EgresosCapitulo4DevengadoForm extends Component
     public $cambiarCuentaContableSeleccionada = true;
     public $partidasPresupuestales = [];
     public $cambiarPartidaPresupuestalSeleccionada = true;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render() 
     {
         try{

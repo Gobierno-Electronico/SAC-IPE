@@ -47,7 +47,13 @@ class EgresosCapitulo4ComprometidoForm extends Component
 
     public $PTTOEjecutar = 0;
 
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render() 
     {
         try{

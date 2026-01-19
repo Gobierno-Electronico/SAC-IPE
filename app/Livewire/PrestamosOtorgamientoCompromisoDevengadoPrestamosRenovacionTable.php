@@ -24,7 +24,13 @@ class PrestamosOtorgamientoCompromisoDevengadoPrestamosRenovacionTable extends T
     public $perPage = 6;
     public $total = 0;
     public $totalDisponible = 0;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         return view('livewire.prestamos-otorgamiento-compromiso-devengado-prestamosRenovacion-table');

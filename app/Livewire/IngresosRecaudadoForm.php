@@ -66,7 +66,13 @@ class IngresosRecaudadoForm extends Component
     public $consultarRegistro = false;
     public $numeroPolizaRemanente;
     public $total;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         try {

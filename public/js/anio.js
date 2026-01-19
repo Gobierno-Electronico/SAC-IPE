@@ -28,3 +28,20 @@ document.addEventListener("DOMContentLoaded", function () {
         inputFecha2.max = fechaMax;
     }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const anio = localStorage.getItem('añoSelect');
+
+    if (!anio) return;
+
+    fetch('/set-anio-fiscal', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            anio
+        })
+    });
+});

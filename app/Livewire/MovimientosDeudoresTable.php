@@ -35,8 +35,13 @@ class MovimientosDeudoresTable extends Tabla
     public $categoriaRemanente;
 
     public $eventoSeleccionado;
+    public int $anio;
 
-
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         $eventos = Poliza::select('evento', 'descripcion')

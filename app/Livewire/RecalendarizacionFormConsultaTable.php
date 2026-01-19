@@ -32,7 +32,12 @@ class RecalendarizacionFormConsultaTable extends Tabla
     public $categoriaModulo = "";
     public $tipoMovimiento;
 
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
 
     public function render()
     {

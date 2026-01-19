@@ -43,7 +43,13 @@ class PresupuestoEGRESOSTable extends Tabla
     public $fecha = '';
 
     public $hora = '';
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         $COGS = Poliza::join('cuenta_clasificadores_egreso as ce', 'ce.codigoCuenta', '=', 'polizas.cuenta')

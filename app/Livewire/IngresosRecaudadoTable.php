@@ -25,7 +25,13 @@ class IngresosRecaudadoTable extends Tabla
     public $numeroPoliza;
     public $numeroEvento;
     public $numeroPolizaRemanente;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         return view('livewire.ingresos-recaudado-table');

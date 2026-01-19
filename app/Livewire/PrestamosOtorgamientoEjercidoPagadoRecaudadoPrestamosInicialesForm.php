@@ -35,7 +35,13 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesForm extends
     public $total;
     public $cuentasAbono = [];
     public $mostrarAbono = false;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     protected function rules()
     {
         $cuentaSeleccionada = Cuenta::find($this->cuenta);

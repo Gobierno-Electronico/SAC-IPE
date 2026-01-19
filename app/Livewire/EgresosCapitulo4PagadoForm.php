@@ -70,7 +70,13 @@ class EgresosCapitulo4PagadoForm extends Component
 
     public $cuentasRetenciones = [];
     public $cambiarCuentaRetencionesSeleccionada = true;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         try {

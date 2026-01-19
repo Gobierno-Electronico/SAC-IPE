@@ -24,6 +24,12 @@ class EgresosCapitulo1PagadoTable extends Tabla
     public $totalDisponible = 0;
     public $numeroPolizaRemanente;
     public $numeroEvento;
+    public int $anio;
+
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
 
     public function render()
     {

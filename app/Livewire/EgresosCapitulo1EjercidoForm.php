@@ -47,7 +47,13 @@ class EgresosCapitulo1EjercidoForm extends Component
     public $documentoFuente = "";
 
     public $PTTODevengado = 0;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render() 
     {
         try{

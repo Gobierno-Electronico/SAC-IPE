@@ -40,7 +40,13 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
     private $ultimoNumeroPolizaTipoD = 0;
     private $polizasComprometidasReclasificadas = [];
     private $numeroDeEventoCompromiso = NULL;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         try {

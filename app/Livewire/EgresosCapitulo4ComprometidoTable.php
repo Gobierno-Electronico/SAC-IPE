@@ -25,7 +25,13 @@ class EgresosCapitulo4ComprometidoTable extends Tabla
     public $perPage = 6;
     public $total = 0;
     public $totalDisponible = 0;
-    
+    public int $anio;
+
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+        
     public function render()
     {
         return view('livewire.egresos-capitulo4-comprometido-table');

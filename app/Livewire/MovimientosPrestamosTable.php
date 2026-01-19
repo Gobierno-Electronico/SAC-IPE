@@ -33,7 +33,12 @@ class MovimientosPrestamosTable extends Tabla
     public $tipoMovimiento;
     public $categoriaModulo;
     public $eventoSeleccionado;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
 
     public function render()
     {

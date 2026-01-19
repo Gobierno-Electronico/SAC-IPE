@@ -70,7 +70,13 @@ class DeudoresComprobacionAnticipoForm extends Component
 
     public $PTTOEjercer = 0;
     public $cuentaResponsabilidad;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         try {

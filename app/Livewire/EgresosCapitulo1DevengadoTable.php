@@ -26,7 +26,12 @@ class EgresosCapitulo1DevengadoTable extends Tabla
     public $numeroEvento;
     public $numeroPolizaRemanente;
     public $importeRestante = 0;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
 
     public function render()
     {

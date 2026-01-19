@@ -57,6 +57,13 @@ class RecalendarizacionForm extends Component
     public $numeroPoliza;
     public $totalAumentado = 0;
     public $totalDisminuido = 0;
+    public int $anio;
+
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+        
     public function render()
     {
         return view('livewire.recalendarizacion-form');

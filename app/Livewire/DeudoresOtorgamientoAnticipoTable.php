@@ -26,6 +26,12 @@ class DeudoresOtorgamientoAnticipoTable extends Tabla
     public $numeroPoliza;
     public $numeroEvento;
     public $totalDisponible = 0;
+    public int $anio;
+
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
 
     public function render(){
         return view('livewire.deudores-ortorgamiento-anticipo-table');
