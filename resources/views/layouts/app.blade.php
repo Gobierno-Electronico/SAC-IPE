@@ -84,20 +84,22 @@
                             @endtecnico
 
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                    data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
-                                    aria-expanded="false" v-pre>
-                                    {{ __('Catálogos') }}
-                                </a>
+                                @can('catalogos')
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                        data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
+                                        aria-expanded="false" v-pre>
+                                        {{ __('Catálogos') }}
+                                    </a>
+                                @endcan
 
                                 <ul class="dropdown-menu">
                                     <li class="nav-item dropdown">
-                                            @can('catalogos.cuentas')
-                                                <a id="navbarCuentas" class="dropdown-item" href="/cuentas"
+                                        @can('catalogos.cuentas')
+                                            <a id="navbarCuentas" class="dropdown-item" href="/cuentas"
                                                 onclick="mostrarCargando()" role="button">
                                                 {{ __('Cuentas') }}</a>
-                                            @endcan
-                                        </li>
+                                        @endcan
+                                    </li>
                                     <li class="nav-item dropdown">
                                         @can('catalogos.clasificador_administrativo')
                                             <a class="dropdown-item" href="/catalogos/CA" id="navbarCA"
@@ -123,35 +125,45 @@
                                         @endcan
                                     </li>
                                     <li class="nav-item dropdown">
-                                        <a class="dropdown-item" href="/catalogos/CTG" id="navbarCTG"
-                                            onclick="mostrarCargando()" role="button">
-                                            {{ __('Clasificador Tipo Gasto') }}
-                                        </a>
+                                        @can('catalogos.clasificador_tipo_gasto')
+                                            <a class="dropdown-item" href="/catalogos/CTG" id="navbarCTG"
+                                                onclick="mostrarCargando()" role="button">
+                                                {{ __('Clasificador Tipo Gasto') }}
+                                            </a>
+                                        @endcan
                                     </li>
                                     <li class="nav-item dropdown">
-                                        <a class="dropdown-item" href="/catalogos/COG" id="navbarCOG"
-                                            onclick="mostrarCargando()" role="button">
-                                            {{ __('Clasificador Objeto Gasto') }}
-                                        </a>
+                                        @can('catalogos.clasificador_objeto_gasto')
+                                            <a class="dropdown-item" href="/catalogos/COG" id="navbarCOG"
+                                                onclick="mostrarCargando()" role="button">
+                                                {{ __('Clasificador Objeto Gasto') }}
+                                            </a>
+                                        @endcan
                                     </li>
                                     <li class="nav-item dropdown">
-                                        <a class="dropdown-item" href="/catalogos/CFF" id="navbarCFF"
-                                            onclick="mostrarCargando()" role="button">
-                                            {{ __('Clasificador Fuente Financiamiento') }}
-                                        </a>
+                                        @can('catalogos.clasificador_fuente_financiamiento')
+                                            <a class="dropdown-item" href="/catalogos/CFF" id="navbarCFF"
+                                                onclick="mostrarCargando()" role="button">
+                                                {{ __('Clasificador Fuente Financiamiento') }}
+                                            </a>
+                                        @endcan
                                     </li>
                                     <li class="nav-item dropdown">
-                                        <a class="dropdown-item" href="/catalogos/CRI" id="navbarCRI"
-                                            onclick="mostrarCargando()" role="button">
-                                            {{ __('Clasificador Rubro Ingreso') }}
-                                        </a>
+                                        @can('catalogos.clasificador_rubro_ingreso')
+                                            <a class="dropdown-item" href="/catalogos/CRI" id="navbarCRI"
+                                                onclick="mostrarCargando()" role="button">
+                                                {{ __('Clasificador Rubro Ingreso') }}
+                                            </a>
+                                        @endcan
                                     </li>
 
                                     <li class="dropdown dropend">
-                                        <a href="#" class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
-                                            role="button">
-                                            Matrices de Conversión
-                                        </a>
+                                        @can('catalogos.matrices_conversion')
+                                            <a href="#" class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                                role="button">
+                                                Matrices de Conversión
+                                            </a>
+                                        @endcan
                                         <ul class="dropdown-menu">
                                             <li class="nav-item dropdown">
                                                 <a class="dropdown-item" href="{{ route('cargarMatriz') }}"
@@ -172,146 +184,174 @@
                         </ul>
                         </li>
 
-                        
-                            <li class="nav-item dropdown">
+                        <li class="nav-item dropdown">
+                            @can('presupuesto')
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                     data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
                                     aria-expanded="false" v-pre>
                                     {{ __('Presupuesto') }}
                                 </a>
+                            @endcan
 
-                                <ul class="dropdown-menu">
-                                    <li class="dropend">
+                            <ul class="dropdown-menu">
+                                <li class="dropend">
+                                    @can('presupuesto.cargar_presupuesto')
                                         <a href="#" class="dropdown-item dropdown-toggle"
                                             data-bs-toggle="dropdown">Cargar
                                             Presupuesto</a>
-                                        <ul class="dropdown-menu">
-                                            <li>
+                                    @endcan
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            @can('presupuesto.cargar_presupuesto.ingresos')
                                                 <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                                     href="{{ route('presupuestoInicialIngresos') }}" method="GET">
                                                     {{ __('Ingresos') }}
                                                 </a>
-                                            </li>
-                                            <li>
+                                            @endcan
+                                        </li>
+                                        <li>
+                                            @can('presupuesto.cargar_presupuesto.egresos')
                                                 <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                                     href="{{ route('presupuestoInicialEgresos') }}" method="GET">
                                                     {{ __('Egresos') }}
                                                 </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="dropend">
+                                            @endcan
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="dropend">
+                                    @can('presupuesto.consulta_presupuesto')
                                         <a href="#" class="dropdown-item dropdown-toggle"
                                             data-bs-toggle="dropdown">Consultar
                                             Presupuesto</a>
-                                        <ul class="dropdown-menu">
-                                            <li>
+                                    @endcan
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            @can('presupuesto.consulta_presupuesto.ingresos')
                                                 <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                                     href="{{ route('consultaPresupuestoIngresos') }}" method="GET">
                                                     {{ __('Ingresos') }}
                                                 </a>
-                                            </li>
-                                            <li>
+                                            @endcan
+                                        </li>
+                                        <li>
+                                            @can('presupuesto.consulta_presupuesto.egresos')
                                                 <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                                     href="{{ route('consultaPresupuestoEgresos') }}" method="GET">
                                                     {{ __('Egresos') }}
                                                 </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="dropend">
-                                        <a href="#" class="dropdown-item dropdown-toggle"
-                                            data-bs-toggle="dropdown">Consultas</a>
-                                        <ul class="dropdown-menu">
-                                            <li>
+                                            @endcan
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="dropend">
+                                    <a href="#" class="dropdown-item dropdown-toggle"
+                                        data-bs-toggle="dropdown">Consultas</a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            @can('presupuesto.consultas.tipos_de_presupuesto')
                                                 <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                                     href="{{ route('tiposPresupuesto') }}" method="GET">
                                                     {{ __('Tipos de presupuesto') }}
                                                 </a>
-                                            </li>
-                                            <li>
+                                            @endcan
+                                        </li>
+                                        <li>
+                                            @can('presupuesto.consultas.ampliaciones-reducciones')
                                                 <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                                     wire:navigate.hover href="{{ route('consultaAmpliacionesReducciones') }}"
                                                     method="GET">
                                                     {{ __('Ampliaciones/Reducciones') }}
                                                 </a>
-                                            </li>
-                                            <li>
+                                            @endcan
+                                        </li>
+                                        <li>
+                                            @can('presupuesto.consultas.consultar_transferencias')
                                                 <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                                     wire:navigate.hover href="{{ route('consultaTransferencias') }}"
                                                     method="GET">
                                                     {{ __('Consultar tranferencias') }}
                                                 </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="dropend">
-                                        <a href="#" class="dropdown-item dropdown-toggle"
-                                            data-bs-toggle="dropdown">Afectaciones
-                                            ingresos</a>
-                                        <ul class="dropdown-menu">
-                                            <li>
+                                            @endcan
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="dropend">
+                                    <a href="#" class="dropdown-item dropdown-toggle"
+                                        data-bs-toggle="dropdown">Afectaciones
+                                        ingresos</a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            @can('presupuesto.afectaciones_ingresos.ampliacion')
                                                 <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                                     href="{{ route('ampliacionIngresos') }}" method="GET">
                                                     {{ __('Ampliación') }}
                                                 </a>
-                                            </li>
-                                            <li>
+                                            @endcan
+                                        </li>
+                                        <li>
+                                            @can('presupuesto.afectaciones_ingresos.reduccion')
                                                 <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                                     href="{{ route('reduccionIngresos') }}" method="GET">
                                                     {{ __('Reducción') }}
                                                 </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="dropend">
-                                        <a href="#" class="dropdown-item dropdown-toggle"
-                                            data-bs-toggle="dropdown">Afectaciones
-                                            egresos</a>
-                                        <ul class="dropdown-menu">
-                                            <li>
+                                            @endcan
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="dropend">
+                                    <a href="#" class="dropdown-item dropdown-toggle"
+                                        data-bs-toggle="dropdown">Afectaciones
+                                        egresos</a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            @can('presupuesto.afectaciones_egresos.ampliacion')
                                                 <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                                     href="{{ route('ampliacionEgresos') }}" method="GET">
                                                     {{ __('Ampliación') }}
                                                 </a>
-
-                                            </li>
-                                            <li>
+                                            @endcan
+                                        </li>
+                                        <li>
+                                            @can('presupuesto.afectaciones_egresos.reduccion')
                                                 <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                                     href="{{ route('reduccionEgresos') }}" method="GET">
                                                     {{ __('Reducción') }}
                                                 </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
+                                            @endcan
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    @can('presupuesto.reclasificacion-recalendarizacion')
                                         <a class="dropdown-item" id="" onclick="mostrarCargando()"
                                             href="{{ route('recalendarizacion') }}" method="GET">
                                             {{ __('Reclasificación/Recalendarización') }}
                                         </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        
+                                    @endcan
+                                </li>
+                            </ul>
+                        </li>
 
-                        @canany(['acceso-contabilidad-reportes', 'acceso-contabilidad-consultar-carga'])
+
                             <li class="nav-item dropdown">
-                                @if ($hayPresupuestoCompleto)
-                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                        data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
-                                        aria-expanded="false" v-pre>
-                                        {{ __('Contabilidad') }}
-                                    </a>
-                                @else
-                                    <a id="navbarDropdown" class="nav-link dropdown-toggle disabled" href="#"
-                                        role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside"
-                                        aria-haspopup="true" aria-expanded="false" v-pre disabled>
-                                        {{ __('Contabilidad') }}
-                                    </a>
-                                @endif
+                                @can('contabilidad')
+                                    @if ($hayPresupuestoCompleto)
+                                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                            data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
+                                            aria-expanded="false" v-pre>
+                                            {{ __('Contabilidad') }}
+                                        </a>
+                                    @else
+                                        <a id="navbarDropdown" class="nav-link dropdown-toggle disabled" href="#"
+                                            role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                            aria-haspopup="true" aria-expanded="false" v-pre disabled>
+                                            {{ __('Contabilidad') }}
+                                        </a>
+                                    @endif
+                                @endcan
 
                                 <ul class="dropdown-menu">
-                                    @can('acceso-contabilidad-reportes')
                                         <li class="dropend">
                                             <a href="#" class="dropdown-item dropdown-toggle"
                                                 data-bs-toggle="dropdown">Reportes</a>
@@ -366,9 +406,8 @@
                                                 </li>
                                             </ul>
                                         </li>
-                                    @endcan
 
-                                    @can('acceso-contabilidad-consultar-carga')
+                                    
                                         <li class="dropend">
                                             <a href="#" class="dropdown-item dropdown-toggle"
                                                 data-bs-toggle="dropdown">Consultar</a>
@@ -388,9 +427,9 @@
                                                 </li>
                                             </ul>
                                         </li>
-                                    @endcan
+                                    
 
-                                    @can('acceso-contabilidad-consultar-carga')
+                                    
                                         <li class="dropend">
                                             <a href="#" class="dropdown-item dropdown-toggle"
                                                 data-bs-toggle="dropdown">Carga</a>
@@ -415,10 +454,9 @@
                                                 </li>
                                             </ul>
                                         </li>
-                                    @endcan
+                                    
                                 </ul>
                             </li>
-                        @endcanany
 
                         <li class="nav-item dropdown">
                             @if ($haySaldosIniciales)
@@ -947,8 +985,7 @@
     </div>
 
 </body>
-<link rel="stylesheet" type="text/css"
-      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 <script>
     function mostrarCargando() {
@@ -978,8 +1015,8 @@
 </script>
 
 @auth
-<script>
-document.addEventListener("DOMContentLoaded", function () {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
 
             const modalElement = document.getElementById('modalSeleccionAnio');
             if (!modalElement) return;
@@ -989,10 +1026,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 keyboard: false
             });
 
-    // 👉 Si no hay año guardado, mostrar modal
-    if (!localStorage.getItem('añoSelect')) {
-        modalAnio.show();
-    }
+            // 👉 Si no hay año guardado, mostrar modal
+            if (!localStorage.getItem('añoSelect')) {
+                modalAnio.show();
+            }
 
             document.getElementById('btnAceptarAnio').addEventListener('click', function() {
                 const anio = document.getElementById('selectAnio').value;
@@ -1002,35 +1039,35 @@ document.addEventListener("DOMContentLoaded", function () {
                     return;
                 }
 
-        // 👉 Guardar año
-        localStorage.setItem('añoSelect', anio);
-        window.añoSelect = anio;
+                // 👉 Guardar año
+                localStorage.setItem('añoSelect', anio);
+                window.añoSelect = anio;
 
-        modalAnio.hide();
+                modalAnio.hide();
 
-        // 👉 RECARGA para que el navbar lo pinte desde Blade
-        location.reload();
-    });
+                // 👉 RECARGA para que el navbar lo pinte desde Blade
+                location.reload();
+            });
 
         });
     </script>
 @endauth
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
 
-    const anioGuardado = localStorage.getItem('añoSelect');
-    if (!anioGuardado) return;
+        const anioGuardado = localStorage.getItem('añoSelect');
+        if (!anioGuardado) return;
 
-    window.añoSelect = anioGuardado;
+        window.añoSelect = anioGuardado;
 
-    const texto = document.getElementById('ejercicioActual');
-    const anioSpan = document.getElementById('anioNavbar');
+        const texto = document.getElementById('ejercicioActual');
+        const anioSpan = document.getElementById('anioNavbar');
 
-    if (texto && anioSpan) {
-        anioSpan.textContent = anioGuardado;
-        texto.style.display = 'inline';
-    }
+        if (texto && anioSpan) {
+            anioSpan.textContent = anioGuardado;
+            texto.style.display = 'inline';
+        }
 
     });
 </script>

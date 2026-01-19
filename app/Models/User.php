@@ -62,10 +62,10 @@ class User extends Authenticatable
 
     public function puede(string $actividad): bool
     {
-        // Superusuario
-        if ($this->rol->value === 'Administrador') {
-            return true;
-        }
+        // // Superusuario
+        // if ($this->rol->value === 'Administrador') {
+        //     return true;
+        // }
 
         return $this->actividades->contains('nombre_actividad', $actividad);
     }
