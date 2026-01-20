@@ -915,7 +915,7 @@
                                         <a class="dropdown-item"
                                             href="{{ route('capitulo7RecuperacionEjerciciosAnteriores') }}" method="GET"
                                             onclick="mostrarCargando()">
-                                            cancelación de préstamos
+                                            Cancelación de préstamos
                                         </a>
                                     @endcan
                                 </li>

@@ -556,7 +556,7 @@ class AuthServiceProvider extends ServiceProvider
         );
 
         Gate::define(
-            'prestamos.cancelacion_prestamo',
+            'prestamos.cancelacion_prestamos',
             fn($user) =>
             $user->puede('prestamos.cancelacion_prestamo')
         );
