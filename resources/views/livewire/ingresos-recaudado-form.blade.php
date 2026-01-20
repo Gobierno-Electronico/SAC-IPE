@@ -49,8 +49,8 @@
             wire:model="observaciones">
 
         <label for="inputFechaRegistro" class="form-label mt-3">Fecha de afectación</label>
-        <input type="date" name="inputFechaRegistro" id="inputFechaRegistro" class="form-control"
-            max="{{ now()->toDateString() }}" wire:model="fechaAfectacion">
+        <input type="date" name="inputFechaRegistro" id="inputFechaRegistro" class="form-control" wire:ignore
+            wire:model="fechaAfectacion">
 
         <h2 class="mt-5 mb-3">Selección de movimientos</h2>
         <div class="row">

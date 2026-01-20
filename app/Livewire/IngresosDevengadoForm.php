@@ -54,7 +54,13 @@ class IngresosDevengadoForm extends Component
     public $total;
 
     public $tipoMovimiento;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         try {
@@ -124,7 +130,7 @@ class IngresosDevengadoForm extends Component
             if (!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
             $this->limpiarImporteIva();
 
-            $anioActual = Carbon::now()->year;
+            $anioActual = (string) $this->anio;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [15, 16, 17, 18, 38, 10110, 10111, 10112, 10113])->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
             $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')

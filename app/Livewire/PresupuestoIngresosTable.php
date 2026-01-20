@@ -125,7 +125,7 @@ class PresupuestoIngresosTable extends Tabla
 
     public function init()
     {
-        $this->selectedYear = Carbon::now()->year;
+        $this->selectedYear = (string) $this->anio;
         $this->selectYear();
     }
 

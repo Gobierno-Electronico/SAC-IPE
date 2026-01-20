@@ -38,11 +38,17 @@ class MovimientosCancelacionesTable extends Tabla
     public $categoriaRemanente;
 
     public $eventoSeleccionado;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         $eventos = Poliza::select('evento', 'descripcion')
-            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->whereYear('fecha', '=', (string) $this->anio)
             ->where('tipo_poliza', '=', 'D')
             ->where('categoria', 'LIKE', '%CANCELACIÓN%')
             ->distinct()
@@ -66,7 +72,7 @@ class MovimientosCancelacionesTable extends Tabla
 
     public function data()
     {
-        $anioActual = Carbon::now()->year;
+        $anioActual = (string) $this->anio;
         $contador = 0;
     
         // Obtener datos desde la consulta SQL

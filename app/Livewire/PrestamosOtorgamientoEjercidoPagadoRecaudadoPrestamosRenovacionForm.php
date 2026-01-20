@@ -57,7 +57,13 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionForm extend
     public $numeroPoliza;
     public $total;
     public $cuentasAbono = [];
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         try{
@@ -86,7 +92,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionForm extend
     {
         try{
             if (!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
-            $anioActual = Carbon::now()->year;
+            $anioActual = (string) $this->anio;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $cuentaSeleccionada = Cuenta::find($this->cuenta);
 

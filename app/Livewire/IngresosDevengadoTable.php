@@ -23,7 +23,13 @@ class IngresosDevengadoTable extends Tabla
     public $total = 0;
     public $numeroPoliza;
     public $numeroEvento;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render(){
         return view('livewire.ingresos-devengado-table');
     }
@@ -220,7 +226,7 @@ class IngresosDevengadoTable extends Tabla
             $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'I')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('numero_poliza')
                 ->pluck('numero_poliza')
@@ -229,7 +235,7 @@ class IngresosDevengadoTable extends Tabla
             $this->numeroPoliza = (int)end($numerosPolizas) + 1;
     
             $numerosEvento = Poliza::selectRaw('CAST(evento AS INT) as evento')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('evento')
                 ->pluck('evento')
@@ -246,7 +252,7 @@ class IngresosDevengadoTable extends Tabla
 
             DB::beginTransaction();
     
-            $anioActual = Carbon::now()->year;
+            $anioActual = $this->anio;
             $fecha = Carbon::now('America/Mexico_City');
             $fecha->year($anioActual);
     

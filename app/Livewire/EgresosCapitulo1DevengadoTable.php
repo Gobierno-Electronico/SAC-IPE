@@ -26,7 +26,12 @@ class EgresosCapitulo1DevengadoTable extends Tabla
     public $numeroEvento;
     public $numeroPolizaRemanente;
     public $importeRestante = 0;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
 
     public function render()
     {
@@ -265,7 +270,7 @@ class EgresosCapitulo1DevengadoTable extends Tabla
         try {
             $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'E')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('numero_poliza')
                 ->pluck('numero_poliza')
@@ -275,7 +280,7 @@ class EgresosCapitulo1DevengadoTable extends Tabla
 
             $this->numeroEvento = $this->dataCompleta[0]['evento'];
 
-            $anioActual = Carbon::now()->year;
+            $anioActual = $this->anio;
             $fecha = Carbon::now('America/Mexico_City');
             $fecha->year($anioActual);
 

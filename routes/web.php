@@ -14,6 +14,8 @@ use App\Http\Controllers\DeudoresController;
 use Illuminate\Support\Facades\Route;
 USE App\Http\Controllers\HomeController;
 use App\Http\Middleware\ResetPassword;
+use Illuminate\Http\Request;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +34,12 @@ Route::get('/', function () {
     return redirect('home');
 });
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+Route::post('/set-anio-fiscal', function (Request $request) {
+    session(['anioSeleccionado' => (int) $request->anio]);
+    return response()->json(['ok' => true]);
+});
+
 
 Route::get('/fuente/cargar', [ReportesController::class, 'mostrarVistaCargafuente'])->name('cargarfuente');
 //Catálogos

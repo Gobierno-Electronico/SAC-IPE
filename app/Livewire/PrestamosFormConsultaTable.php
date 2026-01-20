@@ -40,7 +40,12 @@ class PrestamosFormConsultaTable extends Tabla
 
     public $motivoLiberacion;
     public $liberado = false;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
 
     public function render()
     {
@@ -48,7 +53,7 @@ class PrestamosFormConsultaTable extends Tabla
             $poliza = Poliza::where('numero_poliza', '=', $this->numeroPoliza)
                 ->where('tipo_poliza', '=', $this->tipoPoliza)
                 ->where('evento', '=', $this->numeroEvento)
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->first();
 
             if ($poliza['validado'] == 1) {
@@ -66,7 +71,7 @@ class PrestamosFormConsultaTable extends Tabla
     public function init()
     {
         $poliza = $this->data()->first();
-        $this->fecha = ($poliza) ? date('d-m-Y', strtotime($poliza->fecha)) : '01/01/' . Carbon::now()->year;
+        $this->fecha = ($poliza) ? date('d-m-Y', strtotime($poliza->fecha)) : '01/01/' . (string) $this->anio;
         $this->hora = ($poliza) ? Carbon::createFromFormat('Y-m-d H:i:s', $poliza->created_at)->format('H:i:s') : '11:00:00';
         $this->concepto = ($poliza) ? $poliza->descripcion : 'SIN CONCEPTO';
         $this->sortBy = 'cuenta';
@@ -87,7 +92,7 @@ class PrestamosFormConsultaTable extends Tabla
             ->where('tipo_poliza', '=', $this->tipoPoliza)
             ->where('numero_poliza', '=', $this->numeroPoliza)
             ->where('evento', '=', $this->numeroEvento)
-            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->whereYear('fecha', '=', (string) $this->anio)
             ->search($this->searchBy, $this->searchTerm)
             ->paginate($this->perPage);
         return $datos;
@@ -114,7 +119,7 @@ class PrestamosFormConsultaTable extends Tabla
             DB::beginTransaction();
             if ($this->validado)
                 return;
-            Poliza::searchByYear('fecha', Carbon::now()->year)
+            Poliza::searchByYear('fecha', (string) $this->anio)
                 ->where('tipo_poliza', '=', $this->tipoPoliza)
                 ->where('numero_poliza', '=', $this->numeroPoliza)
                 ->where('evento', '=', $this->numeroEvento)
@@ -138,7 +143,7 @@ class PrestamosFormConsultaTable extends Tabla
             $usuariosController = new BitacoraController();
             $usuariosController->bitacora('validar', 'validó o intentó validar un movimiento de ' . $this->categoriaModulo . ' con número de evento: ' . $this->numeroEvento, request());
             DB::beginTransaction();
-            Poliza::searchByYear('fecha', Carbon::now()->year)
+            Poliza::searchByYear('fecha', (string) $this->anio)
                 ->where('tipo_poliza', '=', $this->tipoPoliza)
                 ->where('evento', '=', $this->numeroEvento)
                 ->where('categoria', '=', $this->categoriaModulo)

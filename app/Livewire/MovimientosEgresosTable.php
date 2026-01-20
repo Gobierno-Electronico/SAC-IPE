@@ -248,11 +248,17 @@ class MovimientosEgresosTable extends Tabla
     public $categoriaModulo;
     public $categoriaRemanente;
     public $eventoSeleccionado;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         $eventos = Poliza::select('evento', 'descripcion')
-            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->whereYear('fecha', '=', (string) $this->anio)
             ->where('tipo_poliza', '=', 'E')
             ->distinct()
             ->get()
@@ -291,7 +297,7 @@ class MovimientosEgresosTable extends Tabla
         "),
         )
         ->where('tipo_poliza', 'E')
-        ->whereYear('fecha', now()->year)
+        ->whereYear('fecha', (string) $this->anio)
         ->groupBy(
             'evento',
             'descripcion',
@@ -330,7 +336,7 @@ class MovimientosEgresosTable extends Tabla
             $item->total = '$' . number_format($total_base, 2, '.', ',');
             
             $total_evento = Poliza::where('evento', $item->evento)
-                ->whereYear('fecha', now()->year)
+                ->whereYear('fecha', (string) $this->anio)
                 ->where('tipo_poliza', 'E')
                 ->where('tipo_interaccion', 'Presupuestal - Cargo')
                 ->sum('total');
@@ -378,7 +384,7 @@ class MovimientosEgresosTable extends Tabla
             'numero_poliza'
         )
         ->where('tipo_poliza', 'E')
-        ->whereYear('fecha', now()->year)
+        ->whereYear('fecha', (string) $this->anio)
         ->where('evento', $evento) 
          ->where('numero_poliza', $numeroPoliza) 
         ->groupBy(
@@ -404,7 +410,7 @@ class MovimientosEgresosTable extends Tabla
         $this->numeroPolizaRemanente = DB::table('polizas')
         ->where('tipo_poliza', 'EAUX')
         ->where('evento', '=', $this->numeroEvento)
-        ->whereYear('fecha', '=', Carbon::now()->year)
+        ->whereYear('fecha', '=', (string) $this->anio)
         ->where('id', '>', function ($query) use ($numeroPoliza) {
             $query->select('id')
                 ->from('polizas')

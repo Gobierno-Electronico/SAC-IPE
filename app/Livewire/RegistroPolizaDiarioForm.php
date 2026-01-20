@@ -45,7 +45,13 @@ class RegistroPolizaDiarioForm extends Component
     public $totalCargo;
     public $totalAbono;
     public $total;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         try {
@@ -98,7 +104,7 @@ class RegistroPolizaDiarioForm extends Component
                 return;
             }
             $cuentaSeleccionada = Cuenta::where('id', '=', $this->cuenta)->first();
-            $anioActual = Carbon::now()->year;
+            $anioActual = (string) $this->anio;
 
             $solvencia = DB::select('EXEC SolvenciaCuentasContables @cuenta = ?, @anio = ?', array($cuentaSeleccionada->Codigo_cuenta, $anioActual));
             $this->solvencia = ($solvencia[0]->Solvencia > 0) ? floatval($solvencia[0]->Solvencia) : 0;

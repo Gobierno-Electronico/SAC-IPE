@@ -38,6 +38,12 @@ class DepositosBancosForm extends Component
     public $numeroEvento;
     public $numeroPoliza;
     public $total;
+    public int $anio;
+
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
 
     public function render()
     {
@@ -47,7 +53,7 @@ class DepositosBancosForm extends Component
                 ->where('interaccion_cuenta_conceptos.concepto_id', '=', 13)->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Cargo')
                 ->orderBy('cuentas.Codigo_cuenta')->get();
 
-            $solvencia = DB::select('exec SolvenciaCuentasContables @cuenta = ?, @anio = ?', array('1.1.1.1.01.01', Carbon::now()->year));
+            $solvencia = DB::select('exec SolvenciaCuentasContables @cuenta = ?, @anio = ?', array('1.1.1.1.01.01', (string) $this->anio));
 
             return view('livewire.depositos-bancos-form', ['cuentas' => $cuentas, 'solvenciaCajaGeneral' => $solvencia[0]->Solvencia]);
         } catch (\Throwable $th) {

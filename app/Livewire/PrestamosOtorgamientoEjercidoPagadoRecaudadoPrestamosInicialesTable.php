@@ -24,7 +24,13 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
     public $perPage = 10;
     public $total = 0;
     public $importeRestante = 0;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         return view('livewire.prestamos-otorgamiento-ejercido-pagado-recaudado-prestamosIniciales-table');
@@ -233,7 +239,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
             $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'D')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('numero_poliza')
                 ->pluck('numero_poliza')
@@ -242,7 +248,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
             $this->numeroPoliza = (int)end($numerosPolizas) + 1;
 
             $numerosEvento = Poliza::selectRaw('CAST(evento AS INT) as evento')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('evento')
                 ->pluck('evento')
@@ -250,7 +256,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesTable extend
             sort($numerosEvento);
             $this->numeroEvento = (int)end($numerosEvento) + 1;
 
-            $anioActual = Carbon::now()->year;
+            $anioActual = $this->anio;
             $fecha = Carbon::now('America/Mexico_City');
             $fecha->year($anioActual);
 

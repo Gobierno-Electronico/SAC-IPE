@@ -69,12 +69,18 @@ class EgresosCapitulo2y3DevengadoForm extends Component
     public $cambiarCuentaContableSeleccionada = true;
 
     public $habilitarSelectorTipoRegistro = false;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render() 
     {
         try{
             $eventos =  Poliza::select('evento', 'descripcion')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 2y3')
                 ->where('estatus_evento', '=', EstatusEvento::ACTIVO->value)
@@ -148,7 +154,7 @@ class EgresosCapitulo2y3DevengadoForm extends Component
         try{
             $cuentasComprometidas = Poliza::join('cuentas', 'cuentas.Codigo_cuenta', '=', 'polizas.cuenta')
             ->where('polizas.evento', '=', $this->numeroEvento)
-            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->whereYear('fecha', '=', (string) $this->anio)
             ->where('polizas.tipo_poliza', '=', 'E')
             ->where('polizas.concepto', 'LIKE', '%Comprometido%')
             ->get();
@@ -200,7 +206,7 @@ class EgresosCapitulo2y3DevengadoForm extends Component
         if (!$this->partidaPresupuestal || !$this->mes || !$this->selectCodigoAreaResponsable) return;
         
         try{
-            $anioActual = Carbon::now()->year;
+            $anioActual = (string) $this->anio;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('interaccion_cuenta_conceptos.concepto_id', [87, 89])->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
             $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')

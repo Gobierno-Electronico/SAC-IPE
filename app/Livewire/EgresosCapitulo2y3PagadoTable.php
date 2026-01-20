@@ -28,6 +28,13 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
     public $totalDisponibleContable = 0;
     public $numeroEvento;
     public $numeroPolizaRemanente;
+    public int $anio;
+
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+        
     public function render()
     {
         return view('livewire.egresos-capitulo2y3-pagado-table');
@@ -264,7 +271,7 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
             $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'E')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('numero_poliza')
                 ->pluck('numero_poliza')
@@ -274,7 +281,7 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
 
             $this->numeroEvento = $this->dataCompleta[0]['evento'];
 
-            $anioActual = Carbon::now()->year;
+            $anioActual = $this->anio;
             $fecha = Carbon::now('America/Mexico_City');
             $fecha->year($anioActual);
 
@@ -362,7 +369,7 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
 
             $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'EAUX')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('numero_poliza')
                 ->pluck('numero_poliza')
@@ -372,20 +379,20 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
             $polizasInicialesEgresosEjercido = Poliza::where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 2y3')
                 ->where('evento', '=', $this->numeroEvento)
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->get();
 
             $polizasInicialesEgresosPagado = Poliza::where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS PAGADO CAPITULO 2y3')
                 ->where('evento', '=', $this->numeroEvento)
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->where('concepto', 'LIKE', '%(Pagado)%')
                 ->get();
 
             $polizasDevengado = Poliza::where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 2y3')
                 ->where('evento', '=', $this->numeroEvento)
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->where('tipo_interaccion', '=', 'Contable - Abono')
                 ->get();
 
@@ -393,7 +400,7 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
             $polizasPagadoContableCargo =  Poliza::where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS PAGADO CAPITULO 2y3')
                 ->where('evento', '=', $this->numeroEvento)
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->where('tipo_interaccion', '=', 'Contable - Cargo')
                 ->get();
 
@@ -447,7 +454,7 @@ class EgresosCapitulo2y3PagadoTable extends Tabla
                 $polizasDevengadoContableCargo = Poliza::where('tipo_poliza', '=', 'E')
                     ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 2y3')
                     ->where('evento', '=', $this->numeroEvento)
-                    ->whereYear('fecha', '=', Carbon::now()->year)
+                    ->whereYear('fecha', '=', (string) $this->anio)
                     ->where('tipo_interaccion', '=', 'Contable - Cargo')
                     ->get();
 

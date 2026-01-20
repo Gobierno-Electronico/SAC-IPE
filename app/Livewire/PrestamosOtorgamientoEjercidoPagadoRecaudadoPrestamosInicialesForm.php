@@ -35,7 +35,13 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesForm extends
     public $total;
     public $cuentasAbono = [];
     public $mostrarAbono = false;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     protected function rules()
     {
         $cuentaSeleccionada = Cuenta::find($this->cuenta);
@@ -126,7 +132,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosInicialesForm extends
     {
         try {
             if (!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
-            $anioActual = Carbon::now()->year;
+            $anioActual = (string) $this->anio;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $cuentaSeleccionada = Cuenta::find($this->cuenta);
             $tipoPlazo = ((str_contains($cuentaSeleccionada->Descripcion_cuenta, 'Corto Plazo'))) ? "Corto Plazo" : "Mediano Plazo";

@@ -41,7 +41,7 @@ class AfectacionesIngresosConsultaTable extends Tabla
     public function init()
     {
         $poliza = $this->data()->first();
-        $this->fecha = ($poliza) ? Carbon::createFromFormat('Y-m-d H:i:s', $poliza->created_at)->format('d/m/Y') : '01/01/' . Carbon::now()->year;
+        $this->fecha = ($poliza) ? Carbon::createFromFormat('Y-m-d H:i:s', $poliza->created_at)->format('d/m/Y') : '01/01/' . (string) $this->anio;
         $this->hora = ($poliza) ? Carbon::createFromFormat('Y-m-d H:i:s', $poliza->created_at)->format('H:i:s') : '11:00:00';
         $this->concepto = ($poliza) ? $poliza->descripcion : 'SIN CONCEPTO';
         $this->sortBy = $this->estado == 'INGRESOS' ? 'CRI' : 'cuenta';
@@ -118,7 +118,7 @@ class AfectacionesIngresosConsultaTable extends Tabla
             if ($this->validado)
                 return;
             // dd($this->numeroEvento);
-            Poliza::searchByYear('fecha', Carbon::now()->year)->where('tipo_poliza', '=', 'D')->where('evento', '=', $this->numeroEvento)->delete();
+            Poliza::searchByYear('fecha', (string) $this->anio)->where('tipo_poliza', '=', 'D')->where('evento', '=', $this->numeroEvento)->delete();
             // PresupuestoInicial::where('anio', '=', $this->selectedYear)->where('categoria', '=', 'INGRESOS')->where('tipo', '=', 'P')->delete();
             $usuariosController = new BitacoraController();
             $usuariosController->bitacora('borrar', 'borró o intentó borrar la ampliación con número de evento: ' . $this->numeroEvento, request());
@@ -138,7 +138,7 @@ class AfectacionesIngresosConsultaTable extends Tabla
         try {
             DB::beginTransaction();
             $categoria = ($this->tipo == "Ampliación") ? 'AMPLIACION ' . $this->estado : 'REDUCCION ' . $this->estado;
-            Poliza::searchByYear('fecha', Carbon::now()->year)->where('categoria', '=', $categoria)->where('tipo_poliza', '=', 'D')->where('evento', '=', $this->numeroEvento)->update(["validado" => true]);
+            Poliza::searchByYear('fecha', (string) $this->anio)->where('categoria', '=', $categoria)->where('tipo_poliza', '=', 'D')->where('evento', '=', $this->numeroEvento)->update(["validado" => true]);
 
             // PresupuestoInicial::where('anio', '=', $this->selectedYear)->where('categoria', '=', 'INGRESOS')->where('tipo', '=', 'P')->update(["validado" => true]);
             $usuariosController = new BitacoraController();

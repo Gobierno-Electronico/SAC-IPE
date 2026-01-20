@@ -40,7 +40,13 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
     private $ultimoNumeroPolizaTipoD = 0;
     private $polizasComprometidasReclasificadas = [];
     private $numeroDeEventoCompromiso = NULL;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         try {
@@ -73,7 +79,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
             $rowsAfectadas = Poliza::where('tipo_poliza', '=', 'E')
                 ->where('evento', '=', $numeroDeEvento)
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 1')
                 ->update([
                     'estatus_evento' => EstatusEvento::CONCLUIDO->value
@@ -96,7 +102,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
     {
         set_time_limit(30000);
         ini_set('max_execution_time', 30000);
-        $anioActual = Carbon::now()->year;
+        $anioActual = (string) $this->anio;
         $fechaActual = Carbon::now('America/Mexico_City');
 
         $polizasCompromisoConReclasificacion = DB::select('EXEC comprometerRecursoConReclasificaciones @eventoAnterior = ?, @anioActual = ?', array($eventoAnterior, $anioActual));
@@ -208,7 +214,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
         $solvenciaMesesAnteriores = DB::select(
             'exec SolvenciaMesesAnterioresPorCuenta @area = ?, @cuenta = ?, @anio = ?, @mesLimite = ?',
-            array($areaDeBusqueda, $cuentaAbono->Codigo_cuenta, Carbon::now()->year, $numeroMes)
+            array($areaDeBusqueda, $cuentaAbono->Codigo_cuenta, (string) $this->anio, $numeroMes)
         );
 
         if (count($solvenciaMesesAnteriores) > 0) {
@@ -267,7 +273,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
         $solvenciaMesesPosteriores = DB::select(
             'exec SolvenciaMesesPosterioresPorCuenta @area = ?, @cuenta = ?, @anio = ?, @mesLimite = ?',
-            array($areaDeBusqueda, $cuentaAbono->Codigo_cuenta, Carbon::now()->year, $numeroMes)
+            array($areaDeBusqueda, $cuentaAbono->Codigo_cuenta, (string) $this->anio, $numeroMes)
         );
 
         if (count($solvenciaMesesPosteriores) > 0) {
@@ -299,7 +305,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
     {
         set_time_limit(30000);
         ini_set('max_execution_time', 30000);
-        $anioActual = Carbon::now()->year;
+        $anioActual = (string) $this->anio;
         $solvenciaCuentaAreasDistintas = DB::select('exec SolvenciaCuentaEnAreasDistitas @cuenta = ?, @anio = ?, @mes = ?, @area = ?', array($cuenta->Codigo_cuenta, $anioActual, $mes, $areaPresupuestalSolicitante));
 
         if (count($solvenciaCuentaAreasDistintas) > 0) {
@@ -444,7 +450,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
         set_time_limit(30000);
         ini_set('max_execution_time', 30000);
 
-        $anioActual = Carbon::now()->year;
+        $anioActual = (string) $this->anio;
         $areasConSolvencia = DB::select('exec SolvenciaAreas @anio = ?, @area = ?', array($anioActual, $areaPresupuestalSolicitante));
 
         if (count($areasConSolvencia) > 0) {
@@ -494,7 +500,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
             $this->yaHayNumeroPoliza = true;
             $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) AS numero_poliza')
                 ->where('tipo_poliza', '=', 'D')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('numero_poliza')
                 ->pluck('numero_poliza')
@@ -552,7 +558,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
     public function cargarDevengado()
     {
-        $anioActual = Carbon::now()->year;
+        $anioActual = (string) $this->anio;
 
         $this->numeroDeEventoCompromiso = Poliza::selectRaw('CAST(evento AS INT) AS evento')
             ->whereYear('fecha', '=', $anioActual)
@@ -813,7 +819,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
 
     private function liberarRemanente()
     {
-        $anioActual = Carbon::now()->year;
+        $anioActual = (string) $this->anio;
         $eventoActual = $this->numeroEvento + 1;
 
 

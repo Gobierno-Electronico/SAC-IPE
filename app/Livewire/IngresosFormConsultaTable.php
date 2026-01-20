@@ -36,13 +36,19 @@ class IngresosFormConsultaTable extends Tabla
     public $categoriaRemanente;
 
     public $tipoMovimiento;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         $poliza = Poliza::where('numero_poliza', '=', $this->numeroPoliza)
             ->where('tipo_poliza', '=', $this->tipoPoliza)
             ->where('evento', '=', $this->numeroEvento)
-            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->whereYear('fecha', '=', (string) $this->anio)
             ->first();
 
             if($poliza['validado'] == 1){ 
@@ -58,7 +64,7 @@ class IngresosFormConsultaTable extends Tabla
     public function init()
     {
         $poliza = $this->data()->first();
-        $this->fecha = ($poliza) ? date('d-m-Y', strtotime($poliza->fecha)) : '01/01/' . Carbon::now()->year;
+        $this->fecha = ($poliza) ? date('d-m-Y', strtotime($poliza->fecha)) : '01/01/' . (string) $this->anio;
         $this->hora = ($poliza) ? Carbon::createFromFormat('Y-m-d H:i:s', $poliza->created_at)->format('H:i:s') : '11:00:00';
         $this->concepto = ($poliza) ? $poliza->descripcion : 'SIN CONCEPTO';
         $this->sortBy = 'cuenta';
@@ -79,7 +85,7 @@ class IngresosFormConsultaTable extends Tabla
             ->where('tipo_poliza', '=', $this->tipoPoliza)
             ->where('numero_poliza', '=', $this->numeroPoliza)
             ->where('evento', '=', $this->numeroEvento)
-            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->whereYear('fecha', '=', (string) $this->anio)
             ->search($this->searchBy, $this->searchTerm)
             ->paginate($this->perPage);
         return $datos;
@@ -105,14 +111,14 @@ class IngresosFormConsultaTable extends Tabla
             DB::beginTransaction();
             if ($this->validado)
                 return;
-            Poliza::searchByYear('fecha', Carbon::now()->year)
+            Poliza::searchByYear('fecha', (string) $this->anio)
                 ->where('tipo_poliza', '=', $this->tipoPoliza)
                 ->where('evento', '=', $this->numeroEvento)
                 ->where('numero_poliza', '=', $this->numeroPoliza)
                 ->where('categoria', '=', $this->categoriaModulo)
                 ->where('validado', '=', false)->delete();
             if ($this->numeroPolizaRemanente && $this->numeroPolizaRemanente > 0) {
-                Poliza::searchByYear('fecha', Carbon::now()->year)
+                Poliza::searchByYear('fecha', (string) $this->anio)
                     ->where('tipo_poliza', '=', 'IAUX')
                     ->where('evento', '=', $this->numeroEvento)
                     ->where('categoria', '=', $this->categoriaRemanente)
@@ -124,21 +130,21 @@ class IngresosFormConsultaTable extends Tabla
                 case 'INGRESOS DEVENGADO PREVIAMENTE RECAUDADO':
                     Poliza::where('categoria', '=', 'INGRESOS POR CLASIFICAR')
                         ->where('evento', '=', $this->numeroEvento)
-                        ->whereYear('fecha', '=', Carbon::now()->year)
+                        ->whereYear('fecha', '=', (string) $this->anio)
                         ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
 
                 case 'INGRESOS RECAUDADO':
                     Poliza::where('categoria', '=', 'INGRESOS DEVENGADO')
                         ->where('evento', '=', $this->numeroEvento)
-                        ->whereYear('fecha', '=', Carbon::now()->year)
+                        ->whereYear('fecha', '=', (string) $this->anio)
                         ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
 
                 case 'INGRESOS COBRO ESPECIE':
                     Poliza::where('categoria', '=', 'INGRESOS DEVENGADO')
                         ->where('evento', '=', $this->numeroEvento)
-                        ->whereYear('fecha', '=', Carbon::now()->year)
+                        ->whereYear('fecha', '=', (string) $this->anio)
                         ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
             }
@@ -161,14 +167,14 @@ class IngresosFormConsultaTable extends Tabla
             $usuariosController = new BitacoraController();
             $usuariosController->bitacora('validar', 'validó o intentó validar un movimiento de ' . $this->categoriaModulo . ' con número de evento: ' . $this->numeroEvento, request());
             DB::beginTransaction();
-            Poliza::searchByYear('fecha', Carbon::now()->year)
+            Poliza::searchByYear('fecha', (string) $this->anio)
                 ->where('tipo_poliza', '=', $this->tipoPoliza)
                 ->where('evento', '=', $this->numeroEvento)
                 ->where('categoria', '=', $this->categoriaModulo)
                 ->where('numero_poliza', '=', $this->numeroPoliza)
                 ->update(["validado" => true]);
             if ($this->numeroPolizaRemanente > 0) {
-                Poliza::searchByYear('fecha', Carbon::now()->year)
+                Poliza::searchByYear('fecha', (string) $this->anio)
                     ->where('tipo_poliza', '=', 'IAUX')
                     ->where('evento', '=', $this->numeroEvento)
                     ->where('categoria', '=', $this->categoriaRemanente)

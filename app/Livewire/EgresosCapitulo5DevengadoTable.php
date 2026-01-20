@@ -26,7 +26,13 @@ class EgresosCapitulo5DevengadoTable extends Tabla
     public $totalDisponible = 0;
     public $numeroEvento;
     public $numeroPolizaRemanente;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         return view('livewire.egresos-capitulo5-devengado-table');
@@ -228,7 +234,7 @@ class EgresosCapitulo5DevengadoTable extends Tabla
             $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'E')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('numero_poliza')
                 ->pluck('numero_poliza')
@@ -238,7 +244,7 @@ class EgresosCapitulo5DevengadoTable extends Tabla
 
             $this->numeroEvento = $this->dataCompleta[0]['evento'];
 
-            $anioActual = Carbon::now()->year;
+            $anioActual = $this->anio;
             $fecha = Carbon::now('America/Mexico_City');
             $fecha->year($anioActual);
 
@@ -322,7 +328,7 @@ class EgresosCapitulo5DevengadoTable extends Tabla
 
             $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'EAUX')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('numero_poliza')
                 ->pluck('numero_poliza')
@@ -333,13 +339,13 @@ class EgresosCapitulo5DevengadoTable extends Tabla
             $polizasInicialesEgresosComprometido = Poliza::where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 5')
                 ->where('evento', '=', $this->numeroEvento)
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->get();
 
             $polizasInicialesEgresosDevengado = Poliza::where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 5')
                 ->where('evento', '=', $this->numeroEvento)
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->where('concepto', 'LIKE', '%(Devengado)%')
                 ->get();
 
@@ -411,7 +417,7 @@ class EgresosCapitulo5DevengadoTable extends Tabla
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
                 Poliza::where('evento', '=', $this->numeroEvento)
                     ->whereIn('categoria', ['EGRESOS COMPROMETIDO CAPITULO 5'])
-                    ->whereYear('fecha', '=', Carbon::now()->year)
+                    ->whereYear('fecha', '=', (string) $this->anio)
                     ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
             }
             DB::commit();

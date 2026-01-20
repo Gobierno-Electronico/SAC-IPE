@@ -52,12 +52,18 @@ class DeudoresReintegroAnticipoForm extends Component
     public $total;
     public $tipoMovimiento;
     public $ppto;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         try {
             $eventos =  Poliza::select('evento', 'descripcion')
-            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->whereYear('fecha', '=', (string) $this->anio)
             ->where('tipo_poliza', '=', 'D')
             ->where('categoria', '=', 'DEUDORES OTORGAMIENTO ANTICIPOS')
             ->where('estatus_evento', '=', EstatusEvento::ACTIVO->value)
@@ -105,7 +111,7 @@ class DeudoresReintegroAnticipoForm extends Component
         if (!$this->cuenta || !$this->mes  ) return;
 
         try{
-            $anioActual = Carbon::now()->year;
+            $anioActual = (string) $this->anio;
             $codigoCuenta = Cuenta::where('id', '=', $this->cuenta)->value('Codigo_cuenta');
             $solvencia = DB::select('EXEC SolvenciaReintegrosAnticipos @cuenta = ?, @anio = ?, @mes = ?, @evento = ?', array($codigoCuenta, $anioActual, $this->mes, $this->numeroEvento))[0]->Total;
             $this->ppto = ($solvencia > 0) ? floatval($solvencia) : 0;

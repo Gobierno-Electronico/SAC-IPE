@@ -25,7 +25,12 @@ class CobroEspecieTable extends Tabla
     public $numeroPoliza;
     public $numeroEvento;
     public $numeroPolizaRemanente;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
     public function render()
     {
         return view('livewire.cobro-especie-table');
@@ -162,7 +167,7 @@ class CobroEspecieTable extends Tabla
                 return;
             }
 
-            $anioActual = Carbon::now()->year;
+            $anioActual = (string) $this->anio;
             $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $registro['cuentaId'])
                 ->whereIn('concepto_id', [33])
                 ->where('tipo_interaccion', '=', 'Presupuestal - Abono')
@@ -232,7 +237,7 @@ class CobroEspecieTable extends Tabla
             $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'I')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('numero_poliza')
                 ->pluck('numero_poliza')
@@ -244,7 +249,7 @@ class CobroEspecieTable extends Tabla
 
             $polizasInicialesIngresosDevengado = Poliza::where('tipo_poliza', '=', 'I')->where('categoria', '=', 'INGRESOS DEVENGADO')
                 ->where('evento', '=', $this->numeroEvento)->get();
-            $anioActual = Carbon::now()->year;
+            $anioActual = $this->anio;
             $fecha = Carbon::now('America/Mexico_City');
             $fecha->year($anioActual);
 
@@ -311,7 +316,7 @@ class CobroEspecieTable extends Tabla
 
             $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'IAUX')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('numero_poliza')
                 ->pluck('numero_poliza')

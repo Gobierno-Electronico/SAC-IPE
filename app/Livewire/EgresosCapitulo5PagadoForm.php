@@ -69,12 +69,18 @@ class EgresosCapitulo5PagadoForm extends Component
     public $cambiarPartidaPresupuestalSeleccionada = false;
     public $cambiarCuentaBancoSeleccionada = false;
     public $cambiarCuentaRetencionesSeleccionada = false;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         try {
             $eventos = Poliza::select('evento', 'descripcion')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 5')
                 ->where('estatus_evento', '=', EstatusEvento::ACTIVO->value)
@@ -147,7 +153,7 @@ class EgresosCapitulo5PagadoForm extends Component
             $this->cambiarPartidaPresupuestalSeleccionada = true;
 
             $cuentasEjercidas = Poliza::where('evento', '=', $this->numeroEvento)
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->where('tipo_poliza', '=', 'E')
                 ->where('concepto', 'LIKE', '%Ejercido%')
                 ->get();
@@ -205,7 +211,7 @@ class EgresosCapitulo5PagadoForm extends Component
         try {
             if (!$this->partidaPresupuestal || !$this->mes || !$this->selectCodigoAreaResponsable) return;
 
-            $anioActual = Carbon::now()->year;
+            $anioActual = (string) $this->anio;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('interaccion_cuenta_conceptos.concepto_id', [80, 83, 84])->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
             $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')
@@ -242,7 +248,7 @@ class EgresosCapitulo5PagadoForm extends Component
 
 
             $cuentasDevengadas = Poliza::where('evento', '=', $this->numeroEvento)
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->where('tipo_poliza', '=', 'E')
                 ->where('tipo_interaccion', '=', 'Contable - Abono')
                 ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 5')
@@ -286,7 +292,7 @@ class EgresosCapitulo5PagadoForm extends Component
     {
         if (!$this->partidaPresupuestal || !$this->mes || !$this->selectCodigoAreaResponsable) return;
 
-        $anioActual = Carbon::now()->year;
+        $anioActual = (string) $this->anio;
         $codigoDepartamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
         $codigoCuentaContableSeleccionada = Cuenta::where('id', $this->cuentaDeRetenciones)->value('Codigo_cuenta');
 

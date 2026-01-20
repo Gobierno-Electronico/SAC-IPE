@@ -50,12 +50,18 @@ class EgresosCapitulo4DevengadoForm extends Component
     public $cambiarCuentaContableSeleccionada = true;
     public $partidasPresupuestales = [];
     public $cambiarPartidaPresupuestalSeleccionada = true;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render() 
     {
         try{
             $eventos =  Poliza::select('evento', 'descripcion')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 4')
                 ->where('estatus_evento', '=', EstatusEvento::ACTIVO->value)
@@ -125,7 +131,7 @@ class EgresosCapitulo4DevengadoForm extends Component
                     
             $cuentasComprometidas = Poliza::where('evento', '=', $this->numeroEvento)
             ->where('tipo_poliza', '=', 'E')
-            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->whereYear('fecha', '=', (string) $this->anio)
             ->where('concepto', 'LIKE', '%Comprometido%')
             ->get();
 
@@ -185,7 +191,7 @@ class EgresosCapitulo4DevengadoForm extends Component
         try{
             if (!$this->partidaPresupuestal || !$this->mes || !$this->selectCodigoAreaResponsable) return;
 
-            $anioActual = Carbon::now()->year;
+            $anioActual = (string) $this->anio;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->partidaPresupuestal)->whereIn('interaccion_cuenta_conceptos.concepto_id', [63, 64, 56, 58])->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
             $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')

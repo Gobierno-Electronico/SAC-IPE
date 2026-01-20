@@ -36,7 +36,13 @@ class EgresosCapitulo1ComprometidoForm extends Component
     public $observaciones = '';
     
     public $documentoFuente = "";
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         try {
@@ -128,7 +134,7 @@ class EgresosCapitulo1ComprometidoForm extends Component
             DB::beginTransaction();
             $cuentasFaltantesPlanCuentas = [];
             $cuentasEnLaGuiaFaltantes = [];
-            $anioActual = Carbon::now()->year;
+            $anioActual = (string) $this->anio;
             $meses = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
             $fecha = Carbon::now('America/Mexico_City');
             $fecha->year($anioActual);

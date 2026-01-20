@@ -89,8 +89,8 @@
             <label for="inputFechaAfectacion" class="form-label fs-5">Fecha de afectación</label>
         </div>
         <div class="col">
-            <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control"
-                max="{{ now()->toDateString() }}" wire:model="fechaAfectacion">
+            <input type="date" name="inputFechaAfectacion" id="inputFechaAfectacion" class="form-control" wire:ignore
+                wire:model="fechaAfectacion">
         </div>
     </div>
 
@@ -196,6 +196,9 @@
     @endif
 </div>
 <script>
+
+
+
     window.addEventListener('limpiar', event => {
         limpiar()
     })

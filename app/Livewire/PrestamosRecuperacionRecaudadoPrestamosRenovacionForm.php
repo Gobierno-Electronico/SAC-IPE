@@ -48,7 +48,13 @@ class PrestamosRecuperacionRecaudadoPrestamosRenovacionForm extends Component
     public $numeroEvento;
     public $numeroPoliza;
     public $total;
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         try {
@@ -73,7 +79,7 @@ class PrestamosRecuperacionRecaudadoPrestamosRenovacionForm extends Component
         try {
             if (!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
             $cuentaPresupuesto = Cuenta::where('id', $this->cuenta)->first();
-            $anioActual = Carbon::now()->year;
+            $anioActual = (string) $this->anio;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('concepto_id', [10099])
                 ->where('tipo_interaccion', '=', 'Contable - Abono')->first();

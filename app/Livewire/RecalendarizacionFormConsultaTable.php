@@ -32,7 +32,12 @@ class RecalendarizacionFormConsultaTable extends Tabla
     public $categoriaModulo = "";
     public $tipoMovimiento;
 
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
 
     public function render()
     {
@@ -40,7 +45,7 @@ class RecalendarizacionFormConsultaTable extends Tabla
         $poliza = Poliza::where('numero_poliza', '=', $this->numeroPoliza)
             ->where('tipo_poliza', '=', 'D')
             ->where('evento', '=', $this->numeroEvento)
-            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->whereYear('fecha', '=', (string) $this->anio)
             ->first();
 
         if ($poliza['validado'] == 1) {
@@ -53,7 +58,7 @@ class RecalendarizacionFormConsultaTable extends Tabla
     public function init()
     {
         $poliza = $this->data()->first();
-        $this->fecha = ($poliza) ? Carbon::createFromFormat('Y-m-d H:i:s', $poliza->created_at)->format('d/m/Y') : '01/01/' . Carbon::now()->year;
+        $this->fecha = ($poliza) ? Carbon::createFromFormat('Y-m-d H:i:s', $poliza->created_at)->format('d/m/Y') : '01/01/' . (string) $this->anio;
         $this->hora = ($poliza) ? Carbon::createFromFormat('Y-m-d H:i:s', $poliza->created_at)->format('H:i:s') : '11:00:00';
         $this->concepto = ($poliza) ? $poliza->descripcion : 'SIN CONCEPTO';
         $this->sortBy = 'cuenta';
@@ -73,7 +78,7 @@ class RecalendarizacionFormConsultaTable extends Tabla
             })
             ->where('tipo_poliza', '=', 'D')
             ->where('numero_poliza', '=', $this->numeroPoliza)
-            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->whereYear('fecha', '=', (string) $this->anio)
             ->where('evento', '=', $this->numeroEvento)
             ->search($this->searchBy, $this->searchTerm)
             ->paginate($this->perPage);
@@ -101,7 +106,7 @@ class RecalendarizacionFormConsultaTable extends Tabla
             if ($this->validado)
                 return;
             // dd($this->numeroEvento);
-            Poliza::searchByYear('fecha', Carbon::now()->year)->where('tipo_poliza', '=', 'D')->where('evento', '=', $this->numeroEvento)
+            Poliza::searchByYear('fecha', (string) $this->anio)->where('tipo_poliza', '=', 'D')->where('evento', '=', $this->numeroEvento)
             ->where('categoria', '=', $this->categoriaModulo)
             ->delete();
             // PresupuestoInicial::where('anio', '=', $this->selectedYear)->where('categoria', '=', 'INGRESOS')->where('tipo', '=', 'P')->delete();
@@ -115,13 +120,13 @@ class RecalendarizacionFormConsultaTable extends Tabla
                 case 'DEUDORES REINTEGRO ANTICIPOS':
                     Poliza::where('categoria', '=', 'DEUDORES OTORGAMIENTO ANTICIPOS')
                         ->where('evento', '=', $this->numeroEvento)
-                        ->whereYear('fecha', '=', Carbon::now()->year)
+                        ->whereYear('fecha', '=', (string) $this->anio)
                         ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
                 case 'DEUDORES COMPROBACION ANTICIPOS':
                     Poliza::where('categoria', '=', 'DEUDORES OTORGAMIENTO ANTICIPOS')
                         ->where('evento', '=', $this->numeroEvento)
-                        ->whereYear('fecha', '=', Carbon::now()->year)
+                        ->whereYear('fecha', '=', (string) $this->anio)
                         ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
             }
@@ -138,7 +143,7 @@ class RecalendarizacionFormConsultaTable extends Tabla
     {
         try {
             DB::beginTransaction();
-            Poliza::searchByYear('fecha', Carbon::now()->year)->where('tipo_poliza', '=', 'D')->where('evento', '=', $this->numeroEvento)->update(["validado" => true]);
+            Poliza::searchByYear('fecha', (string) $this->anio)->where('tipo_poliza', '=', 'D')->where('evento', '=', $this->numeroEvento)->update(["validado" => true]);
             // PresupuestoInicial::where('anio', '=', $this->selectedYear)->where('categoria', '=', 'INGRESOS')->where('tipo', '=', 'P')->update(["validado" => true]);
             $usuariosController = new BitacoraController();
             $usuariosController->bitacora('validarPresupuestoInicial', 'validó o intentó validar el movimiento de ' .  $this->categoriaModulo . ' con número de evento: ' . $this->numeroEvento, request());

@@ -24,7 +24,13 @@ class EgresosCapitulo2y3ComprometidoTable extends Tabla
     public $perPage = 6;
     public $total = 0;
     public $totalDisponible = 0;
-    
+    public int $anio;
+
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+        
     public function render()
     {
         return view('livewire.egresos-capitulo2y3-comprometido-table');
@@ -220,7 +226,7 @@ class EgresosCapitulo2y3ComprometidoTable extends Tabla
             $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'E')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('numero_poliza')
                 ->pluck('numero_poliza')
@@ -230,7 +236,7 @@ class EgresosCapitulo2y3ComprometidoTable extends Tabla
             
 
             $numerosEvento = Poliza::selectRaw('CAST(evento AS INT) as evento')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('evento')
                 ->pluck('evento')
@@ -238,7 +244,7 @@ class EgresosCapitulo2y3ComprometidoTable extends Tabla
             sort($numerosEvento);
             $this->numeroEvento = (int)end($numerosEvento) + 1;
 
-            $anioActual = Carbon::now()->year;
+            $anioActual = $this->anio;
             $fecha = Carbon::now('America/Mexico_City');
             $fecha->year($anioActual);
 

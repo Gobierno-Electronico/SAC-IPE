@@ -52,6 +52,12 @@ class CobroEspecieForm extends Component
     public $numeroPoliza;
     public $numeroPolizaRemanente;
     public $total;
+    public int $anio;
+
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
 
     public function render()
     {
@@ -62,7 +68,7 @@ class CobroEspecieForm extends Component
                 ->where('cuentas.Descripcion_cuenta', 'LIKE', '%(Recaudado)%')->orderBy('cuentas.Codigo_cuenta')->get();
 
             $eventos =  Poliza::select('evento', 'descripcion')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->where('tipo_poliza', '=', 'I')
                 ->where('categoria', '=', 'INGRESOS DEVENGADO')
                 ->where('estatus_evento', '=', EstatusEvento::ACTIVO->value)

@@ -43,12 +43,18 @@ class PresupuestoEGRESOSTable extends Tabla
     public $fecha = '';
 
     public $hora = '';
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         $COGS = Poliza::join('cuenta_clasificadores_egreso as ce', 'ce.codigoCuenta', '=', 'polizas.cuenta')
         ->where('tipo_poliza', 'P')
-        ->whereYear('fecha', '=', Carbon::now()->year)
+        ->whereYear('fecha', '=', (string) $this->anio)
         ->where('categoria', 'LIKE', '%INICIAL%')
         ->select('ce.COG')
         ->groupBy('ce.COG')
@@ -178,7 +184,7 @@ class PresupuestoEGRESOSTable extends Tabla
 
     public function init()
     {
-        $this->selectedYear = Carbon::now()->year;
+        $this->selectedYear = (string) $this->anio;
         $this->selectYear();
         $this->selectedChapter = '';
 
