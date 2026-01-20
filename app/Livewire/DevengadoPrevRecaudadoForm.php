@@ -98,7 +98,7 @@ class DevengadoPrevRecaudadoForm extends Component
             $this->verificarCausaIVA();
             if (!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
     
-            $anioActual = Carbon::now()->year;
+            $anioActual = (string) $this->anio;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->where('concepto_id', '=', 14)->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
             $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')

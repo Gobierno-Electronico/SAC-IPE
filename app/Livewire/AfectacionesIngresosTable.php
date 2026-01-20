@@ -79,7 +79,7 @@ class AfectacionesIngresosTable extends Tabla
                         $entrada->SolvenciaFinal = 0;
                         $entrada->PresupuestoFinal = 0;
                         return $entrada;
-                    }, DB::select('EXEC AfectacionesLiquidasTabla @area = ?, @cuenta = ?, @anio = ?', array($departamento->Codigo_completo, $cuenta->Codigo_cuenta, Carbon::now()->year)));
+                    }, DB::select('EXEC AfectacionesLiquidasTabla @area = ?, @cuenta = ?, @anio = ?', array($departamento->Codigo_completo, $cuenta->Codigo_cuenta, (string) $this->anio)));
             }
             return $this->cacheData;
         } else {
@@ -94,7 +94,7 @@ class AfectacionesIngresosTable extends Tabla
                         $entrada->SolvenciaFinal = 0;
                         $entrada->PresupuestoFinal = 0;
                         return $entrada;
-                    }, DB::select('EXEC AfectacionesLiquidasTabla @area = ?, @cuenta = ?, @anio = ?', array($departamento->Codigo_completo, $cuenta->Codigo_cuenta, Carbon::now()->year)));
+                    }, DB::select('EXEC AfectacionesLiquidasTabla @area = ?, @cuenta = ?, @anio = ?', array($departamento->Codigo_completo, $cuenta->Codigo_cuenta, (string) $this->anio)));
             }
             return $this->cacheData;
         }
@@ -225,7 +225,7 @@ class AfectacionesIngresosTable extends Tabla
         try {
             DB::beginTransaction();
             // dd($this->numeroEvento);
-            Poliza::searchByYear('fecha', Carbon::now()->year)->where('tipo_poliza', '=', 'D')->where('evento', '=', $this->numeroEvento)->delete();
+            Poliza::searchByYear('fecha', (string) $this->anio)->where('tipo_poliza', '=', 'D')->where('evento', '=', $this->numeroEvento)->delete();
             // PresupuestoInicial::where('anio', '=', $this->selectedYear)->where('categoria', '=', 'INGRESOS')->where('tipo', '=', 'P')->delete();
             $usuariosController = new BitacoraController();
             $usuariosController->bitacora('borrar', 'borró o intentó borrar la ampliación con número de evento: ' . $this->numeroEvento, request());

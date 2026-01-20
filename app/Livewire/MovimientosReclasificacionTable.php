@@ -47,7 +47,7 @@ class MovimientosReclasificacionTable extends Tabla
     public function render()
     {
         $eventos = Poliza::select('evento', 'descripcion')
-            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->whereYear('fecha', '=', (string) $this->anio)
             ->where('tipo_poliza', '=', 'D')
             ->where('categoria', 'LIKE', '%RECALENDARIZACION%')
             ->orWhere('categoria', 'LIKE', '%RECLASIFICACION%')
@@ -71,7 +71,7 @@ class MovimientosReclasificacionTable extends Tabla
 
     public function data()
     {
-        $anioActual = Carbon::now()->year;
+        $anioActual = (string) $this->anio;
         $contador = 0;
         $this->data = array_map(function ($entrada) use (&$contador) {
             $entrada =  (array) $entrada;

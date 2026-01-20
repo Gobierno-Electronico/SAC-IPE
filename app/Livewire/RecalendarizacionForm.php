@@ -152,7 +152,7 @@ class RecalendarizacionForm extends Component
 
         $area = CodigoDepartamento::find($this->areaResponsable);
         // dd($area->Codigo_completo, $cuenta->codigoCuenta, Carbon::now()->year, $this->mes);
-        $data = DB::select('EXEC SolvenciaCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($area->Codigo_completo, $cuenta->codigoCuenta, Carbon::now()->year, $this->mes));
+        $data = DB::select('EXEC SolvenciaCuentaArea @area = ?, @cuenta = ?, @anio = ?, @mes = ?', array($area->Codigo_completo, $cuenta->codigoCuenta, (string) $this->anio, $this->mes));
         $this->solvencia = ($data[0]->Solvencia > 0) ? floatval($data[0]->Solvencia) : 0;
         $this->dispatch('actualizar-solvencia', solvencia: $this->solvencia);
     }

@@ -45,7 +45,7 @@ class MovimientosIngresosTable extends Tabla
     public function render()
     {
         $eventos = Poliza::select('evento', 'descripcion')
-            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->whereYear('fecha', '=', (string) $this->anio)
             ->where('tipo_poliza', '=', 'I')
             ->distinct()
             ->get()
@@ -66,7 +66,7 @@ class MovimientosIngresosTable extends Tabla
 
     public function data()
     {
-        $anioActual = Carbon::now()->year;
+        $anioActual = (string) $this->anio;
         $contador = 0;
         $this->data = array_map(function ($entrada) use (&$contador) {
             $entrada =  (array) $entrada;
@@ -118,7 +118,7 @@ class MovimientosIngresosTable extends Tabla
         $filtered = $filtered->map(function ($item) {
 
             $totalesPolizas = Poliza::select('evento', 'numero_poliza', 'total')
-                ->whereYear('fecha', '=', Carbon::now()->year) // Filtra por año actual
+                ->whereYear('fecha', '=', (string) $this->anio) // Filtra por año actual
                 ->where('evento', '=', $item['evento'])
                 ->where('tipo_poliza', '=', 'I')
                 ->get();
@@ -167,7 +167,7 @@ class MovimientosIngresosTable extends Tabla
         $this->numeroPolizaRemanente = DB::table('polizas')
             ->where('tipo_poliza', 'IAUX')
             ->where('evento', '=', $this->numeroEvento)
-            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->whereYear('fecha', '=', (string) $this->anio)
             ->where('id', '>', function ($query) use ($numeroPoliza) {
                 $query->select('id')
                     ->from('polizas')

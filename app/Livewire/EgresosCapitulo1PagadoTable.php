@@ -228,7 +228,7 @@ class EgresosCapitulo1PagadoTable extends Tabla
         try {
             $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'E')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('numero_poliza')
                 ->pluck('numero_poliza')
@@ -238,7 +238,7 @@ class EgresosCapitulo1PagadoTable extends Tabla
 
             $this->numeroEvento = $this->dataCompleta[0]['evento'];
 
-            $anioActual = Carbon::now()->year;
+            $anioActual = $this->anio;
             $fecha = Carbon::now('America/Mexico_City');
             $fecha->year($anioActual);
 
@@ -303,7 +303,7 @@ class EgresosCapitulo1PagadoTable extends Tabla
 
             $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'EAUX')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('numero_poliza')
                 ->pluck('numero_poliza')

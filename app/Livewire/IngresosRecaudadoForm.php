@@ -81,7 +81,7 @@ class IngresosRecaudadoForm extends Component
                 ->whereIn('interaccion_cuenta_conceptos.concepto_id', [19, 20, 21, 35, 39, 10114, 10115, 10116, 10117])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Abono')
                 ->orderBy('cuentas.Codigo_cuenta')->get();
             $eventos =  Poliza::select('evento', 'descripcion')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->where('tipo_poliza', '=', 'I')
                 ->where('categoria', '=', 'INGRESOS DEVENGADO')
                 ->where('estatus_evento', '=', EstatusEvento::ACTIVO->value)
@@ -117,7 +117,7 @@ class IngresosRecaudadoForm extends Component
             if (!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
             $this->llenarCuentasPago();
 
-            $anioActual = Carbon::now()->year;
+            $anioActual = (string) $this->anio;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)
                 ->whereIn('concepto_id', [19, 20, 21, 35, 39, 10114, 10115, 10116, 10117])
@@ -144,7 +144,7 @@ class IngresosRecaudadoForm extends Component
     public function obtenerSolvenciaContable()
     {
         try{
-            $anioActual = Carbon::now()->year;
+            $anioActual = (string) $this->anio;
             $cuentaAbono = Cuenta::find($this->cuentaPago);
             $solvencia = DB::select('EXEC SolvenciaCuentasContables @cuenta = ?, @anio = ?', array($cuentaAbono->Codigo_cuenta, $anioActual))[0]->Solvencia;
             $this->solvenciaAbono = ($solvencia > 0) ? floatval($solvencia) : 0;

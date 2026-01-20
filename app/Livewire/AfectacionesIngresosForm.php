@@ -265,7 +265,7 @@ class AfectacionesIngresosForm extends Component
         $this->registros = $registros;
         $numerosPolizas = Poliza::select('numero_poliza')
             ->where('tipo_poliza', '=', 'D')
-            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->whereYear('fecha', '=', (string) $this->anio)
             ->distinct()
             ->orderBy('numero_poliza')
             ->pluck('numero_poliza')
@@ -274,7 +274,7 @@ class AfectacionesIngresosForm extends Component
         $this->numeroPoliza = (int)end($numerosPolizas) + 1;
         if ($this->numeroEvento == 0) {
             $numerosEvento = Poliza::select('evento')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('evento')
                 ->pluck('evento')
@@ -289,7 +289,7 @@ class AfectacionesIngresosForm extends Component
             }
         }
 
-        $anioActual = Carbon::now()->year;
+        $anioActual = (string) $this->anio;
         $fecha = Carbon::now('America/Mexico_City');
         $fecha->year($anioActual);
         foreach ($registros as $registro) {

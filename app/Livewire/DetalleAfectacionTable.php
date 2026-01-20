@@ -23,6 +23,7 @@ class DetalleAfectacionTable extends Tabla
     public $numeroPolizaEgresos;
     public $fecha;
     public $hora;
+    public int $anio;
 
     public function render()
     {
@@ -30,9 +31,11 @@ class DetalleAfectacionTable extends Tabla
     }
 
     public function mount(){
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+
         $poliza = $this->data()->first();
 
-        $this->fecha = ($poliza) ? Carbon::createFromFormat('Y-m-d H:i:s', $poliza->created_at)->format('d/m/Y') : '01/01/' . Carbon::now()->year;
+        $this->fecha = ($poliza) ? Carbon::createFromFormat('Y-m-d H:i:s', $poliza->created_at)->format('d/m/Y') : '01/01/' . (string) $this->anio;
         $this->hora = ($poliza) ? Carbon::createFromFormat('Y-m-d H:i:s', $poliza->created_at)->format('H:i:s') : '11:00:00';
 
         $this->numeroPolizaIngresos = Poliza::where('evento', '=', $this->evento)

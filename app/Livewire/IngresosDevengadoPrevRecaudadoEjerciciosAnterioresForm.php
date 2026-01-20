@@ -84,7 +84,7 @@ class IngresosDevengadoPrevRecaudadoEjerciciosAnterioresForm extends Component
     public function obtenerSolvencia()
     {
         try{
-            $anioActual = Carbon::now()->year;
+            $anioActual = (string) $this->anio;
             $cuentaAbono = Cuenta::find($this->cuentaPago);
             $solvencia = DB::select('EXEC SolvenciaCuentasContables @cuenta = ?, @anio = ?', array($cuentaAbono->Codigo_cuenta, $anioActual))[0]->Solvencia;
             $this->solvenciaAbono = ($solvencia > 0) ? floatval($solvencia) : 0;

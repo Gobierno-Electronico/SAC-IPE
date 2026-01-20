@@ -178,7 +178,7 @@ class IngresosRecaudadoTable extends Tabla
                     $this->dispatch('mostrarMensaje', mensaje: 'Monto total del evento superado', tipo: 'error', tiempo: 3000);
                     return;
                 }
-                $anioActual = Carbon::now()->year;
+                $anioActual = (string) $this->anio;
                 $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $registro['cuentaId'])
                     ->whereIn('concepto_id', [19, 20, 21, 35, 39, 10114, 10115, 10116, 10117])
                     ->where('tipo_interaccion', '=', 'Presupuestal - Abono')
@@ -279,7 +279,7 @@ class IngresosRecaudadoTable extends Tabla
             $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'I')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('numero_poliza')
                 ->pluck('numero_poliza')
@@ -291,7 +291,7 @@ class IngresosRecaudadoTable extends Tabla
             $polizasInicialesIngresosDevengado = Poliza::where('tipo_poliza', '=', 'I')
                 ->where('categoria', '=', 'INGRESOS DEVENGADO')
                 ->where('evento', '=', $this->numeroEvento)
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->orderBy('id', 'desc')
                 ->get();
             $sumaAbonos = 0;
@@ -328,7 +328,7 @@ class IngresosRecaudadoTable extends Tabla
                 }
             }
 
-            $anioActual = Carbon::now()->year;
+            $anioActual = $this->anio;
             $fecha = Carbon::now('America/Mexico_City');
             $fecha->year($anioActual);
             $bitacora = new BitacoraController();
@@ -414,7 +414,7 @@ class IngresosRecaudadoTable extends Tabla
 
             $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'IAUX')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('numero_poliza')
                 ->pluck('numero_poliza')
@@ -428,7 +428,7 @@ class IngresosRecaudadoTable extends Tabla
                         ->orwhere('categoria', '=', 'INGRESOS COBRO ESPECIE');
                 })
                 ->where('evento', '=', $this->numeroEvento)
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->where('concepto', 'LIKE', '%(Recaudado)%')->get();
             $totalRemanente = DB::select('EXEC ImporteTotalRecaudado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
             if ($totalRemanente > 0) {
@@ -504,7 +504,7 @@ class IngresosRecaudadoTable extends Tabla
             $importeTotalEvento = DB::select('EXEC ImporteTotalRecaudado @evento = ?', [$this->numeroEvento]);
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
                 Poliza::where('evento', '=', $this->numeroEvento)
-                    ->whereYear('fecha', '=', Carbon::now()->year)
+                    ->whereYear('fecha', '=', (string) $this->anio)
                     ->whereIn('categoria', ['INGRESOS DEVENGADO', 'INGRESOS RECAUDADO', 'INGRESOS COBRO ESPECIE'])
                     ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
             }

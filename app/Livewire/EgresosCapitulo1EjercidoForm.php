@@ -58,7 +58,7 @@ class EgresosCapitulo1EjercidoForm extends Component
     {
         try{
             $eventos =  Poliza::select('evento', 'descripcion')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 1')
                 ->where('estatus_evento', '=', EstatusEvento::ACTIVO->value)
@@ -89,7 +89,7 @@ class EgresosCapitulo1EjercidoForm extends Component
 
             if (!$this->cuenta || !$this->mes || !$this->selectCodigoAreaResponsable) return;
 
-            $anioActual = Carbon::now()->year;
+            $anioActual = (string) $this->anio;
             $departamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
             $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $this->cuenta)->whereIn('interaccion_cuenta_conceptos.concepto_id', [59, 60, 61, 62])->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
             $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')
@@ -138,7 +138,7 @@ class EgresosCapitulo1EjercidoForm extends Component
             $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::select('numero_poliza')
                 ->where('tipo_poliza', '=', 'E')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('numero_poliza')
                 ->pluck('numero_poliza')
@@ -147,7 +147,7 @@ class EgresosCapitulo1EjercidoForm extends Component
             $this->numeroPoliza = (int)end($numerosPolizas) + 1;
 
 
-            $anioActual = Carbon::now()->year;
+            $anioActual = (string) $this->anio;
             $fecha = Carbon::now('America/Mexico_City');
             $fecha->year($anioActual);
 
@@ -157,7 +157,7 @@ class EgresosCapitulo1EjercidoForm extends Component
 
             $polizasDevengadas = Poliza::select()
                 ->where('tipo_poliza', '=', 'E')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->where('evento','=',$this->numeroEvento)
                 ->where('categoria','=','EGRESOS DEVENGADO CAPITULO 1')
                 ->where('concepto','LIKE','%(Devengado)%')
@@ -231,7 +231,7 @@ class EgresosCapitulo1EjercidoForm extends Component
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
                 Poliza::where('evento', '=', $this->numeroEvento)
                     ->whereIn('categoria', ['EGRESOS DEVENGADO CAPITULO 1'])
-                    ->whereYear('fecha', '=', Carbon::now()->year)
+                    ->whereYear('fecha', '=', (string) $this->anio)
                     ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
             }
             // dd($polizas);

@@ -16,7 +16,13 @@ class TiposPresupuestoForm extends Component
     public $valor2 = "";
     public $valor3 = "";
     public $valor4 = "";
-    
+    public int $anio;
+
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+
     public function render()
     {
         return view('livewire.tipos-presupuesto-form');
@@ -41,7 +47,7 @@ class TiposPresupuestoForm extends Component
         $nombre = "PresupuestoSolicitado";
         $fecha = Carbon::createFromFormat('Y-m-d H:i:s',Carbon::now())->format('d/m/Y');
         $hora = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->format('H:i:s');
-        $params = "Anio;". Carbon::now()->year . ",Tipo;P,Fecha;{$fecha},Hora;{$hora},Numero;1,";
+        $params = "Anio;". (string) $this->anio . ",Tipo;P,Fecha;{$fecha},Hora;{$hora},Numero;1,";
         switch ($this->seccion) {
             case 'ubpp':
                 $nombre .= "Area";

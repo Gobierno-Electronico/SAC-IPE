@@ -179,7 +179,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
                 return;
             }
 
-            $anioActual = Carbon::now()->year;
+            $anioActual = (string) $this->anio;
             $interaccionCuentaConcepto = InteraccionCuentaConcepto::where('cuenta_id', '=', $registro['cuentaId'])->where('concepto_id', '=', 14)->where('tipo_interaccion', '=', 'Presupuestal - Abono')->first();
             $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConcepto->id)->join('interaccion_cuenta_conceptos', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2', '=', 'interaccion_cuenta_conceptos.id')
                 ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->where('Descripcion_cuenta', 'LIKE', '%(Por ejecutar)%')->first();
@@ -244,7 +244,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
             $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'I')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('numero_poliza')
                 ->pluck('numero_poliza')
@@ -253,7 +253,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
             $this->numeroPoliza = (int)end($numerosPolizas) + 1;
 
             $numerosEvento = Poliza::selectRaw('CAST(evento AS INT) as evento')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('evento')
                 ->pluck('evento')
@@ -262,7 +262,7 @@ class DevengadoPrevRecaudadoTable extends Tabla
     
             $this->numeroEvento = (int)end($numerosEvento) + 1;
           
-            $anioActual = Carbon::now()->year;
+            $anioActual = $this->anio;
             $fecha = Carbon::now('America/Mexico_City');
             $fecha->year($anioActual);
 

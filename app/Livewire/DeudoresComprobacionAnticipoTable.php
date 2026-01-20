@@ -267,7 +267,7 @@ class DeudoresComprobacionAnticipoTable extends Tabla
 
             $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'D')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('numero_poliza')
                 ->pluck('numero_poliza')
@@ -277,7 +277,7 @@ class DeudoresComprobacionAnticipoTable extends Tabla
 
             $this->numeroEvento = $this->dataCompleta[0]['evento'];
 
-            $anioActual = Carbon::now()->year;
+            $anioActual = $this->anio;
             $fecha = Carbon::now('America/Mexico_City');
             $fecha->year($anioActual);
 
@@ -515,12 +515,12 @@ class DeudoresComprobacionAnticipoTable extends Tabla
                         'DEUDORES OTORGAMIENTO ANTICIPOS',
                         'DEUDORES REINTEGRO ANTICIPOS'
                     ])
-                    ->whereYear('fecha', '=', Carbon::now()->year)
+                    ->whereYear('fecha', '=', (string) $this->anio)
                     ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
 
                 $hayRetenciones = Poliza::where('evento', '=', $this->numeroEvento)
                     ->where('categoria', '=', 'DEUDORES COMPROBACION ANTICIPOS')
-                    ->whereYear('fecha', '=', Carbon::now()->year)
+                    ->whereYear('fecha', '=', (string) $this->anio)
                     ->where(function ($q) {
                         $q->where('concepto', 'LIKE', '%ISR%')
                             ->orWhere('concepto', 'LIKE', '%IVA%');
@@ -529,7 +529,7 @@ class DeudoresComprobacionAnticipoTable extends Tabla
                 if (!$hayRetenciones) {
                     Poliza::where('evento', '=', $this->numeroEvento)
                         ->where('categoria', 'DEUDORES COMPROBACION ANTICIPOS')
-                        ->whereYear('fecha', '=', Carbon::now()->year)
+                        ->whereYear('fecha', '=', (string) $this->anio)
                         ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
                 }
             }

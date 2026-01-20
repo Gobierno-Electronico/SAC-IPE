@@ -239,7 +239,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
             $idUsuarioRegistrante = Auth::id();
             $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
                 ->where('tipo_poliza', '=', 'D')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('numero_poliza')
                 ->pluck('numero_poliza')
@@ -248,7 +248,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
             $this->numeroPoliza = (int)end($numerosPolizas) + 1;
 
             $numerosEvento = Poliza::selectRaw('CAST(evento AS INT) as evento')
-                ->whereYear('fecha', '=', Carbon::now()->year)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('evento')
                 ->pluck('evento')
@@ -256,7 +256,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
             sort($numerosEvento);
             $this->numeroEvento = (int)end($numerosEvento) + 1;
 
-            $anioActual = Carbon::now()->year;
+            $anioActual = $this->anio;
             $fecha = Carbon::now('America/Mexico_City');
             $fecha->year($anioActual);
 
@@ -278,7 +278,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
                 $hayRepetidosContables = false;
                 $polizaPrincipalRegistrada = Poliza::where('cuenta', '=', $movimiento['codigoCuenta'])
                     ->where('evento', '=', $this->numeroEvento)
-                    ->whereYear('fecha', '=', Carbon::now()->year)
+                    ->whereYear('fecha', '=', (string) $this->anio)
                     ->get();
                 if (!$polizaPrincipalRegistrada->isEmpty()) {
                     $hayRepetidosContables = true;
@@ -327,7 +327,7 @@ class PrestamosOtorgamientoEjercidoPagadoRecaudadoPrestamosRenovacionTable exten
                     $hayRepetidosPresupuestales = false;
                     $polizaRegistrada = Poliza::where('cuenta', '=', $dataCuenta['Codigo_cuenta'])
                         ->where('evento', '=', $this->numeroEvento)
-                        ->whereYear('fecha', '=', Carbon::now()->year)
+                        ->whereYear('fecha', '=', (string) $this->anio)
                         ->where('tipo_interaccion', '<>', 'Contable - Abono')
                         ->get();
                     if (!$polizaRegistrada->isEmpty()) {

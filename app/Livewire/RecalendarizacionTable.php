@@ -175,7 +175,7 @@ class RecalendarizacionTable extends Tabla
         $idUsuarioRegistrante = Auth::id();
         $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
             ->where('tipo_poliza', '=', 'D')
-            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->whereYear('fecha', '=', (string) $this->anio)
             ->distinct()
             ->orderBy('numero_poliza')
             ->pluck('numero_poliza')
@@ -183,7 +183,7 @@ class RecalendarizacionTable extends Tabla
         sort($numerosPolizas);
         $this->numeroPoliza = (int)end($numerosPolizas) + 1;
         $numerosEvento = Poliza::selectRaw('CAST(evento AS INT) as evento')
-            ->whereYear('fecha', '=', Carbon::now()->year)
+            ->whereYear('fecha', '=', (string) $this->anio)
             ->distinct()
             ->orderBy('evento')
             ->pluck('evento')
@@ -194,7 +194,7 @@ class RecalendarizacionTable extends Tabla
         } else {
             $this->numeroEvento = 1;
         }
-        $anioActual = Carbon::now()->year;
+        $anioActual = $this->anio;
         $fecha = Carbon::now('America/Mexico_City');
         $fecha->year($anioActual);
         foreach ($this->dataCompleta as $movimiento) {
