@@ -39,7 +39,13 @@ class PresupuestoIngresosTable extends Tabla
     public $fecha = '';
 
     public $hora = '';
+    public int $anio;
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+    
     public function render()
     {
         // $this->selectedYear = Carbon::now()->year + 1;
