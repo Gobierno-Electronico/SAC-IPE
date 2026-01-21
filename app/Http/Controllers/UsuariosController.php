@@ -24,6 +24,10 @@ class UsuariosController extends Controller
 
     }
 
+    public function permisosUsuarios(){
+        return view('administracion.administracion-permisos');
+    }
+
     public function editarUsuario($id) {
         $usuario =  User::find($id);
         if($usuario){
@@ -84,5 +88,7 @@ class UsuariosController extends Controller
         $usuariosController->bitacora('cambiarPassword', 'actualizó o intentó actualizar su contraseña', $request);
         return redirect('/');
     }
+
+    
 
 }

@@ -320,9 +320,9 @@ class AuthServiceProvider extends ServiceProvider
 
         //Gates para Ingresos_____________________________________________________
         Gate::define(
-            'Ingresos',
+            'ingresos',
             fn($user)  =>
-            $user->puede('Ingresos')
+            $user->puede('ingresos')
         );
 
         Gate::define(

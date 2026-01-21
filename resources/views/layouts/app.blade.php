@@ -492,7 +492,7 @@
                         </li>
 
                         <li class="nav-item dropdown">
-                            @can('Ingresos')
+                            @can('ingresos')
                                 @if ($haySaldosIniciales)
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" role="button"
                                         data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
@@ -1062,13 +1062,9 @@
                                     <a class="dropdown-item" href="{{ route('listaDeUsuarios') }}">
                                         {{ __('Administración de usuarios') }}
                                     </a>
-                                    <a class="dropdown-item" href="#">
+                                    <a class="dropdown-item" href="{{route('adminPermisos')}}">
                                         {{ __('Administración de permisos') }}
                                     </a>
-                                    <a class="dropdown-item" href="#">
-                                        {{ __('Administración de actividades') }}
-                                    </a>
-
                                     <a class="dropdown-item" onclick="mostrarCargando()" href="/bitacoras">
                                         {{ __('Bitácora') }}
                                     </a>

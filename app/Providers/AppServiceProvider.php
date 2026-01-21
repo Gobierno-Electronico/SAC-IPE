@@ -121,20 +121,12 @@ class AppServiceProvider extends ServiceProvider
             return Auth::user()?->rol == RolEnum::TECNICO;
         });
 
-        Blade::if('jefe_dep_contabilidad', function () {
-            return Auth::user()?->rol == RolEnum::JEFE_DEPARTAMENTO_CONTABILIDAD;
+        Blade::if('jefe_dep', function () {
+            return Auth::user()?->rol == RolEnum::JEFE_DEPARTAMENTO;
         });
 
-        Blade::if('jefe_dep_financieros', function () {
-            return Auth::user()?->rol == RolEnum::JEFE_DEPARTAMENTO_RECURSOS_FINANCIEROS;
-        });
-
-        Blade::if('jefe_ofi_contabilidad', function () {
-            return Auth::user()?->rol == RolEnum::JEFE_OFICINA_CONTABILIDAD;
-        });
-
-        Blade::if('jefe_ofi_control', function () {
-            return Auth::user()?->rol == RolEnum::JEFE_OFICINA_CONTROL;
+        Blade::if('jefe_ofi', function () {
+            return Auth::user()?->rol == RolEnum::JEFE_OFICINA;
         });
 
         Blade::if('capturista', function () {

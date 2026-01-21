@@ -198,8 +198,11 @@ Route::get("/deudores-otorgamiento-anticipo", [DeudoresController::class, 'otorg
 Route::get("/deudores-reintegro-anticipo", [DeudoresController::class, 'reintegroAnticipo'])->name('reintegroAnticipo');
 Route::get("/deudores-comprobacion-anticipo", [DeudoresController::class, 'comprobacionAnticipo'])->name('comprobacionAnticipo');
 
+//Permisos de usuarios
+Route::get("/permisos", [UsuariosController::class, 'permisosUsuarios'])->name('adminPermisos')->middleware(['auth', 'role:Administrador']);
+
 //ruta de prueba
-Route::get("/bancos", [IngresosController::class, 'bancos'])->name('bancos');
+Route::get("/bancos", [IngresosController::class, 'bancos'])->name('bancos');   
 
 
 
