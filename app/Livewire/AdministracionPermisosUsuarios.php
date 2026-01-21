@@ -30,19 +30,26 @@ class AdministracionPermisosUsuarios extends Component
 
     public function seleccionarUsuario($userId)
     {
-        $this->usuarioSeleccionadoId = $userId;
-        $usuario = User::findOrFail($userId);
-        $this->nombreUsuarioSeleccionado = $usuario->nombre . " " . $usuario->apellido_paterno . " " . $usuario->apellido_materno;
-
-        $this->permisosSeleccionados = User::findOrFail($userId)
-            ->actividades()
-            ->pluck('actividades.id')
-            ->toArray();
+        try {
+            $this->usuarioSeleccionadoId = $userId;
+            $usuario = User::findOrFail($userId);
+            $this->nombreUsuarioSeleccionado = $usuario->nombre . " " . $usuario->apellido_paterno . " " . $usuario->apellido_materno;
+    
+            $this->permisosSeleccionados = User::findOrFail($userId)
+                ->actividades()
+                ->pluck('actividades.id')
+                ->toArray();
+        } catch (\Throwable $th) {
+             DB::rollBack();
+            Log::error('Ocurrió un error al obtener los permisos del usuario seleccionado' . $th->getMessage());
+            $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al obtener los permisos', tipo: 'error', tiempo: 3000);
+        }
     }
 
     public function guardarPermisos()
     {
         try {
+            $this->dispatch('mostrarCargando');
             $bitacora = new BitacoraController();
             $bitacora->bitacora('guardarPermisos', ' modificó los permisos del usuario ' . $this->nombreUsuarioSeleccionado . ' el día ' . Carbon::now()->format('d/m/Y'). ' a las ' . Carbon::now()->format('h:i A'), request());
             DB::beginTransaction();
@@ -55,6 +62,8 @@ class AdministracionPermisosUsuarios extends Component
             DB::rollBack();
             Log::error('Ocurrió un error al actualizar los permisos ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al actualizar los permisos', tipo: 'error', tiempo: 3000);
+        } finally{
+            $this->dispatch('esconderCargando');
         }
     }
 
