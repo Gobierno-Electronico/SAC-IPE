@@ -3,8 +3,13 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use App\Http\Controllers\BitacoraController;
 use App\Models\User;
 use App\Models\Actividad;
+use Carbon\Carbon;
+use DB;
+use Log;
+use Illuminate\Support\Facades\Auth;
 
 class AdministracionPermisosUsuarios extends Component
 {
@@ -38,6 +43,8 @@ class AdministracionPermisosUsuarios extends Component
     public function guardarPermisos()
     {
         try {
+            $bitacora = new BitacoraController();
+            $bitacora->bitacora('guardarPermisos', ' modificó los permisos del usuario ' . $this->nombreUsuarioSeleccionado . ' el día ' . Carbon::now()->format('d/m/Y'). ' a las ' . Carbon::now()->format('h:i A'), request());
             DB::beginTransaction();
             User::findOrFail($this->usuarioSeleccionadoId)
                 ->actividades()
