@@ -22,6 +22,7 @@
     <!-- Scripts -->
     <script src="https://kit.fontawesome.com/5a7f009297.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         window.IP_PORT = @json(config('app.ip_port'));
         window.NOMBRE_REPORTEADOR = @json(config('app.nombre_reporteador'));
