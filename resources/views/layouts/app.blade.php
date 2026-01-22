@@ -1062,7 +1062,7 @@
                                     <a class="dropdown-item" href="{{ route('listaDeUsuarios') }}">
                                         {{ __('Administración de usuarios') }}
                                     </a>
-                                    <a class="dropdown-item" href="{{route('adminPermisos')}}">
+                                    <a class="dropdown-item" href="{{ route('adminPermisos') }}">
                                         {{ __('Administración de permisos') }}
                                     </a>
                                     <a class="dropdown-item" onclick="mostrarCargando()" href="/bitacoras">
@@ -1138,7 +1138,6 @@
 
 </body>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
     function mostrarCargando() {
@@ -1179,7 +1178,7 @@
                 keyboard: false
             });
 
-            // 👉 Si no hay año guardado, mostrar modal
+            
             if (!localStorage.getItem('añoSelect')) {
                 modalAnio.show();
             }
@@ -1192,13 +1191,13 @@
                     return;
                 }
 
-                // 👉 Guardar año
+                
                 localStorage.setItem('añoSelect', anio);
                 window.añoSelect = anio;
 
                 modalAnio.hide();
 
-                // 👉 RECARGA para que el navbar lo pinte desde Blade
+                
                 location.reload();
             });
 
