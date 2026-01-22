@@ -17,10 +17,12 @@ use Illuminate\Support\Facades\Auth;
 class ContabilidadController extends Controller
 {
     private $documentoFuente = "";
+    public int $anio;
 
     public function __construct()
     {
         $this->middleware('auth');
+        $this->anio = (int) session('anioSeleccionado', now()->year);
     }
 
     public function movimientosDeudores()
@@ -163,7 +165,7 @@ class ContabilidadController extends Controller
                 // $poliza = Poliza::whereYear('fecha', '=', Carbon::now()->year)->orderBy('numero_poliza','DESC')->first();
                 // $numeroPoliza = $poliza ? $poliza->numero_poliza + 1 : 1;
                 $numerosEvento = Poliza::select('evento')
-                    ->whereYear('fecha', '=', Carbon::now()->year)
+                    ->whereYear('fecha', '=', (string) $this->anio)
                     ->distinct()
                     ->orderBy('evento')
                     ->pluck('evento')
@@ -178,7 +180,7 @@ class ContabilidadController extends Controller
                 }
 
                 if (empty($eventoFaltante)) {
-                    $poliza = Poliza::whereYear('fecha', '=', Carbon::now()->year)->orderBy('evento', 'DESC')->first();
+                    $poliza = Poliza::whereYear('fecha', '=', (string) $this->anio)->orderBy('evento', 'DESC')->first();
                     $numeroEvento = $poliza ? $poliza->evento + 1 : 1;
                 } else {
                     $numeroEvento = $eventoFaltante[0];
@@ -193,7 +195,7 @@ class ContabilidadController extends Controller
                         }
                     }
 
-                    $buscarPolizaInicial = Poliza::where('cuenta', '=', $row['Cuenta'])->whereYear('fecha', '=', Carbon::now()->year)->where('categoria', '=', 'SALDO INICIAL')->first();
+                    $buscarPolizaInicial = Poliza::where('cuenta', '=', $row['Cuenta'])->whereYear('fecha', '=', (string) $this->anio)->where('categoria', '=', 'SALDO INICIAL')->first();
                     if ($buscarPolizaInicial) {
                         if ($buscarPolizaInicial->validado) {
 
@@ -293,7 +295,7 @@ class ContabilidadController extends Controller
     public function generarPolizasInicial($row, $numeroEvento)
     {
         $idUsuarioRegistrante = Auth::id();
-        $anioActual = Carbon::now()->year;
+        $anioActual = $this->anio;
         $fecha = Carbon::now('America/Mexico_City');
         $fecha->year($anioActual);
         $poliza = new Poliza([

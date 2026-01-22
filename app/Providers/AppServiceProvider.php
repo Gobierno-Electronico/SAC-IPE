@@ -26,8 +26,13 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
+
+    public int $anio;
+
     public function boot(): void
     {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+
         // DB::listen(function ($query) {
         //     Log::info(
         //         $query->sql,
@@ -36,8 +41,7 @@ class AppServiceProvider extends ServiceProvider
         //     );
         // });
         // ini_set('max_execution_time', 120);
-        $anioActual = Carbon::now()->year;
-
+        $anioActual = $this->anio;
 
         Builder::macro('search', function ($fields, $string) {
             if (!$string)

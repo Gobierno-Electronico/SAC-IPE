@@ -32,10 +32,13 @@ class PresupuestoController extends Controller
 
     private $cuentaDerechaActual = null;
     private $documentoFuente = "";
+        public int $anio;
+
 
     public function __construct()
     {
         $this->middleware('auth');
+        $this->anio = (int) session('anioSeleccionado', now()->year);
     }
 
 
@@ -220,14 +223,14 @@ class PresupuestoController extends Controller
                 // $numeroPoliza = $poliza ? $poliza->numero_poliza + 1 : 1;
                 $numerosPolizas = Poliza::select('numero_poliza')
                     ->where('tipo_poliza', '=', 'P')
-                    ->whereYear('fecha', '=', Carbon::now()->year)
+                    ->whereYear('fecha', '=', (string) $this->anio)
                     ->distinct()
                     ->orderBy('numero_poliza')
                     ->pluck('numero_poliza')
                     ->toArray();
                 $numerosEvento = Poliza::select('evento')
                     ->distinct()
-                    ->whereYear('fecha', '=', Carbon::now()->year)
+                    ->whereYear('fecha', '=', (string) $this->anio)
                     ->orderBy('evento')
                     ->pluck('evento')
                     ->toArray();
@@ -246,14 +249,14 @@ class PresupuestoController extends Controller
                     }
                 }
                 if (empty($numeroFaltante)) {
-                    $poliza = Poliza::whereYear('fecha', '=', Carbon::now()->year)->where('tipo_poliza', '=', 'P')->orderBy('numero_poliza', 'DESC')->first();
+                    $poliza = Poliza::whereYear('fecha', '=', (string) $this->anio)->where('tipo_poliza', '=', 'P')->orderBy('numero_poliza', 'DESC')->first();
                     $numeroPoliza = $poliza ? $poliza->numero_poliza + 1 : 1;
                 } else {
                     $numeroPoliza = $numeroFaltante[0];
                 }
 
                 if (empty($eventoFaltante)) {
-                    $poliza = Poliza::whereYear('fecha', '=', Carbon::now()->year)->orderBy('evento', 'DESC')->first();
+                    $poliza = Poliza::whereYear('fecha', '=', (string) $this->anio)->orderBy('evento', 'DESC')->first();
                     $numeroEvento = $poliza ? $poliza->evento + 1 : 1;
                 } else {
                     $numeroEvento = $eventoFaltante[0];
@@ -319,7 +322,7 @@ class PresupuestoController extends Controller
                         ]);
                     }
 
-                    $buscarPresupuesto = Poliza::where('cuenta', '=', $row['Cuenta'])->whereYear('fecha', '=', Carbon::now()->year)->where('categoria', '=', 'INICIAL INGRESOS')->first();
+                    $buscarPresupuesto = Poliza::where('cuenta', '=', $row['Cuenta'])->whereYear('fecha', '=', (string) $this->anio)->where('categoria', '=', 'INICIAL INGRESOS')->first();
                     if ($buscarPresupuesto) {
                         if ($buscarPresupuesto->validado) {
 
@@ -444,7 +447,7 @@ class PresupuestoController extends Controller
         }
         // dd($presupuesto, $cuenta, $interaccionCuentaConceptoIzquierda, $interaccionCuentaCuenta, $interaccionCuentaConceptoDeracha, $cuentaDerecha);
         $meses = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
-        $anioActual = Carbon::now()->year;
+        $anioActual = $this->anio;
         $fecha = Carbon::now('America/Mexico_City');
         $fecha->year($anioActual);
         $polizaEstimado = [];
@@ -671,14 +674,14 @@ class PresupuestoController extends Controller
                 DB::beginTransaction();
                 $numerosPolizas = Poliza::select('numero_poliza')
                     ->where('tipo_poliza', '=', 'P')
-                    ->whereYear('fecha', '=', Carbon::now()->year)
+                    ->whereYear('fecha', '=', (string) $this->anio)
                     ->distinct()
                     ->orderBy('numero_poliza')
                     ->pluck('numero_poliza')
                     ->toArray();
 
                 $numerosEvento = Poliza::select('evento')
-                    ->whereYear('fecha', '=', Carbon::now()->year)
+                    ->whereYear('fecha', '=', (string) $this->anio)
                     ->distinct()
                     ->orderBy('evento')
                     ->pluck('evento')
@@ -702,14 +705,14 @@ class PresupuestoController extends Controller
                     }
                 }
                 if (empty($numeroFaltante)) {
-                    $poliza = Poliza::whereYear('fecha', '=', Carbon::now()->year)->where('tipo_poliza', '=', 'P')->orderBy('numero_poliza', 'DESC')->first();
+                    $poliza = Poliza::whereYear('fecha', '=', (string) $this->anio)->where('tipo_poliza', '=', 'P')->orderBy('numero_poliza', 'DESC')->first();
                     $numeroPoliza = $poliza ? $poliza->numero_poliza + 1 : 1;
                 } else {
                     $numeroPoliza = $numeroFaltante;
                 }
 
                 if (empty($eventoFaltante)) {
-                    $poliza = Poliza::whereYear('fecha', '=', Carbon::now()->year)->orderBy('evento', 'DESC')->first();
+                    $poliza = Poliza::whereYear('fecha', '=', (string) $this->anio)->orderBy('evento', 'DESC')->first();
                     $numeroEvento = $poliza ? $poliza->evento + 1 : 1;
                 } else {
                     $numeroEvento = $eventoFaltante[0];
@@ -800,7 +803,7 @@ class PresupuestoController extends Controller
                     //     ]);
                     // }
 
-                    $buscarPresupuesto = Poliza::where('cuenta', '=', $row['Cuenta'])->whereYear('fecha', '=', Carbon::now()->year)->where('area', '=', $row['Area Ejecutora'])->where('categoria', '=', 'INICIAL EGRESOS')->first();
+                    $buscarPresupuesto = Poliza::where('cuenta', '=', $row['Cuenta'])->whereYear('fecha', '=', (string) $this->anio)->where('area', '=', $row['Area Ejecutora'])->where('categoria', '=', 'INICIAL EGRESOS')->first();
                     if ($buscarPresupuesto) {
                         if ($buscarPresupuesto->validado) {
 
@@ -997,7 +1000,7 @@ class PresupuestoController extends Controller
         }
         // dd($presupuesto, $cuenta, $interaccionCuentaConceptoIzquierda, $interaccionCuentaCuenta, $interaccionCuentaConceptoDeracha, $cuentaDerecha);
         $meses = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
-        $anioActual = Carbon::now()->year;
+        $anioActual = $this->anio;
         $created = Carbon::now('America/Mexico_City');
         $fecha = Carbon::now('America/Mexico_City');
         $fecha->year($anioActual);
