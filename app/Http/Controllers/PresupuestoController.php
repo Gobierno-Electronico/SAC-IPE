@@ -39,6 +39,7 @@ class PresupuestoController extends Controller
     {
         $this->middleware('auth');
         $this->anio = (int) session('anioSeleccionado', now()->year);
+
     }
 
 

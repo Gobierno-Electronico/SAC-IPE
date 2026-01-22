@@ -1160,7 +1160,7 @@
         };
 
         toastr.error(
-            'Para iniciar el registro de movimientos primero cargue el presupuesto y los saldos iniciales',
+            'Para iniciar el registro de movimientos primero cargue el presupuesto y los saldos iniciales del ejercicio actual',
             'ATENCIÓN'
         );
     }
@@ -1178,7 +1178,7 @@
                 keyboard: false
             });
 
-            
+
             if (!localStorage.getItem('añoSelect')) {
                 modalAnio.show();
             }
@@ -1191,14 +1191,25 @@
                     return;
                 }
 
-                
+
                 localStorage.setItem('añoSelect', anio);
                 window.añoSelect = anio;
+                fetch('/seleccionar-anio', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document
+                                .querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({
+                            anio
+                        })
+                    })
+                    .then(() => {
+                        modalAnio.hide();
 
-                modalAnio.hide();
-
-                
-                location.reload();
+                        location.reload();
+                    });
             });
 
         });

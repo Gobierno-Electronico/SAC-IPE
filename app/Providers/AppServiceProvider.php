@@ -8,10 +8,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,8 +28,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        $this->anio = (int) session('anioSeleccionado', now()->year);
-
+        
         // DB::listen(function ($query) {
         //     Log::info(
         //         $query->sql,
@@ -40,8 +36,6 @@ class AppServiceProvider extends ServiceProvider
         //         $query->time
         //     );
         // });
-        // ini_set('max_execution_time', 120);
-        $anioActual = $this->anio;
 
         Builder::macro('search', function ($fields, $string) {
             if (!$string)
@@ -86,36 +80,6 @@ class AppServiceProvider extends ServiceProvider
                 ->where([[$tabla . '.' . $campoWhere , '=', $valorWhere], [$tabla . '.' . $campoWhere2, '=', $valorWhere2]]);
         });
 
-        // Lógica para la comprobar la apertura del sistema
-        $polizasPresupuestales = DB::table('polizas')
-            ->select('categoria', 'evento')
-            ->where('tipo_poliza', '=', 'P')
-            ->whereYear('fecha', '=', $anioActual)
-            ->groupBy('categoria', 'evento')
-            ->get();
-        
-        $hayPresupuestoCompleto = false;
-        $haySaldosIniciales = false;
-
-        //comparamos con 7 para verificar si ya estácargado el presupuesto de los 6 capítulos de egresos más el de ingresos
-        if($polizasPresupuestales->count() == 7 ){
-            $hayPresupuestoCompleto = true;
-        }
-
-        $polizaSaldosIniciales = DB::table('polizas')
-            ->where('categoria', '=', 'SALDO INICIAL')
-            ->whereYear('fecha', '=', $anioActual)
-            ->first();
-
-        if($hayPresupuestoCompleto && $polizaSaldosIniciales != NULL){
-            $haySaldosIniciales = true;
-        }   
-
-        //Se comparten las variables para que puedan ser usadas por las vistas
-        View::share([
-            'hayPresupuestoCompleto' => $hayPresupuestoCompleto,
-            'haySaldosIniciales' => $haySaldosIniciales
-        ]);
 
         Blade::if('admin', function () {
             return Auth::user()?->rol == RolEnum::ADMINISTRADOR;

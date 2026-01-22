@@ -201,8 +201,14 @@ Route::get("/deudores-comprobacion-anticipo", [DeudoresController::class, 'compr
 //Permisos de usuarios
 Route::get("/permisos", [UsuariosController::class, 'permisosUsuarios'])->name('adminPermisos')->middleware(['auth', 'role:Administrador']);
 
+//guardar año seleccionado en session
+Route::post('/seleccionar-anio', function (\Illuminate\Http\Request $request) {
+    session(['anioSeleccionado' => $request->anio]);
+    return response()->json(['ok' => true]);
+});
+
 //ruta de prueba
-Route::get("/bancos", [IngresosController::class, 'bancos'])->name('bancos');   
+// Route::get("/bancos", [IngresosController::class, 'bancos'])->name('bancos');   
 
 
 
