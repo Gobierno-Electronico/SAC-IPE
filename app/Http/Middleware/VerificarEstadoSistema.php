@@ -19,7 +19,6 @@ class VerificarEstadoSistema
     public function handle($request, Closure $next)
     {
         $anio = session('anioSeleccionado');
-        Log::info($anio);
 
         $polizasPresupuestales = DB::table('polizas')
             ->select('categoria', 'evento')

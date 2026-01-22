@@ -25,6 +25,10 @@ class BitacorasTable extends Tabla
 
     public function query(): Builder
     {
+        $anio = session('anioSeleccionado');
+
+        return Bitacora::query()
+            ->whereYear('created_at', $anio);
         return Bitacora::query();
     }
 
@@ -38,7 +42,7 @@ class BitacorasTable extends Tabla
         ];
     }
 
-    
+
     public function data()
     {
         return $this
@@ -49,11 +53,12 @@ class BitacorasTable extends Tabla
             ->when($this->fecha !== '', function ($query) {
                 $query->whereDate('created_at', $this->fecha);
             })
-            ->search($this->searchBy,$this->searchTerm)
+            ->search($this->searchBy, $this->searchTerm)
             ->paginate($this->perPage);
     }
 
-    public function search() {
+    public function search()
+    {
         $this->resetPage();
     }
 
@@ -63,6 +68,5 @@ class BitacorasTable extends Tabla
         return view('bitacoras.lista');
     }
 
-    public function changeState($value)
-    {}
+    public function changeState($value) {}
 }
