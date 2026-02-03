@@ -32,14 +32,13 @@ class PresupuestoController extends Controller
 
     private $cuentaDerechaActual = null;
     private $documentoFuente = "";
-        public int $anio;
+    public int $anio;
 
 
     public function __construct()
     {
         $this->middleware('auth');
         $this->anio = (int) session('anioSeleccionado', now()->year);
-
     }
 
 
@@ -149,13 +148,13 @@ class PresupuestoController extends Controller
                     return str_replace("\xc2\xa0", '', $texto);
                 };
 
-                $numeroRegistros = 0;
+                // $numeroRegistros = 0;
                 foreach ($xlsx->rows() as $numero_fila => $datos_fila) {
                     if ($numero_fila === 0) {
                         $encabezados = $datos_fila;
                         continue;
                     }
-                    $numeroRegistros++;
+                    // $numeroRegistros++;
                     if (count($encabezados) != count($datos_fila)) {
                         dd($encabezados, $datos_fila);
                     }
@@ -216,9 +215,8 @@ class PresupuestoController extends Controller
                 DB::beginTransaction();
                 $total = 0;
                 $totalPresupuestos = count($rows);
-                $numeroRegistros--; //Se quita uno, ya que hay una fila que es el total
+                // $numeroRegistros--; //Se quita uno, ya que hay una fila que es el total
                 $cuentasFaltantesPlanCuentas = [];
-                $presupuestosRepetidos = [];
                 $cuentasEnLaGuiaFaltantes = [];
                 // $poliza = Poliza::whereYear('fecha', '=', Carbon::now()->year)->orderBy('numero_poliza','DESC')->first();
                 // $numeroPoliza = $poliza ? $poliza->numero_poliza + 1 : 1;
@@ -262,10 +260,12 @@ class PresupuestoController extends Controller
                 } else {
                     $numeroEvento = $eventoFaltante[0];
                 }
+
                 // Se procesan los datos de cada fila del archivo Excel y se crea un nuevo registro en la base de datos utilizando el modelo Cuenta.
                 foreach ($rows as $row) {
                     $total++;
-                    if ($total == $totalPresupuestos) {
+                   
+                    if ($total == $totalPresupuestos + 1) {
                         continue;
                     }
                     $cuenta = Cuenta::where("Codigo_cuenta", $row["Cuenta"])->first();
@@ -343,31 +343,6 @@ class PresupuestoController extends Controller
                     if (!$creacionExitosaPoliza) {
                         continue;
                     }
-                    // $presupuestoInicial = PresupuestoInicial::create([
-                    //     'area' => $row['Area Recaudadora'],
-                    //     'tipo' => $row['TIPO'],
-                    //     'anio' => Carbon::now()->year + 1,
-                    //     'cuenta' => $row['Cuenta'],
-                    //     'descripcion' => $row['Descripción'],
-                    //     'concepto' => $row['CONCEPTO'],
-                    //     'total' => $row['TOTAL'],
-                    //     'monto_enero' => $row['ENERO'],
-                    //     'monto_febrero' => $row['FEBRERO'],
-                    //     'monto_marzo' => $row['MARZO'],
-                    //     'monto_abril' => $row['ABRIL'],
-                    //     'monto_mayo' => $row['MAYO'],
-                    //     'monto_junio' => $row['JUNIO'],
-                    //     'monto_julio' => $row['JULIO'],
-                    //     'monto_agosto' => $row['AGOSTO'],
-                    //     'monto_septiembre' => $row['SEPTIEMBRE'],
-                    //     'monto_octubre' => $row['OCTUBRE'],
-                    //     'monto_noviembre' => $row['NOVIEMBRE'],
-                    //     'monto_diciembre' => $row['DICIEMBRE'],
-                    //     'fecha' => Carbon::now('America/Mexico_City'),
-                    //     'validado' => false,
-                    //     'categoria' => 'INGRESOS'
-                    // ]);
-
                 }
 
                 // Se verifica si hubo errores durante la importación. Si no hubo errores, se confirma la transacción y se redirige con un mensaje de éxito.
@@ -401,6 +376,7 @@ class PresupuestoController extends Controller
                     session()->flash('nombreArchivo', $txtFileName);
                     return back();
                 }
+
                 // Si ocurre alguna excepción durante el proceso de importación, se revierte la transacción
                 // y se redirige con un mensaje de error que incluye detalles sobre la excepción.
             } catch (\Exception $error) {
@@ -434,7 +410,7 @@ class PresupuestoController extends Controller
         $interaccionCuentaCuenta = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $interaccionCuentaConceptoIzquierda->id)->first();
         if (!$interaccionCuentaCuenta) {
             $cuentasEnLaGuiaFaltantes[] = $cuenta;
-            return false;;
+            return false;
         }
         $interaccionCuentaConceptoDerecha = InteraccionCuentaConcepto::where('id', '=', $interaccionCuentaCuenta->id_interaccion_concepto_cuenta_2)->first();
         if (!$interaccionCuentaConceptoIzquierda) {
@@ -514,6 +490,7 @@ class PresupuestoController extends Controller
                 'updated_at' => $fecha
             ];
         }
+      
         if (!empty($polizaEstimado)) {
             Poliza::insert($polizaEstimado);
         }
@@ -549,19 +526,6 @@ class PresupuestoController extends Controller
     }
 
 
-
-    // public function borrarPresupuestoInicial()
-    // {
-    //     try {
-    //         DB::table('polizas')->truncate();
-    //         return response()->json(['success' => 'El Presupuesto Inicial ha sido borrado con éxito.']);
-    //     } catch (\Exception $e) {
-    //         return response()->json(['error' => 'Hubo un error al borrar el Presupuesto Inicial: ' . $e->getMessage()], 500);
-    //     }
-    // }
-
-    //EGRESOS
-
     public function cargarPresupuestoInicialEgresos(Request $request)
     {
         set_time_limit(0);
@@ -579,24 +543,9 @@ class PresupuestoController extends Controller
         }
         $this->documentoFuente = $request->get('selectDocumentoFuente');
         $capitulo = $request->get('capitulo');
-        // switch ($capitulo) {
-        //     case '2000':
-        //         $numPoliza = 2;
-        //         break;
-        //     case '3000':
-        //         $numPoliza = 3;
-        //         break;
-        //     default:
-        //         session()->flash('message', 'El capítulo seleccionado no se encuentra programado');
-        //         session()->flash('message_type', 'error');
-        //         return back();
-        // }
+       
         $archivo = $request->file('input-archivo');
-        // $archivo = public_path('PresupuestoInicial/presupuesto egresos 2024.xlsx');
-        // Poliza::truncate();
-        // PresupuestoInicial::truncate();
-        // dd(1);
-        // return response()->json('Método desactivado');
+      
         // Validar que el archivo pueda ser analizado correctamente.
         if ($xlsx = SimpleXLSX::parse($archivo)) {
             // Validar que los encabezados coincidan con los campos esperados.
@@ -610,7 +559,6 @@ class PresupuestoController extends Controller
             }
             $encabezados = $rows = [];
             $errores = [];
-            $numeroRegistros = 0;
             try {
                 $reemplazarCaracterEspecial = function ($texto) {
                     return str_replace("\xc2\xa0", '', $texto);
@@ -620,7 +568,6 @@ class PresupuestoController extends Controller
                         $encabezados = $datos_fila;
                         continue;
                     }
-                    $numeroRegistros++;
                     if (count($encabezados) != count($datos_fila)) {
                         dd($encabezados, $datos_fila);
                     }
@@ -785,24 +732,6 @@ class PresupuestoController extends Controller
                             'CA' => $row["CA"]
                         ]);
                     }
-                    // $cri = ClasificadorRubroIngreso::where('Codificacion_rubro_ingreso', '=', $row["CRI"])->where('Nombre' , '=' , $row["Descripción"])->first();
-                    // if (!$cri) {
-                    //     ClasificadorRubroIngreso::create([
-                    //         'Codificacion_rubro_ingreso' => $row["CRI"],
-                    //         'Nombre' => $row["Descripción"],
-                    //         'Cuenta_contable' => $row["Cuenta"],
-                    //         'Cuenta_registro' => $cuenta->Cuenta_registro
-                    //     ]);
-                    // }
-                    // $cff = ClasificadorFuenteFinanciamiento::where('Codificacion_fuente_financiamiento', '=', $row["CFF"])->where('Nombre' , '=' , $row["Descripción"])->first();
-                    // if (!$cff) {
-                    //     ClasificadorFuenteFinanciamiento::create([
-                    //         'Codificacion_fuente_financiamiento' => $row["CFF"],
-                    //         'Nombre' => $row["Descripción"],
-                    //         'Cuenta_contable' => $row["Cuenta"],
-                    //         'Cuenta_registro' => $cuenta->Cuenta_registro
-                    //     ]);
-                    // }
 
                     $buscarPresupuesto = Poliza::where('cuenta', '=', $row['Cuenta'])->whereYear('fecha', '=', (string) $this->anio)->where('area', '=', $row['Area Ejecutora'])->where('categoria', '=', 'INICIAL EGRESOS')->first();
                     if ($buscarPresupuesto) {
@@ -825,30 +754,6 @@ class PresupuestoController extends Controller
                     if (!$creacionExitosaPoliza) {
                         continue;
                     }
-                    //     $presupuestoInicial[] = [
-                    //         'area' => $row['Area Ejecutora'],
-                    //         'tipo' => $row['TIPO'],
-                    //         'anio' => Carbon::now()->year + 1,
-                    //         'cuenta' => $row['Cuenta'],
-                    //         'descripcion' => $row['Descripción'],
-                    //         'concepto' => $row['CONCEPTO'],
-                    //         'total' => $row['TOTAL'],
-                    //         'monto_enero' => $row['ENERO'],
-                    //         'monto_febrero' => $row['FEBRERO'],
-                    //         'monto_marzo' => $row['MARZO'],
-                    //         'monto_abril' => $row['ABRIL'],
-                    //         'monto_mayo' => $row['MAYO'],
-                    //         'monto_junio' => $row['JUNIO'],
-                    //         'monto_julio' => $row['JULIO'],
-                    //         'monto_agosto' => $row['AGOSTO'],
-                    //         'monto_septiembre' => $row['SEPTIEMBRE'],
-                    //         'monto_octubre' => $row['OCTUBRE'],
-                    //         'monto_noviembre' => $row['NOVIEMBRE'],
-                    //         'monto_diciembre' => $row['DICIEMBRE'],
-                    //         'fecha' => Carbon::now('America/Mexico_City'),
-                    //         'validado' => false,
-                    //         'categoria' => 'EGRESOS'
-                    //     ];
                 }
 
                 if (!empty($polizaEstimado)) {
