@@ -306,7 +306,7 @@ class ContabilidadController extends Controller
             'fecha' => $fecha,
             'cuenta' => $row['Cuenta'],
             'concepto' => $row['Descripcion'],
-            'total' => $row['Cargo'] != '' ? $row['Cargo'] : $row['Abono'],
+            'total' => $row['Cargo'] != 0 ? $row['Cargo'] : $row['Abono'],
             'mes' => 'Enero',
             'descripcion' => 'CARGA DE SALDOS INICIALES DEL EJERCICIO ' . $anioActual,
             'evento' => $numeroEvento,
