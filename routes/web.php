@@ -137,7 +137,7 @@ Route::get('/contabilidad/plantilla-auxiliares', [ContabilidadController::class,
 //Tipos de presupuesto
 Route::get("/tiposPresupuesto", [PresupuestoController::class, 'tiposPresupuesto'])->name('tiposPresupuesto');
 
-Route::get("/movimientos", [PresupuestoController::class, 'movimientos'])->name('movimientos')->middleware('role:Administrador');
+Route::get("/movimientos", [PresupuestoController::class, 'movimientos'])->name('movimientos');
 
 //Ingresos
 Route::get("/ingresos-por-clasificar", [IngresosController::class, 'ingresosPorClasificar'])->name('ingresosPorClasificar');
