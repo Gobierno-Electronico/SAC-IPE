@@ -17,6 +17,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const inputFecha = document.getElementById('inputFechaAfectacion');
     const inputFecha2 = document.getElementById('inputFechaRegistro');
+    const inputFechaInicio = document.getElementById('fechaInicio');
+    const inputFechaFin = document.getElementById('fechaFin');
 
     if (inputFecha) {
         inputFecha.min = fechaMin;
@@ -26,6 +28,16 @@ document.addEventListener("DOMContentLoaded", function () {
     if (inputFecha2) {
         inputFecha2.min = fechaMin;
         inputFecha2.max = fechaMax;
+    }
+
+    if (inputFechaInicio) {
+        inputFechaInicio.min = fechaMin;
+        inputFechaInicio.max = fechaMax;
+    }
+
+    if (inputFechaFin) {
+        inputFechaFin.min = fechaMin;
+        inputFechaFin.max = fechaMax;
     }
 });
 
