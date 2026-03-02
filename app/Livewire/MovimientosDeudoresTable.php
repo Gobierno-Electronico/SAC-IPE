@@ -72,8 +72,9 @@ class MovimientosDeudoresTable extends Tabla
         $this->data = array_map(function ($entrada) use (&$contador) {
             $entrada =  (array) $entrada;
             // Convertir a número y dividir entre 2
-            $entrada['total'] = floatval($entrada['total']);
-            $entrada['total'] = '$' . number_format($entrada['total'], 2, '.', ',');
+            $total = number_format((float)$entrada['total'], 2, '.', '');
+            $total = bcdiv($total, '2', 2);
+            $entrada['total'] = '$' . number_format((float)$total, 2, '.', ',');
             if (isset($entrada['tipoRegistro']) && $entrada['tipoRegistro'] === 'COMPROBACION') {
                 $entrada['tipoRegistro'] = 'COMPROBACIÓN';
             }

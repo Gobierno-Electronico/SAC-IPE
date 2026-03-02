@@ -74,7 +74,9 @@ class MovimientosDiarioTable extends Tabla
         $this->data = array_map(function ($entrada) use (&$contador) {
             $entrada =  (array) $entrada;
         // Convertir a número y dividir entre 2
-            $entrada['total'] = floatval($entrada['total']);            $entrada['total'] = '$' . number_format($entrada['total'], 2, '.', ',');
+            $total = number_format((float)$entrada['total'], 2, '.', '');
+            $total = bcdiv($total, '2', 2);
+            $entrada['total'] = '$' . number_format((float)$total, 2, '.', ',');
             $entrada['id'] = $contador++;
             return $entrada;
         }, DB::select('EXEC dbo.ConsultaMovimientoDiarioDiversosConceptos @anio = ?', array($anioActual)));
