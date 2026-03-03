@@ -271,7 +271,7 @@ class RegistroPolizaDiarioTable extends Tabla
             $this->dispatch('mostrarMensaje', mensaje: 'Tabla sin registros', tipo: 'error', tiempo: 3000);
             return;
         }
-        if ($this->totalCargo != $this->totalAbono) {
+        if (bccomp($this->totalCargo, $this->totalAbono, 2) != 0) {
             $this->dispatch('mostrarMensaje', mensaje: 'Los totales Cargo y Abono deben estar balanceados', tipo: 'error', tiempo: 3000);
             return;
         }
