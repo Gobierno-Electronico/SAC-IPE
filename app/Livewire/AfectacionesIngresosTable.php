@@ -66,6 +66,11 @@ class AfectacionesIngresosTable extends Tabla
         return Poliza::query();
     }
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+
     public function data()
     {
         if ($this->estado == 'INGRESOS') {
