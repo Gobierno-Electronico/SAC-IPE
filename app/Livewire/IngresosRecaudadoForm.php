@@ -79,6 +79,7 @@ class IngresosRecaudadoForm extends Component
             //code...
             $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
                 ->whereIn('interaccion_cuenta_conceptos.concepto_id', [19, 20, 21, 35, 39, 10114, 10115, 10116, 10117])->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Presupuestal - Abono')
+                ->where('cuentas.Descripcion_cuenta', 'LIKE', '%(Recaudado)%')
                 ->orderBy('cuentas.Codigo_cuenta')->get();
             $eventos =  Poliza::select('evento', 'descripcion')
                 ->whereYear('fecha', '=', (string) $this->anio)
