@@ -76,6 +76,11 @@ class AfectacionesIngresosForm extends Component
         dd($this->only(['title', 'content', 'tipo']));
     }
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+
 
     public function change($element = "")
     {

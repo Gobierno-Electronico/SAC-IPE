@@ -54,6 +54,8 @@ class AfectacionesIngresosTable extends Tabla
     public $total = 0;
     public $totalPrevio;
     public $totalProceso = 0;
+    public int $anio;
+
 
     public function render()
     {
@@ -64,6 +66,11 @@ class AfectacionesIngresosTable extends Tabla
     public function query(): Builder
     {
         return Poliza::query();
+    }
+
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
     }
 
     public function data()
@@ -79,7 +86,7 @@ class AfectacionesIngresosTable extends Tabla
                         $entrada->SolvenciaFinal = 0;
                         $entrada->PresupuestoFinal = 0;
                         return $entrada;
-                    }, DB::select('EXEC AfectacionesLiquidasTabla @area = ?, @cuenta = ?, @anio = ?', array($departamento->Codigo_completo, $cuenta->Codigo_cuenta, (string) $this->anio)));
+                    }, DB::select('EXEC AfectacionesLiquidasTabla @area = ?, @cuenta = ?, @anio = ?', array($departamento->Codigo_completo, $cuenta->Codigo_cuenta, $this->anio)));
             }
             return $this->cacheData;
         } else {
@@ -94,7 +101,7 @@ class AfectacionesIngresosTable extends Tabla
                         $entrada->SolvenciaFinal = 0;
                         $entrada->PresupuestoFinal = 0;
                         return $entrada;
-                    }, DB::select('EXEC AfectacionesLiquidasTabla @area = ?, @cuenta = ?, @anio = ?', array($departamento->Codigo_completo, $cuenta->Codigo_cuenta, (string) $this->anio)));
+                    }, DB::select('EXEC AfectacionesLiquidasTabla @area = ?, @cuenta = ?, @anio = ?', array($departamento->Codigo_completo, $cuenta->Codigo_cuenta, $this->anio)));
             }
             return $this->cacheData;
         }
