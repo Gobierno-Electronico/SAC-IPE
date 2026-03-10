@@ -17,6 +17,7 @@ class ConsultaAmpliacionesReduccionesTable extends Tabla
     public $sortBy = 'evento';
     public $perPage = 10;
     public $data = [];
+    public int $anio;
 
     public function render()
     {
@@ -28,13 +29,18 @@ class ConsultaAmpliacionesReduccionesTable extends Tabla
         return Poliza::query();
     }
 
+    public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
+    }
+
     public function data()
     {
         $this->data = array_map(function ($entrada) {
             $entrada =  (array) $entrada;
             $entrada['totalAfectaciones'] = '$' . number_format($entrada['totalAfectaciones'], 2, '.', ',');
             return $entrada;
-        }, DB::select('EXEC dbo.ConsultaAmpliacionesReducciones'));
+        }, DB::select('EXEC dbo.ConsultaAmpliacionesReducciones @anio = ?', [(string) $this->anio]));
         $collection = collect($this->data);
         if ($this->sortBy !== '') {
             if ($this->sortDirection == "asc") {

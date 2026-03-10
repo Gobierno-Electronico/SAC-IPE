@@ -78,7 +78,7 @@
 		<band height="100" splitType="Stretch">
 			<image>
 				<reportElement x="20" y="0" width="137" height="50" uuid="13cd4ec7-8468-4e49-b7ec-344540383739"/>
-				<imageExpression><![CDATA["/opt/payara/reportesSac/jrxml/ipe_reportes.png"]]></imageExpression>
+				<imageExpression><![CDATA["C:/xampp/htdocs/SAC-IPE/public/imagenes/ipe_reportes.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="231" y="0" width="340" height="20" uuid="d8017d03-9fc6-4c7d-8af5-1bca5a8eb09c"/>

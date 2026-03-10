@@ -954,13 +954,6 @@ class PresupuestoController extends Controller
                 'updated_at' => $created
             ];
         }
-        // if (!empty($polizaEstimado)) {
-        //     Poliza::insert($polizaEstimado);
-        // }
-
-        // if (!empty($polizaPorEjecutar)) {
-        //     Poliza::insert($polizaPorEjecutar);
-        // }
 
         if (!empty($polizaEstimado)) {
             $columns = ['idUsuarioRegistrante', 'area', 'tipo_poliza', 'numero_poliza', 'fecha', 'cuenta', 'concepto', 'total', 'mes', 'descripcion', 'evento', 'tipo_interaccion', 'validado', 'categoria', 'documento_fuente', 'created_at', 'updated_at'];

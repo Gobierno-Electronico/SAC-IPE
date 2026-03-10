@@ -30,12 +30,18 @@ class AfectacionesIngresosConsultaTable extends Tabla
 
     public $totalPrevio;
     public $total;
+    public int $anio;
 
 
     public function render()
     {
 
         return view('livewire.afectaciones-ingresos-consulta-table');
+    }
+
+     public function mount()
+    {
+        $this->anio = (int) session('anioSeleccionado', now()->year);
     }
 
     public function init()
@@ -65,6 +71,7 @@ class AfectacionesIngresosConsultaTable extends Tabla
                 ->where('tipo_poliza', '=', 'D')
                 ->where('numero_poliza', '=', $this->numeroPoliza)
                 ->where('evento', '=', $this->numeroEvento)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->search($this->searchBy, $this->searchTerm)
                 ->paginate($this->perPage);
             return $datos;
@@ -77,6 +84,7 @@ class AfectacionesIngresosConsultaTable extends Tabla
                 ->where('tipo_poliza', '=', 'D')
                 ->where('numero_poliza', '=', $this->numeroPoliza)
                 ->where('evento', '=', $this->numeroEvento)
+                ->whereYear('fecha', '=', (string) $this->anio)
                 ->search($this->searchBy, $this->searchTerm)
                 ->paginate($this->perPage);
             return $datos;
@@ -140,7 +148,6 @@ class AfectacionesIngresosConsultaTable extends Tabla
             $categoria = ($this->tipo == "Ampliación") ? 'AMPLIACION ' . $this->estado : 'REDUCCION ' . $this->estado;
             Poliza::searchByYear('fecha', (string) $this->anio)->where('categoria', '=', $categoria)->where('tipo_poliza', '=', 'D')->where('evento', '=', $this->numeroEvento)->update(["validado" => true]);
 
-            // PresupuestoInicial::where('anio', '=', $this->selectedYear)->where('categoria', '=', 'INGRESOS')->where('tipo', '=', 'P')->update(["validado" => true]);
             $usuariosController = new BitacoraController();
             $usuariosController->bitacora('validarPresupuestoInicial', 'validó o intentó validar la ampliación con número de evento: ' . $this->numeroEvento, request());
             $this->validado = true;

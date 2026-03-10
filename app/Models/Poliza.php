@@ -26,6 +26,7 @@ class Poliza extends Model
         'tipo_interaccion',
         'validado',
         'categoria',
+        'documento_fuente',
         'estatus_evento'
     ];
 

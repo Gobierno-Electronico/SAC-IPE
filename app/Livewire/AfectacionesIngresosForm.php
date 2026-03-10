@@ -64,6 +64,8 @@ class AfectacionesIngresosForm extends Component
     public $totalPrevio = 0;
     public $estado;
     public $estadoOriginal;
+    public int $anio;
+
 
     public function render()
     {
@@ -142,7 +144,7 @@ class AfectacionesIngresosForm extends Component
                     $query->where('Nombre', 'like', '%Por ejecutar%')
                         ->orWhere('Nombre', 'like', '%Modificado%');
                 })->orderBy('Nombre')->get();
-            
+
             $this->codigoCuentaAbono = $cuentas[1]->Cuenta_contable;
             $this->codigoCuentaCargo = $cuentas[0]->Cuenta_contable;
             $this->descripcionCuentaAbono = $cuentas[1]->Nombre;
@@ -194,7 +196,8 @@ class AfectacionesIngresosForm extends Component
         }
     }
     #[On('reiniciar-estado')]
-    public function reiniciarEstado() {
+    public function reiniciarEstado()
+    {
         $this->estado = $this->estadoOriginal;
         $this->numeroEvento = 0;
     }
@@ -255,7 +258,7 @@ class AfectacionesIngresosForm extends Component
     #[On('suma-total')]
     public function sumaTotal($total)
     {
-        $total = str_replace(array('$','.', ','), array('','.',''), $total);
+        $total = str_replace(array('$', '.', ','), array('', '.', ''), $total);
         $this->total += $total;
     }
 
@@ -268,7 +271,7 @@ class AfectacionesIngresosForm extends Component
         $this->total = '$' . $this->total;
         $this->consulta = true;
         $this->registros = $registros;
-        $numerosPolizas = Poliza::select('numero_poliza')
+        $numerosPolizas = Poliza::selectRaw('CAST(numero_poliza AS INT) as numero_poliza')
             ->where('tipo_poliza', '=', 'D')
             ->whereYear('fecha', '=', (string) $this->anio)
             ->distinct()
@@ -278,7 +281,7 @@ class AfectacionesIngresosForm extends Component
         sort($numerosPolizas);
         $this->numeroPoliza = (int)end($numerosPolizas) + 1;
         if ($this->numeroEvento == 0) {
-            $numerosEvento = Poliza::select('evento')
+            $numerosEvento = Poliza::selectRaw('CAST(evento AS INT) as evento')
                 ->whereYear('fecha', '=', (string) $this->anio)
                 ->distinct()
                 ->orderBy('evento')
@@ -286,15 +289,14 @@ class AfectacionesIngresosForm extends Component
                 ->toArray();
             sort($numerosEvento);
             if (!empty($numerosEvento)) {
-                // $poliza = Poliza::whereYear('fecha', '=', Carbon::now()->year)->orderBy('evento', 'DESC')->first();
                 $this->numeroEvento = (int)end($numerosEvento) + 1;
-
             } else {
                 $this->numeroEvento = 1;
             }
+
         }
 
-        $anioActual = (string) $this->anio;
+        $anioActual = $this->anio;
         $fecha = Carbon::now('America/Mexico_City');
         $fecha->year($anioActual);
         foreach ($registros as $registro) {
@@ -348,12 +350,13 @@ class AfectacionesIngresosForm extends Component
                         'created_at' => $fecha,
                         'updated_at' => $fecha
                     ]);
+
                     $poliza->save();
                     $polizaModificado->save();
                 }
             }
         }
         $bitacora = new BitacoraController();
-        $bitacora->bitacora('finalizarRegistrosIngresos', 'finalizó o intentó finalizar el registro de una ' .$this->tipo. ' de ' .$this->estado. ' con evento : '.$this->numeroEvento, request());
+        $bitacora->bitacora('finalizarRegistrosIngresos', 'finalizó o intentó finalizar el registro de una ' . $this->tipo . ' de ' . $this->estado . ' con evento : ' . $this->numeroEvento, request());
     }
 }
