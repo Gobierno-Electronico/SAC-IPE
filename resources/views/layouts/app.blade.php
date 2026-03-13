@@ -1172,7 +1172,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-4 text-center text-md-start">
-                    <img src="{{ asset('imagenes/ipe_logo.png') }}" alt="Logo Adicional"
+                    <img src="{{ asset('imagenes/ipe_logo_1.png') }}" alt="Logo Adicional"
                         style="height: 70px; width: auto;">
                 </div>
 
