@@ -36,7 +36,26 @@
 
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
+
+    <style>
+        /* Color para el título del sistema (Brand) */
+        .navbar-light .navbar-brand {
+            color: #7A1737 !important;
+            font-weight: bold;
+        }
+
+        /* Color para los links del menú */
+        .navbar-light .navbar-nav .nav-link {
+            color: #A8253C !important;
+        }
+
+        /* Efecto al pasar el mouse (un poco más claro o con opacidad) */
+        .navbar-light .navbar-nav .nav-link:hover {
+            color: #7A1737;
+            opacity: 0.8;
+        }
+    </style>
     <div id="app">
 
         @if (!$hayPresupuestoCompleto || !$haySaldosIniciales)
@@ -47,12 +66,34 @@
             </script>
         @endif
 
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <img class="img-fluid logo_encabezado" src="{{ asset('imagenes/ipe_logo.png') }}" alt="veracruz logo">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    Sistema de Armonización Contable
+        <nav class="navbar navbar-expand-sm navbar-light bg-white shadow-sm">
+            <div class="ms-3 flex-grow-1">
+                <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
+                    <img src="{{ asset('imagenes/logo_sac_ipe_1.png') }}" alt="Logo SAC-IPE" class="me-3"
+                        style="height: 70px; width: auto;">
+
+                    <div class="d-flex flex-column border-start ps-3"
+                        style="border-color: rgba(192, 192, 192, 0.4) !important;">
+                        <span class="fw-bold" style="color: #7A1737; line-height: 1.2;">
+                            Sistema de <br> Armonización Contable
+                        </span>
+                        <small class="text-muted" style="font-size: 0.7rem; letter-spacing: 1px;">SAC-IPE</small>
+                    </div>
                 </a>
+            </div>
+            <div class="container-fluid w-auto me-3">
+
+                @auth
+                    <li class="nav-item d-flex align-items-center me-2">
+                        <span id="ejercicioActual" class="fw-bold"
+                            style="white-space: nowrap; display: none; color: #7A1737;">
+                            Ejercicio actual: <span id="anioNavbar"></span>
+                        </span>
+                    </li>
+                    <li class="nav-item d-none d-md-block mx-2" 
+        style="border-left: 2px solid rgba(122, 23, 55, 0.2); height: 30px; align-self: center; border-radius: 2px;">
+    </li>
+                @endauth
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -1084,15 +1125,6 @@
                             </div>
                         </li>
                     @endguest
-                    @auth
-                        <li class="nav-item d-flex align-items-center ms-4">
-                            <span id="ejercicioActual" class="fw-bold text-danger"
-                                style="white-space: nowrap; display: none;">
-                                Ejercicio actual: <span id="anioNavbar"></span>
-                            </span>
-                        </li>
-                    @endauth
-
 
                     </ul>
                 </div>
@@ -1135,6 +1167,29 @@
             </div>
         </div>
     </div>
+
+    <footer class="footer mt-auto py-4 bg-white" style="border-top: 1px solid rgba(192, 192, 192, 0.4);">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center text-md-start">
+                    <img src="{{ asset('imagenes/ipe_logo.png') }}" alt="Logo Adicional"
+                        style="height: 70px; width: auto;">
+                </div>
+
+                <div class="col-md-4 text-center">
+                    <span style="color: #7A1737;">
+                        © {{ date('Y') }} Sistema de Armonización Contable
+                    </span>
+                    <p class="small text-muted mb-0">Instituto de Pensiones del Estado de Veracruz</p>
+                </div>
+
+                <div class="col-md-4 text-center text-md-end">
+                    <img src="{{ asset('imagenes/logos_gobierno.png') }}" alt="Logo Adicional"
+                        style="height: 70px; width: auto;">
+                </div>
+            </div>
+        </div>
+    </footer>
 
 </body>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
