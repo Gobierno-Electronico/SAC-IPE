@@ -92,11 +92,11 @@
     <div class="mt-4 d-flex gap-3 justify-content-end">
         @if (!$validado)
             <button id="botonGenerarPoliza" onclick="generarPolizaAmpliacion(this)" type="button"
-                class="btn btn-success shadow border-1 mt-3 mt-md-0">
+                class="btn btn_primario shadow border-1 mt-3 mt-md-0">
                 Visualizar póliza
             </button>
             <button @if ($validado) disabled @endif
-                class="btn btn-success shadow border-1 mt-3 mt-md-0"id="validarPresupuesto" data-bs-toggle="modal"
+                class="btn btn_primario shadow border-1 mt-3 mt-md-0"id="validarPresupuesto" data-bs-toggle="modal"
                 data-bs-target="#confirmModalvalidarPresupuestoInicial" wire:init="init()">Validar póliza</button>
             <button @if ($validado) disabled @endif id="borrarPresupuesto" type="button"
                 class="btn btn-danger shadow border-1 mt-3 mt-md-0" data-bs-toggle="modal"
@@ -105,14 +105,14 @@
             </button>
         @else
             <button id="botonGenerarPoliza" onclick="generarPolizaAmpliacion(this)" type="button"
-                class="btn btn-success shadow border-1 mt-3 mt-md-0">
+                class="btn btn_primario shadow border-1 mt-3 mt-md-0">
                 Visualizar póliza
             </button>
             @if ($estado == $estadoOriginal)
-                <button class="btn btn-success shadow border-1 mt-3 mt-md-0"id="validarPresupuesto"
+                <button class="btn btn_primario shadow border-1 mt-3 mt-md-0"id="validarPresupuesto"
                     wire:click='continuarAmpliacion("{{$estado == 'EGRESOS' ? 'INGRESOS' : 'EGRESOS'}}")'>Continuar {{ strtolower($tipo) }}</button>
             @else
-                <button class="btn btn-success shadow border-1 mt-3 mt-md-0"id="validarPresupuesto"
+                <button class="btn btn_primario shadow border-1 mt-3 mt-md-0"id="validarPresupuesto"
                     wire:click="finalizar('{{$tipo}}')">Finalizar {{ strtolower($tipo) }}</button>
             @endif
         @endif

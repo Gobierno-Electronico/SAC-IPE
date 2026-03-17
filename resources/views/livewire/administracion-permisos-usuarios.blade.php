@@ -12,7 +12,7 @@
                 @foreach ($usuarios as $usuario)
                     <li
                         class="list-group-item
-            {{ $usuarioSeleccionadoId === $usuario->id ? 'bg-success bg-opacity-25' : '' }}">
+            {{ $usuarioSeleccionadoId === $usuario->id ? 'bg_secundario bg-opacity-25' : '' }}">
 
                         <button class="btn btn-link p-0 text-start text-dark w-100"
                             wire:click="seleccionarUsuario({{ $usuario->id }})" wire:loading.attr="disabled"
@@ -58,7 +58,7 @@
                 @endforeach
             </div>
 
-            <button class="btn btn-success mt-3" wire:click="guardarPermisos" wire:loading.attr="disabled"
+            <button class="btn btn_primario mt-3" wire:click="guardarPermisos" wire:loading.attr="disabled"
                 wire:target="guardarPermisos">
 
                 <span wire:loading.remove wire:target="guardarPermisos">

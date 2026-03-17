@@ -9,7 +9,7 @@
         </div>
     </div>
     <div class="mt-5 d-flex justify-content-end">
-        <button wire:click="actualizarDocumentosFuente" class="btn btn-success shadow border-0" id="importarBoton"
+        <button wire:click="actualizarDocumentosFuente" class="btn btn_primario shadow border-0" id="importarBoton"
             wire:loading.attr="disabled" wire:target="archivo" onclick="mostrarCarga()">
             Cargar fuentes
         </button>

@@ -106,7 +106,7 @@
         @if (!$validado)
             <div>
                 <button id="botonRegresar" wire:click="regresar" type="button"
-                    class="btn btn-success shadow border-1 mt-3 mt-md-0">
+                    class="btn btn_primario shadow border-1 mt-3 mt-md-0">
                     Regresar
                 </button>
             </div>
@@ -117,7 +117,7 @@
 
             @if($categoriaModulo == 'EGRESOS COMPROMETIDO CAPITULO 1')
                 <button id="botonPoliza" onclick="generarPolizaExcel(this, 'X')" type="button"
-                    class="btn btn-success shadow border-1 mt-3 mt-md-0">
+                    class="btn btn_primario shadow border-1 mt-3 mt-md-0">
                     Visualizar póliza en excel
                 </button>
             @endif
@@ -125,12 +125,12 @@
             @if (!$validado)
 
                 <button id="botonPoliza" onclick="generarPoliza(this)" type="button"
-                    class="btn btn-success shadow border-1 mt-3 mt-md-0">
+                    class="btn btn_primario shadow border-1 mt-3 mt-md-0">
                     Visualizar póliza
                 </button>
                 @if ($numeroPolizaRemanente > 0)
                     <button id="botonGenerarPolizaRemanente" onclick="generarPolizaRemanente(this)" type="button"
-                        class="btn btn-success shadow border-1 mt-3 mt-md-0">
+                        class="btn btn_primario shadow border-1 mt-3 mt-md-0">
                         Visualizar póliza del remanente
                     </button>
 
@@ -144,11 +144,11 @@
                
                 @if ($numeroPolizaRemanente > 0)
                     <button @if ($validado) disabled @endif
-                    class="btn btn-success shadow border-1 mt-3 mt-md-0"id="validarIngreso" data-bs-toggle="modal"
+                    class="btn btn_primario shadow border-1 mt-3 mt-md-0"id="validarIngreso" data-bs-toggle="modal"
                     data-bs-target="#confirmModalvalidarIngreso" wire:init="init()">Validar y conservar remanente</button>
                 @else
                     <button @if ($validado) disabled @endif
-                    class="btn btn-success shadow border-1 mt-3 mt-md-0"id="validarIngreso" data-bs-toggle="modal"
+                    class="btn btn_primario shadow border-1 mt-3 mt-md-0"id="validarIngreso" data-bs-toggle="modal"
                     data-bs-target="#confirmModalvalidarIngreso" wire:init="init()">Validar póliza</button>
                 @endif
                 <button @if ($validado) disabled @endif id="borrarIngreso" type="button"
@@ -159,22 +159,22 @@
             @else
                 @if ($liberado)
                     <button id="botonGenerarPolizaRemanenteLiberado"
-                        class="btn btn-success shadow border-1 mt-3 mt-md-0" id="remanenteLiberado" type="button"
+                        class="btn btn_primario shadow border-1 mt-3 mt-md-0" id="remanenteLiberado" type="button"
                         onclick="generarPolizaRemanenteLiberado(this)">Visualizar póliza de liberación</button>
                 @endif
                 <button id="botonPoliza" onclick="generarPoliza(this)" type="button"
-                    class="btn btn-success shadow border-1 mt-3 mt-md-0">
+                    class="btn btn_primario shadow border-1 mt-3 mt-md-0">
                     Visualizar póliza
                 </button>
                 @if ($numeroPolizaRemanente > 0)
                     <button id="botonGenerarPolizaRemanente"
                         onclick="generarPolizaRemanente(this,  @json($liberado))" type="button"
-                        class="btn btn-success shadow border-1 mt-3 mt-md-0">
+                        class="btn btn_primario shadow border-1 mt-3 mt-md-0">
                         Visualizar póliza del remanente
                     </button>
                 @endif
 
-                <button class="btn btn-success shadow border-1 mt-3 mt-md-0"id="validarIngreso"
+                <button class="btn btn_primario shadow border-1 mt-3 mt-md-0"id="validarIngreso"
                     wire:click="finalizar('ingreso por clasificar')">Finalizar</button>
             @endif
         </div>

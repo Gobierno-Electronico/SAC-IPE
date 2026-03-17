@@ -39,6 +39,21 @@
 <body class="d-flex flex-column min-vh-100">
 
     <style>
+
+        .bg_secundario{
+            background-color: #a8253d62
+        }
+        .bg_primario{
+            background-color: #7A1737; 
+        }
+        .btn_primario{
+            background-color: #7A1737; 
+            color: white;
+        }
+        .btn_primario:hover{
+            background-color: #500b21;
+            color: white;
+        }
         /* Color para el título del sistema (Brand) */
         .navbar-light .navbar-brand {
             color: #7A1737 !important;
@@ -46,7 +61,7 @@
         }
 
         /* Color para los links del menú */
-        .navbar-light .navbar-nav .nav-link {
+        .navbar-light .navbar-nav .nav-link{
             color: #A8253C !important;
         }
 
@@ -1159,7 +1174,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button id="btnAceptarAnio" class="btn btn-primary">
+                    <button id="btnAceptarAnio" class="btn btn_primario">
                         Aceptar
                     </button>
                 </div>

@@ -59,7 +59,7 @@
 
         <div class="text-end mt-3">
             <button id="botonPoliza" onclick="generarPDF(this)" type="button"
-                class="btn btn-success shadow border-1 mt-3 mt-md-0">
+                class="btn btn_primario shadow border-1 mt-3 mt-md-0">
                 Generar reporte
             </button>
         </div>

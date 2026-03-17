@@ -300,7 +300,7 @@
             <a href="/tiposPresupuesto" class="btn btn-outline-secondary">Limpiar campos</a>
         </div>
         <div class="col text-end">
-            <button type="submit" onclick="descargar()" wire:click="reporte" class="btn btn-success mb-4"
+            <button type="submit" onclick="descargar()" wire:click="reporte" class="btn btn_primario mb-4"
                 id="descargar">Generar reporte</button>
         </div>
     </div>

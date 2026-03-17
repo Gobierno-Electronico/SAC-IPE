@@ -47,7 +47,7 @@
 
                             <div class="row mb-0 mt-4">
                                 <div class="col-md-8 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">
+                                    <button type="submit" class="btn btn_primario">
                                         {{ __('Iniciar sesión') }}
                                     </button>
                                 </div>

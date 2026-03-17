@@ -184,7 +184,7 @@
                         <a href="{{url ('/cuentas/mostrarRegistrarCuenta')}}" class="btn btn-outline-success shadow border-1">Limpiar campos</a>
                     </div>
                     <div class="col text-end">
-                        <button id="btnAgregar" type="button" class="btn btn-success shadow border-0" onclick="agregarCuenta(this)">Agregar</button>
+                        <button id="btnAgregar" type="button" class="btn btn_primario shadow border-0" onclick="agregarCuenta(this)">Agregar</button>
                     </div>
                 </div>
             </form>

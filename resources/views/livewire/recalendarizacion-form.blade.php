@@ -187,10 +187,10 @@
     </div>
     <div class="mb-3 row">
         <div class="col-auto">
-            <button class="btn btn-success" wire:click="agregarRegistro">Agregar registro</button>
+            <button class="btn btn_primario" wire:click="agregarRegistro">Agregar registro</button>
         </div>
         <div class="col text-end">
-            <button class="btn btn-success" wire:click="finalizarRegistros">Finalizar registros</button>
+            <button class="btn btn_primario" wire:click="finalizarRegistros">Finalizar registros</button>
         </div>
     </div>
     @endif

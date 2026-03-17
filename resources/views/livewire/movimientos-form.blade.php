@@ -99,8 +99,8 @@
             <a href="/movimientos" class="btn btn-outline-secondary">Limpiar campos</a>
         </div>
         <div class="col text-end">
-            <a href="#" class="btn btn-primary">Guardar</a>
-            <a href="#" class="btn btn-success">Aplicar</a>
+            <a href="#" class="btn btn_primario">Guardar</a>
+            <a href="#" class="btn btn_primario">Aplicar</a>
         </div>
     </div>
 </div>

@@ -56,11 +56,11 @@
             </div>
             <div class="mt-5 d-flex justify-content-between">
                 <button type="button" onclick="descargarPlantilla(this,'egresos')"
-                    class="btn btn-success shadow border-0" id="botonPlantilla">
+                    class="btn btn_primario shadow border-0" id="botonPlantilla">
                     Descargar plantilla
                 </button>
 
-                <button wire:click="cargarComprometido" class="btn btn-success shadow border-0" id="importarBoton"
+                <button wire:click="cargarComprometido" class="btn btn_primario shadow border-0" id="importarBoton"
                     wire:loading.attr="disabled" wire:target="archivo" onclick="mostrarCarga()">
                     Cargar comprometido
                 </button>

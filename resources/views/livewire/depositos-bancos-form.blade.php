@@ -105,10 +105,10 @@
                 </div>
                 <div class="row pt-4">
                     <div class="col">
-                        <buton class="btn btn-success" wire:click="agregarRegistro">Agregar registro</buton>
+                        <buton class="btn btn_primario" wire:click="agregarRegistro">Agregar registro</buton>
                     </div>
                     <div class="col text-end">
-                        <buton class="btn btn-success" wire:click="finalizarRegistros">Finalizar registro</buton>
+                        <buton class="btn btn_primario" wire:click="finalizarRegistros">Finalizar registro</buton>
                     </div>
                 </div>
             </div>

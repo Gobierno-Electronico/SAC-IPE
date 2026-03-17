@@ -50,12 +50,12 @@
     </div>
     <div class="mt-4 d-flex flex-row-reverse">
         <button id="botonGenerarLibro" wire:click="generar('PDF')" type="button"
-            class="btn btn-success shadow border-1 mt-3 mt-md-0" @if ($tipoCuenta == '' || $fechaInicio == '' || $fechaFin == '' || $nivel == '' || $cuenta == '') disabled @endif>
+            class="btn btn_primario shadow border-1 mt-3 mt-md-0" @if ($tipoCuenta == '' || $fechaInicio == '' || $fechaFin == '' || $nivel == '' || $cuenta == '') disabled @endif>
             Generar libro mayor PDF
         </button>
 
         <button id="botonGenerarLibro" wire:click="generar('X')" type="button"
-            class="btn btn-success shadow border-1 mt-3 mt-md-0 me-3" @if ($tipoCuenta == '' || $fechaInicio == '' || $fechaFin == '' || $nivel == '' || $cuenta == '') disabled @endif>
+            class="btn btn_primario shadow border-1 mt-3 mt-md-0 me-3" @if ($tipoCuenta == '' || $fechaInicio == '' || $fechaFin == '' || $nivel == '' || $cuenta == '') disabled @endif>
             Generar libro mayor EXCEL
         </button>
     </div>

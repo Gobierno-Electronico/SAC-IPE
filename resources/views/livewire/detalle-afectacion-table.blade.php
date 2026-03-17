@@ -77,13 +77,13 @@
         <div class="mt-3 row text-end">
             <div class="col">
                 <button id="ingresos" onclick="generarPolizaAmpliacion(this)" value="{{$numeroPolizaIngresos}}" type="button"
-                class="btn btn-success shadow border-1 mt-3 mt-md-0">
+                class="btn btn_primario shadow border-1 mt-3 mt-md-0">
                     Generar póliza de ingresos
                 </button>
             </div>
             <div class="col-auto">
                 <button id="egresos" onclick="generarPolizaAmpliacion(this)"  value="{{$numeroPolizaEgresos}}"  type="button"
-                class="btn btn-success shadow border-1 mt-3 mt-md-0">
+                class="btn btn_primario shadow border-1 mt-3 mt-md-0">
                     Generar póliza de egresos
                 </button>
             </div>

@@ -86,7 +86,7 @@
 
             <div>
                 <button id="botonGenerarPoliza" onclick="generarReporte(this)" type="button"
-                    class="btn btn-success shadow border-1 mt-3 mt-md-0"
+                    class="btn btn_primario shadow border-1 mt-3 mt-md-0"
                     @if ($tipoMatriz == '' || $datos->isEmpty()) disabled @endif>
                     Generar reporte
                 </button>

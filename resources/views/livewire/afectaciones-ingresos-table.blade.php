@@ -68,7 +68,7 @@
                 </div>
                 <div class="col-md-6 position-relative" style="width: 25%;">
                     <button
-                        class="btn btn-success shadow border-1 mt-3 mt-md-0 position-absolute bottom-0 start-50 translate-middle-x"
+                        class="btn btn_primario shadow border-1 mt-3 mt-md-0 position-absolute bottom-0 start-50 translate-middle-x"
                         style="width: 60%;" wire:click="agregar" id="agregar">Agregar</button>
                 </div>
                 <div class="col-md-6 w-25">
@@ -133,7 +133,7 @@
             </div>
             <div class="col-md-6 position-relative" style="width: 25%;">
                 <button
-                    class="btn btn-success shadow border-1 mt-3 mt-md-0 position-absolute bottom-0 start-50 translate-middle-x"
+                    class="btn btn_primario shadow border-1 mt-3 mt-md-0 position-absolute bottom-0 start-50 translate-middle-x"
                     style="width: 60%;" wire:click="agregar" id="agregar">Agregar</button>
             </div>
             <div class="col-md-6 w-25">
@@ -145,9 +145,9 @@
     @endif
     <div>
         <div class="d-flex justify-content-end  mt-5">
-            <button class="btn btn-success shadow border-1 mt-3 mx-3" wire:click="agregarRegistro" id="registroExtra"
+            <button class="btn btn_primario shadow border-1 mt-3 mx-3" wire:click="agregarRegistro" id="registroExtra"
                 @if ($total == 0) disabled @endif>Agregar registro</button>
-            <button class="btn btn-success shadow border-1 mt-3" wire:click="finalizarRegistros" id="registroExtra"
+            <button class="btn btn_primario shadow border-1 mt-3" wire:click="finalizarRegistros" id="registroExtra"
                 @empty($registros) disabled @endempty>Finalizar registros</button>
             @if ($totalPrevio > 0 && $totalProceso !== $totalPrevio)
                 <button id="borrarPresupuesto" type="button"

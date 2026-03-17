@@ -60,13 +60,13 @@
                         onchange="cambioArchivo()">
                 </div>
                 <div class="mt-5 d-flex justify-content-between">
-                    <button type="button" onclick="descargarPlantilla(this)" class="btn btn-success shadow border-0"
+                    <button type="button" onclick="descargarPlantilla(this)" class="btn btn_primario shadow border-0"
                         id="botonPlantilla">
                         Descargar plantilla
                     </button>
 
                     <button type="submit" onclick="cargarPolizaInicial(this)"
-                        class="btn btn-success shadow border-0" id="importarBoton" disabled>
+                        class="btn btn_primario shadow border-0" id="importarBoton" disabled>
                         Cargar póliza inicial
                     </button>
                 </div>

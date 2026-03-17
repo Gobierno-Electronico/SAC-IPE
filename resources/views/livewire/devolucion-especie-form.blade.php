@@ -68,10 +68,10 @@
 
         <div class="row mt-4">
             <div class="col">
-                <button class="btn btn-success">Agregar registro</button>
+                <button class="btn btn_primario">Agregar registro</button>
             </div>
             <div class="col text-end">
-                <button class="btn btn-success">Finalizar registros</button>
+                <button class="btn btn_primario">Finalizar registros</button>
             </div>
         </div>
     </div>

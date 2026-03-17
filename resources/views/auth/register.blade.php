@@ -182,7 +182,7 @@
 
                         <div class="row mb-0">
                             <div class="d-flex col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-success ms-auto">
+                                <button type="submit" class="btn btn_primario ms-auto">
                                     {{ __('Registrar usuario') }}
                                 </button>
                             </div>

@@ -45,10 +45,10 @@
 
     <div class="mt-4 d-flex flex-row-reverse">
         <button wire:click="generarEstadoCuenta('X')" type="button"
-            class="btn btn-success shadow border-1 mt-3 mt-md-0 ms-3">
+            class="btn btn_primario shadow border-1 mt-3 mt-md-0 ms-3">
             Generar Excel
         </button>
-        <button wire:click="generarEstadoCuenta('PDF')" type="button" class="btn btn-success shadow border-1 mt-3 mt-md-0">
+        <button wire:click="generarEstadoCuenta('PDF')" type="button" class="btn btn_primario shadow border-1 mt-3 mt-md-0">
             Generar PDF
         </button>
     </div>

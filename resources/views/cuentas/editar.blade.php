@@ -51,7 +51,7 @@
                     </div>
                     
                     <div class="mt-3 text-end">
-                        <button type="button" id="btnActualizar" class="btn btn-success shadow border-0"
+                        <button type="button" id="btnActualizar" class="btn btn_primario shadow border-0"
                             onclick="actualizarCuenta(this)">Guardar cambios</button>
                     </div>
                 </form>

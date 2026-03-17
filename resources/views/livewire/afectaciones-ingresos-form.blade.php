@@ -2,7 +2,7 @@
     <div class="d-flex justify-content-between mb-3">
         <h2>{{ $tipo }} presupuestal</h2>
         <div class="">
-            <button onclick="location.reload()" class="btn btn-success ms-auto">
+            <button onclick="location.reload()" class="btn btn_primario ms-auto">
                 {{ __('Limpiar') }}
             </button>
         </div>

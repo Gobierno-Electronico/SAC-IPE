@@ -118,7 +118,7 @@
 
     <div class="mt-4">
         <button @if ($validado || $selectedChapter == '') disabled @endif
-            class="btn btn-success shadow border-1 mt-3 mt-md-0"id="validarPresupuesto" data-bs-toggle="modal"
+            class="btn btn_primario shadow border-1 mt-3 mt-md-0"id="validarPresupuesto" data-bs-toggle="modal"
             data-bs-target="#confirmModalvalidarPresupuestoInicial" wire:init="init()">Validar presupuesto
             inicial</button>
     </div>
@@ -130,7 +130,7 @@
         </button>
         <div>
             <button id="botonGenerarPoliza" onclick="generarPolizaPresupuestalEgresos(this)" type="button"
-                class="btn btn-success shadow border-1 mt-3 mt-md-0" @if ($selectedChapter == '') disabled @endif>
+                class="btn btn_primario shadow border-1 mt-3 mt-md-0" @if ($selectedChapter == '') disabled @endif>
                 Generar póliza presupuestal
             </button>
         </div>

@@ -36,9 +36,9 @@
                 </div>
                 <div class="d-flex justify-content-between align-items-center mb-2 mt-5">
                     <a href="{{ url('/plantillaExcel/plantilla_ejemplo_excel_cuentas.xlsx') }}"><button type="button"
-                            id="btnDescargar" class="btn btn-success shadow border-0">Descargar
+                            id="btnDescargar" class="btn btn_primario shadow border-0">Descargar
                             plantilla</button></a>
-                    <button type="button" id="btnImportar" class="btn btn-success shadow border-0"
+                    <button type="button" id="btnImportar" class="btn btn_primario shadow border-0"
                         onclick="importarExcel(this)">Importar Excel</button>
                 </div>
             </form>

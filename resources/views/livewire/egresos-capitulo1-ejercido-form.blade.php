@@ -67,7 +67,7 @@
                 <div class="col">
                 </div>
                 <div class="col text-end">
-                    <button class="btn btn-success" wire:click="finalizarRegistros">Finalizar registros</button>
+                    <button class="btn btn_primario" wire:click="finalizarRegistros">Finalizar registros</button>
                 </div>
             </div>
         </div>
