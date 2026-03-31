@@ -684,6 +684,7 @@ Evento]]></text>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Contable - Cargo") || $F{tipo_interaccion}.equals("Presupuestal - Cargo")   || $F{tipo_interaccion}.equals("Cargo"))]]></printWhenExpression>
 				</reportElement>
 				<box padding="2">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -724,6 +725,7 @@ Evento]]></text>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<printWhenExpression><![CDATA[new Boolean($F{tipo_interaccion}.equals("Contable - Abono") || $F{tipo_interaccion}.equals("Presupuestal - Abono")   || $F{tipo_interaccion}.equals("Abono"))]]></printWhenExpression>
 				</reportElement>
 				<box padding="2">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>

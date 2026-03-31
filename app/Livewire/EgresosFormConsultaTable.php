@@ -135,6 +135,7 @@ class EgresosFormConsultaTable extends Tabla
                 ->where('tipo_poliza', '=', 'E')
                 ->where('categoria', 'LIKE', '%' . 'COMPROMETIDO' . '%')
                 ->get();
+            
     
             $cuentasRemanente =  Poliza::where('evento', '=', $this->numeroEvento)
                 ->whereYear('fecha', '=', (string) $this->anio)
@@ -142,9 +143,9 @@ class EgresosFormConsultaTable extends Tabla
                 ->where('categoria', 'LIKE', '%' . 'REMANENTE DEVENGADO' . '%')
                 ->where('numero_poliza', '=', $this->numeroPolizaRemanente)
                 ->get();
+
     
             $polizasLiberacionRemanente = collect();
-
             foreach($cuentasComprometidas as $comprometida){
                 foreach($cuentasRemanente as $remanente){
                     if($comprometida->cuenta == $remanente->cuenta){

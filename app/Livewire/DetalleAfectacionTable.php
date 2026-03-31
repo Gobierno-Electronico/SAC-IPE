@@ -64,6 +64,11 @@ class DetalleAfectacionTable extends Tabla
         })
         ->search($this->searchBy, $this->searchTerm)
         ->where('evento', '=', $this->evento)
+        ->where(function ($query) {
+                $query->where('categoria', 'like', '%AMPLIACION%')
+                    ->orWhere('categoria', 'like', '%REDUCCION%');
+            })
+        ->whereYear('fecha', '=', $this->anio)
         ->paginate($this->perPage); 
     }
 

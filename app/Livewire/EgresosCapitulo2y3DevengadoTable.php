@@ -32,7 +32,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
     {
         $this->anio = (int) session('anioSeleccionado', now()->year);
     }
-    
+
     public function render()
     {
         return view('livewire.egresos-capitulo2y3-devengado-table');
@@ -75,7 +75,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                 $this->dispatch('mostrarMensaje', mensaje: 'Monto total del evento superado', tipo: 'error', tiempo: 3000);
                 return;
             }
-            
+
 
             if ($this->verificarPresupuesto($registro)) {
                 $nuevoRegistro = [
@@ -361,6 +361,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                 ->whereYear('fecha', '=', (string) $this->anio)
                 ->get();
 
+
             $polizasInicialesEgresosDevengado = Poliza::where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 2y3')
                 ->where('evento', '=', $this->numeroEvento)
@@ -368,7 +369,8 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                 ->where('concepto', 'LIKE', '%(Devengado)%')
                 ->get();
 
-            $totalRemanente = DB::select('EXEC ImporteTotalCapitulo2y3Devengado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
+
+            $totalRemanente = DB::select('EXEC ImporteTotalCapitulo2y3Devengado @evento = ?, @anio = ?', [$this->numeroEvento, $this->anio])[0]->MontoDelEvento;
             if ($totalRemanente > 0) {
                 foreach ($polizasInicialesEgresosComprometido as $polizaImporte) {
                     $clave = $polizaImporte->cuenta . '-' . $polizaImporte->concepto;
@@ -403,7 +405,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                     foreach ($polizasInicialesEgresosDevengado as $polizaDevengado) {
                         $conceptoGeneral = explode('(', $polizaDevengado->concepto);
 
-                        if (str_contains($polizaInicial['concepto'], rtrim($conceptoGeneral[0])) !== false && $conceptoGeneral[1] == 'Devengado)') {
+                        if (str_contains($polizaInicial['concepto'], rtrim($conceptoGeneral[0])) !== false && end($conceptoGeneral) == 'Devengado)') {
                             $total = $total - $polizaDevengado['total'];
                         }
                     }
@@ -431,7 +433,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
             } else {
                 $this->numeroPolizaRemanente = 0;
             }
-            $importeTotalEvento = DB::select('EXEC ImporteTotalCapitulo2y3Devengado @evento = ?', [$this->numeroEvento]);
+            $importeTotalEvento = DB::select('EXEC ImporteTotalCapitulo2y3Devengado @evento = ?, @anio = ?', [$this->numeroEvento, $this->anio]);
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
                 Poliza::where('evento', '=', $this->numeroEvento)
                     ->whereIn('categoria', ['EGRESOS COMPROMETIDO CAPITULO 2y3'])
