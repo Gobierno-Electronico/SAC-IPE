@@ -33,7 +33,6 @@
 	<parameter name="FechaInicio" class="java.lang.String"/>
 	<parameter name="FechaFin" class="java.lang.String"/>
 	<parameter name="DescripcionCuenta" class="java.lang.String"/>
-	<parameter name="p_RutaImagenes" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[EXEC dbo.ReporteEstadoDeCuenta @cuenta =  $P{Cuenta}, @fechaInicio =  $P{FechaInicio}, @fechaFin = $P{FechaFin}]]>
 	</queryString>
@@ -215,7 +214,7 @@
 			<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
 			<image>
 				<reportElement x="20" y="0" width="137" height="50" uuid="13cd4ec7-8468-4e49-b7ec-344540383739"/>
-				<imageExpression><![CDATA[$P{p_RutaImagenes} + "ipe_logo_1.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{p_Dir} + "imagenes/ipe_logo_1.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="157" y="0" width="447" height="50" uuid="d8017d03-9fc6-4c7d-8af5-1bca5a8eb09c"/>

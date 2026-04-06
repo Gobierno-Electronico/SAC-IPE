@@ -18,7 +18,6 @@
 	<parameter name="Hora" class="java.lang.String"/>
 	<parameter name="Numero" class="java.lang.String"/>
 	<parameter name="Concepto" class="java.lang.String"/>
-	<parameter name="p_RutaImagenes" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[EXEC PolizaPresupuestalIngresos @Anio =  $P{Anio}, @Numero_poliza = $P{Numero}]]>
 	</queryString>
@@ -202,7 +201,7 @@
 			</textField>
 			<image>
 				<reportElement x="20" y="0" width="137" height="50" uuid="034113a6-b4a8-4ba7-b197-565322b0a56b"/>
-				<imageExpression><![CDATA[$P{p_RutaImagenes} + "ipe_logo_1.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{p_Dir} + "imagenes/ipe_logo_1.png"]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>
