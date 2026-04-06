@@ -33,6 +33,7 @@
 	<parameter name="FechaInicio" class="java.lang.String"/>
 	<parameter name="FechaFin" class="java.lang.String"/>
 	<parameter name="DescripcionCuenta" class="java.lang.String"/>
+	<parameter name="p_Dir" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[EXEC dbo.ReporteEstadoDeCuenta @cuenta =  $P{Cuenta}, @fechaInicio =  $P{FechaInicio}, @fechaFin = $P{FechaFin}]]>
 	</queryString>

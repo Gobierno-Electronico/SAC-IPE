@@ -18,6 +18,7 @@
 	<parameter name="Hora" class="java.lang.String"/>
 	<parameter name="Numero" class="java.lang.String"/>
 	<parameter name="Concepto" class="java.lang.String"/>
+	<parameter name="p_Dir" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[EXEC PolizaPresupuestalIngresos @Anio =  $P{Anio}, @Numero_poliza = $P{Numero}]]>
 	</queryString>
