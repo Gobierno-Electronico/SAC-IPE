@@ -509,7 +509,6 @@ class DeudoresComprobacionAnticipoTable extends Tabla
                 }
             }
             $importeTotalEvento = DB::select('EXEC ImporteTotalOtorgamientoAnticipo @evento = ?, @anio = ?', [$this->numeroEvento, $this->anio]);
-            DB::commit();
             
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
                 Poliza::where('evento', '=', $this->numeroEvento)
@@ -535,6 +534,7 @@ class DeudoresComprobacionAnticipoTable extends Tabla
                         ->update(['estatus_evento' => EstatusEvento::FINALIZADO->value]);
                 }
             }
+            DB::commit();
             $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total);
         } catch (\Throwable $th) {
             DB::rollBack();
