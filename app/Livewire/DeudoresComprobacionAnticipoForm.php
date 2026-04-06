@@ -116,7 +116,7 @@ class DeudoresComprobacionAnticipoForm extends Component
         $this->limpiar();
         try {
             $this->llenarCamposEspecificos();
-            $this->montoDelEvento = DB::select('EXEC ImporteTotalOtorgamientoAnticipo @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
+            $this->montoDelEvento = DB::select('EXEC ImporteTotalOtorgamientoAnticipo @evento = ?, @anio = ?', array($this->numeroEvento, $this->anio))[0]->MontoDelEvento;
             $this->dispatch('formato_importe', id: 'inputMontoEvento', amount: ($this->montoDelEvento > 0) ? $this->montoDelEvento : '');
             $this->dispatch('mostrarMensaje', mensaje: 'Monto del evento cargado', tipo: 'success', tiempo: 1500);
             $this->llenarCuentasContableAbono();

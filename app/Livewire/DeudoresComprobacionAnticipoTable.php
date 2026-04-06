@@ -74,9 +74,11 @@ class DeudoresComprobacionAnticipoTable extends Tabla
     public function agregarRegistro($registro)
     {
         try {
-            if (bccomp((string)($this->total + $registro['importe']), (string)$registro['montoEvento'], 2) == 1) {
-                $this->dispatch('mostrarMensaje', mensaje: 'Monto total del evento superado', tipo: 'error', tiempo: 3000);
-                return;
+            if($registro['selectorPagoRetenciones'] != 'SI'){
+                if (bccomp((string)($this->total + $registro['importe']), (string)$registro['montoEvento'], 2) == 1) {
+                    $this->dispatch('mostrarMensaje', mensaje: 'Monto total del evento superado', tipo: 'error', tiempo: 3000);
+                    return;
+                }
             }
 
             if ($this->verificarPresupuesto($registro)) {
