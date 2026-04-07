@@ -124,7 +124,12 @@ class RecalendarizacionFormConsultaTable extends Tabla
                         ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
                     break;
                 case 'DEUDORES COMPROBACION ANTICIPOS':
-                    Poliza::where('categoria', '=', 'DEUDORES OTORGAMIENTO ANTICIPOS')
+                    Poliza::where('categoria', '=', 'DEUDORES REINTEGRO ANTICIPOS')                    
+                        ->where('evento', '=', $this->numeroEvento)
+                        ->whereYear('fecha', '=', (string) $this->anio)
+                        ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);
+
+                    Poliza::where('categoria', '=', 'DEUDORES OTORGAMIENTO ANTICIPOS')                    
                         ->where('evento', '=', $this->numeroEvento)
                         ->whereYear('fecha', '=', (string) $this->anio)
                         ->update(['estatus_evento' => EstatusEvento::ACTIVO->value]);

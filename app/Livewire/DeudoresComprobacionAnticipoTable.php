@@ -427,10 +427,16 @@ class DeudoresComprobacionAnticipoTable extends Tabla
 
 
                         foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
+                            $numeroInicialCuenta = explode('.', $dataCuenta['Codigo_cuenta']);
+
                             if (!str_contains($dataCuenta['Descripcion_cuenta'], 'Responsabilidad de Funcionarios y Empleados Ejercicio Actual')) {
                                 if ($dataCuenta['tipo_interaccion'] == 'Presupuestal - Abono' && str_contains($dataCuenta['Descripcion_cuenta'], '(Ejercido)')) {
                                     continue;
-                                } else {
+                                }else if(($numeroInicialCuenta[0] == 2 || $numeroInicialCuenta[0] == 1) && $dataCuenta['tipo_interaccion'] == 'Contable - Cargo') {
+                                    continue;
+                                }else if($numeroInicialCuenta[0] == 2 && $dataCuenta['tipo_interaccion'] == 'Contable - Abono') {
+                                    continue;
+                                }else {
                                     array_push($polizas, [
                                         'idUsuarioRegistrante' => $idUsuarioRegistrante,
                                         'area' => $movimiento['codigoAreaResponsable'],
@@ -510,7 +516,7 @@ class DeudoresComprobacionAnticipoTable extends Tabla
             }
             $importeTotalEvento = DB::select('EXEC ImporteTotalOtorgamientoAnticipo @evento = ?, @anio = ?', [$this->numeroEvento, $this->anio]);
             
-            if ($importeTotalEvento[0]->MontoDelEvento == 0) {
+            if ($importeTotalEvento[0]->MontoDelEvento <= 0)  {
                 Poliza::where('evento', '=', $this->numeroEvento)
                     ->whereIn('categoria', [
                         'DEUDORES OTORGAMIENTO ANTICIPOS',
