@@ -316,7 +316,7 @@ class RegistroPolizaDiarioTable extends Tabla
                     'fecha' => $movimiento['fechaAfectacion'],
                     'cuenta' => $movimiento['codigoCuenta'],
                     'concepto' => $movimiento['descripcionCuenta'],
-                    'total' => abs($movimiento['importe']),
+                    'total' => number_format(abs($movimiento['importe']), 2, '.', ''),
                     'mes' => $movimiento['mes'],
                     'descripcion' => $movimiento['observaciones'],
                     'evento' => $this->numeroEvento,
