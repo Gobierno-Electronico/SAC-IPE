@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
+<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BalanzaArmonizada" pageWidth="1747" pageHeight="595" orientation="Landscape" columnWidth="1707" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="283f1541-42d6-4d73-8f29-0a6c9605635e">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SAC-IPE VENUS"/>
@@ -9,6 +9,7 @@
 	<parameter name="Fecha" class="java.lang.String"/>
 	<parameter name="Hora" class="java.lang.String"/>
 	<parameter name="Numero" class="java.lang.String"/>
+	<parameter name="p_Dir" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[EXEC BalanzaArmonizada @Anio =   $P{Anio} , @Grupo =  $P{Grupo}]]>
 	</queryString>
@@ -139,7 +140,7 @@
 		<band height="80">
 			<image>
 				<reportElement x="20" y="0" width="137" height="50" uuid="1eafcdf0-8dce-437b-bdf5-9c9f26749229"/>
-				<imageExpression><![CDATA["C:/xampp/htdocs/SAC-IPE/public/imagenes/ipe_reportes.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{p_Dir} + "imagenes/ipe_logo_1.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="320" y="0" width="340" height="20" uuid="c367064d-885e-41c1-820f-4c83d5df8dff"/>

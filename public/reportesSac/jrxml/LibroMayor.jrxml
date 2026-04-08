@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.20.5.final using JasperReports Library version 6.20.5-3efcf2e67f959db3888d79f73dde2dbd7acb4f8e  -->
+<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LibroMayor" pageWidth="1230" pageHeight="950" orientation="Landscape" columnWidth="1190" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="07435f69-7c61-4785-b7f6-165369384ce4">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SQL Server Nueva"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
@@ -7,6 +7,7 @@
 	<parameter name="Fecha1" class="java.lang.String"/>
 	<parameter name="Fecha2" class="java.lang.String"/>
 	<parameter name="TituloFechas" class="java.lang.String"/>
+	<parameter name="p_Dir" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[EXEC LibroMayor @Anio = $P{Anio} , @Fecha1 =  $P{Fecha1}, @Fecha2 =  $P{Fecha2}]]>
 	</queryString>
@@ -208,7 +209,7 @@
 		<band height="100">
 			<image>
 				<reportElement x="5" y="1" width="137" height="50" uuid="5a3c263c-361f-4dec-bc4f-f891d4af8ae0"/>
-				<imageExpression><![CDATA["C:/xampp/htdocs/SAC-IPE/public/imagenes/ipe_reportes.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{p_Dir} + "imagenes/ipe_logo_1.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="425" y="0" width="340" height="20" uuid="f3fad13b-203a-4977-b959-a4a26bf699dd"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.20.5.final using JasperReports Library version 6.20.5-3efcf2e67f959db3888d79f73dde2dbd7acb4f8e  -->
+<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PolizaOtorgamientoEjercidoPagadoRecaudadoPrestamosIniciales" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" isFloatColumnFooter="true" uuid="55a8c4bf-9344-4264-a6b2-ecc8cd2fda35">
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -17,6 +17,7 @@
 	<parameter name="Hora" class="java.lang.String"/>
 	<parameter name="Numero" class="java.lang.String"/>
 	<parameter name="Evento" class="java.lang.String"/>
+	<parameter name="p_Dir" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[EXEC dbo.PolizaOtorgamientoRecuperacionRecaudadoPrestamosIniciales @Numero_poliza =  $P{Numero}, @evento =  $P{Evento}]]>
 	</queryString>
@@ -89,7 +90,7 @@
 		<band height="120" splitType="Stretch">
 			<image>
 				<reportElement x="20" y="0" width="137" height="50" uuid="13cd4ec7-8468-4e49-b7ec-344540383739"/>
-				<imageExpression><![CDATA["C:/xampp/htdocs/SAC-IPE/public/imagenes/ipe_reportes.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{p_Dir} + "imagenes/ipe_logo_1.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="231" y="0" width="340" height="20" uuid="d8017d03-9fc6-4c7d-8af5-1bca5a8eb09c"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.20.5.final using JasperReports Library version 6.20.5-3efcf2e67f959db3888d79f73dde2dbd7acb4f8e  -->
+<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteBalanzaArmonizada" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" isFloatColumnFooter="true" uuid="55a8c4bf-9344-4264-a6b2-ecc8cd2fda35">
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -30,11 +30,11 @@
 	<parameter name="FechaInicio" class="java.lang.String"/>
 	<parameter name="FechaFin" class="java.lang.String"/>
 	<parameter name="SubtituloFechas" class="java.lang.String"/>
+	<parameter name="p_Dir" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[EXEC dbo.ReporteBalanzaArmonizada 
     @FechaInicio = $P{FechaInicio},
-    @FechaFin = $P{FechaFin}
-]]>
+    @FechaFin = $P{FechaFin}]]>
 	</queryString>
 	<field name="Codigo_cuenta" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="Codigo_cuenta"/>
@@ -120,6 +120,10 @@ Departamento de Contabilidad y Presupuesto]]></text>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{Hora}]]></textFieldExpression>
 			</textField>
+			<image>
+				<reportElement x="0" y="30" width="137" height="50" uuid="dc497025-e68f-4f6b-af79-bac6810a39e7"/>
+				<imageExpression><![CDATA[$P{p_Dir} + "imagenes/ipe_logo_1.png"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<columnHeader>
