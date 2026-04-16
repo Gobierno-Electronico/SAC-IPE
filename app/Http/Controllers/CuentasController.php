@@ -126,8 +126,8 @@ class CuentasController extends Controller
         ]);
     }
 
-   
-     //Busca un código de cuenta en base a uno que se ingrese en la vista para verificar si ya existe dicho código
+
+    //Busca un código de cuenta en base a uno que se ingrese en la vista para verificar si ya existe dicho código
     public function buscarCodigoDeCuenta($codigoCuenta)
     {
         try {
@@ -359,7 +359,7 @@ class CuentasController extends Controller
 
 
                     $codigoCuentaExistente = $this->buscarCodigoDeCuenta($row['Cuenta']);
-                    if (count($codigoCuentaExistente)) {
+                    if (count($codigoCuentaExistente) && $row['Identificador'] != 'ELIMINAR') {
                         Log::info("CÓDIGO EXISTENTE: ------------- " . $codigoCuentaExistente);
                         return response()->json(['error' => 'Código de cuenta ya existente']);
                     } else {
@@ -384,7 +384,7 @@ class CuentasController extends Controller
                 }
 
                 //codigo interno unicamente para borrar al inicio de la carga cualquier actualizacion en el plan de cuentas
-                if(!empty($identificadoresExistentes)){
+                if (!empty($identificadoresExistentes)) {
                     foreach ($identificadoresExistentes as $key => $value) {
                         $cuentaBorrar = Cuenta::where('identificador', '=', $value)->first();
                         CuentaCapitulo::where('Cuenta', '=', $cuentaBorrar->Codigo_cuenta)->delete();
@@ -393,14 +393,18 @@ class CuentasController extends Controller
                     }
                 }
 
+
+
                 // Se verifica si hubo errores durante la importación. Si no hubo errores, se confirma la transacción y se redirige con un mensaje de éxito.
                 // Si hubo errores, se revierte la transacción y se redirige con un mensaje de error que muestra los errores.
 
-                //limpia cuentas que traigan dos espacios o más en su descripción   
+                //limpia cuentas que traigan dos espacios o más en su descripción                 
                 Cuenta::where('Descripcion_cuenta', 'LIKE', '%  %')
                     ->update([
                         'Descripcion_cuenta' => DB::raw("LTRIM(RTRIM(REPLACE(REPLACE(Descripcion_cuenta, '  ', ' '), '  ', ' ')))")
                     ]);
+
+                Cuenta::where('identificador', 'ELIMINAR')->delete();
 
                 if (empty($cuentasRepetidas)) {
                     DB::commit();
