@@ -250,6 +250,19 @@ class CuentasController extends Controller
                     $rows[] = array_combine($encabezados, $datos_fila);
                 }
                 // Se inicia una transacción de base de datos para que todas las operaciones de base de datos dentro del bloque se puedan revertir si ocurre algún error.
+                $identificadoresExcel = array_map(function ($row) {
+                    return trim((string) $row['Identificador']);
+                }, $rows);
+
+                $identificadoresDuplicados = array_filter(array_count_values($identificadoresExcel), function ($cantidad) {
+                    return $cantidad > 1;
+                });
+
+                if (!empty($identificadoresDuplicados)) {
+                    return response()->json([
+                        'error' => 'El archivo contiene identificadores repetidos en la columna Identificador: ' . implode(', ', array_keys($identificadoresDuplicados))
+                    ]);
+                }
                 DB::beginTransaction();
                 // Se procesan los datos de cada fila del archivo Excel y se crea un nuevo registro en la base de datos utilizando el modelo Cuenta.
                 foreach ($rows as $row) {
