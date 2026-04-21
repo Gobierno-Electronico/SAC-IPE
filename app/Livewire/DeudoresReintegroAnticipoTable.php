@@ -320,7 +320,7 @@ class DeudoresReintegroAnticipoTable extends Tabla
             Poliza::insert($polizas);
             DB::commit();
 
-            $importeTotalEvento = DB::select('EXEC ImporteTotalOtorgamientoAnticipo @evento = ?', [$this->numeroEvento]);
+            $importeTotalEvento = DB::select('EXEC ImporteTotalOtorgamientoAnticipo @evento = ?, @anio = ?', [$this->numeroEvento, $this->anio]);
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
                 Poliza::where('evento', '=', $this->numeroEvento)
                     ->whereIn('categoria', [
