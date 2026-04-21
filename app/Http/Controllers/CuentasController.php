@@ -274,7 +274,7 @@ class CuentasController extends Controller
                         $identificadorExistente = Cuenta::where('identificador', '=', $row['Identificador'])->first();
                         if ($identificadorExistente->Codigo_cuenta != $row['Cuenta']) {
                             $codigoCuentaExistente = $this->buscarCodigoDeCuenta($row['Cuenta']);
-                            if (count($codigoCuentaExistente)) {
+                            if (count($codigoCuentaExistente) && $row['Identificador'] != 'ELIMINAR') {
                                 Log::info($codigoCuentaExistente);
                                 return response()->json(['error' => 'Código de cuenta ya existente']);
                             } else {
@@ -376,7 +376,7 @@ class CuentasController extends Controller
 
 
                     $codigoCuentaExistente = $this->buscarCodigoDeCuenta($row['Cuenta']);
-                    if (count($codigoCuentaExistente) && $row['Identificador'] != 'ELIMINAR') {
+                    if ((count($codigoCuentaExistente)) && ($row['Identificador'] != 'ELIMINAR')) {
                         Log::info("CÓDIGO EXISTENTE: ------------- " . $codigoCuentaExistente);
                         return response()->json(['error' => 'Código de cuenta ya existente']);
                     } else {
@@ -396,7 +396,6 @@ class CuentasController extends Controller
                             // 'Clasificador_objeto_gasto' => empty($row['COG']) ? null : $row['COG'],
                             'Cuenta_padre_ID' => empty($cuentaPadre) ? null : $cuentaPadre,
                         ]);
-                        Log::info($cuenta);
                     }
                 }
 
