@@ -254,6 +254,10 @@ class CuentasController extends Controller
                     return trim((string) $row['Identificador']);
                 }, $rows);
 
+                $identificadoresExcel = array_filter($identificadoresExcel, function ($identificador) {
+                    return Str::upper($identificador) !== 'ELIMINAR';
+                });
+
                 $identificadoresDuplicados = array_filter(array_count_values($identificadoresExcel), function ($cantidad) {
                     return $cantidad > 1;
                 });
