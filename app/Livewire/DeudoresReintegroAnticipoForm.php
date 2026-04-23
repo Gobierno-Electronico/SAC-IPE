@@ -58,32 +58,32 @@ class DeudoresReintegroAnticipoForm extends Component
     {
         $this->anio = (int) session('anioSeleccionado', now()->year);
     }
-    
+
     public function render()
     {
         try {
             $eventos =  Poliza::select('evento', 'descripcion')
-            ->whereYear('fecha', '=', (string) $this->anio)
-            ->where('tipo_poliza', '=', 'D')
-            ->where('categoria', '=', 'DEUDORES OTORGAMIENTO ANTICIPOS')
-            ->where('estatus_evento', '=', EstatusEvento::ACTIVO->value)
-            ->distinct()
-            ->pluck('descripcion', 'evento');
+                ->whereYear('fecha', '=', (string) $this->anio)
+                ->where('tipo_poliza', '=', 'D')
+                ->where('categoria', '=', 'DEUDORES OTORGAMIENTO ANTICIPOS')
+                ->where('estatus_evento', '=', EstatusEvento::ACTIVO->value)
+                ->distinct()
+                ->pluck('descripcion', 'evento');
 
             $cuentasCargo = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-            ->where('interaccion_cuenta_conceptos.concepto_id', [10107])
-            ->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Cargo')
-            ->where('cuentas.Descripcion_cuenta', '=', 'Caja General')
-            ->orWhere('cuentas.Descripcion_cuenta', '=', 'BBVA Bancomer 4441066229') 
-            ->orderBy('cuentas.Codigo_cuenta')->get(); 
+                ->where('interaccion_cuenta_conceptos.concepto_id', [10107])
+                ->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Cargo')
+                ->where('cuentas.Descripcion_cuenta', '=', 'Caja General')
+                ->orWhere('cuentas.Descripcion_cuenta', '=', 'BBVA Bancomer 4441066229')
+                ->orderBy('cuentas.Codigo_cuenta')->get();
 
             $cuentasCargo = $cuentasCargo->unique('Descripcion_cuenta');
 
             $cuentas = Cuenta::join('interaccion_cuenta_conceptos', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
-            ->whereIn('interaccion_cuenta_conceptos.concepto_id', [10107])
-            ->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Abono')
-            ->where('cuentas.Descripcion_cuenta', 'LIKE', '%Responsabilidad de Funcionarios%' )
-            ->orderBy('cuentas.Descripcion_cuenta')->get();
+                ->whereIn('interaccion_cuenta_conceptos.concepto_id', [10107])
+                ->where('interaccion_cuenta_conceptos.tipo_interaccion', '=', 'Contable - Abono')
+                ->where('cuentas.Descripcion_cuenta', 'LIKE', '%Responsabilidad de Funcionarios%')
+                ->orderBy('cuentas.Descripcion_cuenta')->get();
 
             $this->cuenta = $cuentas[0]->cuenta_id;
 
@@ -94,23 +94,36 @@ class DeudoresReintegroAnticipoForm extends Component
         }
     }
 
-    public function cambioEvento(){
-        $this->limpiar(); 
-        try{
+    public function cambioEvento()
+    {
+        $this->limpiar();
+        try {
+            $this->cargarObservacionEvento();
             $this->montoDelEvento = DB::select('EXEC ImporteTotalOtorgamientoAnticipo @evento = ?, @anio = ?', array($this->numeroEvento, $this->anio))[0]->MontoDelEvento;
             $this->dispatch('formato_importe', id: 'inputMontoEvento', amount: ($this->montoDelEvento > 0) ? $this->montoDelEvento : '');
             $this->dispatch('mostrarMensaje', mensaje: 'Monto del evento cargado', tipo: 'success', tiempo: 1500);
-        }catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar el monto del evento en deudores reintegro de anticipos: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 
+    public function cargarObservacionEvento()
+    {
+        $descripcionEvento = Poliza::select('descripcion')
+            ->where('evento', '=', $this->numeroEvento)
+            ->where('tipo_poliza', '=', 'D')
+            ->where('categoria', 'LIKE', '%DEUDORES%')
+            ->get()[0]->descripcion;
+
+        $this->observaciones = $descripcionEvento;
+    }
+
     public function cargarPresupuesto()
     {
-        if (!$this->cuenta || !$this->mes  ) return;
+        if (!$this->cuenta || !$this->mes) return;
 
-        try{
+        try {
             $anioActual = (string) $this->anio;
             $codigoCuenta = Cuenta::where('id', '=', $this->cuenta)->value('Codigo_cuenta');
             $solvencia = DB::select('EXEC SolvenciaReintegrosAnticipos @cuenta = ?, @anio = ?, @mes = ?, @evento = ?', array($codigoCuenta, $anioActual, $this->mes, $this->numeroEvento))[0]->Total;
@@ -118,7 +131,7 @@ class DeudoresReintegroAnticipoForm extends Component
 
             $this->dispatch('formato_importe', id: 'inputSolvencia', amount: "{$this->ppto}");
             $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto comprometido cargado', tipo: 'success', tiempo: 1500);
-        }catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar presupuesto en deudores reintegro de anticipos: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar presupuesto, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
@@ -126,7 +139,7 @@ class DeudoresReintegroAnticipoForm extends Component
 
     public function agregarRegistro()
     {
-        try{
+        try {
             $this->importe = floatval(str_replace(['$', ','], "", $this->importe));
             $this->importe = ($this->importe > 0)  ? $this->importe : "";
             $this->validate();
@@ -155,9 +168,9 @@ class DeudoresReintegroAnticipoForm extends Component
             ];
             $this->dispatch('agregar-registro', registro: $registro);
             $this->limpiar();
-        }catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (\Illuminate\Validation\ValidationException $e) {
             $this->dispatch('mostrarMensaje', mensaje: $e->getMessage(), tipo: 'warning', tiempo: 3000);
-        }catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             Log::error('Ocurrió un error al registrar en deudores reintegro de anticipo: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }

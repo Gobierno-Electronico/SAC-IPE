@@ -45,6 +45,7 @@ class EgresosCapitulo1DevengadoCargaForm extends Component
     public function mount()
     {
         $this->anio = (int) session('anioSeleccionado', now()->year);
+        $this->fechaAfectacion = "{$this->anio}-01-01";
     }
     
     public function render()
