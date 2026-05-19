@@ -32,7 +32,7 @@ class GuiaContabilizadoraController extends Controller
         set_time_limit(30000);
         ini_set('max_execution_time', 30000);
         // return response()->json('Método desactivado');
-        $path = public_path('Guia/2000y3000-Pagado-CuentasConceptos-Bancos.xlsx'); // cambiar el número del capítulo cuando se carguen las relaciones
+        $path = public_path('Guia/4000-Devengado-CuentasConceptos - 19052026.xlsx'); // cambiar el número del capítulo cuando se carguen las relaciones
 
         // Validar que el archivo pueda ser analizado correctamente.
         if ($xlsx = SimpleXLSX::parse($path)) {
@@ -247,7 +247,7 @@ class GuiaContabilizadoraController extends Controller
                 set_time_limit(30000);
         ini_set('max_execution_time', 30000);
         // return response()->json('Método desactivado');
-        $path = public_path('CuentasCuentas/2000y3000-Pagado-CuentasCuentasSeguidas-Bancos.xlsx');
+        $path = public_path('CuentasCuentas/4000-Devengado-CuentasCuentasSeguidas - 19052026.xlsx');
 
         // Validar que el archivo pueda ser analizado correctamente.
         if ($xlsx = SimpleXLSX::parse($path)) {
