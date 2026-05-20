@@ -404,7 +404,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
 
 
 
-            $totalRemanente = DB::select('EXEC ImporteTotalCapitulo4Pagado @evento = ?', array($this->numeroEvento))[0]->MontoDelEvento;
+            $totalRemanente = DB::select('EXEC ImporteTotalCapitulo4Pagado @evento = ?, @anio = ?', array($this->numeroEvento, $this->anio))[0]->MontoDelEvento;
             if ($totalRemanente > 0) {
 
 
@@ -417,7 +417,8 @@ class EgresosCapitulo4PagadoTable extends Tabla
                     $codigoCuentaPagada = Cuenta::where('Descripcion_cuenta', 'LIKE', '%' . $conceptoGeneralCuentaDevengada[0] . '(Pagado)' . '%')->value('Codigo_cuenta');
                     foreach ($polizasPagadoContableCargo as $index => $pagado) {
                         if ($pagado->cuentaRelacionada == $codigoCuentaPagada && $devengado->concepto == $pagado->concepto) {
-                            $totalRemanente = $devengado->total - $pagado->total;
+                            // bcsub($operando1, $operando2, $escala_de_decimales)
+                            $totalRemanente = bcsub((string)$devengado->total, (string)$pagado->total, 2);
                             $devengado->total = $totalRemanente;
                             $pagado->total = $totalRemanente;
                             $devengado->matchEncontrado = 1;
@@ -498,7 +499,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
                         ];
                     }
                 }
-
+                // dd($resultado);
 
                 foreach ($resultado as $polizaInicial) {
                     $total = $polizaInicial['total'];
@@ -506,7 +507,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
                         $conceptoGeneral = explode('(', $polizaPagado->concepto);
 
                         if (str_contains($polizaInicial['concepto'], rtrim($conceptoGeneral[0])) !== false && $conceptoGeneral[1] == 'Pagado)') {
-                            $total = $total - $polizaPagado['total'];
+                            $total = bcsub((string)$total, (string)$polizaPagado['total'], 2);
                         }
                     }
                     Poliza::create([
@@ -535,7 +536,7 @@ class EgresosCapitulo4PagadoTable extends Tabla
             }
 
 
-            $importeTotalEvento = DB::select('EXEC ImporteTotalCapitulo4Pagado @evento = ?', [$this->numeroEvento]);
+            $importeTotalEvento = DB::select('EXEC ImporteTotalCapitulo4Pagado @evento = ?, @anio = ?', [$this->numeroEvento, $this->anio]);
             if ($importeTotalEvento[0]->MontoDelEvento == 0) {
                 Poliza::where('evento', '=', $this->numeroEvento)
                     ->whereYear('fecha', '=', (string) $this->anio)
