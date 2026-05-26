@@ -77,7 +77,7 @@ class EgresosCapitulo4PagadoForm extends Component
         $this->anio = (int) session('anioSeleccionado', now()->year);
         $this->fechaAfectacion = "{$this->anio}-01-01";
     }
-    
+
     public function render()
     {
         try {
@@ -106,7 +106,7 @@ class EgresosCapitulo4PagadoForm extends Component
     {
         try {
             $this->limpiar();
-            $this->llenarCamposEspecificos();   
+            $this->llenarCamposEspecificos();
             $this->montoDelEvento = DB::select('EXEC ImporteTotalCapitulo4Pagado @evento = ?, @anio = ?', array($this->numeroEvento, $this->anio))[0]->MontoDelEvento;
             $this->dispatch('formato_importe', id: 'inputMontoEvento', amount: ($this->montoDelEvento > 0) ? $this->montoDelEvento : '');
             $this->dispatch('mostrarMensaje', mensaje: 'Monto del evento cargado', tipo: 'success', tiempo: 1500);
@@ -117,27 +117,28 @@ class EgresosCapitulo4PagadoForm extends Component
         }
     }
 
-    public function llenarCamposEspecificos(){
-        try{      
+    public function llenarCamposEspecificos()
+    {
+        try {
             $descripcionEvento = Poliza::select('descripcion')
-            ->where('evento', '=', $this->numeroEvento)
-            ->where('tipo_poliza', '=', 'E')
-            ->where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 4')
-            ->get()[0]->descripcion;
-        
+                ->where('evento', '=', $this->numeroEvento)
+                ->where('tipo_poliza', '=', 'E')
+                ->where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 4')
+                ->get()[0]->descripcion;
+
             $areaEvento = Poliza::select('area')
                 ->where('evento', '=', $this->numeroEvento)
                 ->where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS EJERCIDO CAPITULO 4')
                 ->get()[0]->area;
-        
+
             $idArea = CodigoDepartamento::select('id')
                 ->where('Codigo_completo', '=', $areaEvento)
-                ->get()[0]->id; 
-        
+                ->get()[0]->id;
+
             $this->observaciones = $descripcionEvento;
-            $this->selectCodigoAreaResponsable = $idArea;   
-        }catch (\Throwable $th) {
+            $this->selectCodigoAreaResponsable = $idArea;
+        } catch (\Throwable $th) {
             Log::error('Ocurrió un error al llenar campos específicos en Pagado del capítulo 4: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
@@ -174,7 +175,6 @@ class EgresosCapitulo4PagadoForm extends Component
 
             $cuentasDevengadasAux = $cuentasDevengadasAux->unique('Codigo_cuenta');
             $this->partidasPresupuestales = $cuentasDevengadasAux;
-            
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar el evento en pagado del capítulo 4: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar el evento, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
@@ -217,12 +217,12 @@ class EgresosCapitulo4PagadoForm extends Component
                 $this->cuentaDeRetenciones = "";
             }
 
-            $cuentasEjercidas = Poliza::where('evento', '=', $this->numeroEvento)
-                ->where('tipo_poliza', '=', 'E')
-                ->whereYear('fecha', '=', (string) $this->anio)
-                ->where('tipo_interaccion', '=', 'Contable - Abono')
-                ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 4')
-                ->get();
+            // $cuentasEjercidas = Poliza::where('evento', '=', $this->numeroEvento)
+            //     ->where('tipo_poliza', '=', 'E')
+            //     ->whereYear('fecha', '=', (string) $this->anio)
+            //     ->where('tipo_interaccion', '=', 'Contable - Abono')
+            //     ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 4')
+            //     ->get();
 
             $this->cambiarCuentaRetencionesSeleccionada = true;
             $this->cuentasRetenciones = InteraccionCuentaCuenta::where('id_interaccion_concepto_cuenta_1', '=', $idInteraccionCuentaConcepto)
@@ -230,28 +230,26 @@ class EgresosCapitulo4PagadoForm extends Component
                     $join->on('interaccion_cuenta_conceptos.id', '=', 'interaccion_cuenta_cuentas.id_interaccion_concepto_cuenta_2')
                         ->where('tipo_interaccion', '=', 'Contable - Cargo');
                 })
-                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')->get();
+                ->join('cuentas', 'cuentas.id', '=', 'interaccion_cuenta_conceptos.cuenta_id')
+                ->orderBy('cuentas.Codigo_cuenta', 'asc') // O 'desc' si lo necesitas al revés
+                ->get();
 
+            // $cuentasDevengadasAux = new Collection();
+            // foreach ($this->cuentasRetenciones as $pagada) {
+            //     foreach ($cuentasEjercidas as $ejercida) {
+            //         $conceptoComprometida = explode('(', $ejercida->concepto);
+            //         if (str_contains($pagada->Descripcion_cuenta, $conceptoComprometida[0])) {
+            //             $cuentasDevengadasAux->push($pagada);
+            //         }
+            //     }
+            // }
 
-            $cuentasDevengadasAux = new Collection();
-            foreach ($this->cuentasRetenciones as $pagada) {
-                foreach ($cuentasEjercidas as $ejercida) {
-                    $conceptoComprometida = explode('(', $ejercida->concepto);
-                    if (str_contains($pagada->Descripcion_cuenta, $conceptoComprometida[0])) {
-                        $cuentasDevengadasAux->push($pagada);
-                    }
-                }
-            }
-
-            $cuentasDevengadasAux = $cuentasDevengadasAux->unique('Codigo_cuenta');
-            $this->cuentasRetenciones = $cuentasDevengadasAux->toArray();
+            // $cuentasDevengadasAux = $cuentasDevengadasAux->unique('Codigo_cuenta');
 
             // Si solo hay una cuenta, seleccionarla automáticamente
             if (count($this->cuentasRetenciones) === 1) {
                 $this->cuentaDeRetenciones = $this->cuentasRetenciones[0]['id'];
             }
-
-                
         } catch (\Throwable $th) {
             Log::error('Ocurrió un error al cargar las cuentas de retenciones en pagado capítulo 4000: ' . $th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al cargar las cuentas de retenciones, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
@@ -273,10 +271,10 @@ class EgresosCapitulo4PagadoForm extends Component
             $solvencia = DB::select('EXEC SolvenciaEjercidosCapitulo4 @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?', array($departamento->Codigo_completo, $interaccionCuentaCuenta->Codigo_cuenta, $anioActual, $this->mes, $this->numeroEvento))[0]->Total;
 
             $identificadorPartidaPresupuestalSeleccionada = Cuenta::where('id', $this->partidaPresupuestal)->value('identificador');
-            if($identificadorPartidaPresupuestalSeleccionada == 'CG-5745'){ //esta comparacion se hace porque ese identificador pertenece a pensiones con recursos propios, esta cuenta es la unica cuenta contable que puede tener retenciones
+            if ($identificadorPartidaPresupuestalSeleccionada == 'CG-5745') { //esta comparacion se hace porque ese identificador pertenece a pensiones con recursos propios, esta cuenta es la unica cuenta contable que puede tener retenciones
                 $this->cargarMontoContable();
-            }else{
-                $this->montoContable=0;
+            } else {
+                $this->montoContable = 0;
             }
             $this->PPTOEjercido = ($solvencia > 0) ? floatval($solvencia) : 0;
             $this->dispatch('formato_importe', id: 'inputPTTOEjercido', amount: "{$this->PPTOEjercido}");
@@ -287,12 +285,13 @@ class EgresosCapitulo4PagadoForm extends Component
         }
     }
 
-    public function cargarMontoContable(){
+    public function cargarMontoContable()
+    {
         if (!$this->partidaPresupuestal || !$this->mes || !$this->selectCodigoAreaResponsable) return;
         $anioActual = (string) $this->anio;
         $codigoDepartamento = CodigoDepartamento::find($this->selectCodigoAreaResponsable);
         $codigoCuentaContableSeleccionada = Cuenta::where('id', $this->cuentaDeRetenciones)->value('Codigo_cuenta');
-        $solvenciaContable = DB::select('EXEC SolvenciaDevengadoCuentaContableCapitulo4 @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?', array ($codigoDepartamento->Codigo_completo, $codigoCuentaContableSeleccionada, $anioActual, $this->mes, $this->numeroEvento))[0]->Total;
+        $solvenciaContable = DB::select('EXEC SolvenciaDevengadoCuentaContableCapitulo4 @area = ?, @cuenta = ?, @anio = ?, @mes = ?, @evento = ?', array($codigoDepartamento->Codigo_completo, $codigoCuentaContableSeleccionada, $anioActual, $this->mes, $this->numeroEvento))[0]->Total;
         $this->montoContable = ($solvenciaContable > 0) ? floatval($solvenciaContable) : 0;
         $this->dispatch('formato_importe', id: 'inputMontoContable', amount: "{$this->montoContable}");
         $this->dispatch('mostrarMensaje', mensaje: 'Monto contable cargado', tipo: 'success', tiempo: 1500);
@@ -325,7 +324,7 @@ class EgresosCapitulo4PagadoForm extends Component
                 'codigoCuentaBanco' => $cuentaBancoSeleccionada->Codigo_cuenta,
                 'descripcionCuentaBanco' => $cuentaBancoSeleccionada->Descripcion_cuenta,
                 'cuentaRetencionesId' => $this->cuentaDeRetenciones,
-                'codigoCuentaRetenciones' => $cuentaRetencionesSeleccionada->Codigo_cuenta,           
+                'codigoCuentaRetenciones' => $cuentaRetencionesSeleccionada->Codigo_cuenta,
                 'descripcionCuentaRetenciones' => $cuentaRetencionesSeleccionada->Descripcion_cuenta,
                 'mes' => $this->mes,
                 'importe' => $this->importe,
@@ -363,7 +362,7 @@ class EgresosCapitulo4PagadoForm extends Component
     public function llenarFormulario($datosRegistro)
     {
 
-        $this->partidaPresupuestal = $datosRegistro['partida']; 
+        $this->partidaPresupuestal = $datosRegistro['partida'];
         $this->cuentaBanco = $datosRegistro['cuentaBanco'];
         $this->cuentaDeRetenciones = $datosRegistro['cuentaRetenciones'];
         $this->mes = $datosRegistro['mes'];
@@ -373,7 +372,7 @@ class EgresosCapitulo4PagadoForm extends Component
         $this->montoContable = $datosRegistro['montoContable'];
         $this->documentoFuente = $datosRegistro['documentoFuente'];
 
-        $this->dispatch('llenarFormulario', presupuesto: $this->PPTOEjercido, importe: $this->importe, cuentaBanco: $this->cuentaBanco, cuentaRetenciones: $this->cuentaDeRetenciones, montoContable:$this->montoContable);
+        $this->dispatch('llenarFormulario', presupuesto: $this->PPTOEjercido, importe: $this->importe, cuentaBanco: $this->cuentaBanco, cuentaRetenciones: $this->cuentaDeRetenciones, montoContable: $this->montoContable);
     }
 
     #[On('consultar-registro')]
