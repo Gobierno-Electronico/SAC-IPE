@@ -84,7 +84,9 @@ class TiposPresupuestoForm extends Component
             default:
                 break;
         }
-        $wsUrl = "http://10.0.2.59:8080/Reporteador/webresources/service/report?name={$nombre}&params={$params}";
+        $ipPort = config('app.ip_port');
+        $reporteador = config('app.nombre_reporteador');
+        $wsUrl = "http://{$ipPort}/{$reporteador}/webresources/service/report?name={$nombre}&params={$params}";
         $this->dispatch('descargar-reporte-tipo-presupuesto', url: $wsUrl);
         $bitacora = new BitacoraController();
         $bitacora->bitacora('reporte', 'generó o intentó generer el reporte de '.$nombre.' en el apartado de tipos de presupuesto', request());

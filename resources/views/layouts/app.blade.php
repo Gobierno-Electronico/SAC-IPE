@@ -11,17 +11,7 @@
 
     <title>@yield('title')</title>
 
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-    <!-- JQuery and Toastr -->
-    {{-- <script src="//unpkg.com/alpinejs" defer></script> --}}
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
-        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <!-- Scripts -->
-    <script src="https://kit.fontawesome.com/5a7f009297.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
     <script>
         window.IP_PORT = @json(config('app.ip_port'));
         window.NOMBRE_REPORTEADOR = @json(config('app.nombre_reporteador'));
@@ -1207,7 +1197,6 @@
     </footer>
 
 </body>
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 <script>
     function mostrarCargando() {

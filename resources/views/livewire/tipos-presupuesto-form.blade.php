@@ -8,7 +8,6 @@
             </div>
         </div>
     </div>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <div class="row">
         <h2 class="mb-5">Tipos de presupuesto</h2>
         <h5 class="mt-3">Presupuestos</h5>
@@ -359,4 +358,3 @@
         $("#descargar").prop("disabled", true);
     }
 </script>
-
