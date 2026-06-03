@@ -11,6 +11,11 @@
 
     <title>@yield('title')</title>
 
+    <link rel="stylesheet" href="{{ asset('vendor/toastr/toastr.min.css') }}">
+    <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('vendor/toastr/toastr.min.js') }}"></script>
+    <script src="{{ asset('vendor/dayjs/dayjs.min.js') }}"></script>
+
     <!-- Scripts -->
     <script>
         window.IP_PORT = @json(config('app.ip_port'));
