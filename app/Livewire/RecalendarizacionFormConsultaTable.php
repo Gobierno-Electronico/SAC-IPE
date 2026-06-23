@@ -102,9 +102,17 @@ class RecalendarizacionFormConsultaTable extends Tabla
     public function borrar()
     {
         try {
-            DB::beginTransaction();
-            if ($this->validado)
+            $movimientoValidado = Poliza::searchByYear('fecha', (string) $this->anio)
+                ->where('tipo_poliza', '=', 'D')
+                ->where('evento', '=', $this->numeroEvento)
+                ->where('categoria', '=', $this->categoriaModulo)
+                ->where('validado', '=', true)
+                ->exists();
+            if ($movimientoValidado && auth()->user()?->puede('botonBorrarMovimiento') !== true) {
+                $this->dispatch('mostrarMensaje', mensaje: 'No tiene permiso para borrar movimientos validados', tipo: 'error', tiempo: 3000);
                 return;
+            }
+            DB::beginTransaction();
             // dd($this->numeroEvento);
             Poliza::searchByYear('fecha', (string) $this->anio)->where('tipo_poliza', '=', 'D')->where('evento', '=', $this->numeroEvento)
             ->where('categoria', '=', $this->categoriaModulo)

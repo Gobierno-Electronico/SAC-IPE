@@ -298,6 +298,15 @@ class AfectacionesIngresosTable extends Tabla
     function borrar()
     {
         try {
+            $movimientoValidado = Poliza::searchByYear('fecha', (string) $this->anio)
+                ->where('tipo_poliza', '=', 'D')
+                ->where('evento', '=', $this->numeroEvento)
+                ->where('validado', '=', true)
+                ->exists();
+            if ($movimientoValidado && auth()->user()?->puede('botonBorrarMovimiento') !== true) {
+                $this->dispatch('mostrarMensaje', mensaje: 'No tiene permiso para borrar movimientos validados', tipo: 'error', tiempo: 3000);
+                return;
+            }
             DB::beginTransaction();
             Poliza::searchByYear('fecha', (string) $this->anio)->where('tipo_poliza', '=', 'D')->where('evento', '=', $this->numeroEvento)->delete();
             $usuariosController = new BitacoraController();
@@ -311,5 +320,18 @@ class AfectacionesIngresosTable extends Tabla
             DB::rollBack();
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al borrar el movimiento de ampliación', tipo: 'error', tiempo: 3000);
         }
+    }
+
+    public function movimientoValidado(): bool
+    {
+        if (!$this->numeroEvento) {
+            return false;
+        }
+
+        return Poliza::searchByYear('fecha', (string) $this->anio)
+            ->where('tipo_poliza', '=', 'D')
+            ->where('evento', '=', $this->numeroEvento)
+            ->where('validado', '=', true)
+            ->exists();
     }
 }

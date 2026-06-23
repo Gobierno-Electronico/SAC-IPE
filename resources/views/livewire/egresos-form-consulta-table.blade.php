@@ -115,7 +115,7 @@
         @endif
         <div class="d-flex gap-3">
 
-            @if($categoriaModulo == 'EGRESOS COMPROMETIDO CAPITULO 1')
+            @if ($categoriaModulo == 'EGRESOS COMPROMETIDO CAPITULO 1')
                 <button id="botonPoliza" onclick="generarPolizaExcel(this, 'X')" type="button"
                     class="btn btn_primario shadow border-1 mt-3 mt-md-0">
                     Visualizar póliza en excel
@@ -136,22 +136,25 @@
 
                     @if (str_contains($categoriaModulo, 'DEVENGADO'))
                         <button class="btn btn-warning shadow border-1 mt-3 mt-md-0" id="liberarRemanente"
-                            type="button" data-bs-toggle="modal" data-bs-target="#confirmModalliberarRemanente">Validar y liberar
+                            type="button" data-bs-toggle="modal" data-bs-target="#confirmModalliberarRemanente">Validar
+                            y liberar
                             remanente</button>
                     @endif
                 @endif
 
-               
+
                 @if ($numeroPolizaRemanente > 0)
                     <button @if ($validado) disabled @endif
-                    class="btn btn_primario shadow border-1 mt-3 mt-md-0"id="validarIngreso" data-bs-toggle="modal"
-                    data-bs-target="#confirmModalvalidarIngreso" wire:init="init()">Validar y conservar remanente</button>
+                        class="btn btn_primario shadow border-1 mt-3 mt-md-0"id="validarIngreso" data-bs-toggle="modal"
+                        data-bs-target="#confirmModalvalidarIngreso" wire:init="init()">Validar y conservar
+                        remanente</button>
                 @else
                     <button @if ($validado) disabled @endif
-                    class="btn btn_primario shadow border-1 mt-3 mt-md-0"id="validarIngreso" data-bs-toggle="modal"
-                    data-bs-target="#confirmModalvalidarIngreso" wire:init="init()">Validar póliza</button>
+                        class="btn btn_primario shadow border-1 mt-3 mt-md-0"id="validarIngreso" data-bs-toggle="modal"
+                        data-bs-target="#confirmModalvalidarIngreso" wire:init="init()">Validar póliza</button>
                 @endif
-                <button @if ($validado) disabled @endif id="borrarIngreso" type="button"
+
+                <button id="borrarIngreso" type="button"
                     class="btn btn-danger shadow border-1 mt-3 mt-md-0" data-bs-toggle="modal"
                     data-bs-target="#confirmModalborrarIngreso">
                     Borrar movimiento
@@ -176,6 +179,13 @@
 
                 <button class="btn btn_primario shadow border-1 mt-3 mt-md-0"id="validarIngreso"
                     wire:click="finalizar('ingreso por clasificar')">Finalizar</button>
+                @if (auth()->user()?->puede('botonBorrarMovimiento'))
+                    <button id="borrarIngreso" type="button"
+                        class="btn btn-danger shadow border-1 mt-3 mt-md-0" data-bs-toggle="modal"
+                        data-bs-target="#confirmModalborrarIngreso">
+                        Borrar movimiento
+                    </button>
+                @endif
             @endif
         </div>
 

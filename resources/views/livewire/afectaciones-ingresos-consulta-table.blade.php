@@ -98,7 +98,7 @@
             <button @if ($validado) disabled @endif
                 class="btn btn_primario shadow border-1 mt-3 mt-md-0"id="validarPresupuesto" data-bs-toggle="modal"
                 data-bs-target="#confirmModalvalidarPresupuestoInicial" wire:init="init()">Validar póliza</button>
-            <button @if ($validado) disabled @endif id="borrarPresupuesto" type="button"
+            <button id="borrarPresupuesto" type="button"
                 class="btn btn-danger shadow border-1 mt-3 mt-md-0" data-bs-toggle="modal"
                 data-bs-target="#confirmModalborrarPresupuestoInicial">
                 Borrar movimiento
@@ -114,6 +114,13 @@
             @else
                 <button class="btn btn_primario shadow border-1 mt-3 mt-md-0"id="validarPresupuesto"
                     wire:click="finalizar('{{$tipo}}')">Finalizar {{ strtolower($tipo) }}</button>
+            @endif
+            @if (auth()->user()?->puede('botonBorrarMovimiento'))
+                <button id="borrarPresupuesto" type="button"
+                    class="btn btn-danger shadow border-1 mt-3 mt-md-0" data-bs-toggle="modal"
+                    data-bs-target="#confirmModalborrarPresupuestoInicial">
+                    Borrar movimiento
+                </button>
             @endif
         @endif
 

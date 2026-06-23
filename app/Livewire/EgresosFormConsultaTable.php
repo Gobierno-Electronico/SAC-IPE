@@ -198,9 +198,19 @@ class EgresosFormConsultaTable extends Tabla
         try {
             $usuariosController = new BitacoraController();
             $usuariosController->bitacora('borrar', 'borró o intentó borrar un movimiento de ' . $this->categoriaModulo . ' con número de evento: ' . $this->numeroEvento, request());
-            DB::beginTransaction();
-            if ($this->validado)
+            $movimientoValidado = Poliza::searchByYear('fecha', (string) $this->anio)
+                ->where('tipo_poliza', '=', $this->tipoPoliza)
+                ->where('numero_poliza', '=', $this->numeroPoliza)
+                ->where('evento', '=', $this->numeroEvento)
+                ->whereYear('fecha', '=', (string) $this->anio)
+                ->where('categoria', '=', $this->categoriaModulo)
+                ->where('validado', '=', true)
+                ->exists();
+            if ($movimientoValidado && auth()->user()?->puede('botonBorrarMovimiento') !== true) {
+                $this->dispatch('mostrarMensaje', mensaje: 'No tiene permiso para borrar movimientos validados', tipo: 'error', tiempo: 3000);
                 return;
+            }
+            DB::beginTransaction();
             Poliza::searchByYear('fecha', (string) $this->anio)
                 ->where('tipo_poliza', '=', $this->tipoPoliza)
                 ->where('numero_poliza', '=', $this->numeroPoliza)
@@ -208,7 +218,9 @@ class EgresosFormConsultaTable extends Tabla
                 ->whereYear('fecha', '=', (string) $this->anio)
                 ->where('categoria', '=', $this->categoriaModulo)
                 ->where('numero_poliza', '=', $this->numeroPoliza)
-                ->where('validado', '=', false)->delete();
+                ->when(!$movimientoValidado, function ($query) {
+                    $query->where('validado', '=', false);
+                })->delete();
             if ($this->numeroPolizaRemanente && $this->numeroPolizaRemanente > 0) {
                 Poliza::searchByYear('fecha', (string) $this->anio)
                     ->where('tipo_poliza', '=', 'EAUX')
@@ -216,7 +228,9 @@ class EgresosFormConsultaTable extends Tabla
                     ->whereYear('fecha', '=', (string) $this->anio)
                     ->where('categoria', '=', $this->categoriaRemanente)
                     ->where('numero_poliza', '=', $this->numeroPolizaRemanente)
-                    ->where('validado', '=', false)->delete();
+                    ->when(!$movimientoValidado, function ($query) {
+                        $query->where('validado', '=', false);
+                    })->delete();
             }
 
             switch ($this->categoriaModulo) {

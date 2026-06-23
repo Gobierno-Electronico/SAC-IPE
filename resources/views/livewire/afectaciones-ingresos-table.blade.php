@@ -149,7 +149,7 @@
                 @if ($total == 0) disabled @endif>Agregar registro</button>
             <button class="btn btn_primario shadow border-1 mt-3" wire:click="finalizarRegistros" id="registroExtra"
                 @empty($registros) disabled @endempty>Finalizar registros</button>
-            @if ($totalPrevio > 0 && $totalProceso !== $totalPrevio)
+            @if ($totalPrevio > 0 && $totalProceso !== $totalPrevio && (!$this->movimientoValidado() || auth()->user()?->puede('botonBorrarMovimiento')))
                 <button id="borrarPresupuesto" type="button"
                     class="btn btn-danger shadow border-1 mt-3 ms-3" data-bs-toggle="modal"
                     data-bs-target="#confirmModalborrarPresupuestoInicial">

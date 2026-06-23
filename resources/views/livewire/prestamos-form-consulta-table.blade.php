@@ -144,7 +144,7 @@
                     class="btn btn_primario shadow border-1 mt-3 mt-md-0"id="validarIngreso" data-bs-toggle="modal"
                     data-bs-target="#confirmModalvalidarIngreso" wire:init="init()">Validar póliza</button>
                 @endif
-                <button @if ($validado) disabled @endif id="borrarIngreso" type="button"
+                <button id="borrarIngreso" type="button"
                     class="btn btn-danger shadow border-1 mt-3 mt-md-0" data-bs-toggle="modal"
                     data-bs-target="#confirmModalborrarIngreso">
                     Borrar movimiento
@@ -169,6 +169,13 @@
 
                 <button class="btn btn_primario shadow border-1 mt-3 mt-md-0"id="validarIngreso"
                     wire:click="finalizar('ingreso por clasificar')">Finalizar</button>
+                @if (auth()->user()?->puede('botonBorrarMovimiento'))
+                    <button id="borrarIngreso" type="button"
+                        class="btn btn-danger shadow border-1 mt-3 mt-md-0" data-bs-toggle="modal"
+                        data-bs-target="#confirmModalborrarIngreso">
+                        Borrar movimiento
+                    </button>
+                @endif
             @endif
         </div>
 

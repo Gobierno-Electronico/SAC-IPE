@@ -622,5 +622,12 @@ class AuthServiceProvider extends ServiceProvider
             fn($user) =>
             $user->puede('consultar_movimientos.concluidos')
         );
+
+        //bGates para borrar movimientos contables_________________________________________________________________
+        Gate::define(
+            'botonBorrarMovimiento',
+            fn($user) =>
+            $user->puede('botonBorrarMovimiento')
+        );
     }
 }

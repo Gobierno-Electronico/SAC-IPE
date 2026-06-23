@@ -67,6 +67,13 @@ class User extends Authenticatable
             return true;
         }
 
+        if (
+            $actividad === 'botonBorrarMovimiento' &&
+            in_array($this->rol->value, ['Jefe_Oficina'])
+        ) {
+            return true;
+        }
+
         return $this->actividades->contains('nombre_actividad', $actividad);
     }
 }

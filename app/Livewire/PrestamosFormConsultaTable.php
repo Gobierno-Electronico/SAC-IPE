@@ -116,16 +116,27 @@ class PrestamosFormConsultaTable extends Tabla
         try {
             $usuariosController = new BitacoraController();
             $usuariosController->bitacora('borrar', 'borró o intentó borrar un movimiento de ' . $this->categoriaModulo . ' con número de evento: ' . $this->numeroEvento, request());
-            DB::beginTransaction();
-            if ($this->validado)
+            $movimientoValidado = Poliza::searchByYear('fecha', (string) $this->anio)
+                ->where('tipo_poliza', '=', $this->tipoPoliza)
+                ->where('numero_poliza', '=', $this->numeroPoliza)
+                ->where('evento', '=', $this->numeroEvento)
+                ->where('categoria', '=', $this->categoriaModulo)
+                ->where('validado', '=', true)
+                ->exists();
+            if ($movimientoValidado && auth()->user()?->puede('botonBorrarMovimiento') !== true) {
+                $this->dispatch('mostrarMensaje', mensaje: 'No tiene permiso para borrar movimientos validados', tipo: 'error', tiempo: 3000);
                 return;
+            }
+            DB::beginTransaction();
             Poliza::searchByYear('fecha', (string) $this->anio)
                 ->where('tipo_poliza', '=', $this->tipoPoliza)
                 ->where('numero_poliza', '=', $this->numeroPoliza)
                 ->where('evento', '=', $this->numeroEvento)
                 ->where('categoria', '=', $this->categoriaModulo)
                 ->where('numero_poliza', '=', $this->numeroPoliza)
-                ->where('validado', '=', false)->delete();
+                ->when(!$movimientoValidado, function ($query) {
+                    $query->where('validado', '=', false);
+                })->delete();
             
             $this->validado = true;
             $this->dispatch('cancelar-movimiento');
