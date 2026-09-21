@@ -2,30 +2,36 @@
 
 namespace App\Livewire;
 
-use Illuminate\Pagination\LengthAwarePaginator;
 use App\Clases\Column;
-use Livewire\Attributes\On;
-use App\Livewire\Tabla;
-use Illuminate\Database\Eloquent\Builder;
+use App\Enums\EstatusEvento;
 use App\Http\Controllers\BitacoraController;
-use Illuminate\Support\Facades\Auth;
+use App\Models\InteraccionCuentaConcepto;
+use App\Models\InteraccionCuentaCuenta;
 use App\Models\Poliza;
 use Carbon\Carbon;
-use App\Models\InteraccionCuentaCuenta;
-use App\Models\InteraccionCuentaConcepto;
-use Log;
 use DB;
-use App\Enums\EstatusEvento;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\On;
+use Log;
 
 class EgresosCapitulo2y3DevengadoTable extends Tabla
 {
     public $cacheData = [];
+
     public $dataCompleta = [];
+
     public $perPage = 6;
+
     public $total = 0;
+
     public $totalDisponible = 0;
+
     public $numeroEvento;
+
     public $numeroPolizaRemanente;
+
     public int $anio;
 
     public function mount()
@@ -47,6 +53,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
     {
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
         $currentItems = array_slice($this->cacheData, $this->perPage * ($currentPage - 1), $this->perPage);
+
         return new LengthAwarePaginator($currentItems, count($this->cacheData), $this->perPage, $currentPage);
     }
 
@@ -63,7 +70,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
             Column::make('pttoComprometido', 'PPTO Comprometido')->component('columns.importe'),
             Column::make('importe', 'Importe')->component('columns.importe'),
             Column::make('disponibilidad', 'Disponibilidad')->component('columns.importe'),
-            Column::make('id', 'Acciones')->component('columns.accionesIngresos')
+            Column::make('id', 'Acciones')->component('columns.accionesIngresos'),
         ];
     }
 
@@ -71,18 +78,18 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
     public function agregarRegistro($registro)
     {
         try {
-            if (bccomp((string)($this->total + $registro['importe']), (string)$registro['montoEvento'], 2) == 1) {
+            if (bccomp((string) ($this->total + $registro['importe']), (string) $registro['montoEvento'], 2) == 1) {
                 $this->dispatch('mostrarMensaje', mensaje: 'Monto total del evento superado', tipo: 'error', tiempo: 3000);
+
                 return;
             }
-
 
             if ($this->verificarPresupuesto($registro)) {
                 $nuevoRegistro = [
                     'id' => 0,
-                    'area' => $registro['codigoAreaResponsable'] . ' ' . $registro['descripcionAreaResponsable'],
-                    'partida' => $registro['codigoPartida'] . ' ' . $registro['descripcionPartida'],
-                    'cuentaContable' => $registro['codigoCuentaContable'] . ' ' . $registro['descripcionCuentaContable'],
+                    'area' => $registro['codigoAreaResponsable'].' '.$registro['descripcionAreaResponsable'],
+                    'partida' => $registro['codigoPartida'].' '.$registro['descripcionPartida'],
+                    'cuentaContable' => $registro['codigoCuentaContable'].' '.$registro['descripcionCuentaContable'],
                     'mes' => $registro['mes'],
                     'tipoRegistro' => $registro['tipoRegistro'],
                     'movimiento' => 'DEVENGADO',
@@ -102,7 +109,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                 $this->dispatch('cambioTotal', total: $this->total);
             }
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al agregar registro en devengado del capítulo 2 y 3: ' . $th->getMessage());
+            Log::error('Ocurrió un error al agregar registro en devengado del capítulo 2 y 3: '.$th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al agregar registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -124,6 +131,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
 
         if ($this->totalDisponible < 0) {
             $this->dispatch('mostrarMensaje', mensaje: 'Presupuesto comprometido insuficiente', tipo: 'warning', tiempo: 3000);
+
             return false;
         }
 
@@ -167,7 +175,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
             $this->total = $totalActualizado;
             $this->dispatch('cambioTotal', total: $totalActualizado);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al editar en devengado del capítulo 2 y 3: ' . $th->getMessage());
+            Log::error('Ocurrió un error al editar en devengado del capítulo 2 y 3: '.$th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al editar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -196,7 +204,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
             $this->total = $totalActualizado;
             $this->dispatch('cambioTotal', total: $totalActualizado);
         } catch (\Throwable $th) {
-            Log::error('Ocurrió un error al eliminar en devengado del capítulo 2 y 3: ' . $th->getMessage());
+            Log::error('Ocurrió un error al eliminar en devengado del capítulo 2 y 3: '.$th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al editar, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
@@ -209,7 +217,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                 $datosSeleccionado = [
                     'codigoArea' => $registro['codigoAreaResponsable'],
                     'codigoCuentaPartida' => $registro['codigoPartida'],
-                    'mes' => $registro['mes']
+                    'mes' => $registro['mes'],
                 ];
             }
         }
@@ -234,6 +242,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
     {
         if (empty($this->cacheData)) {
             $this->dispatch('mostrarMensaje', mensaje: 'Tabla sin registros', tipo: 'error', tiempo: 3000);
+
             return;
         }
 
@@ -247,7 +256,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                 ->pluck('numero_poliza')
                 ->toArray();
             sort($numerosPolizas);
-            $this->numeroPoliza = (int)end($numerosPolizas) + 1;
+            $this->numeroPoliza = (int) end($numerosPolizas) + 1;
 
             $this->numeroEvento = $this->dataCompleta[0]['evento'];
 
@@ -256,11 +265,11 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
             $fecha->year($anioActual);
 
             $bitacora = new BitacoraController();
-            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un devengado del capítulo 2 y 3 con evento: ' . $this->numeroEvento, request());
+            $bitacora->bitacora('finalizarRegistros', 'registro o intentó registrar un devengado del capítulo 2 y 3 con evento: '.$this->numeroEvento, request());
             DB::beginTransaction();
 
             foreach ($this->dataCompleta as $movimiento) {
-                $movimiento['importe'] = doubleval($movimiento['importe']);
+                $movimiento['importe'] = floatval($movimiento['importe']);
                 $interaccionCuentaConceptoPrincipal = InteraccionCuentaConcepto::where('cuenta_id', '=', $movimiento['partidaId'])->whereIn('concepto_id', [87, 89])
                     ->where('tipo_interaccion', '=', 'Presupuestal - Cargo')->first();
 
@@ -273,16 +282,19 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                     if ($cuenta['tipo_interaccion'] == 'Contable - Abono') {
                         if ($cuenta['Codigo_cuenta'] == $movimiento['codigoCuentaContable']) {
                             $interaccionCuentaCuentasFiltradas[] = $cuenta;
+
                             continue;
                         }
-                    } else if ($cuenta['tipo_interaccion'] == 'Contable - Cargo') {
+                    } elseif ($cuenta['tipo_interaccion'] == 'Contable - Cargo') {
                         if (count($interaccionCuentaCuentas) > 7) {
                             $numeroInicialCuenta = explode('.', $cuenta['Codigo_cuenta']);
                             if ($movimiento['tipoRegistro'] == 'Almacen' && $numeroInicialCuenta[0] < 5) {
                                 $interaccionCuentaCuentasFiltradas[] = $cuenta;
+
                                 continue;
-                            } else if ($movimiento['tipoRegistro'] == 'Gasto' && $numeroInicialCuenta[0] >= 5) {
+                            } elseif ($movimiento['tipoRegistro'] == 'Gasto' && $numeroInicialCuenta[0] >= 5) {
                                 $interaccionCuentaCuentasFiltradas[] = $cuenta;
+
                                 continue;
                             }
                         } else {
@@ -299,7 +311,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                         'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'E',
-                        'numero_poliza' =>  $this->numeroPoliza,
+                        'numero_poliza' => $this->numeroPoliza,
                         'fecha' => $movimiento['fechaAfectacion'],
                         'cuenta' => $movimiento['codigoPartida'],
                         'concepto' => $movimiento['descripcionPartida'],
@@ -314,8 +326,8 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                         'categoria' => 'EGRESOS DEVENGADO CAPITULO 2y3',
                         'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
-                        'updated_at' => $fecha
-                    ]
+                        'updated_at' => $fecha,
+                    ],
                 ];
 
                 foreach ($interaccionCuentaCuentas as $key => $dataCuenta) {
@@ -323,7 +335,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                         'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $movimiento['codigoAreaResponsable'],
                         'tipo_poliza' => 'E',
-                        'numero_poliza' =>  $this->numeroPoliza,
+                        'numero_poliza' => $this->numeroPoliza,
                         'fecha' => $movimiento['fechaAfectacion'],
                         'cuenta' => $dataCuenta['Codigo_cuenta'],
                         'concepto' => $dataCuenta['Descripcion_cuenta'],
@@ -338,7 +350,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                         'categoria' => 'EGRESOS DEVENGADO CAPITULO 2y3',
                         'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
-                        'updated_at' => $fecha
+                        'updated_at' => $fecha,
                     ]);
                 }
 
@@ -353,14 +365,13 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                 ->pluck('numero_poliza')
                 ->toArray();
             sort($numerosPolizas);
-            $this->numeroPolizaRemanente = (int)end($numerosPolizas) + 1;
+            $this->numeroPolizaRemanente = (int) end($numerosPolizas) + 1;
 
             $polizasInicialesEgresosComprometido = Poliza::where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS COMPROMETIDO CAPITULO 2y3')
                 ->where('evento', '=', $this->numeroEvento)
                 ->whereYear('fecha', '=', (string) $this->anio)
                 ->get();
-
 
             $polizasInicialesEgresosDevengado = Poliza::where('tipo_poliza', '=', 'E')
                 ->where('categoria', '=', 'EGRESOS DEVENGADO CAPITULO 2y3')
@@ -369,11 +380,10 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                 ->where('concepto', 'LIKE', '%(Devengado)%')
                 ->get();
 
-
             $totalRemanente = DB::select('EXEC ImporteTotalCapitulo2y3Devengado @evento = ?, @anio = ?', [$this->numeroEvento, $this->anio])[0]->MontoDelEvento;
             if ($totalRemanente > 0) {
                 foreach ($polizasInicialesEgresosComprometido as $polizaImporte) {
-                    $clave = $polizaImporte->cuenta . '-' . $polizaImporte->concepto;
+                    $clave = $polizaImporte->cuenta.'-'.$polizaImporte->concepto;
                     if (isset($resultado[$clave])) {
                         $resultado[$clave]['total'] += $polizaImporte['total'];
                     } else {
@@ -381,7 +391,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                             'idUsuarioRegistrante' => $idUsuarioRegistrante,
                             'area' => $polizaImporte->area,
                             'tipo_poliza' => 'EAUX',
-                            'numero_poliza' =>  $this->numeroPolizaRemanente,
+                            'numero_poliza' => $this->numeroPolizaRemanente,
                             'fecha' => $movimiento['fechaAfectacion'],
                             'cuenta' => $polizaImporte->cuenta,
                             'concepto' => $polizaImporte->concepto,
@@ -395,7 +405,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                             'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 2y3 REMANENTE DEVENGADO',
                             'documento_fuente' => $movimiento['documentoFuente'],
                             'created_at' => $fecha,
-                            'updated_at' => $fecha
+                            'updated_at' => $fecha,
                         ];
                     }
                 }
@@ -406,14 +416,17 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                         $conceptoGeneral = explode('(', $polizaDevengado->concepto);
 
                         if (str_contains($polizaInicial['concepto'], rtrim($conceptoGeneral[0])) !== false && end($conceptoGeneral) == 'Devengado)') {
-                            $total = $total - $polizaDevengado['total'];
+                            $total -= (float) $polizaDevengado['total'];
                         }
                     }
+                    // Evitar residuos de precisión de punto flotante
+                    $total = round($total, 2);
+                    
                     Poliza::create([
                         'idUsuarioRegistrante' => $idUsuarioRegistrante,
                         'area' => $polizaInicial['area'],
                         'tipo_poliza' => 'EAUX',
-                        'numero_poliza' =>  $this->numeroPolizaRemanente,
+                        'numero_poliza' => $this->numeroPolizaRemanente,
                         'fecha' => $movimiento['fechaAfectacion'],
                         'cuenta' => $polizaInicial['cuenta'],
                         'concepto' => $polizaInicial['concepto'],
@@ -427,7 +440,7 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
                         'categoria' => 'EGRESOS COMPROMETIDO CAPITULO 2y3 REMANENTE DEVENGADO',
                         'documento_fuente' => $movimiento['documentoFuente'],
                         'created_at' => $fecha,
-                        'updated_at' => $fecha
+                        'updated_at' => $fecha,
                     ]);
                 }
             } else {
@@ -444,10 +457,12 @@ class EgresosCapitulo2y3DevengadoTable extends Tabla
             $this->dispatch('consultar-registro', $this->numeroEvento, $this->numeroPoliza, $this->total, $this->numeroPolizaRemanente);
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('Ocurrió un error al finalizarRegistro en devengado del capítulo 2 y 3: ' . $th->getMessage());
+            Log::error('Ocurrió un error al finalizarRegistro en devengado del capítulo 2 y 3: '.$th->getMessage());
             $this->dispatch('mostrarMensaje', mensaje: 'Ocurrió un error al realizar el registro, contacte al área de Gobierno Electrónico', tipo: 'error', tiempo: 3000);
         }
     }
 
-    public function changeState($value) {}
+    public function changeState($value)
+    {
+    }
 }
