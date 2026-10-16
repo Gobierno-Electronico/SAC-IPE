@@ -95,6 +95,5 @@
 
         function esconderCargando() {
             $('#loadingScreen').prop('hidden', true);
-            toastr.clear();
         }
     </script>

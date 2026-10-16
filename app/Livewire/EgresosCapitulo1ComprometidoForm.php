@@ -77,30 +77,37 @@ class EgresosCapitulo1ComprometidoForm extends Component
             ]);
 
 
-            $path = $this->archivo->store('temp');
-            $filePath = storage_path('app/' . $path); // Ruta donde guardaste el archivo
+            $path = $this->archivo->store('temp', config('filesystems.default'));
+            $filePath = Storage::path($path);
 
-            $spreadsheet = IOFactory::load($filePath);
-            $sheet = $spreadsheet->getActiveSheet();
-            $data = $sheet->toArray();
+            $data = $this->leerDatosExcel($filePath);
 
             $encabezadosEsperados = ['Area Ejecutora', 'CUENTA', 'DESCRIPCION', 'CONCEPTO', 'TOTAL', 'ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
 
-            // Obtener encabezados del archivo y filtrar vacíos
-            $encabezadosArchivo = array_filter(array_map('trim', $data[0]), fn($valor) => $valor !== "");
+            $encabezadosArchivo = array_map(fn ($valor) => trim((string) $valor), $data[0] ?? []);
+            // Ignorar únicamente columnas vacías al final, sin desplazar encabezados intermedios.
+            while ($encabezadosArchivo !== [] && end($encabezadosArchivo) === '') {
+                array_pop($encabezadosArchivo);
+            }
 
-            // Reindexar array para evitar problemas de índices
-            $encabezadosArchivo = array_values($encabezadosArchivo);
+            $diferencias = [];
+            $cantidadColumnas = max(count($encabezadosArchivo), count($encabezadosEsperados));
+            for ($indice = 0; $indice < $cantidadColumnas; $indice++) {
+                $esperado = $encabezadosEsperados[$indice] ?? null;
+                $recibido = $encabezadosArchivo[$indice] ?? '';
+                $columna = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($indice + 1);
 
-            $diferencias = array_diff_assoc($encabezadosArchivo, $encabezadosEsperados);
+                if ($esperado === null) {
+                    $diferencias[] = "- Columna {$columna}: columna adicional '" . e($recibido) . "'.";
+                } elseif ($recibido !== $esperado) {
+                    $diferencias[] = "- Columna {$columna}: se esperaba '" . e($esperado)
+                        . "'; recibido: '" . e($recibido === '' ? '(vacío)' : $recibido) . "'.";
+                }
+            }
 
             if (!empty($diferencias)) {
                 Storage::delete($path);
-                $mensajeError = "Los siguientes encabezados no coinciden:\n";
-
-                foreach ($diferencias as $indice => $valorIncorrecto) {
-                    $mensajeError .= "- Esperado: '{$encabezadosEsperados[$indice]}' → Recibido: '{$valorIncorrecto}'\n";
-                }
+                $mensajeError = "Los siguientes encabezados no coinciden:\n" . implode("\n", $diferencias);
 
                 $this->dispatch('mostrarMensaje', mensaje: $mensajeError, tipo: 'error', tiempo: 5000);
                 return;
@@ -313,6 +320,59 @@ class EgresosCapitulo1ComprometidoForm extends Component
             $this->dispatch('mostrarMensaje', mensaje: 'Hubo un error al procesar el archivo.', tipo: 'error', tiempo: 3000);
         } finally {
             $this->dispatch('esconderCargando');
+        }
+    }
+
+    protected function leerDatosExcel(string $filePath): array
+    {
+        $zip = new \ZipArchive();
+        if ($zip->open($filePath) !== true) {
+            throw new \RuntimeException('No se pudo abrir el archivo XLSX.');
+        }
+
+        try {
+            $workbook = simplexml_load_string($zip->getFromName('xl/workbook.xml'));
+            if ($workbook === false) {
+                throw new \RuntimeException('No se pudo leer la estructura del libro.');
+            }
+            $views = $workbook->xpath('//*[local-name()="workbookView"]');
+            $activeTab = (int) ($views[0]['activeTab'] ?? 0);
+            $sheets = $workbook->xpath('//*[local-name()="sheet"]');
+            $sheetName = (string) ($sheets[$activeTab]['name'] ?? $sheets[0]['name'] ?? '');
+        } finally {
+            $zip->close();
+        }
+
+        $reader = IOFactory::createReader('Xlsx');
+        $reader->setReadDataOnly(true);
+        $reader->setReadEmptyCells(false);
+        $reader->setLoadSheetsOnly($sheetName);
+        $spreadsheet = $reader->load($filePath);
+
+        try {
+            $sheet = $spreadsheet->getActiveSheet();
+
+            // Conservar los cálculos que dependen de otras hojas del libro.
+            foreach ($sheet->getCellCollection()->getCoordinates() as $coordinate) {
+                $value = $sheet->getCell($coordinate)->getValue();
+                if (is_string($value) && str_starts_with($value, '=') && str_contains($value, '!')) {
+                    $spreadsheet->disconnectWorksheets();
+                    unset($sheet, $spreadsheet);
+                    gc_collect_cycles();
+                    $reader->setLoadAllSheets();
+                    $spreadsheet = $reader->load($filePath);
+                    $sheet = $spreadsheet->getSheetByName($sheetName);
+                    break;
+                }
+            }
+
+            return $sheet->rangeToArray(
+                'A1:' . $sheet->getHighestDataColumn() . $sheet->getHighestDataRow()
+            );
+        } finally {
+            $spreadsheet->disconnectWorksheets();
+            unset($spreadsheet, $sheet, $reader);
+            gc_collect_cycles();
         }
     }
 
