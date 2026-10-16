@@ -54,6 +54,11 @@ class EgresosCapitulo1ComprometidoForm extends Component
         }
     }
 
+    public function updatedArchivo(): void
+    {
+        $this->resetValidation('archivo');
+    }
+
     public function cargarComprometido()
     {
         set_time_limit(3000);
@@ -135,7 +140,7 @@ class EgresosCapitulo1ComprometidoForm extends Component
             DB::beginTransaction();
             $cuentasFaltantesPlanCuentas = [];
             $cuentasEnLaGuiaFaltantes = [];
-            $anioActual = (string) $this->anio;
+            $anioActual = $this->anio;
             $meses = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
             $fecha = Carbon::now('America/Mexico_City');
             $fecha->year($anioActual);
@@ -300,6 +305,7 @@ class EgresosCapitulo1ComprometidoForm extends Component
                 $this->dispatch('mostrarMensaje', mensaje: $mensajeError, tipo: 'error', tiempo: 5000);
             }
         } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->setErrorBag($e->validator->errors());
             $this->dispatch('mostrarMensaje', mensaje: $e->getMessage(), tipo: 'error', tiempo: 3000);
         } catch (\Exception $e) {
             Log::error("Error al procesar el archivo en carga de comprometido del 1000: " . $e->getMessage() . ' ' . $e->getLine());

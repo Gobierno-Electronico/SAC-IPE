@@ -27,7 +27,12 @@
             categoriaModulo='EGRESOS COMPROMETIDO CAPITULO 1' />
     @else
         <button id="downloadButton" hidden></button>
-        <div class="container mt-5">
+        <div class="container mt-5"
+            x-data="{ subiendo: false, archivoListo: @js((bool) $archivo), errorCarga: false }"
+            x-on:livewire-upload-start="subiendo = true; archivoListo = false; errorCarga = false"
+            x-on:livewire-upload-finish="subiendo = false; archivoListo = true"
+            x-on:livewire-upload-error="subiendo = false; archivoListo = false; errorCarga = true"
+            x-on:livewire-upload-cancel="subiendo = false; archivoListo = false; errorCarga = false">
 
             <div class="col-2">
                 <label for="inputFechaAfectacion" class="form-label mt-3">Fecha de afectación</label>
@@ -48,6 +53,15 @@
 
             <div class="mt-5">
                 <input class="form-control" type="file" accept=".xlsx" id="archivo" wire:model="archivo">
+                @error('archivo')
+                    <div class="text-danger mt-2" role="alert">{{ $message }}</div>
+                @enderror
+                <div x-show="errorCarga" style="display: none" class="text-danger mt-2" role="alert">
+                    No se pudo subir el archivo. Vuelve a seleccionarlo; si el problema persiste, revisa su tamaño y tu conexión.
+                </div>
+                <div x-show="archivoListo && !subiendo" style="display: none" class="text-success mt-2" role="status">
+                    Archivo recibido. Ya puedes cargar el comprometido.
+                </div>
                 <div wire:loading wire:target="archivo" class="mt-2">
                     <p class="fw-bold h5">
                         Subiendo archivo, por favor espera...
@@ -60,8 +74,10 @@
                     Descargar plantilla
                 </button>
 
-                <button wire:click="cargarComprometido" class="btn btn_primario shadow border-0" id="importarBoton"
-                    wire:loading.attr="disabled" wire:target="archivo" onclick="mostrarCarga()">
+                <button type="button" wire:click="cargarComprometido" class="btn btn_primario shadow border-0" id="importarBoton"
+                    x-bind:disabled="subiendo || !archivoListo"
+                    wire:loading.attr="disabled" wire:target="cargarComprometido"
+                    @disabled(!$archivo) onclick="mostrarCarga()">
                     Cargar comprometido
                 </button>
 
