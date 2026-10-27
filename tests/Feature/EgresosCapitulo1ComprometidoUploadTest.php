@@ -149,4 +149,16 @@ class EgresosCapitulo1ComprometidoUploadTest extends TestCase
             Storage::disk('local')->delete('lectura.xlsx');
         }
     }
+
+    public function test_poliza_insert_batch_stays_below_the_sql_server_parameter_limit(): void
+    {
+        $component = new EgresosCapitulo1ComprometidoForm();
+        $method = new \ReflectionMethod($component, 'tamanioLotePolizas');
+        $poliza = array_fill_keys(range(1, 18), 'valor');
+
+        $tamanioLote = $method->invoke($component, $poliza);
+
+        $this->assertSame(111, $tamanioLote);
+        $this->assertLessThanOrEqual(2100, $tamanioLote * count($poliza));
+    }
 }

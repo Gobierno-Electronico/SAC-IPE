@@ -23,8 +23,10 @@ use function PHPUnit\Framework\isNull;
 
 class EgresosCapitulo1ComprometidoForm extends Component
 {
-
     use WithFileUploads;
+
+    private const SQL_SERVER_MAX_PARAMETERS = 2100;
+    private const SQL_SERVER_PARAMETER_SAFETY_MARGIN = 100;
     public $fechaAfectacion = "";
     public $archivo;
 
@@ -294,9 +296,7 @@ class EgresosCapitulo1ComprometidoForm extends Component
             }
 
             if (empty($cuentasEnLaGuiaFaltantes)) {
-                collect($polizas)->chunk(120)->each(function ($chunk) {
-                    Poliza::insert($chunk->toArray());
-                }); // divide $polizas en partes pequeñas (chunks) de 120 elementos. Esto evita la sobrecarga de memoria al hacer inserciones en la base.
+                $this->insertarPolizasEnLotes($polizas);
 
                 DB::commit();
                 Storage::delete($path);
@@ -374,6 +374,34 @@ class EgresosCapitulo1ComprometidoForm extends Component
             unset($spreadsheet, $sheet, $reader);
             gc_collect_cycles();
         }
+    }
+
+    /**
+     * SQL Server admite como máximo 2,100 parámetros por consulta. El tamaño
+     * del lote se calcula con las columnas que se insertarán para no rebasarlo.
+     *
+     * @param array<int, array<string, mixed>> $polizas
+     */
+    protected function insertarPolizasEnLotes(array $polizas): void
+    {
+        if ($polizas === []) {
+            return;
+        }
+
+        $tamanioLote = $this->tamanioLotePolizas($polizas[0]);
+
+        collect($polizas)->chunk($tamanioLote)->each(function ($lote) {
+            Poliza::insert($lote->toArray());
+        });
+    }
+
+    /** @param array<string, mixed> $poliza */
+    protected function tamanioLotePolizas(array $poliza): int
+    {
+        $columnasPorPoliza = count($poliza);
+        $limiteParametros = self::SQL_SERVER_MAX_PARAMETERS - self::SQL_SERVER_PARAMETER_SAFETY_MARGIN;
+
+        return max(1, intdiv($limiteParametros, $columnasPorPoliza));
     }
 
     #[On('consultar-registro')]
